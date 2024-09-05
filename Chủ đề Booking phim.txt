@@ -1,0 +1,29 @@
+Chủ đề: Booking phim
+
+Chức năng:
++Khách hàng
+- Đăng nhập/ Đăng kí
+- Đổi mật khẩu
+- Đặt vé, bán vé
+- Chọn phim, Chọn thời gian chiếu, chọn phòng, chọn ghế ngồi
+- Dịch vụ( mua đồ ăn, uống, đồ lưu niệm)
++Admin
+1: Quản lý phim:
+- Thêm, sửa, xóa thông tin phim.
+2: Chương trình khuyến mãi
+- Tạo và quản lý các mã giảm giá hoặc voucher.
+- Người dùng có thể nhập mã để được giảm giá khi đặt vé.
+3: Quản lý rạp và phòng chiếu 
+- Quản lý thông tin về các rạp và phòng chiếu khác nhau.
+- Đảm bảo rằng việc đặt vé phải tương thích với sơ đồ ghế của từng phòng
+4: Quản lý sản phẩm( đồ ăn , đồ uống)
+- Thêm, sửa, xóa danh mục sản phẩm như nước, bỏng ngô.
+- Cho phép người quản trị cập nhật các thông tin liên quan đến danh mục sản phẩm.
+5: Quản lý đặt vé
+- Giao diện đặt vé dễ sử dụng cho người dùng. Hiển thị sơ đồ ghế trong phòng chiếu để người dùng chọn ghế.
+6: Quản lý hóa đơn 
+- Tạo hóa đơn
+- Xem chi tiết hóa đơn
+- In hóa đơn và gửi qua email
+- Quản lý lịch sử hóa đơn
+7: Quản lý bảng giá 

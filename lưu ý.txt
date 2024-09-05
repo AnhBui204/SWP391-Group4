@@ -1,0 +1,4 @@
+- Thiết kế giao diện đơn giản, phù hợp với người dùng, dễ nhớ dễ hiểu.
+- Cái gì quan trọng, dùng nhiều, những gì khách hàng cần thì đưa vào.
+- Animation.
+- Gang màu phù hợp với người dùng.
