@@ -27,3 +27,10 @@ Chức năng:
 - In hóa đơn và gửi qua email
 - Quản lý lịch sử hóa đơn
 7: Quản lý bảng giá 
+
+
+
+
+
+#Bổ sung:
+- Thêm chức năng nạp tiền tk tương tự FAP. Nếu hủy vé thì hoàn tiền về tk.
