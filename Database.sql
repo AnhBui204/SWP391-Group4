@@ -55,8 +55,10 @@ CREATE TABLE Movies (
     MovieName VARCHAR(100),
     Director VARCHAR(50),
     movieType VARCHAR(50),
-    releaseDate DATE
+    releaseDate DATE,
+    Rate DECIMAL(3,1) CHECK (Rate >= 0 AND Rate <= 10)  
 );
+
 
 -- Table for Shows (linked to Movies)
 CREATE TABLE Shows(
