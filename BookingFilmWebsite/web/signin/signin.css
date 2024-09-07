@@ -1,0 +1,110 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 7 Sep 2024, 4:38:08 PM
+    Author     : HongD
+*/
+
+.signin_background{
+    position: absolute;
+    background-image: url(../image/signin/Signin_Background_Image.jpg);
+    background-size: cover;
+    filter: brightness(50%);
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    z-index: -1;
+}
+
+.logo_signin{
+    position: absolute;
+    top: 0;
+}
+
+.logo_signin img{
+    width: 200px;
+}
+
+.box_signin{
+    background-color: #fffdf0;
+    width: 50%;
+    height: 90vh;
+    margin: 5vh 25%;
+    border-radius: 2%;
+    
+}
+
+.box_signin .title_signin{
+    padding-top: 5%;
+}
+
+.box_signin .title_signin p{
+    font-size: 40px;
+    text-align: center;
+}
+
+.box_signin .input_signin .box_input{
+    width: 80%;
+    margin: 0 10%;
+    height: 50px;
+    font-size: 20px;
+}
+
+.box_signin .input_signin .box_input_title{
+    width: 80%;
+    margin: 2% 10% 0;
+    color: #757575;
+    font-size: 12px;
+}
+
+.box_signin .input_signin .box_1_input_group_1{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.box_signin .input_signin #box_1_input_1{
+    width: 100%;
+}
+
+.box_signin .input_signin #box_input_half_1{
+    width: 75%;
+    margin: 0 5% 0 20%; 
+}
+
+.box_signin .input_signin #box_input_title_half_1{
+    width: 75%;
+    margin: 2% 5% 0 20%;
+}
+
+.box_signin .input_signin #box_1_input_2{
+    width: 100%;
+}
+
+.box_signin .input_signin #box_input_half_2{
+    width: 75%;
+    margin: 0 20% 0 5%; 
+}
+
+.box_signin .input_signin #box_input_title_half_2{
+    width: 75%;
+    margin: 2% 20% 0 5%;
+}
+
+hr{
+    width: 80%;
+    margin: 16px 10% 16px;
+}
+
+.box_signin .confirm_button{
+    width: 100%;
+}
+
+.box_signin .confirm_button button{
+    width: 80%;
+    margin: 0 10%;
+    color: #ffffff;
+    height: 50px;
+    font-size: 20px;
+}
