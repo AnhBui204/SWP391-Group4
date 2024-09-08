@@ -5,7 +5,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Galaxy Cinema</title>
-  <link rel="stylesheet" href="style.css" />
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -14,8 +13,11 @@
   <header>
     <div class="header-container">
       <!-- Logo -->
-      <div class="logo">
-        <img src="./images/logo.png" alt="FPT Cinema" />
+      <div class="bigLogo">
+          <div class="logo">
+        <img src="image/logo/logo.png" alt="FPT Cinema">
+        </div>
+          <h3 class="text">FPT CINEMA</h3>
       </div>
       <!-- Navbar -->
       <nav class="navbar">
@@ -29,7 +31,7 @@
       </nav>
       <!-- User Info -->
       <div class="user-info">
-        <span><img src="./images/icon.png" alt="User Icon" /> Bùi Lê Việt Anh</span>
+          <span><img src="image/logo/logo.png" alt="User Icon" /> Bùi Lê Việt Anh</span>
         <span>0 Stars</span>
       </div>
     </div>
@@ -45,13 +47,13 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
       <div class="item active">
-        <img src="./images/poster.jpg" alt="Los Angeles" />
+        <img src="image/v1.jpg" alt="Los Angeles" />
       </div>
       <div class="item">
-        <img src="./images/poster1.jpg" alt="Chicago" />
+        <img src="image/v1.jpg" alt="Chicago" />
       </div>
       <div class="item">
-        <img src="./images/poster2.jpg" alt="New York" />
+        <img src="image/v1.jpg" alt="New York" />
       </div>
     </div>
     <a class="left carousel-control" href="#myCarousel" data-slide="prev">

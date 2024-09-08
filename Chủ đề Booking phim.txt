@@ -34,3 +34,30 @@ Chức năng:
 
 #Bổ sung:
 - Thêm chức năng nạp tiền tk tương tự FAP. Nếu hủy vé thì hoàn tiền về tk.
+- Làm mã QR thanh toán.
+
+Ý kiến của cô:
+- Phạm vi : cho các rạp ở tp Đà nẵng
+- Bối cảnh chọn đề tài.
+- 
+- 
+
+
+Đối tượng:
+- Visitor
+- Customer
+- Admin
+- Staff
+- Bank
+
+Vẽ usecase bằng app
+
+- Tích hợp thanh toán bằng VNPAY vào website
+- Báo lỗi xuất vé(success or fail)
+
+
+
+
+Thêm Staff:
+- mỗi rạp mỗi staff
+- Staff quản lí phim, quản lí rooms, seats

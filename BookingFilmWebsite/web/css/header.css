@@ -13,17 +13,29 @@ header {
 
 /* Logo */
 .logo {
-    background:linear-gradient(135deg,#00feba,#5b548a)  ;
     border-radius: 50%;
+    background-color: #FFD08E;
+}
+
+.bigLogo{
+    justify-content: center;
+}
+
+.bigLogo h3{
+    text-align: center;
+    margin-top: 5px;
+    color: #681740;
+    font-family: fantasy;
 }
 
 .logo img {
-    height: 150px;
-    width: 150px;
+    height: 140px;
+    width: 145px    ;
     border: 2px solid #FF8C00;
     border-radius: 50%;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: none;
 }
 
 
@@ -48,6 +60,7 @@ header {
     font-size: 20px;
     display: flex;
     align-items: center;
+    background: none;
 }
 
 
