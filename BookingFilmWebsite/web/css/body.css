@@ -8,7 +8,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 */
 
 .box{
-    height: 100%;
+    height: 1000px;
+    background-color: #ffd08e;
+    border-radius: 10px;
+    padding: 0 20px;
 }
 
 .box1{
@@ -87,6 +90,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     top: 0;
     background-color: rgba(0,0,0,0.3);
     border-radius: 5%;
+    border: solid #d5d5d5;
 }
 
 .box2-1 .skin p{

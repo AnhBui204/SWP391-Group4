@@ -10,32 +10,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-  <header>
-    <div class="header-container">
-      <!-- Logo -->
-      <div class="bigLogo">
-          <div class="logo">
-        <img src="image/logo/logo.png" alt="FPT Cinema">
-        </div>
-          <h3 class="text">FPT CINEMA</h3>
-      </div>
-      <!-- Navbar -->
-      <nav class="navbar">
-        <ul>
-          <li><a href="#">Mua Vé</a></li>
-          <li><a href="#">Phim</a></li>
-          <li><a href="#">Góc Điện Ảnh</a></li>
-          <li><a href="#">Sự Kiện</a></li>
-          <li><a href="#">Rạp/Giá Vé</a></li>
-        </ul>
-      </nav>
-      <!-- User Info -->
-      <div class="user-info">
-          <span><img src="image/logo/logo.png" alt="User Icon" /> Bùi Lê Việt Anh</span>
-        <span>0 Stars</span>
-      </div>
-    </div>
-  </header>
+  
 
   <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
