@@ -15,7 +15,7 @@
       <!-- Logo -->
       <div class="bigLogo">
           <div class="logo">
-        <img src="image/logo/logo.png" alt="FPT Cinema">
+              <img src="../image/logo/logo.png" alt="FPT Cinema">
         </div>
           <h3 class="text">FPT CINEMA</h3>
       </div>
@@ -31,7 +31,7 @@
       </nav>
       <!-- User Info -->
       <div class="user-info">
-          <span><img src="image/logo/logo.png" alt="User Icon" /> Bùi Lê Việt Anh</span>
+          <span><img src="image/logo/logo.png" alt="User Icon" /> </span>
         <span>0 Stars</span>
       </div>
     </div>

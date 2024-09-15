@@ -255,3 +255,7 @@ INSERT INTO Tickets (TicketID, BookingID, ShowID, SeatID, ComboID, VoucherID, Pr
 VALUES 
 ('T00001', 'B00001', 'SH0001', 'S00001', 'C00001', 'V00001', 120000, '2024-09-10 13:00:00'),
 ('T00002', 'B00002', 'SH0002', 'S00004', 'C00002', 'V00002', 150000, '2024-09-11 14:00:00');
+
+
+
+select Username, Pass , UserID, Email, Phone, Sex, DateOfBirth, MoneyLeft from Users where Username = 'Admin' and Pass= '123' 

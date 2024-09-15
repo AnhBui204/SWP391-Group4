@@ -1,4 +1,10 @@
-<%@include file="includes/headerNavbar.jsp" %>
+        <%
+            String user = (String) session.getAttribute("user");
+            if (user == null) { %>
+        <%@include file="includes/header.jsp" %>
+        <% } else { %>
+        <%@include file="includes/header_user.jsp" %>
+        <% } %>
 <%@include file="includes/headerBanner.jsp" %>
 <%@include file="includes/body.jsp" %>
 <%@include file="includes/voucher.jsp" %>

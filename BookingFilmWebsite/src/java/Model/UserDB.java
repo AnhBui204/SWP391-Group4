@@ -1,6 +1,7 @@
 package Model;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,11 +23,9 @@ public class UserDB implements DatabaseInfo {
         return null;
     }
 
-
-    
     public User getUsers(String username, String password) {
         User user = null;
-        String query = "select Username, Pass, FName , LName , UserID, Email, Phone, Address, Sex, DateOfBirth, MoneyLeft "
+        String query = "select Username, Pass , UserID, Email, Phone, Sex, DateOfBirth, MoneyLeft "
                 + "from Users where Username =? and Pass=? ";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
@@ -135,13 +134,10 @@ public class UserDB implements DatabaseInfo {
     }
 
 //-----------------------------------------------------------------------------------
-
     public User updateUser(User user) {
         String query = "UPDATE Users SET username=?, password=? WHERE UserId=?";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
-
-            
 
             int rc = stmt.executeUpdate();
             if (rc == 0) {
@@ -154,6 +150,42 @@ public class UserDB implements DatabaseInfo {
             throw new RuntimeException("Invalid data");
         }
     }
+
+    public static ArrayList<User> listAllUsers() {
+        ArrayList<User> userList = new ArrayList<>();
+        String query = "SELECT UserID, Username, Pass, Email, Phone, Sex, DateOfBirth, MoneyLeft FROM Users";
+
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String userID = rs.getString("UserID");
+                String username = rs.getString("Username");
+                String password = rs.getString("Pass");
+                String email = rs.getString("Email");
+                String phone = rs.getString("Phone");
+                String sex = rs.getString("Sex");
+                String dob = rs.getString("DateOfBirth");
+                String money = rs.getString("MoneyLeft");
+                String role = "User"; // Assuming all are regular users by default
+
+                User user = new User(userID, username, password, email, role, phone, sex, dob, money);
+                userList.add(user);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return userList;
+    }
+
+    public static void main(String[] args) {
+        ArrayList<User> list = UserDB.listAllUsers();
+        for (User user : list) {
+            System.out.println(user);
+        }
+    }
+}
+
 
 //--------------------------------------------------------------------------------
 //    public static int deleteUser(String userId) {
@@ -182,7 +214,6 @@ public class UserDB implements DatabaseInfo {
 //        }
 //        return res;
 //    }
-
 //    public static ArrayList<Users> listAllUsers() {
 //        ArrayList<Users> list = new ArrayList<>();
 //        String query = "SELECT UserId, username, password FROM Users";
@@ -203,12 +234,5 @@ public class UserDB implements DatabaseInfo {
 //        return list;
 //    }
 ////--------------------------------------------------------------------------------------------
-//
-//    public static void main(String[] args) {
-//        ArrayList<Users> list = UserDB.listAllUsers();
-//        for (Users user : list) {
-//            System.out.println(user);
-//        }
-//    }
 //---------------------------------------------------------------------------
-}
+

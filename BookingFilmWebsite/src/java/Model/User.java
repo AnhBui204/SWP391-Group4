@@ -115,7 +115,10 @@ public class User implements Serializable {
     public void setMoney(String money) {
         this.money = money;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "UserID: " + userID + ", Username: " + username + ", Email: " + email + ", Role: " + role;
+    }
 
 }
