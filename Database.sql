@@ -4,15 +4,15 @@ USE a;
 -- Table for Users
 CREATE TABLE Users (
     UserID CHAR(6) PRIMARY KEY,
-    UserName VARCHAR(50) UNIQUE,
-    Pass VARCHAR(80),
-    Email VARCHAR(100) UNIQUE,
+    UserName NVARCHAR(50) UNIQUE,
+    Pass NVARCHAR(80),
+    Email NVARCHAR(100) UNIQUE,
     Role NVARCHAR(20) CHECK (Role IN ('Admin', 'User', 'Staff')) DEFAULT 'User',
-    Phone VARCHAR(15),
-    Sex VARCHAR(7),
+    Phone NVARCHAR(15),
+    Sex NVARCHAR(7),
     DateOfBirth DATE,
     MoneyLeft MONEY CHECK (MoneyLeft >= 0),
-    Avatar VARCHAR(MAX)
+    Avatar NVARCHAR(MAX)
 );
 
 -- Table for Booking
@@ -26,14 +26,14 @@ CREATE TABLE Booking(
 -- Table for Theatres
 CREATE TABLE Theatres(
     TheatreID CHAR(6) PRIMARY KEY,
-    TheatreName VARCHAR(50) UNIQUE,
+    TheatreName NVARCHAR(50) UNIQUE,
     TheatreLocation NVARCHAR(150)
 );
 
 -- Table for Rooms
 CREATE TABLE Rooms(
     RoomID CHAR(6) PRIMARY KEY,
-    RoomName VARCHAR(50) UNIQUE,
+    RoomName NVARCHAR(50) UNIQUE,
     TheatreID CHAR(6),
     FOREIGN KEY (TheatreID) REFERENCES Theatres(TheatreID)
 );
@@ -41,7 +41,7 @@ CREATE TABLE Rooms(
 -- Table for Seats 
 CREATE TABLE Seats(
     SeatID CHAR(6) PRIMARY KEY,
-    SeatName VARCHAR(50),
+    SeatName NVARCHAR(50),
     RoomID CHAR(6),
     FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID),
     UNIQUE(RoomID, SeatName)
@@ -50,9 +50,9 @@ CREATE TABLE Seats(
 -- Table for Movies
 CREATE TABLE Movies (
     MovieID CHAR(6) PRIMARY KEY,
-    MovieName VARCHAR(100),
-    Director VARCHAR(50),
-    MovieType VARCHAR(50),
+    MovieName NVARCHAR(100),
+    Director NVARCHAR(50),
+    MovieType NVARCHAR(50),
     ReleaseDate DATE,
     Rate DECIMAL(3,1) CHECK (Rate >= 0 AND Rate <= 10)
 );
@@ -81,7 +81,7 @@ CREATE TABLE ShowSeats (
 -- Table for Actors
 CREATE TABLE Actors (
     ActorID CHAR(6) PRIMARY KEY,
-    ActorName VARCHAR(100)
+    ActorName NVARCHAR(100)
 );
 
 -- Table for linking Movies and Actors (many-to-many relationship)
@@ -96,6 +96,7 @@ CREATE TABLE MovieActors (
 -- Table for Vouchers
 CREATE TABLE Vouchers (
     VoucherID CHAR(6) PRIMARY KEY,
+	VoucherName NVARCHAR(50) UNIQUE,
     Price MONEY CHECK (Price >= 0),
     ExpiryDate DATE
 );
@@ -135,26 +136,26 @@ VALUES
 -- Thêm Theatres (rạp phim tại Đà Nẵng)
 INSERT INTO Theatres (TheatreID, TheatreName, TheatreLocation)
 VALUES 
-('T00001', 'CGV Vincom Đà Nẵng', '910A Ngô Quyền, Sơn Trà, Đà Nẵng'),
-('T00002', 'Lotte Cinema Đà Nẵng', '46 Điện Biên Phủ, Thanh Khê, Đà Nẵng'),
-('T00003', 'Galaxy Đà Nẵng', '79 Nguyễn Văn Linh, Hải Châu, Đà Nẵng'),
-('T00004', 'Beta Cinemas Đà Nẵng', 'Cách Mạng Tháng 8, Cẩm Lệ, Đà Nẵng'),
-('T00005', 'Metiz Cinema Đà Nẵng', 'Lô 19 đường 30 Tháng 4, Hải Châu, Đà Nẵng'),
-('T00006', 'Starlight Đà Nẵng', 'Tầng 4, Lotte Mart, Ngũ Hành Sơn, Đà Nẵng');
+('T00001', N'CGV Vincom Đà Nẵng', N'910A Ngô Quyền, Sơn Trà, Đà Nẵng'),
+('T00002', N'Lotte Cinema Đà Nẵng', N'46 Điện Biên Phủ, Thanh Khê, Đà Nẵng'),
+('T00003', N'Galaxy Đà Nẵng', N'79 Nguyễn Văn Linh, Hải Châu, Đà Nẵng'),
+('T00004', N'Beta Cinemas Đà Nẵng', N'Cách Mạng Tháng 8, Cẩm Lệ, Đà Nẵng'),
+('T00005', N'Metiz Cinema Đà Nẵng', N'Lô 19 đường 30 Tháng 4, Hải Châu, Đà Nẵng'),
+('T00006', N'Starlight Đà Nẵng', N'Tầng 4, Lotte Mart, Ngũ Hành Sơn, Đà Nẵng');
 
 -- Thêm Rooms (phòng chiếu phim tại các rạp)
 INSERT INTO Rooms (RoomID, RoomName, TheatreID)
 VALUES 
-('R00001', 'Phòng 1', 'T00001'),
-('R00002', 'Phòng 2', 'T00001'),
-('R00003', 'Phòng 1', 'T00002'),
-('R00004', 'Phòng 2', 'T00002'),
-('R00005', 'Phòng 1', 'T00003'),
-('R00006', 'Phòng 1', 'T00004'),
-('R00007', 'Phòng 2', 'T00004'),
-('R00008', 'Phòng 1', 'T00005'),
-('R00009', 'Phòng 2', 'T00005'),
-('R00010', 'Phòng 1', 'T00006');
+('R00001', N'Phòng 1', 'T00001'),
+('R00002', N'Phòng 2', 'T00001'),
+('R00003', N'Phòng 3', 'T00002'),
+('R00004', N'Phòng 4', 'T00002'),
+('R00005', N'Phòng 5', 'T00003'),
+('R00006', N'Phòng 6', 'T00004'),
+('R00007', N'Phòng 7', 'T00004'),
+('R00008', N'Phòng 8', 'T00005'),
+('R00009', N'Phòng 9', 'T00005'),
+('R00010', N'Phòng 10', 'T00006');
 
 -- Thêm Seats (ghế tại các phòng chiếu)
 INSERT INTO Seats (SeatID, SeatName, RoomID)
@@ -233,14 +234,14 @@ VALUES
 -- Thêm Vouchers (voucher khuyến mãi)
 INSERT INTO Vouchers (VoucherID, Price, ExpiryDate)
 VALUES 
-('V00001', 50000, '2024-12-31'),
-('V00002', 100000, '2024-11-30');
+('V00001', 50000, N'Voucher1', '2024-12-31'),
+('V00002', 100000, N'Voucher2', '2024-11-30');
 
 -- Thêm FoodsAndDrinks (đồ ăn và nước uống)
 INSERT INTO FoodsAndDrinks (ComboID, ComboName, Price)
 VALUES 
-('C00001', 'Combo 1: Bắp rang + Nước ngọt', 60000),
-('C00002', 'Combo 2: Bắp rang lớn + Nước ngọt lớn', 80000);
+('C00001', N'Combo 1: Bắp rang + Nước ngọt', 60000),
+('C00002', N'Combo 2: Bắp rang lớn + Nước ngọt lớn', 80000);
 
 -- Thêm Booking (đơn đặt vé)
 INSERT INTO Booking (BookingID, CustomerID, BookingDate)
@@ -254,8 +255,14 @@ VALUES
 INSERT INTO Tickets (TicketID, BookingID, ShowID, SeatID, ComboID, VoucherID, Price, BookingDate)
 VALUES 
 ('T00001', 'B00001', 'SH0001', 'S00001', 'C00001', 'V00001', 120000, '2024-09-10 13:00:00'),
-('T00002', 'B00002', 'SH0002', 'S00004', 'C00002', 'V00002', 150000, '2024-09-11 14:00:00');
+('T00002', 'B00002', 'SH0002', 'S00004', 'C00002', 'V00002', 150000, '2024-09-11 14:00:00'),
+('T00003', 'B00003', 'SH0003', 'S00006', 'C00001', 'V00002', 100000, '2024-09-12 15:00:00'),
+('T00004', 'B00004', 'SH0004', 'S00007', 'C00001', 'V00001', 130000, '2024-09-12 16:00:00'); 
 
 
 
-select Username, Pass , UserID, Email, Phone, Sex, DateOfBirth, MoneyLeft from Users where Username = 'Admin' and Pass= '123' 
+select Username, Pass , UserID, Email, Phone, Sex, DateOfBirth, MoneyLeft from Users where Username = 'Admin' and Pass= '123'
+
+select * from Rooms
+
+DROP TABLE IF EXISTS Tickets;

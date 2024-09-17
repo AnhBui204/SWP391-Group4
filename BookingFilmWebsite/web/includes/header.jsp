@@ -5,7 +5,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Galaxy Cinema</title>
-        <link rel="stylesheet" href="../css/header.css"/>
+        <link rel="stylesheet" href="../css/headers.css"/>
         <link rel="stylesheet" href="../css/body.css"/>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -20,7 +20,7 @@
                 <!-- Logo -->
                 <div class="bigLogo">
                     <div class="logo">
-                        <img src="../image/logo/logo.png" alt="FPT Cinema">
+                        <img src="image/logo/logo.png" alt="FPT Cinema">
                     </div>
                     <h3 class="text">FPT CINEMA</h3>
                 </div>
@@ -36,32 +36,7 @@
                 </nav>
                 <!-- User Info -->
                 <div class="signlog">
-                    <div id="activate_button">
-                        <button class="btn btn-primary">Toggle Login</button>
-                    </div>
-                    <div id="box_signlog" class="hidden">
-                        <div class="logo_signlog">
-                            <img src="image/logo/logo.png" alt="Logo"/>
-                            <p>Login</p>
-                        </div>
-                        <form action="UserServlet" method="post">
-                            <div class="input_layer">
-                                <label for="username">Username</label>
-                                <input type="text" id="username" name="uname" placeholder="Username" required>
-                                <label for="password">Password</label>
-                                <input type="password" id="password" name="psw" placeholder="Password" required>
-                            </div>
-                            <div class="login_button">
-                                <button type="submit" class="btn btn-warning">Login</button>
-                                <a href="#">Forgot Password?</a>
-                            </div>
-                            <hr>
-                            <div class="no_account">
-                                <p>Don't have an account?</p>
-                                <a href="../signin/signin.jsp" class="btn btn-outline-warning">Sign Up</a>
-                            </div>
-                        </form>
-                    </div>
+                    <a href="Login.jsp" class="btn btn-custom">Login</a>
                 </div>
             </div>
         </header>

@@ -64,7 +64,7 @@ public class UserServlet extends HttpServlet {
                 Cookie password = new Cookie("pass", URLEncoder.encode(a.getPassword(), "UTF-8"));
                 response.addCookie(userName);
                 response.addCookie(password);
-                String encodedURL = response.encodeRedirectURL("adminDBoard.jsp");
+                String encodedURL = response.encodeRedirectURL("AdminDashBoard.jsp");
                 response.sendRedirect(encodedURL);
 
             } else if (a.getRole().equals("User")) {
@@ -83,7 +83,23 @@ public class UserServlet extends HttpServlet {
                 String encodedURL = response.encodeRedirectURL("HomePage.jsp");
                 response.sendRedirect(encodedURL);
 
-            } else {
+            }else if (a.getRole().equals("Staff")) {
+                // User login
+                HttpSession session = request.getSession();
+                session.setAttribute("user", a.getUsername());
+                session.setAttribute("pass", a.getPassword());
+                session.setAttribute("id",a.getUserID()); //added
+                session.setAttribute("role", "staff");
+
+                session.setMaxInactiveInterval(30 * 60); // Session expiry
+                Cookie userName = new Cookie("user", URLEncoder.encode(a.getUsername(), "UTF-8"));
+                Cookie password = new Cookie("pass", URLEncoder.encode(a.getPassword(), "UTF-8"));
+                response.addCookie(userName);
+                response.addCookie(password);
+                String encodedURL = response.encodeRedirectURL("StaffDashBoard.jsp");
+                response.sendRedirect(encodedURL);
+            }
+            else {
                 // Invalid role, handle accordingly
 
             }
