@@ -30,7 +30,7 @@ body {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 40px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Segoe UI;
     color: white;
 }
 
@@ -80,21 +80,23 @@ nav ul li a:hover {
     color: #000;
 }
 
-.movie-filters {
+.add-movie{
     display: flex;
-    gap: 15px;
+    width: auto;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
 }
 
-.movie-filters a {
-    text-decoration: none;
-    color: #007BFF;
-    font-weight: bold;
+.add-movie:hover{
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.add-movie i{
+    margin-right: 8px;
     font-size: 18px;
-}
-
-.movie-filters a.active {
-    color: #000;
-    border-bottom: 2px solid #007BFF;
 }
 
 .movie-grid {
@@ -104,26 +106,30 @@ nav ul li a:hover {
 }
 
 .movie-card {
-    background-color: #fff;
-    border-radius: 10px;
+    background-color: #FECF8F;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease;
 }
 
-.movie-card:hover {
-    color: grey;
+.movie-image-container:hover {
+    opacity: 0.7;
 }
 
-.movie-card img {
+.movie-image-container {
+    border-radius: 15px;
+    overflow: hidden; 
+    display: block; 
+}
+
+.movie-image img{
     width: 100%;
     height: auto;
     display: block;
 }
 
-.movie-info {
-    padding: 15px;
-    text-align: center;
+.movie-name {
+    padding: 15px 0;
+    text-align: left;
 }
 
 .movie-info h3 {
