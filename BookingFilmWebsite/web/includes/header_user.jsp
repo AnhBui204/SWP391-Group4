@@ -15,7 +15,7 @@
                 <!-- Logo -->
                 <div class="bigLogo">
                     <div class="logo">
-                        <img src="image/logo/logo.png" alt="FPT Cinema" style="cursor: pointer;" onclick="window.location.href='HomePage.jsp';">
+                        <img src="image/logo/logo.png" alt="FPT Cinema" style="cursor: pointer;" onclick="window.location.href = 'HomePage.jsp';">
                     </div>
                     <h3 class="text">FPT CINEMA</h3>
                 </div>
@@ -40,7 +40,9 @@
                         <div class="dropdown-menu">
                             <a href="UserServlet?action=db" class="dropdown-item">Tài Khoản</a>
                             <a href="#" class="dropdown-item">Lịch Sử</a>
-                            <a href="UserServlet?action=logout" class="dropdown-item">Đăng Xuất</a>
+                            <form action="<%=response.encodeURL("UserServlet")%>" method="get">
+                                <input type="submit" name="action" value="Log Out" class="logout">
+                            </form>
                         </div>
                     </div>
                 </div>

@@ -9,7 +9,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Admin Dashboard</title>
-        <link href="css/admindb.css" rel="stylesheet"/> 
+        <link href="css/admindbs.css" rel="stylesheet"/> 
     </head>
     <body>
         <!-- =============== Navigation ================ -->
@@ -23,8 +23,8 @@
                             </a>
                         </div>
                     </li>
-                    <li class="dep">
-                        <a href="#">
+                    <li class="dep actived">
+                        <a class="" href="#">
                             <span class="icon">
                                 <img src="image/logo/dashboard.png" alt="Dashboard">
                             </span>

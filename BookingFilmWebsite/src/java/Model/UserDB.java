@@ -25,8 +25,8 @@ public class UserDB implements DatabaseInfo {
 
     public User getUsers(String username, String password) {
         User user = null;
-        String query = "select Username, Pass , UserID, Email, Phone, Sex, DateOfBirth, MoneyLeft "
-                + "from Users where Username =? and Pass=? ";
+        String query = "select CustomerName, Pass, FName , LName , CustomerID, Email, Phone, Sex, DateOfBirth, MoneyLeft "
+                + "from Customers where CustomerName =? and Pass=? ";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
 
@@ -38,14 +38,17 @@ public class UserDB implements DatabaseInfo {
                 // String id = rs.getString("UserId");
                 username = rs.getString(1);
                 password = rs.getString(2);
-                String id = rs.getString(3);
-                String email = rs.getString(4);
-                String phone = rs.getString(5);
-                String sex = rs.getString(6);
-                String DOB = rs.getString(7);
-                String money = rs.getString(8);
+                String fName = rs.getString(3);
+                String lName = rs.getString(4);
+                String id = rs.getString(5);
+                String email = rs.getString(6);
+                String phone = rs.getString(7);
+                String sex = rs.getString(8);
+                String DOB = rs.getString(9);
+                String money = rs.getString(10);
+
                 String role = "User";
-                user = new User(id, username, password, email, role, phone, sex, DOB, money);
+                user = new User(id, username, password, fName, lName, email, role, phone, sex, DOB, money);
             }
 
         } catch (Exception ex) {
@@ -53,12 +56,12 @@ public class UserDB implements DatabaseInfo {
         }
         return user;
     }
-
 //--------------------------------------------------------------------------------------------
     // Phương thức để lấy ID lớn nhất hiện có
+
     public String getMaxUserId() {
         String maxId = null;
-        String query = "SELECT MAX(CAST(SUBSTRING(UserId, 3, LEN(UserId) - 2) AS INT)) AS maxId FROM Users WHERE UserId LIKE 'US%'";
+        String query = "SELECT MAX(CAST(SUBSTRING(UserId, 3, LEN(UserId) - 2) AS INT)) AS maxId FROM Customers WHERE UserId LIKE 'US%'";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
             ResultSet rs = stmt.executeQuery();
@@ -75,7 +78,7 @@ public class UserDB implements DatabaseInfo {
     // Phương thức để tìm các ID bị thiếu
     public TreeSet<Integer> findMissingIds() {
         TreeSet<Integer> missingIds = new TreeSet<>();
-        String query = "SELECT CAST(SUBSTRING(UserId, 3, LEN(UserId) - 2) AS INT) AS numId FROM Users WHERE UserId LIKE 'US%' ORDER BY numId";
+        String query = "SELECT CAST(SUBSTRING(UserId, 3, LEN(UserId) - 2) AS INT) AS numId FROM Customers WHERE UserId LIKE 'US%' ORDER BY numId";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
             ResultSet rs = stmt.executeQuery();
@@ -119,7 +122,7 @@ public class UserDB implements DatabaseInfo {
     public void insert(User user) {
         String newUserId = generateNewUserId();
         user.setUserID(newUserId);
-        String sql = "INSERT INTO Users (UserId, Username, Pass, Role, Email) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Customers (CustomerID, CustomerName, Pass,FName,LName, Role, Email) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, user.getUserID());
@@ -135,7 +138,7 @@ public class UserDB implements DatabaseInfo {
 
 //-----------------------------------------------------------------------------------
     public User updateUser(User user) {
-        String query = "UPDATE Users SET username=?, password=? WHERE UserId=?";
+        String query = "UPDATE Customers SET CustomerName=?, password=? WHERE CustomerID=?";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
 
@@ -153,15 +156,17 @@ public class UserDB implements DatabaseInfo {
 
     public static ArrayList<User> listAllUsers() {
         ArrayList<User> userList = new ArrayList<>();
-        String query = "SELECT UserID, Username, Pass, Email, Phone, Sex, DateOfBirth, MoneyLeft FROM Users";
+        String query = "SELECT CustomerID, CustomerName,Pass , FName , LName, Email, Phone, Sex, DateOfBirth, MoneyLeft FROM Customers";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                String userID = rs.getString("UserID");
-                String username = rs.getString("Username");
+                String userID = rs.getString("CustomerID");
+                String username = rs.getString("CustomerName");
                 String password = rs.getString("Pass");
+                String fname = rs.getString("FName");
+                String lname = rs.getString("LName");
                 String email = rs.getString("Email");
                 String phone = rs.getString("Phone");
                 String sex = rs.getString("Sex");
@@ -169,7 +174,7 @@ public class UserDB implements DatabaseInfo {
                 String money = rs.getString("MoneyLeft");
                 String role = "User"; // Assuming all are regular users by default
 
-                User user = new User(userID, username, password, email, role, phone, sex, dob, money);
+                User user = new User(userID, username, password, fname, lname, email, role, phone, sex, dob, money);
                 userList.add(user);
             }
         } catch (Exception ex) {
@@ -183,9 +188,11 @@ public class UserDB implements DatabaseInfo {
         for (User user : list) {
             System.out.println(user);
         }
+//        User s = UserDB.getUsers("admin", "123");
+//        System.out.println(s);
+//        System.out.println(s.getRole());
     }
 }
-
 
 //--------------------------------------------------------------------------------
 //    public static int deleteUser(String userId) {

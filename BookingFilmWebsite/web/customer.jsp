@@ -8,7 +8,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Customer</title>
-        <link rel="stylesheet" href="css/admindb.css"/>
+        <link rel="stylesheet" href="css/admindbs.css"/>
     </head>
     <style>
         .userInfo {
@@ -16,7 +16,7 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         .userInfo h1{
             margin: 10px;
         }
@@ -127,8 +127,8 @@
                             <span class="title">Dashboard</span>
                         </a>
                     </li>
-                    <li class="dep">
-                        <a href="customer.jsp">
+                    <li class="dep actived">
+                        <a class="" href="customer.jsp">
                             <span class="icon">
                                 <img src="image/logo/customer.png" alt="Customers">
                             </span>
@@ -170,6 +170,8 @@
                             <tr>
                                 <th>Username</th>
                                 <th>Password</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
                                 <th>Email</th>
                                 <th>Phone Number</th>
                                 <th>Sex</th>
@@ -189,6 +191,8 @@
                                     <span id="passwordDisplay">********</span>
                                     <button onclick="togglePassword()">Show</button>
                                 </td>
+                                <td><%= user.getfName()%></td>
+                                <td><%= user.getlName()%></td>
                                 <td><%= user.getEmail()%></td>
                                 <td><%= user.getPhone()%></td>
                                 <td><%= user.getSex()%></td>

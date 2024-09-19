@@ -39,8 +39,8 @@ public class TicketDB {
 
     // Create - Thêm mới chi tiết vé
     public void insert(Ticket c) {
-        String sql = "INSERT INTO Tickets (TicketID, BookingID, ShowID, SeatID, ComboID, VoucherID, Price, BookingDate)\n"
-                + "VALUES(?,?,?,?,?,?)";
+        String sql = "INSERT INTO Tickets (TicketID, BookingID, ShowID, SeatID, ComboID, VoucherID, Price,Status, BookingDate)\n"
+                + "VALUES(?,?,?,?,?,?,?)";
         try (Connection con = getConnect()) {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, c.getTicketID());
@@ -49,34 +49,34 @@ public class TicketDB {
             stmt.setString(4, c.getSeatID());
             stmt.setString(5, c.getComboID());
             stmt.setString(6, c.getVoucherID());
-            stmt.setInt(7, c.getPrice());
-            stmt.setDate(8, (Date) c.getBookingDate());
+            stmt.setDouble(7, c.getPrice());
+            stmt.setString(8, c.getStatus());
+            stmt.setDate(9, (Date) c.getBookingDate());
             stmt.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-
     // Read - Lấy một chi tiết vé
     public static Ticket getTicketDetail(String ticketDetailID) {
         Ticket ticket = null;
-        String query = "SELECT TD.TicketDetailID, T.BookingID, M.MovieName AS ShowName, ST.SeatName, " +
-                       "F.ComboName, V.VoucherID, TD.Price, T.BookingDate " +
-                       "FROM TicketDetails TD " +
-                       "JOIN Tickets T ON TD.TicketID = T.TicketID " +
-                       "JOIN Shows SH ON TD.ShowID = SH.ShowID " +
-                       "JOIN Movies M ON SH.MovieID = M.MovieID " +
-                       "JOIN Seats ST ON TD.SeatID = ST.SeatID " +
-                       "LEFT JOIN FoodsAndDrinks F ON TD.ComboID = F.ComboID " +
-                       "LEFT JOIN Vouchers V ON TD.VoucherID = V.VoucherID " +
-                       "WHERE TD.TicketDetailID = ?";
-        
+        String query = "SELECT TD.TicketDetailID, T.BookingID, M.MovieName AS ShowName, ST.SeatName, "
+                + "F.ComboName, V.VoucherID, TD.Price, T.BookingDate, T.TicketStatus "
+                + "FROM TicketDetails TD "
+                + "JOIN Tickets T ON TD.TicketID = T.TicketID "
+                + "JOIN Shows SH ON TD.ShowID = SH.ShowID "
+                + "JOIN Movies M ON SH.MovieID = M.MovieID "
+                + "JOIN Seats ST ON TD.SeatID = ST.SeatID "
+                + "LEFT JOIN FoodsAndDrinks F ON TD.ComboID = F.ComboID "
+                + "LEFT JOIN Vouchers V ON TD.VoucherID = V.VoucherID "
+                + "WHERE TD.TicketDetailID = ?";
+
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
             stmt.setString(1, ticketDetailID);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    ticket  = new Ticket(
+                    ticket = new Ticket(
                             rs.getString("TicketID"),
                             rs.getString("BookingID"),
                             rs.getString("ShowName"),
@@ -84,6 +84,7 @@ public class TicketDB {
                             rs.getString("ComboName"),
                             rs.getString("VoucherID"),
                             rs.getInt("Price"),
+                            rs.getString("TicketStatus"),
                             rs.getDate("BookingDate")
                     );
                 }
@@ -93,27 +94,39 @@ public class TicketDB {
         }
         return ticket;
     }
-    
-    public static ArrayList<Ticket> listAllTickets() {
-        ArrayList<Ticket> ticketList = new ArrayList<>();
-        String query = "SELECT TD.TicketID, T.BookingID, M.MovieName AS ShowName, ST.SeatName, " +
-                       "F.ComboName, V.VoucherID, TD.Price, T.BookingDate " +
-                       "FROM TicketID TD " +
-                       "JOIN Tickets T ON TD.TicketID = T.TicketID " +
-                       "JOIN Shows SH ON TD.ShowID = SH.ShowID " +
-                       "JOIN Movies M ON SH.MovieID = M.MovieID " +
-                       "JOIN Seats ST ON TD.SeatID = ST.SeatID " +
-                       "LEFT JOIN FoodsAndDrinks F ON TD.ComboID = F.ComboID " +
-                       "LEFT JOIN Vouchers V ON TD.VoucherID = V.VoucherID ";
+
+    public static ArrayList<TicketDetails> listAllTickets() {
+        ArrayList<TicketDetails> ticketList = new ArrayList<>();
+        String query = "SELECT \n"
+                + "    TD.TicketID,\n"
+                + "    S.MovieName AS ShowName,\n"
+                + "    ST.SeatName,\n"
+                + "    F.ComboName,\n"
+                + "    V.VoucherName,\n"
+                + "    TD.Price,\n"
+                + "    TD.BookingDate,\n"
+                + "    TD.TicketStatus\n"
+                + "FROM \n"
+                + "     Tickets TD \n"
+                + "    JOIN Shows SH ON TD.ShowID = SH.ShowID\n"
+                + "    JOIN Movies S ON SH.MovieID = S.MovieID\n"
+                + "    JOIN Seats ST ON TD.SeatID = ST.SeatID\n"
+                + "    LEFT JOIN FoodsAndDrinks F ON TD.ComboID = F.ComboID\n"
+                + "    LEFT JOIN Vouchers V ON TD.VoucherID = V.VoucherID;";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                String cID = rs.getString("TheatreID");
-                String cName = rs.getString("TheatreName");
-                String cLocation = rs.getString("TheatreLocation");
-                Ticket ticket = new Cinema(cID, cName, cLocation);
+                String tID = rs.getString("TicketID");
+                String show = rs.getString("ShowName");
+                String seat = rs.getString("seatName");
+                String comboname = rs.getString("comboName");
+                String voucher = rs.getString("VoucherName");
+                Double price = rs.getDouble("price");
+                String status = rs.getString("TicketStatus");
+                Date bookingDate = rs.getDate("bookingDate");
+                TicketDetails ticket = new TicketDetails(tID, show, seat, comboname, voucher, price,status, bookingDate);
                 ticketList.add(ticket);
             }
         } catch (Exception ex) {

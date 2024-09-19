@@ -1,14 +1,15 @@
+<%@page import="Model.TicketDB"%>
+<%@page import="Model.Ticket"%>
+<%@page import="Model.TicketDetails"%>
 <%@ page import="java.util.List" %>
 <%@page import="Model.DatabaseInfo"%>
-<%@page import="Model.Cinema"%>
-<%@page import="Model.CinemaDB"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="vn">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Customer</title>
-        <link rel="stylesheet" href="css/admindb.css"/>
+        <link rel="stylesheet" href="css/admindbs.css"/>
     </head>
     <style>
         .userInfo {
@@ -143,7 +144,7 @@
                             <span class="title">Cinema</span>
                         </a>
                     </li>
-                    <li class="dep">
+                    <li class="dep actived">
                         <a href="ticket.jsp">
                             <span class="icon">
                                 <img src="image/logo/order.png" alt="Orders">
@@ -168,21 +169,31 @@
                     <table class="table-container">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Location</th>
+                                <th>TicketID</th>
+                                <th>Show</th>
+                                <th>Seat</th>
+                                <th>Combo</th>
+                                <th>Voucher</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <%
-                                CinemaDB cinemaDB = new CinemaDB();
-                                List<Cinema> list = CinemaDB.listAllCinemas();
-                                for (Cinema ci : list) {
+                                TicketDB ticketDB = new TicketDB();
+                                List<TicketDetails> list = ticketDB.listAllTickets();
+                                for (TicketDetails tk : list) {
                             %>
                             <tr>
-                                <td><%= ci.getCinemaID()%></td>
-                                <td><%= ci.getCinemaName()%></td>
-                                <td><%= ci.getCinemaLocation()%></td>
+                                <td><%= tk.getTicketID()%></td>
+                                <td><%= tk.getShowName()%></td>
+                                <td><%= tk.getSeatName()%></td>
+                                <td><%= tk.getComboName()%></td>
+                                <td><%= tk.getVoucherName()%></td>
+                                <td><%= tk.getPrice()%></td>
+                                <td><%= tk.getBookingDate()%></td>
+                                <td><%= tk.getStatus() %></td>
                             </tr>
                             <%
                                 }

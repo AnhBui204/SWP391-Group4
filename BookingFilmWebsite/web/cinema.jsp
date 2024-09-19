@@ -8,7 +8,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Customer</title>
-        <link rel="stylesheet" href="css/admindb.css"/>
+        <link rel="stylesheet" href="css/admindbs.css"/>
     </head>
     <style>
         .userInfo {
@@ -135,7 +135,7 @@
                             <span class="title">Customers</span>
                         </a>
                     </li>
-                    <li class="dep">
+                    <li class="dep actived">
                         <a href="cinema.jsp">
                             <span class="icon">
                                 <img src="image/logo/cinema.png" alt="Cinema">

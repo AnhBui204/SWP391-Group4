@@ -20,7 +20,7 @@
                 <!-- Logo -->
                 <div class="bigLogo">
                     <div class="logo">
-                        <img src="image/logo/logo.png" alt="FPT Cinema">
+                        <img src="image/logo/logo.png" alt="FPT Cinema" style="cursor: pointer;" onclick="window.location.href='HomePage.jsp';">
                     </div>
                     <h3 class="text">FPT CINEMA</h3>
                 </div>

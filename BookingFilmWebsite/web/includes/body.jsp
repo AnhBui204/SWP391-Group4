@@ -1,9 +1,4 @@
 
-<%-- 
-    Document   : body1
-    Created on : 5 Sep 2024, 9:46:48 PM
-    Author     : HongD
---%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>

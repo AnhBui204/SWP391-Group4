@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 public class UserServlet extends HttpServlet {
 
@@ -57,7 +58,7 @@ public class UserServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", a.getUsername());
                 session.setAttribute("pass", a.getPassword());
-                session.setAttribute("role", "admin");
+                session.setAttribute("role", "Admin");
 
                 session.setMaxInactiveInterval(30 * 60); // Session expiry
                 Cookie userName = new Cookie("user", URLEncoder.encode(a.getUsername(), "UTF-8"));
@@ -73,7 +74,7 @@ public class UserServlet extends HttpServlet {
                 session.setAttribute("user", a.getUsername());
                 session.setAttribute("pass", a.getPassword());
                 session.setAttribute("id",a.getUserID()); //added
-                session.setAttribute("role", "user");
+                session.setAttribute("role", "User");
 
                 session.setMaxInactiveInterval(30 * 60); // Session expiry
                 Cookie userName = new Cookie("user", URLEncoder.encode(a.getUsername(), "UTF-8"));
@@ -89,7 +90,7 @@ public class UserServlet extends HttpServlet {
                 session.setAttribute("user", a.getUsername());
                 session.setAttribute("pass", a.getPassword());
                 session.setAttribute("id",a.getUserID()); //added
-                session.setAttribute("role", "staff");
+                session.setAttribute("role", "Staff");
 
                 session.setMaxInactiveInterval(30 * 60); // Session expiry
                 Cookie userName = new Cookie("user", URLEncoder.encode(a.getUsername(), "UTF-8"));
@@ -192,4 +193,13 @@ public class UserServlet extends HttpServlet {
     public String getServletInfo() {
         return "UserServlet handles user login, logout, signup, and dashboard actions.";
     }
+    
+//    public static void main(String[] args) {
+//        ArrayList<User> list = UserDB.listAllUsers();
+//        for (User user : list) {
+//            System.out.println(user);
+//        }
+//        User s = UserDB.getUsers("admin","123");
+//        System.out.println(s.getRole());
+//    }
 }

@@ -16,12 +16,13 @@ public class Ticket implements Serializable {
     private String comboID;
     private String voucherID;
     private double price;
+    private String status;
     private Date bookingDate;
 
     public Ticket() {
     }
 
-    public Ticket(String ticketID, String bookingID, String showID, String seatID, String comboID, String voucherID, double price, Date bookingDate) {
+    public Ticket(String ticketID, String bookingID, String showID, String seatID, String comboID, String voucherID, double price,String status, Date bookingDate) {
         this.ticketID = ticketID;
         this.bookingID = bookingID;
         this.showID = showID;
@@ -29,6 +30,7 @@ public class Ticket implements Serializable {
         this.comboID = comboID;
         this.voucherID = voucherID;
         this.price = price;
+        this.status = status;
         this.bookingDate = bookingDate;
     }
 
@@ -38,6 +40,14 @@ public class Ticket implements Serializable {
 
     public void setTicketID(String ticketID) {
         this.ticketID = ticketID;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getBookingID() {

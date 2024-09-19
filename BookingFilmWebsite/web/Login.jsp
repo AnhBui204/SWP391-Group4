@@ -6,160 +6,82 @@
         <title>Login and Signup</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <link href="css/body.css" rel="stylesheet">
-        <style>
-            /* Body Styling */
-            body {
-                background-color: #f8f9fa;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-                margin: 0;
-                font-family: Arial, sans-serif;
-            }
-
-            /* Container for the form */
-            .signlog {
-                max-width: 600px;
-                background-color: #fff;
-                padding: 30px;
-                border-radius: 10px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                margin: 20px;
-            }
-
-            /* Logo Styling */
-            .logo_signlog {
-                text-align: center;
-                margin-bottom: 20px;
-            }
-
-            .logo_signlog img {
-                max-width: 80px;
-                margin-bottom: 10px;
-            }
-
-            .logo_signlog p {
-                font-size: 24px;
-                font-weight: bold;
-                color: #ff6f00;
-            }
-
-            /* Input Fields */
-            .input_layer {
-                margin-bottom: 20px;
-            }
-
-            .input_layer label {
-                font-weight: bold;
-                color: #555;
-                margin-bottom: 5px;
-                display: block;
-            }
-
-            .input_layer input {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid #ced4da;
-                border-radius: 5px;
-                margin-bottom: 15px;
-                font-size: 16px;
-            }
-
-            /* Buttons */
-            .login_button {
-                text-align: center;
-                margin-bottom: 20px;
-            }
-
-            .login_button button {
-                width: 100%;
-                padding: 10px;
-                font-size: 16px;
-                background-color: #ff6f00;
-                border: none;
-                color: #fff;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            .login_button button:hover {
-                background-color: #e65c00;
-            }
-
-            /* Links and Divider */
-            .login_button a {
-                display: block;
-                margin-top: 10px;
-                color: #007bff;
-                text-decoration: none;
-            }
-
-            .login_button a:hover {
-                text-decoration: underline;
-            }
-
-            hr {
-                border: none;
-                border-top: 1px solid #ddd;
-                margin: 20px 0;
-            }
-
-            /* Sign Up Section */
-            .no_account {
-                text-align: center;
-            }
-
-            .no_account p {
-                margin-bottom: 10px;
-                color: #555;
-            }
-
-            .no_account a {
-                text-decoration: none;
-                font-size: 16px;
-                color: #ff6f00;
-                border: 2px solid #ff6f00;
-                padding: 10px 20px;
-                border-radius: 5px;
-                transition: all 0.3s;
-            }
-
-            .no_account a:hover {
-                background-color: #ff6f00;
-                color: #fff;
-            }
-        </style>
+        <link href="" rel="stylesheet">
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
     </head>
     <body>
-        <div class="signlog">
-            <div id="box_signlog">
-                <div class="logo_signlog">
-                    <img src="image/logo/logo.png" alt="Logo"/>
-                    <p>Login</p>
+        <section class="h-100 gradient-form" style="background-color: #eee;">
+            <div class="container py-1 h-70">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-xl-10">
+                        <div class="card rounded-3 text-black">
+                            <div class="row g-0">
+                                <div class="col-lg-6">
+                                    <div class="card-body p-md-5 mx-md-4">
+                                        <div class="text-center">
+                                            <img src="image/logo/logo.png" alt="Logo" style="width: 185px;">
+                                            <h4 class="mt-1 mb-5 pb-1">Login</h4>
+                                        </div>
+
+                                        <form action="UserServlet" method="post">
+                                            <p>Please login to your account</p>
+
+                                            <div class="form-outline mb-4">
+                                                <input type="text" id="uname" name="uname" class="form-control" placeholder="Username" required>
+                                                <label class="form-label" for="uname">Username</label>
+                                            </div>
+
+                                            <div class="form-outline mb-4">
+                                                <input type="password" id="password" name="psw" class="form-control" placeholder="Password" required>
+                                                <label class="form-label" for="password">Password</label>
+                                            </div>
+
+                                            <div class="text-center pt-1 mb-5 pb-1">
+                                                <button type="submit" class="btn btn-warning">Login</button>
+                                                <br>
+                                                <a href="#">Forgot Password?</a>
+                                            </div>
+
+                                            <div class="text-center mb-4">
+                                                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                                            </div>
+
+                                            <hr>
+
+                                            <div class="d-flex align-items-center justify-content-center pb-4">
+                                                <p class="mb-0 me-2">Don't have an account?</p>
+                                                <a href="../signin/signin.jsp" class="btn btn-outline-warning">Sign Up</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 d-flex align-items-center gradient-custom-2" style="background-color: grey; border-radius: 5px;">
+                                    <div class="text-white px-3 py-4 p-md-5 mx-md-4" style="border-radius: 10px;">
+                                        <h4 class="mb-4">Welcome to Cineluxe Cinema</h4>
+                                        <p class="small mb-0">
+                                            Chúng tôi rất vui được chào đón bạn đến với thế giới điện ảnh tuyệt vời của chúng tôi! 
+                                            Tại đây, chúng tôi cung cấp cho bạn những bộ phim mới nhất, 
+                                            các chương trình khuyến mãi hấp dẫn và trải nghiệm xem phim tuyệt vời.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <form action="UserServlet" method="post">
-                    <div class="input_layer">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="uname" placeholder="Username" required>
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="psw" placeholder="Password" required>
-                    </div>
-                    <div class="login_button">
-                        <button type="submit" class="btn btn-warning">Login</button>
-                        <a href="#">Forgot Password?</a>
-                    </div>
-                    <hr>
-                    <div class="no_account">
-                        <p>Don't have an account?</p>
-                        <a href="../signin/signin.jsp" class="btn btn-outline-warning">Sign Up</a>
-                    </div>
-                </form>
             </div>
-        </div>
+        </section>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <script>
+            function onSignIn(googleUser) {
+                // Handle sign-in logic here.
+                var profile = googleUser.getBasicProfile();
+                console.log('ID: ' + profile.getId());
+                console.log('Name: ' + profile.getName());
+                console.log('Image URL: ' + profile.getImageUrl());
+                console.log('Email: ' + profile.getEmail());
+            }
+        </script>
     </body>
 </html>

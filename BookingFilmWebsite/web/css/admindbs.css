@@ -94,6 +94,15 @@
         .navigation-admin ul .dep.hovered {
             background-color: #FFD08E;
         }
+        
+        .navigation-admin ul .actived {
+            background-color: #FFD08E;
+        }
+        
+        .navigation-admin ul .actived a{
+            color: var(--blue);
+        }
+        
 
         /* Làm cho cái ul đầu tiên (QTALD) không có hiệu ứng lúc di chuột vào */
         .navigation-admin ul .dep:hover:nth-child(1) {
