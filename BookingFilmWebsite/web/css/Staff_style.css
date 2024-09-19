@@ -1,0 +1,171 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Sep 19, 2024, 3:51:32 PM
+    Author     : pc
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial;
+}
+
+.container {
+    display: flex;
+}
+
+.sidebar {
+    width: 300px;
+    background-color: #F97D5B;
+    padding: 20px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+}
+
+nav ul {
+    list-style-type: none;
+}
+
+nav ul li {
+    margin: 20px 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    font-size: 18px;
+    color: black;
+    display: flex;
+    align-items: center;
+}
+
+nav ul li a:hover {
+    color: #FF5722;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #FECF8F;
+}
+
+.content h2 {
+    margin-bottom: 20px;
+}
+
+.movie-section {
+    padding: 20px;
+}
+
+.movie-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.movie-header h1 {
+    font-size: 24px;
+    color: #000;
+}
+
+.movie-filters {
+    display: flex;
+    gap: 15px;
+}
+
+.movie-filters a {
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.movie-filters a.active {
+    color: #000;
+    border-bottom: 2px solid #007BFF;
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.movie-card {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.movie-card:hover {
+    color: grey;
+}
+
+.movie-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.movie-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.movie-info h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.movie-info p {
+    font-size: 14px;
+    color: #666;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #A8234C;
+    padding: 10px;
+    border-radius: 8px;
+    color: #ffffff;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-info p {
+    margin: 0 10px;
+}
+
+.user-name {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.user-title{
+    font-size: 12px;
+}
+
+.fa-right-from-bracket {
+    cursor: pointer;
+}
+
