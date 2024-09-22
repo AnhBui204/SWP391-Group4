@@ -4,60 +4,87 @@
 <%@page import="Model.CinemaDB"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html lang="vn">
+<html lang="en">
+
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Customer</title>
-        <link rel="stylesheet" href="css/admindbs.css"/>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width= , initial-scale=1.0">
+        <link rel="stylesheet" href="admin.css">
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+        <title>Document</title>
     </head>
     <style>
+        /* Các trang khác */
+
         .userInfo {
-            margin-top: 50px;
+            background-color: var(--clr-white);
             justify-content: center;
             align-items: center;
+            padding: var(--card-padding);
+            border: var(--card-border-radius);
+            box-shadow: var(--box-shadow);
+            margin-top: 65px;
         }
-        
+
         .userInfo h1{
             margin: 10px;
+            color: var(--clr-primary);
         }
 
         .table-container {
-            width:95%;
+            width:100%;
             margin: auto;
         }
 
-        table {
+        .main-admin table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 40px;
+            height: 100%;
+            background-color: var(--clr-white);
+            padding: var(--card-padding);
+            border-radius: var(--card-border-radius);
+            text-align: center;
+            transition: all .3s ease;
+            color: var(--clr-dark);
         }
 
-        table, th, td {
+        .main-admin table, th, td {
             border: 1px solid #ddd;
         }
 
-        th, td {
+        .main-admin th, td {
             padding: 15px;
             text-align: center;
-            color: #333;
+            color: var(--clr-dark);
         }
 
-        th {
-            background-color: #3498db;
+        .main-admin th {
+            background-color: var(--clr-primary);
             color: white;
             font-weight: bold;
         }
 
-        tbody tr{
-            background-color: #f2f2f2;
+        .main-admin tbody tr{
+            height: 3.8rem;
+            border-bottom: 1px solid var(--clr-white);
+            color: var(--clr-dark-variant);
         }
 
-        tbody tr:hover {
+        .main-admin tbody tr:hover {
             background-color: #ddd;
         }
 
+        .main-table tbody td{
+            height: 3.8rem;
+            border-bottom: 1px solid var(--clr-dark);
+        }
+
+        .main-table tbody td:last-child td{
+            border: none;
+        }
+
         /* Button Styling */
-        button {
+        .main-admin button {
             padding: 5px 10px;
             background-color: #3498db;
             color: white;
@@ -67,102 +94,63 @@
             transition: background-color 0.3s;
         }
 
-        button:hover {
+        .main-admin button:hover {
             background-color: #2980b9;
         }
 
-        /* Responsive Table */
-        @media screen and (max-width: 768px) {
-            .table-container {
-                display: block;
-                width: 100%;
-            }
-
-            table, thead, tbody, th, td, tr {
-                display: block;
-            }
-
-            th {
-                display: none; /* Hide table headers for small screens */
-            }
-
-            tr {
-                margin-bottom: 10px;
-            }
-
-            td {
-                text-align: right;
-                padding-left: 50%;
-                position: relative;
-            }
-
-            td::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 0;
-                width: 50%;
-                padding-left: 15px;
-                font-weight: bold;
-                text-align: left;
-                color: #fff;
-            }
-        }
     </style>
     <body>
-        <div class="container">
-            <div class="navigation-admin">
-                <ul>
-                    <li class="logo">
-                        <div class="topbar-admin">
-                            <a href="AdminDashBoard.jsp">
-                                <h3 class="logo-text">Cineluxe</h3>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="dep">
-                        <a href="AdminDashBoard.jsp">
-                            <span class="icon">
-                                <img src="image/logo/dashboard.png" alt="Dashboard">
-                            </span>
-                            <span class="title">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="dep">
-                        <a href="customer.jsp">
-                            <span class="icon">
-                                <img src="image/logo/customer.png" alt="Customers">
-                            </span>
-                            <span class="title">Customers</span>
-                        </a>
-                    </li>
-                    <li class="dep actived">
-                        <a href="cinema.jsp">
-                            <span class="icon">
-                                <img src="image/logo/cinema.png" alt="Cinema">
-                            </span>
-                            <span class="title">Cinema</span>
-                        </a>
-                    </li>
-                    <li class="dep">
-                        <a href="ticket.jsp">
-                            <span class="icon">
-                                <img src="image/logo/order.png" alt="Orders">
-                            </span>
-                            <span class="title">Orders</span>
-                        </a>
-                    </li>
-                    <li class="dep">
-                        <a href="HomePage.jsp">
-                            <span class="icon">
-                                <img src="image/logo/logout.png" alt="Messages">
-                            </span>
-                            <span class="title">Log out</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
 
-            <div class="main-admin">
+        <div class="container">
+            <aside>
+
+                <div class="top">
+                    <div class="log">
+                        <h2 class="primary">Cine<span class="danger">Luxe</span></h2>
+                    </div>
+                    <div class="close" id="close_btn">
+                        <span class="material-symbols-outlined">
+                            close
+                        </span>
+                    </div>
+                </div>
+                <div class="sidebar">
+                    <a href="AdminDashBoard.jsp" >
+                        <span class="material-symbols-outlined">
+                            grid_view
+                        </span>
+                        <h3>Dashboard</h3>
+                    </a>
+                    <a href="customer.jsp">
+                        <span class="material-symbols-outlined">
+                            person
+                        </span>
+                        <h3>Customer</h3>
+                    </a>
+                    <a href="cinema.jsp"  class="active">
+                        <span class="material-symbols-outlined">
+                            movie
+                        </span>
+                        <h3>Cinema</h3>
+                    </a>
+                    <a href="ticket.jsp">
+                        <span class="material-symbols-outlined">
+                            local_activity
+                        </span>
+                        <h3>Ticket</h3>
+                    </a>
+                    <a href="UserServlet?action=logout">
+                        <span class="material-symbols-outlined">
+                            logout
+                        </span>
+                        <h3>Log out</h3>
+                    </a>
+                </div>
+
+            </aside>
+
+            <main>
+                <div class="main-admin">
                 <div class="userInfo">
                     <h1>Cinema Information</h1>
                     <table class="table-container">
@@ -191,7 +179,114 @@
                     </table>
                 </div>
             </div>
+            </main>
+
+            <div class="right">
+                <div class="top">
+                    <button id="menu_bar">
+                        <span class="material-symbols-outlined">
+                            menu
+                        </span>
+                    </button>
+                    <div class="theme-toggler">
+                        <span class="material-symbols-outlined active">light_mode</span>
+
+                        <span class="material-symbols-outlined">dark_mode</span>
+
+                    </div>
+                    <div class="profile">
+                        <div class="info">
+                            <p><b>Babar</b></p>
+                            <p>Admin</p>
+                            <small class="text-muted"></small>
+                        </div>
+                        <div class="profile-photo">
+                            <img src="image/logo/logo.png" alt="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent_updates">
+                    <h2>Recent Update</h2>
+                    <div class="updates">
+                        <div class="update">
+                            <div class="profile-photo">
+                                <img src="image/logo/logo.png" alt="">
+                            </div>
+                            <div class="message"><p><b>Babar</b> Recived his order</p></div>
+                        </div>
+
+                        <div class="update">
+                            <div class="profile-photo">
+                                <img src="image/logo/logo.png" alt="">
+                            </div>
+                            <div class="message"><p><b>Babar</b> Recived his order</p></div>
+                        </div>
+
+                        <div class="update">
+                            <div class="profile-photo">
+                                <img src="image/logo/logo.png" alt="">
+                            </div>
+                            <div class="message"><p><b>Babar</b> Recived his order</p></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="sales_analytics">
+                    <h2>Sales Analytics</h2>
+
+                    <div class="item onlion">
+                        <div class="icon">
+                            <span class="material-symbols-outlined">shopping_cart</span>
+                        </div>
+                        <div class="right_text">
+                            <div class="info">
+                                <h3>Onlion order</h3>
+                                <small class="text-muted">Last seen 2 Hours</small>
+                            </div>
+                            <h5 class="danger">-17%</h5>
+                            <h3>3849</h3>
+                        </div>
+                    </div>
+
+                    <div class="item onlion">
+                        <div class="icon">
+                            <span class="material-symbols-outlined">shopping_cart</span>
+                        </div>
+                        <div class="right_text">
+                            <div class="info">
+                                <h3>Onlion order</h3>
+                                <small class="text-muted">Last seen 2 Hours</small>
+                            </div>
+                            <h5 class="danger">-17%</h5>
+                            <h3>3849</h3>
+                        </div>
+                    </div>
+
+                    <div class="item onlion">
+                        <div class="icon">
+                            <span class="material-symbols-outlined">shopping_cart</span>
+                        </div>
+                        <div class="right_text">
+                            <div class="info">
+                                <h3>Onlion order</h3>
+                                <small class="text-muted">Last seen 2 Hours</small>
+                            </div>
+                            <h5 class="danger">-17%</h5>
+                            <h3>3849</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="item add_products">
+                    <div>
+                        <span class="material-symbols-outlined">add</span>
+                    </div>
+                </div>
+            </div>
 
         </div>
+
     </body>
+    <script src="admin.js"></script>
 </html>

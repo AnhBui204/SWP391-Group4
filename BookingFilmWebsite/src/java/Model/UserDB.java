@@ -23,9 +23,9 @@ public class UserDB implements DatabaseInfo {
         return null;
     }
 
-    public User getUsers(String username, String password) {
+    public static User getUsers(String username, String password) {
         User user = null;
-        String query = "select CustomerName, Pass, FName , LName , CustomerID, Email, Phone, Sex, DateOfBirth, MoneyLeft "
+        String query = "select CustomerName, Pass, FName , LName , CustomerID, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft "
                 + "from Customers where CustomerName =? and Pass=? ";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
@@ -42,12 +42,13 @@ public class UserDB implements DatabaseInfo {
                 String lName = rs.getString(4);
                 String id = rs.getString(5);
                 String email = rs.getString(6);
-                String phone = rs.getString(7);
-                String sex = rs.getString(8);
-                String DOB = rs.getString(9);
-                String money = rs.getString(10);
+                String role = rs.getString(7);
+                String phone = rs.getString(8);
+                String sex = rs.getString(9);
+                String DOB = rs.getString(10);
+                String money = rs.getString(11);
 
-                String role = "User";
+                
                 user = new User(id, username, password, fName, lName, email, role, phone, sex, DOB, money);
             }
 
@@ -156,7 +157,7 @@ public class UserDB implements DatabaseInfo {
 
     public static ArrayList<User> listAllUsers() {
         ArrayList<User> userList = new ArrayList<>();
-        String query = "SELECT CustomerID, CustomerName,Pass , FName , LName, Email, Phone, Sex, DateOfBirth, MoneyLeft FROM Customers";
+        String query = "SELECT CustomerID, CustomerName,Pass , FName , LName, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft FROM Customers";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
             ResultSet rs = stmt.executeQuery();
@@ -168,11 +169,12 @@ public class UserDB implements DatabaseInfo {
                 String fname = rs.getString("FName");
                 String lname = rs.getString("LName");
                 String email = rs.getString("Email");
+                String role = rs.getString("Role"); 
                 String phone = rs.getString("Phone");
                 String sex = rs.getString("Sex");
                 String dob = rs.getString("DateOfBirth");
                 String money = rs.getString("MoneyLeft");
-                String role = "User"; // Assuming all are regular users by default
+                // Assuming all are regular users by default
 
                 User user = new User(userID, username, password, fname, lname, email, role, phone, sex, dob, money);
                 userList.add(user);
@@ -188,9 +190,9 @@ public class UserDB implements DatabaseInfo {
         for (User user : list) {
             System.out.println(user);
         }
-//        User s = UserDB.getUsers("admin", "123");
-//        System.out.println(s);
-//        System.out.println(s.getRole());
+        User s = UserDB.getUsers("admin", "123");
+        System.out.println(s);
+        System.out.println(s.getRole());
     }
 }
 

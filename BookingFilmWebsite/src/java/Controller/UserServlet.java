@@ -171,10 +171,24 @@ public class UserServlet extends HttpServlet {
 
         UserDB userDB = new UserDB();
         User user = userDB.getUsers(username, password);
-        request.setAttribute("user", user);
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("userDBoard.jsp");
-        dispatcher.forward(request, response);
+        String role = user.getRole();
+        switch(role){
+            case "Admin" -> {
+                request.setAttribute("admin", user);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("AdminDashBoard.jsp");
+                dispatcher.forward(request, response);
+            }
+            case "User" -> {
+                request.setAttribute("user", user);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("userDBoard.jsp");
+                dispatcher.forward(request, response);
+            }
+            case "Staff" -> {
+                request.setAttribute("user", user);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("userDBoard.jsp");
+                dispatcher.forward(request, response);
+            }
+        }
     }
 
     @Override
