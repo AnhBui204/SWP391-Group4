@@ -21,9 +21,10 @@ body {
 }
 
 .sidebar {
-    width: 300px;
+    width: 350px;
     background-color: #F97D5B;
     padding: 20px;
+    padding-right: 0;
 }
 
 .logo {
@@ -52,6 +53,25 @@ nav ul li a {
 
 nav ul li a:hover {
     color: #FF5722;
+}
+
+.navigation {
+    padding: 10px 15px;
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+
+.navigation:hover {
+    background-color: #FECF8F; /* Hover effect */
+}
+
+.navigation.active {
+    background-color: #FECF8F; /* Active state */
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+    height: 40px;
+    font-size: 25px;
 }
 
 .content {
@@ -99,6 +119,35 @@ nav ul li a:hover {
     font-size: 18px;
 }
 
+.pagination {
+    display: flex;
+    justify-content: left;
+    margin: 20px 0;
+}
+
+.pagination .page-number {
+    color: black;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 0 5px;
+    background-color: white;
+    border: 1px solid #ddd;
+    transition: background-color 0.3s;
+}
+
+.pagination .page-number:hover {
+    background-color: #FF5722;
+    color: white;
+    border: none;
+}
+
+.pagination .page-number.active {
+    background-color: #FF5722;
+    color: white;
+    border: 1px solid #FF5722;
+}
+
 .movie-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -106,16 +155,14 @@ nav ul li a:hover {
 }
 
 .movie-card {
+    position: relative;
     background-color: #FECF8F;
     overflow: hidden;
     transition: transform 0.2s ease;
 }
 
-.movie-image-container:hover {
-    opacity: 0.7;
-}
-
 .movie-image-container {
+    position: relative;
     border-radius: 15px;
     overflow: hidden; 
     display: block; 
@@ -127,20 +174,55 @@ nav ul li a:hover {
     display: block;
 }
 
+.movie-overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 10px;
+    gap: 10px;
+}
+
+.movie-overlay button {
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.edit-btn {
+    background: green;
+}
+
+.delete-btn {
+    background: red;
+}
+
+.edit-btn:hover {
+    background-color: #4CAF50; 
+}
+
+.delete-btn:hover {
+    background-color: #F44336;
+}
+
+.movie-card:hover .movie-overlay {
+    opacity: 1;
+}
+
 .movie-name {
     padding: 15px 0;
     text-align: left;
-}
-
-.movie-info h3 {
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 5px;
-}
-
-.movie-info p {
-    font-size: 14px;
-    color: #666;
 }
 
 .user-profile {
@@ -151,6 +233,7 @@ nav ul li a:hover {
     padding: 10px;
     border-radius: 8px;
     color: #ffffff;
+    margin-right: 20px; 
 }
 
 .user-info {
