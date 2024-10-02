@@ -1,24 +1,22 @@
-
 package Model;
 
 import java.io.Serializable;
 
 public class Seat implements Serializable {
+
     private String seatID;
-    private String flightID;
-    private int seatNumber;
-    private String seatType;
-    private int isAvailable;
+    private String seatName;
+    private String RoomID;
+    private String TheatreID;
 
     public Seat() {
     }
 
-    public Seat(String seatID, String flightID, int seatNumber, String seatType, int isAvailable) {
+    public Seat(String seatID, String seatName, String RoomID, String TheatreID) {
         this.seatID = seatID;
-        this.flightID = flightID;
-        this.seatNumber = seatNumber;
-        this.seatType = seatType;
-        this.isAvailable = isAvailable;
+        this.seatName = seatName;
+        this.RoomID = RoomID;
+        this.TheatreID = TheatreID;
     }
 
     public String getSeatID() {
@@ -29,36 +27,35 @@ public class Seat implements Serializable {
         this.seatID = seatID;
     }
 
-    public String getFlightID() {
-        return flightID;
+    public String getSeatName() {
+        return seatName;
     }
 
-    public void setFlightID(String flightID) {
-        this.flightID = flightID;
+    public void setSeatName(String seatName) {
+        this.seatName = seatName;
     }
 
-    public int getSeatNumber() {
-        return seatNumber;
+    public String getRoomID() {
+        return RoomID;
     }
 
-    public void setSeatNumber(int seatNumber) {
-        this.seatNumber = seatNumber;
+    public void setRoomID(String RoomID) {
+        this.RoomID = RoomID;
     }
 
-    public String getSeatType() {
-        return seatType;
+    public String getTheatreID() {
+        return TheatreID;
     }
 
-    public void setSeatType(String seatType) {
-        this.seatType = seatType;
+    public void setTheatreID(String TheatreID) {
+        this.TheatreID = TheatreID;
     }
 
-    public int getIsAvailable() {
-        return isAvailable;
+    @Override
+    public String toString() {
+        return "Seat{" + "seatID=" + seatID + ", seatName=" + seatName + ", RoomID=" + RoomID + ", TheatreID=" + TheatreID + '}';
     }
-
-    public void setIsAvailable(int isAvailable) {
-        this.isAvailable = isAvailable;
-    }
+    
+    
     
 }

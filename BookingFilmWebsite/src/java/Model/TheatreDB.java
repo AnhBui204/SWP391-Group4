@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CinemaDB {
+public class TheatreDB {
     
     public static Connection getConnect() {
         try {
@@ -35,8 +35,8 @@ public class CinemaDB {
         return null;
     }
     
-    public Cinema getCinema(String id) {
-        Cinema a = null;
+    public Theatre getTheatre(String id) {
+        Theatre a = null;
         String query = "select TheatreID, TheatreName , TheatreLocation"
                 + "from Theatres where TheatreID =? ";
 
@@ -50,7 +50,7 @@ public class CinemaDB {
                 id = rs.getString(1);
                 String name = rs.getString(2);
                 String location = rs.getString(3);
-                a = new Cinema(id, name, location);
+                a = new Theatre(id, name, location);
             }
 
         } catch (Exception ex) {
@@ -59,8 +59,8 @@ public class CinemaDB {
         return a;
     }
     
-    public static ArrayList<Cinema> listAllCinemas() {
-        ArrayList<Cinema> cinemaList = new ArrayList<>();
+    public static ArrayList<Theatre> listAllTheatres() {
+        ArrayList<Theatre> cinemaList = new ArrayList<>();
         String query = "select TheatreID, TheatreName , TheatreLocation FROM Theatres";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
@@ -70,7 +70,7 @@ public class CinemaDB {
                 String cID = rs.getString("TheatreID");
                 String cName = rs.getString("TheatreName");
                 String cLocation = rs.getString("TheatreLocation");
-                Cinema cinema = new Cinema(cID, cName, cLocation);
+                Theatre cinema = new Theatre(cID, cName, cLocation);
                 cinemaList.add(cinema);
             }
         } catch (Exception ex) {
@@ -80,8 +80,8 @@ public class CinemaDB {
     }
     
     public static void main(String[] args) {
-        ArrayList<Cinema> list = CinemaDB.listAllCinemas();
-        for (Cinema ci : list) {
+        ArrayList<Theatre> list = TheatreDB.listAllTheatres();
+        for (Theatre ci : list) {
             System.out.println(ci);
         }
     }

@@ -25,7 +25,7 @@ public class UserDB implements DatabaseInfo {
 
     public static User getUsers(String username, String password) {
         User user = null;
-        String query = "select CustomerName, Pass, FName , LName , CustomerID, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft "
+        String query = "select UserName, Pass, FName , LName , UserID, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft "
                 + "from Customers where CustomerName =? and Pass=? ";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {

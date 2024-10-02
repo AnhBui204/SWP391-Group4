@@ -1,7 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@page import="Model.DatabaseInfo"%>
-<%@page import="Model.Cinema"%>
-<%@page import="Model.CinemaDB"%>
+<%@page import="Model.Theatre"%>
+<%@page import="Model.TheatreDB"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +9,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width= , initial-scale=1.0">
-        <link rel="stylesheet" href="admin.css">
+        <link rel="stylesheet" href="admins.css">
         <link rel="stylesheet"
               href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
         <title>Document</title>
@@ -33,12 +33,12 @@
         }
 
         .table-container {
-            width:100%;
+            width:95%;
             margin: auto;
         }
 
         .main-admin table {
-            width: 100%;
+            width: 90%;
             height: 100%;
             background-color: var(--clr-white);
             padding: var(--card-padding);
@@ -121,17 +121,17 @@
                         </span>
                         <h3>Dashboard</h3>
                     </a>
-                    <a href="customer.jsp">
+                    <a href="customer.jsp" class="active">
                         <span class="material-symbols-outlined">
                             person
                         </span>
                         <h3>Customer</h3>
                     </a>
-                    <a href="cinema.jsp"  class="active">
+                    <a href="cinema.jsp">
                         <span class="material-symbols-outlined">
                             movie
                         </span>
-                        <h3>Cinema</h3>
+                        <h3>Theatre</h3>
                     </a>
                     <a href="ticket.jsp">
                         <span class="material-symbols-outlined">
@@ -150,140 +150,67 @@
             </aside>
 
             <main>
-                <div class="main-admin">
-                <div class="userInfo">
-                    <h1>Cinema Information</h1>
-                    <table class="table-container">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Location</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%
-                                CinemaDB cinemaDB = new CinemaDB();
-                                List<Cinema> list = CinemaDB.listAllCinemas();
-                                for (Cinema ci : list) {
-                            %>
-                            <tr>
-                                <td><%= ci.getCinemaID()%></td>
-                                <td><%= ci.getCinemaName()%></td>
-                                <td><%= ci.getCinemaLocation()%></td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </tbody>
-                    </table>
+                <div class="right">
+                    <div class="top">
+                        <button id="menu_bar">
+                            <span class="material-symbols-outlined">
+                                menu
+                            </span>
+                        </button>
+                        <div class="theme-toggler">
+                            <span class="material-symbols-outlined active">light_mode</span>
+
+                            <span class="material-symbols-outlined">dark_mode</span>
+
+                        </div>
+                    </div>
+                    <div class="main-admin">
+                        <div class="userInfo">
+                            <h1>Theatre Information</h1>
+                            <table class="table-container">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Location</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%
+                                        TheatreDB cinemaDB = new TheatreDB();
+                                        List<Theatre> list = TheatreDB.listAllTheatres();
+                                        for (Theatre ci : list) {
+                                    %>
+                                    <tr>
+                                        <td><%= ci.getTheatreID()%></td>
+                                        <td><%= ci.getTheatreName()%></td>
+                                        <td><%= ci.getTheatreLocation()%></td>
+                                        <td>
+                                            <!-- Update and Delete buttons -->
+                                            <form action="TheatreServlet" method="POST">
+                                                <input type="hidden" name="cinemaID" value="<%= ci.getTheatreID()%>">
+                                                <button style="background-color: var(--clr-primary)" type="submit" name="action" value="update">Update</button>
+                                                <button style="background-color: var(--clr-danger)" type="submit" name="action" value="delete">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <%
+                                        }
+                                    %>
+                                </tbody>
+                            </table>
+                            <div class="action-buttons">
+                                <form action="addTheatre.jsp" method="GET">
+                                    <button style="background-color: green; margin-top: 10px" type="submit">Add New Theatre</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
             </main>
 
-            <div class="right">
-                <div class="top">
-                    <button id="menu_bar">
-                        <span class="material-symbols-outlined">
-                            menu
-                        </span>
-                    </button>
-                    <div class="theme-toggler">
-                        <span class="material-symbols-outlined active">light_mode</span>
 
-                        <span class="material-symbols-outlined">dark_mode</span>
-
-                    </div>
-                    <div class="profile">
-                        <div class="info">
-                            <p><b>Babar</b></p>
-                            <p>Admin</p>
-                            <small class="text-muted"></small>
-                        </div>
-                        <div class="profile-photo">
-                            <img src="image/logo/logo.png" alt="">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="recent_updates">
-                    <h2>Recent Update</h2>
-                    <div class="updates">
-                        <div class="update">
-                            <div class="profile-photo">
-                                <img src="image/logo/logo.png" alt="">
-                            </div>
-                            <div class="message"><p><b>Babar</b> Recived his order</p></div>
-                        </div>
-
-                        <div class="update">
-                            <div class="profile-photo">
-                                <img src="image/logo/logo.png" alt="">
-                            </div>
-                            <div class="message"><p><b>Babar</b> Recived his order</p></div>
-                        </div>
-
-                        <div class="update">
-                            <div class="profile-photo">
-                                <img src="image/logo/logo.png" alt="">
-                            </div>
-                            <div class="message"><p><b>Babar</b> Recived his order</p></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="sales_analytics">
-                    <h2>Sales Analytics</h2>
-
-                    <div class="item onlion">
-                        <div class="icon">
-                            <span class="material-symbols-outlined">shopping_cart</span>
-                        </div>
-                        <div class="right_text">
-                            <div class="info">
-                                <h3>Onlion order</h3>
-                                <small class="text-muted">Last seen 2 Hours</small>
-                            </div>
-                            <h5 class="danger">-17%</h5>
-                            <h3>3849</h3>
-                        </div>
-                    </div>
-
-                    <div class="item onlion">
-                        <div class="icon">
-                            <span class="material-symbols-outlined">shopping_cart</span>
-                        </div>
-                        <div class="right_text">
-                            <div class="info">
-                                <h3>Onlion order</h3>
-                                <small class="text-muted">Last seen 2 Hours</small>
-                            </div>
-                            <h5 class="danger">-17%</h5>
-                            <h3>3849</h3>
-                        </div>
-                    </div>
-
-                    <div class="item onlion">
-                        <div class="icon">
-                            <span class="material-symbols-outlined">shopping_cart</span>
-                        </div>
-                        <div class="right_text">
-                            <div class="info">
-                                <h3>Onlion order</h3>
-                                <small class="text-muted">Last seen 2 Hours</small>
-                            </div>
-                            <h5 class="danger">-17%</h5>
-                            <h3>3849</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="item add_products">
-                    <div>
-                        <span class="material-symbols-outlined">add</span>
-                    </div>
-                </div>
-            </div>
 
         </div>
 

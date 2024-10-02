@@ -4,11 +4,10 @@ import static Model.DatabaseInfo.DBURL;
 import static Model.DatabaseInfo.DRIVERNAME;
 import static Model.DatabaseInfo.PASSDB;
 import static Model.DatabaseInfo.USERDB;
+import static Model.ShowSeatDB.getConnect;
 import java.sql.*;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,82 +20,70 @@ public class RoomDB implements DatabaseInfo {
             System.out.println("Error loading driver" + e);
         }
         try {
-            Connection con = DriverManager.getConnection(DBURL, USERDB, PASSDB);
-            return con;
+            return DriverManager.getConnection(DBURL, USERDB, PASSDB);
         } catch (SQLException e) {
             System.out.println("Error: " + e);
         }
         return null;
     }
 
-//    public static Room getRoom(String id) {
-//        Room s = null;
-//        try (Connection con = getConnect()) {
-//            PreparedStatement stmt = con.prepareStatement("Select RoomID, RoomNumber, RoomType, IsAvailable from Room where HotelID=?");
-//            stmt.setString(1, id);
-//            ResultSet rs = stmt.executeQuery();
-//            if (rs.next()) {
-//                String rid = rs.getString(1);
-//                int number = rs.getInt(2);
-//                String type = rs.getString(3);
-//                int avai = rs.getInt(4);
-//                s = new Room(id, number,type,avai);
-//            }
-//            con.close();
-//        } catch (Exception ex) {
-//            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return s;
-//    }
     // Method to get room details by RoomID
     public static Room getRoom(String roomID) {
         Room room = null;
         try (Connection con = getConnect()) {
-            String query = "SELECT RoomID, RoomName, TheatreID FROM Rooms WHERE RoomID=?";
+            String query = "SELECT RoomID, RoomName, t.TheatreName FROM Rooms "
+                    + "r inner join Theatres t on r.TheatreID = t.TheatreID\n"
+                    + "WHERE RoomID=?";
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString(1, roomID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                room = new Room(rs.getString("RoomID"), rs.getString("RoomName"), rs.getString("TheatreID"));
+                room = new Room(rs.getString("RoomID"), rs.getString("RoomName"), rs.getString("TheatreName"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return room;
     }
+    
+    //Get room by showID
+    public static List<Room> getRoomByShow(String ShowID) {
+        List<Room> roomlist = new ArrayList<>();
+        try (Connection con = getConnect()) {
+            String query = "SELECT DISTINCT r.RoomID, r.RoomName, r.theatreID "
+                         + "FROM ROOMS r INNER JOIN ShowSeats ss "
+                         + "ON r.RoomID = ss.RoomID WHERE ShowID=?";
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, ShowID);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Room room = new Room(
+                        rs.getString("RoomID"),
+                        rs.getString("RoomName"),
+                        rs.getString("theatreID")
+                );
+                roomlist.add(room);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return roomlist;
+    }
 
-//    public static List<Room> getAvailableRooms(String roomType) {
-//        List<Room> roomList = new ArrayList<>();
-//        try (Connection con = getConnect()) {
-//            String query = "SELECT RoomID, RoomNumber, RoomType, IsAvailable FROM Room WHERE IsAvailable = 1 AND RoomType = ?";
-//            PreparedStatement stmt = con.prepareStatement(query);
-//            stmt.setString(1, roomType);  // Set the room type parameter
-//            ResultSet rs = stmt.executeQuery();
-//            while (rs.next()) {
-//                Room room = new Room(rs.getString("RoomID"),
-//                        rs.getInt("RoomNumber"),
-//                        rs.getString("RoomType"),
-//                        rs.getInt("IsAvailable"));
-//                roomList.add(room);
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return roomList;
-//    }
-    // Method to get all rooms by HotelID
-    public static List<Room> getRoomsByHotel(String hotelID) {
+    // Method to get all rooms by CinemaID
+    public static List<Room> getRoomsByCinema(String cinemaID) {
         List<Room> roomList = new ArrayList<>();
         try (Connection con = getConnect()) {
-            String query = "SELECT RoomID, RoomNumber, RoomType, IsAvailable FROM Room WHERE HotelID=?";
+            String query = "SELECT RoomID, RoomName, t.TheatreName FROM Rooms "
+                    + "r inner join Theatres t on r.TheatreID = t.TheatreID\n"
+                    + "WHERE r.TheatreID=?";
             PreparedStatement stmt = con.prepareStatement(query);
-            stmt.setString(1, hotelID);
+            stmt.setString(1, cinemaID);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Room room = new Room(rs.getString("RoomID"),
-                        rs.getInt("RoomNumber"),
-                        rs.getString("RoomType"),
-                        rs.getInt("IsAvailable"));
+                        rs.getString("RoomName"),
+                        rs.getString("TheatreName"));
                 roomList.add(room);
             }
         } catch (SQLException ex) {
@@ -105,154 +92,55 @@ public class RoomDB implements DatabaseInfo {
         return roomList;
     }
 
-//--------------------------------------------------------------------------------------------
-//
-//    public static int newHotel(Hotel s) {
-//        int id = -1;
-//        try (Connection con = getConnect()) {
-//            PreparedStatement stmt = con.prepareStatement("Insert into Hotel(ProductID, ProductName, Description, Category, Price, StockQuantity, ProductImage, UnitOfMeasurement) output inserted.id values(?,?,?)");
-//            stmt.setString(1, s.getProductName());
-//            stmt.setString(2, s.getProductName());
-//
-//            ResultSet rs = stmt.executeQuery();
-//            if (rs.next()) {
-//                id = rs.getInt(1);
-//            }
-//            con.close();
-//        } catch (Exception ex) {
-//            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return id;
-//    }
-//-----------------------------------------------------------------------------------
-    public static Hotel update(Hotel hotel) {
+    public static int deleteRoom(String roomID) {
         try (Connection con = getConnect()) {
-            PreparedStatement stmt = con.prepareStatement("UPDATE Hotel SET HotelName=?, Description=?, HotelAddress=?, City=?, Country=? WHERE HotelID=?");
-            stmt.setString(1, hotel.getHotelName());
-            stmt.setString(2, hotel.getHotelDescription());
-            stmt.setString(3, hotel.getHotelAddress());
-            stmt.setString(4, hotel.getCity());
-            stmt.setString(5, hotel.getCountry());
-            stmt.setString(6, hotel.getHotelId());
-
-            int rowCount = stmt.executeUpdate();
-            if (rowCount > 0) {
-                return hotel; // Return the updated hotel object
-            } else {
-                throw new RuntimeException("Failed to update hotel with ID: " + hotel.getHotelId());
-            }
+            PreparedStatement stmt = con.prepareStatement("DELETE FROM Rooms WHERE RoomID=?");
+            stmt.setString(1, roomID);
+            return stmt.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException("Database error occurred while updating hotel");
-        }
-    }
-
-//--------------------------------------------------------------------------------
-//    
-//        public void updateHotelQuantity(int id, int quantity) {
-//        String sql = "UPDATE Products SET StockQuantity = ? WHERE id = ?";
-//        try (Connection con = getConnect()) {
-//            PreparedStatement stmt = con.prepareStatement(sql);
-//            stmt.setInt(1, quantity);
-//            stmt.setInt(2, id);
-//            stmt.executeUpdate();
-//        } catch (Exception ex) {
-//            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
-//
-//    //--------------------------------------------------------------------------------------------
-    public static int delete(String id) {
-        try (Connection con = getConnect()) {
-            PreparedStatement stmt = con.prepareStatement("Delete Hotel where HotelID =?");
-            stmt.setString(1, id);
-            int rc = stmt.executeUpdate();
-            con.close();
-            return rc;
-        } catch (Exception ex) {
             Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
     }
-////--------------------------------------------------------------------------------------------
-//
-//    public static ArrayList<Hotel> search(Predicate<Hotel> p) {
-//        ArrayList<Hotel> list = listAll();
-//        ArrayList<Hotel> res = new ArrayList<Hotel>();
-//        for (Hotel s : list) {
-//            if (p.test(s)) {
-//                res.add(s);
-//            }
-//        }
-//        return res;
-//    }
-//--------------------------------------------------------------------------------------------
 
-    public static ArrayList<Hotel> listAll() {
-        ArrayList<Hotel> list = new ArrayList<Hotel>();//vì cái trả về là một danh sách nên lưu và truyền nó ở dạng arraylist
-
-        try (Connection con = getConnect()) {
-            PreparedStatement stmt = con.prepareStatement("Select HotelID, HotelName, HotelAddress, Description, City, Country from Hotel");
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                list.add(new Hotel(rs.getString(1), rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5), rs.getString(6)));
-            }
-            con.close();
-            return list;
-        } catch (Exception ex) {
-            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    public void insert(Hotel c) {
-        String sql = "INSERT INTO Hotel (HotelID, HotelName, HotelAddress, Description, City, Country)\n"
-                + "VALUES(?,?,?,?,?,?)";
+    public static void insertRoom(Room room) {
+        String sql = "INSERT INTO Rooms (RoomID, RoomName, TheatreID) VALUES (?, ?, ?)";
         try (Connection con = getConnect()) {
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, c.getHotelId());
-            stmt.setString(2, c.getHotelName());
-            stmt.setString(3, c.getHotelAddress());
-            stmt.setString(4, c.getHotelDescription());
-            stmt.setString(5, c.getCity());
-            stmt.setString(6, c.getCountry());
+            stmt.setString(1, room.getRoomID());
+            stmt.setString(2, room.getRoomName());
+            stmt.setString(3, room.getCinemaID());
             stmt.executeUpdate();
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public static Hotel getHotelById(String id) {
-        String sql = "select * from Hotel where HotelID = ?";
+    public static void updateRoom(Room room) {
+        String sql = "UPDATE Rooms SET RoomName=?, TheatreID=? WHERE RoomID=?";
         try (Connection con = getConnect()) {
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                // Assuming Hotel constructor can take these parameters
-                Hotel c = new Hotel(
-                        rs.getString("HotelID"),
-                        rs.getString("HotelName"),
-                        rs.getString("HotelAddress"),
-                        rs.getString("Description"),
-                        rs.getString("City"),
-                        rs.getString("Country")
-                );
-                return c;
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error fetching hotel by ID", ex);
+            stmt.setString(1, room.getRoomName());
+            stmt.setString(2, room.getCinemaID());
+            stmt.setString(3, room.getRoomID());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
     }
-    //--------------------------------------------------------------------------------------------
 
-    public static void main(String[] a) {
-//        ArrayList<Hotel> list = HotelDB.listAll();
-//        for (Hotel item : list) {
-//            System.out.println(item);
+    public static void main(String[] args) {
+        // Example usage (you can uncomment to test):
+        Room room = getRoom("R00001");
+        System.out.println(room);
+        System.out.println("-----------");
+//        List<Room> rooms = getRoomsByCinema("T00001");
+//        for (Room r : rooms) {
+//            System.out.println(r);
 //        }
-//---------------------------------------------------------------------------
+        List<Room> rooms = getRoomByShow("SH0001");
+        for (Room r : rooms) {
+            System.out.println(r);
+        }
     }
 }

@@ -5,6 +5,7 @@ public class Room {
     private String roomID;
     private String roomName;
     private String cinemaID;
+    private String cinemaName;
 
     public Room() {
     }
@@ -39,9 +40,18 @@ public class Room {
         this.cinemaID = cinemaID;
     }
 
+    public String getCinemaName() {
+        return cinemaName;
+    }
+
+    public void setCinemaName(String cinemaName) {
+        this.cinemaName = cinemaName;
+    }
+    
+    
     @Override
     public String toString() {
-        return "Room{" + "roomID=" + roomID + ", roomName=" + roomName + ", cinemaID=" + cinemaID + '}';
+        return "Room{" + "roomID=" + roomID + ", roomName=" + roomName + ", cinemaName=" + cinemaID + '}';
     }
 
    

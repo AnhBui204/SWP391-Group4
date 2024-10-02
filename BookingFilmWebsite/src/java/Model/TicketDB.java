@@ -1,6 +1,6 @@
 package Model;
 
-import static Model.CinemaDB.getConnect;
+import static Model.TheatreDB.getConnect;
 import static Model.DatabaseInfo.DBURL;
 import static Model.DatabaseInfo.DRIVERNAME;
 import static Model.DatabaseInfo.PASSDB;

@@ -10,7 +10,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width= , initial-scale=1.0">
-        <link rel="stylesheet" href="admin.css">
+        <link rel="stylesheet" href="admins.css">
         <link rel="stylesheet"
               href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
         <title>Document</title>
@@ -151,6 +151,19 @@
             </aside>
 
             <main>
+                <div class="right">
+                <div class="top">
+                    <button id="menu_bar">
+                        <span class="material-symbols-outlined">
+                            menu
+                        </span>
+                    </button>
+                    <div class="theme-toggler">
+                        <span class="material-symbols-outlined active">light_mode</span>
+
+                        <span class="material-symbols-outlined">dark_mode</span>
+
+                    </div>
                 <div class="main-admin">
                     <div class="userInfo">
                         <h1>Cinema Information</h1>
@@ -175,12 +188,12 @@
                                 %>
                                 <tr>
                                     <td><%= tk.getTicketID()%></td>
-                                    <td><%= tk.getShowName()%></td>
+                                    <td class="show"><%= tk.getShowName()%></td>
                                     <td><%= tk.getSeatName()%></td>
-                                    <td><%= tk.getComboName()%></td>
+                                    <td class="combos"><%= tk.getComboName()%></td>
                                     <td><%= tk.getVoucherName()%></td>
                                     <td><%= tk.getPrice()%></td>
-                                    <td><%= tk.getBookingDate()%></td>
+                                    <td class='dates'><%= tk.getBookingDate()%></td>
                                     <td><%= tk.getStatus()%></td>
                                 </tr>
                                 <%
@@ -192,112 +205,6 @@
                 </div>
 
             </main>
-
-            <div class="right">
-                <div class="top">
-                    <button id="menu_bar">
-                        <span class="material-symbols-outlined">
-                            menu
-                        </span>
-                    </button>
-                    <div class="theme-toggler">
-                        <span class="material-symbols-outlined active">light_mode</span>
-
-                        <span class="material-symbols-outlined">dark_mode</span>
-
-                    </div>
-                    <div class="profile">
-                        <div class="info">
-                            <p><b>Babar</b></p>
-                            <p>Admin</p>
-                            <small class="text-muted"></small>
-                        </div>
-                        <div class="profile-photo">
-                            <img src="image/logo/logo.png" alt="">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="recent_updates">
-                    <h2>Recent Update</h2>
-                    <div class="updates">
-                        <div class="update">
-                            <div class="profile-photo">
-                                <img src="image/logo/logo.png" alt="">
-                            </div>
-                            <div class="message"><p><b>Babar</b> Recived his order</p></div>
-                        </div>
-
-                        <div class="update">
-                            <div class="profile-photo">
-                                <img src="image/logo/logo.png" alt="">
-                            </div>
-                            <div class="message"><p><b>Babar</b> Recived his order</p></div>
-                        </div>
-
-                        <div class="update">
-                            <div class="profile-photo">
-                                <img src="image/logo/logo.png" alt="">
-                            </div>
-                            <div class="message"><p><b>Babar</b> Recived his order</p></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="sales_analytics">
-                    <h2>Sales Analytics</h2>
-
-                    <div class="item onlion">
-                        <div class="icon">
-                            <span class="material-symbols-outlined">shopping_cart</span>
-                        </div>
-                        <div class="right_text">
-                            <div class="info">
-                                <h3>Onlion order</h3>
-                                <small class="text-muted">Last seen 2 Hours</small>
-                            </div>
-                            <h5 class="danger">-17%</h5>
-                            <h3>3849</h3>
-                        </div>
-                    </div>
-
-                    <div class="item onlion">
-                        <div class="icon">
-                            <span class="material-symbols-outlined">shopping_cart</span>
-                        </div>
-                        <div class="right_text">
-                            <div class="info">
-                                <h3>Onlion order</h3>
-                                <small class="text-muted">Last seen 2 Hours</small>
-                            </div>
-                            <h5 class="danger">-17%</h5>
-                            <h3>3849</h3>
-                        </div>
-                    </div>
-
-                    <div class="item onlion">
-                        <div class="icon">
-                            <span class="material-symbols-outlined">shopping_cart</span>
-                        </div>
-                        <div class="right_text">
-                            <div class="info">
-                                <h3>Onlion order</h3>
-                                <small class="text-muted">Last seen 2 Hours</small>
-                            </div>
-                            <h5 class="danger">-17%</h5>
-                            <h3>3849</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="item add_products">
-                    <div>
-                        <span class="material-symbols-outlined">add</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
 
     </body>
     <script src="admin.js"></script>
