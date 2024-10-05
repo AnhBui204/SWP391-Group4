@@ -1,0 +1,1 @@
+- Thêm bảng issue lưu ID user và user report. Reply thì lấy email của user qua id và reply về mail
