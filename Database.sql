@@ -20,6 +20,7 @@ CREATE TABLE User (
 CREATE TABLE FoodsAndDrinks (
     ComboID CHAR(6) PRIMARY KEY,
     ComboName NVARCHAR(100),
+	ImagePath VARCHAR(255),
     Price MONEY CHECK (Price >= 0)
 );
 
@@ -76,6 +77,7 @@ CREATE TABLE Movies (
     Director NVARCHAR(50),
     MovieType NVARCHAR(50),
     ReleaseDate DATE,
+	ImagePath VARCHAR(255),
     Rate DECIMAL(3,1) CHECK (Rate >= 0 AND Rate <= 10)
 );
 
@@ -112,7 +114,8 @@ CREATE TABLE ShowSeats (
 -- Table for Actors
 CREATE TABLE Actors (
     ActorID CHAR(6) PRIMARY KEY,
-    ActorName NVARCHAR(100)
+    ActorName NVARCHAR(100),
+	ImagePath VARCHAR(255)
 );
 
 -- Table for linking Movies and Actors (many-to-many relationship)
@@ -129,6 +132,7 @@ CREATE TABLE Vouchers (
     VoucherID CHAR(6) PRIMARY KEY,
 	VoucherName NVARCHAR(50) UNIQUE,
     Price MONEY CHECK (Price >= 0),
+	ImagePath VARCHAR(255),
     ExpiryDate DATE
 );
 
@@ -2497,5 +2501,7 @@ WHERE RoomID='R00001'
 
 SELECT RoomID, RoomName, t.TheatreName FROM Rooms r inner join Theatres t on r.TheatreID = t.TheatreID
 WHERE r.TheatreID='T00001'
+
+select * from Theatres where theatreID = 'T00001'
 
 --Thêm trigger truy suất người tên người đặt vé khi ấn vào ô ticketOrder

@@ -19,7 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class TheatreDB {
-    
+
     public static Connection getConnect() {
         try {
             Class.forName(DRIVERNAME);
@@ -34,31 +34,26 @@ public class TheatreDB {
         }
         return null;
     }
-    
-    public Theatre getTheatre(String id) {
-        Theatre a = null;
-        String query = "select TheatreID, TheatreName , TheatreLocation"
-                + "from Theatres where TheatreID =? ";
 
-        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+    public static Theatre getTheatreById(String theatreID) {
+        String sql = "select * from Theatres where TheatreID =? ";
+        try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, id);
-            ResultSet rs = stmt.executeQuery();
-
+            ps.setString(1, theatreID);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                // String id = rs.getString("UserId");
-                id = rs.getString(1);
+                String id = rs.getString(1);
                 String name = rs.getString(2);
                 String location = rs.getString(3);
-                a = new Theatre(id, name, location);
-            }
 
-        } catch (Exception ex) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+                return new Theatre(id, name, location);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return a;
+        return null;
     }
-    
+
     public static ArrayList<Theatre> listAllTheatres() {
         ArrayList<Theatre> cinemaList = new ArrayList<>();
         String query = "select TheatreID, TheatreName , TheatreLocation FROM Theatres";
@@ -78,8 +73,49 @@ public class TheatreDB {
         }
         return cinemaList;
     }
-    
+
+    // Method to delete a theatre
+    public void deleteTheatre(String theatreID) {
+        try (Connection con = getConnect()) {
+            String sql = "DELETE FROM Theatres WHERE TheatreID = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, theatreID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Method to add a new theatre
+    public void addTheatre(Theatre theatre) {
+        try (Connection con = getConnect()) {
+            String sql = "INSERT INTO Theatres (Name, Location) VALUES (?, ?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, theatre.getTheatreName());
+            ps.setString(2, theatre.getTheatreLocation());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Method to update a theatre
+    public void updateTheatre(Theatre theatre) {
+        try (Connection con = getConnect()) {
+            String sql = "UPDATE Theatres SET Name = ?, Location = ? WHERE TheatreID = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, theatre.getTheatreName());
+            ps.setString(2, theatre.getTheatreLocation());
+            ps.setString(3, theatre.getTheatreID());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
+        Theatre a = getTheatreById("T00001");
+        System.out.println(a);
         ArrayList<Theatre> list = TheatreDB.listAllTheatres();
         for (Theatre ci : list) {
             System.out.println(ci);

@@ -8,11 +8,10 @@
 
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width= , initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="admins.css">
-        <link rel="stylesheet"
-              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-        <title>Document</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+        <title>Theatre Management</title>
     </head>
     <style>
         /* Các trang khác */
@@ -96,6 +95,61 @@
 
         .main-admin button:hover {
             background-color: #2980b9;
+        }
+
+        /* Modal container */
+        .modal-container {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Modal content */
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Close button */
+        .close-btn {
+            background-color: red;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+            float: right;
+        }
+
+        /* Delete button */
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Open modal button */
+        .open-btn {
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
     </style>
@@ -191,7 +245,43 @@
                                             <form action="TheatreServlet" method="POST">
                                                 <input type="hidden" name="cinemaID" value="<%= ci.getTheatreID()%>">
                                                 <button style="background-color: var(--clr-primary)" type="submit" name="action" value="update">Update</button>
-                                                <button style="background-color: var(--clr-danger)" type="submit" name="action" value="delete">Delete</button>
+
+                                                <!-- Open Modal Button -->
+                                                <button class="open-btn" style="background-color: var(--clr-danger)" type="button" id="openModal-<%= ci.getTheatreID()%>">Delete</button>
+
+                                                <!-- Modal -->
+                                                <div class="modal-container" id="myModal-<%= ci.getTheatreID()%>">
+                                                    <div class="modal-content">
+                                                        <h2>Are you sure you want to delete <%= ci.getTheatreID()%>?</h2>
+                                                        <button class="delete-btn" id="closeModal-<%= ci.getTheatreID()%>">Cancel</button>
+                                                        <button class="delete-btn" style="background-color: var(--clr-danger)">Delete</button>
+                                                    </div>
+                                                </div>
+
+                                                <script>
+                                                    // Get modal elements for this specific theatre
+                                                    const modal<%= ci.getTheatreID()%> = document.getElementById("myModal-<%= ci.getTheatreID()%>");
+                                                    const openModalBtn<%= ci.getTheatreID()%> = document.getElementById("openModal-<%= ci.getTheatreID()%>");
+                                                    const closeModalBtn<%= ci.getTheatreID()%> = document.getElementById("closeModal-<%= ci.getTheatreID()%>");
+
+                                                    // Open modal on button click
+                                                    openModalBtn<%= ci.getTheatreID()%>.addEventListener("click", () => {
+                                                        modal<%= ci.getTheatreID()%>.style.display = "flex";
+                                                    });
+
+                                                    // Close modal on button click
+                                                    closeModalBtn<%= ci.getTheatreID()%>.addEventListener("click", (event) => {
+                                                        event.preventDefault();
+                                                        modal<%= ci.getTheatreID()%>.style.display = "none";
+                                                    });
+
+                                                    // Close modal when clicking outside the modal content
+                                                    window.addEventListener("click", (event) => {
+                                                        if (event.target === modal<%= ci.getTheatreID()%>) {
+                                                            modal<%= ci.getTheatreID()%>.style.display = "none";
+                                                        }
+                                                    });
+                                                </script>
                                             </form>
                                         </td>
                                     </tr>
