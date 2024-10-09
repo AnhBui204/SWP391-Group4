@@ -22,7 +22,7 @@
                 <!-- Navbar -->
                 <nav class="navbar">
                     <ul>
-                        <li><a href="#">Mua Vé</a></li>
+                        <li><a href="MovieServlet">Mua Vé</a></li>
                         <li><a href="#">Phim</a></li>
                         <li><a href="#">Góc Điện Ảnh</a></li>
                         <li><a href="#">Sự Kiện</a></li>
