@@ -39,7 +39,10 @@
                                             <div class="text-center pt-1 mb-5 pb-1">
                                                 <button type="submit" class="btn btn-warning">Login</button>
                                                 <br>
-                                                <a href="#">Forgot Password?</a>
+                                                <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/BookingFilmWebsite/Login.jsp&response_type=code
+                                                   &client_id=375465691355-c20ocp2cb0lnhhept5ssqsrgjukm3ceq.apps.googleusercontent.com&approval_prompt=force">Login With Google</a> 
+                                                <br>
+                                                <a href="ForgetPassword.jsp">Forgot Password?</a>
                                             </div>
 
                                             <div class="text-center mb-4">

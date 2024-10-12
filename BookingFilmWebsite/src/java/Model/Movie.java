@@ -11,23 +11,26 @@ public class Movie {
     private String movieName;
     private int duration;
     private String country;
+    private String manufacturer;
     private String director;
-    private String movieType;
+    private String imgPortrait;
+    private String imgLandscape;
     private Date releaseDate;
-    private double rate;
+    private String description;
 
     public Movie() {
     }
 
-    public Movie(String movieID, String movieName, int duration, String country, String director, String movieType, Date releaseDate, double rate) {
+    public Movie(String movieID, String movieName, int duration, String country, String manufacturer, String director, String imgPortrait, String imgLandscape, Date releaseDate) {
         this.movieID = movieID;
         this.movieName = movieName;
         this.duration = duration;
         this.country = country;
+        this.manufacturer = manufacturer;
         this.director = director;
-        this.movieType = movieType;
+        this.imgPortrait = imgPortrait;
+        this.imgLandscape = imgLandscape;
         this.releaseDate = releaseDate;
-        this.rate = rate;
     }
 
     public String getMovieID() {
@@ -62,6 +65,14 @@ public class Movie {
         this.country = country;
     }
 
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
     public String getDirector() {
         return director;
     }
@@ -70,12 +81,20 @@ public class Movie {
         this.director = director;
     }
 
-    public String getMovieType() {
-        return movieType;
+    public String getImgPortrait() {
+        return imgPortrait;
     }
 
-    public void setMovieType(String movieType) {
-        this.movieType = movieType;
+    public void setImgPortrait(String imgPortrait) {
+        this.imgPortrait = imgPortrait;
+    }
+
+    public String getImgLandscape() {
+        return imgLandscape;
+    }
+
+    public void setImgLandscape(String imgLandscape) {
+        this.imgLandscape = imgLandscape;
     }
 
     public Date getReleaseDate() {
@@ -85,19 +104,18 @@ public class Movie {
     public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
     }
-
-    public double getRate() {
-        return rate;
+    
+    public String getDescription() {
+        return description;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
     public String toString() {
-        return "Movie{" + "movieID=" + movieID + ", movieName=" + movieName + ", duration=" + duration + ", country=" + country + ", director=" + director + ", movieType=" + movieType + ", releaseDate=" + releaseDate + ", rate=" + rate + '}';
+        return "Movie{" + "movieID=" + movieID + ", movieName=" + movieName + ", duration=" + duration + ", country=" + country + ", manufacturer=" + manufacturer + ", director=" + director + ", imgPortrait=" + imgPortrait + ", imgLandscape=" + imgLandscape + ", releaseDate=" + releaseDate + '}';
     }
-    
     
 }

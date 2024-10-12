@@ -1,93 +1,139 @@
-<%@include file="includes/header.jsp" %>
+
+<%@include file="includes/header_user.jsp" %>
 <link rel="stylesheet" href="css/headers.css" />
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Chỉnh sửa hồ sơ</title>
         <link rel="stylesheet" href="bootstrap/css/bootstrap.css"/>
         <link rel="stylesheet" href="css/CustomerProfile_css.css">
     </head>
     <body>
         <div class="container my-5">
-            <div class="row">
-                <h1 class="col-12 mb-4 display-5">Chỉnh sửa hồ sơ</h1>
-                <div class="col-4 d-flex flex-column justify-content-center shadow-lg rounded" style="background-color: rgb(255, 247, 229);">
-                    <div class="d-flex justify-content-center pt-5  pb-2">
-                        <img src="image/temp/meo.jpg" alt="alt" class="img-fluid rounded-circle" style="height: 100px; width: 100px;"/>
-                        <div class="d-flex align-items-center px-3">
-                            <i class="fa-solid fa-gift fa-2x"></i>
-                            <p class="m-0 px-2 fs-3">0 Stars</p>
+            <c:if test="${not empty user}">
+                <div class="row">
+                    <h1 class="col-12 mb-4 display-5">Chỉnh sửa hồ sơ</h1>
+                    <div class="col-md-4 col-12 d-flex flex-column justify-content-center shadow-lg rounded" style="background-color: rgb(255, 247, 229);">
+                        <div class="d-flex justify-content-center pt-5 pb-2">
+                            <img src="${user.avatar}" alt="Profile Image" class="img-fluid rounded-circle" style="height: 100px; width: 100px;"/>
+                            <div class="d-flex align-items-center px-3">
+                                <i class="fa-solid fa-gift fa-2x"></i>
+                                <p class="m-0 px-2 fs-3">0 Stars</p>
+                            </div>
                         </div>
-                    </div>
-                    
+                        <div class="text-center mt-3">
+                            <form id="uploadForm" enctype="multipart/form-data">
+                                <input type="file" name="profileImage" id="profileImage" />
+                                <input type="hidden" name="userID" value="${user.userID}" />
+                                <button type="button" id="uploadButton">Upload Image</button>
+                            </form>
+                        </div>
                         <hr class="w-75 mx-auto">
-                    
-                    
-                    <div class="text-center mt-3 d-flex flex-column">
-                        <h3 class="bg-white p-3">Chỉnh sửa hồ sơ</h3>
-                        <h3 class="mt-4 p-3">Lịch sử giao dịch</h3>
-                        <h3 class="my-4 p-3">Quà tặng tích điểm</h3>
+                        <div class="text-center mt-3 d-flex flex-column">
+                            <h3 class="bg-white p-3">Chỉnh sửa hồ sơ</h3>
+                            <h3 class="mt-4 p-3">Lịch sử giao dịch</h3>
+                            <h3 class="my-4 p-3">Quà tặng tích điểm</h3>
+                        </div>
                     </div>
-                </div>
-                <div class="col-1"></div>
-                <div class="col-7 row">
-                    <div class="col-12 row" style="padding-right: 0;">
-                        <div class="col-7">
-                            <h5>Tên người dùng</h5>
-                            <div class="input-group">
-                                  <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-7 col-12">
+                        <div class="row">
+                            <div class="col-md-8 mb-3"> <!-- Thêm mb-3 để tạo khoảng cách dưới -->
+                                <h5>Tên người dùng</h5>
 
-                                  <input type="text" value="MrZing" class="form-control fs-4" disabled>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                    <input type="text" value="${user.username}" class="form-control fs-4" disabled />
+                                </div>
+
+
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Giới tính</h5>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-venus-mars"></i></span>
+                                    <input type="text" value="${user.sex}" class="form-control fs-4" disabled>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-1"></div>
-                        <div class="col-4 px-0">
-                            <h5>Giới tính</h5>
+
+                        <div class="row">
+                            <div class="col-md-6"> <!-- Thêm mb-3 để tạo khoảng cách dưới -->
+                                <h5>First Name</h5>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                    <input type="text" value="${user.fName}" class="form-control fs-4" disabled />
+                                </div>
+                            </div>
+                            <div class="col-md-6"> <!-- Thêm mb-3 để tạo khoảng cách dưới -->
+                                <h5>Last Name</h5>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                    <input type="text" value="${user.lName}" class="form-control fs-4" disabled />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-3">
+                            <h5>Email</h5>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fa-solid fa-venus-mars"></i></span>
-                                
-                                <input type="text" value="Nam" class="form-control fs-4" disabled>
+                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                <input type="text" value="${user.email}" class="form-control fs-4" disabled>
+                                <button class="input-group-text">Thay đổi</button>
                             </div>
                         </div>
-                    </div>
-                    <div class="pt-3">
-                        <h5>Họ và tên</h5>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>
-                            <input type="text" value="Nguyễn Hồng Diện" class="form-control fs-4" disabled>
+                        <div class="pt-3">
+                            <h5>Số điện thoại</h5>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+                                <input type="text" value="${user.phone}" class="form-control fs-4" disabled>
+                            </div>
                         </div>
-                    </div>
-                    <div class="pt-3">
-                        <h5>Email</h5>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                            <input type="text" value="fptcinema@gmail.com" class="form-control fs-4" disabled>
-                            <span class="input-group-text"><p class="m-0">Thay đổi</p></span>
-                        </div>
-                    </div>
-                    <div class="pt-3">
-                        <h5>Số điện thoại</h5>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
-                            <input type="text" value="0123456789" class="form-control fs-4" disabled>
-                        </div>
-                    </div>
-                    <div class="pt-3">
-                        <h5>Mật khẩu</h5>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                            <input type="password" value="12345678" class="form-control fs-4" disabled>
-                            <span class="input-group-text"><p class="m-0">Thay đổi</p></span>
-                            
+                        <div class="pt-3">
+                            <h5>Mật khẩu</h5>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                                <input type="password" value="${user.password}" class="form-control fs-4" disabled>
+                                <button class="input-group-text">Thay đổi</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </c:if>
+            <c:if test="${empty user}">
+                <p>No user information available.</p>
+            </c:if>
         </div>
+        <script src="bs/js/bootstrap.bundle.js"></script>
     </body>
-    <script src="bs/js/bootstrap.bundle.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#uploadButton').click(function () {
+                var formData = new FormData($('#uploadForm')[0]);
+
+                $.ajax({
+                    url: 'UserServlet?action=uploadProfileImage',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        // Cập nhật lại ảnh đại diện trên trang
+                        $('#profileImageDisplay').attr('src', response.newAvatarPath);
+                        alert(response.message);
+                    },
+                    error: function () {
+                        alert('Upload failed.');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <%@include file="includes/footer.jsp" %>
+    <link rel="stylesheet" href="css/footer.css" />
 </html>
-<%@include file="includes/footer.jsp" %>
-<link rel="stylesheet" href="css/footer.css" />

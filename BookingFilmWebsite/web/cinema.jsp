@@ -9,7 +9,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="admins.css">
+        <link rel="stylesheet" href="css/admins.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
         <title>Theatre Management</title>
     </head>
@@ -175,13 +175,13 @@
                         </span>
                         <h3>Dashboard</h3>
                     </a>
-                    <a href="customer.jsp" class="active">
+                    <a href="customer.jsp" class="">
                         <span class="material-symbols-outlined">
                             person
                         </span>
                         <h3>Customer</h3>
                     </a>
-                    <a href="cinema.jsp">
+                    <a href="cinema.jsp" class="active">
                         <span class="material-symbols-outlined">
                             movie
                         </span>

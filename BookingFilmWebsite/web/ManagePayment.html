@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Management - Cinemagic</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    /* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffd08e;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #333;
+}
+
+p {
+    color: #555;
+}
+
+/* Navigation Bar */
+nav {
+    background-color: #007BFF;
+    padding: 15px;
+    color: white;
+    text-align: center;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+/* Main Container */
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+/* Payment Table */
+.payment-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.payment-table th, .payment-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.payment-table th {
+    background-color: #Fa7c5a   ;
+    color: white;
+    font-weight: bold;
+}
+
+.payment-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.payment-table tr:hover {
+    background-color: #ddd;
+}
+
+/* No Payments Message */
+.no-payments {
+    text-align: center;
+    color: red;
+    display: none; /* Show this only when there are no payments */
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    background-color: #007BFF;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+</style>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <h1>Cinemagic Admin Panel</h1>
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">User Management</a></li>
+            <li><a href="#">Payment Management</a></li>
+            <li><a href="#">Reports</a></li>
+            <li><a href="#">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <h2>Payment Management</h2>
+        <p>Below is the payment information for users.</p>
+
+        <!-- Payment Table -->
+        <table class="payment-table">
+            <thead>
+                <tr>
+                    <th>Payer</th>
+                    <th>Payment for</th>
+                    <th>Date</th>
+                    <th>Method</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Khanh Luan</td>
+                    <td>Movie: Avengers</td>
+                    <td>2024-10-01</td>
+                    <td>Credit Card</td>
+                    <td>200.000vnđ</td>
+                </tr>
+                <tr>
+                    <td>Hong Dien</td>
+                    <td>Movie: Spider-Man</td>
+                    <td>2024-10-03</td>
+                    <td>PayPal</td>
+                    <td>170.000vnđ</td>
+                </tr>
+                <tr>
+                    <td>Phuong Anh</td>
+                    <td>Movie: Làm giàu với ma</td>
+                    <td>2024-10-03</td>
+                    <td>PayPal</td>
+                    <td>120.000vnđ</td>
+                </tr>
+                <tr>
+                    <td>Quyet Tien</td>
+                    <td>Movie: Lật mặt 8</td>
+                    <td>2024-10-03</td>
+                    <td>PayPal</td>
+                    <td>150.000vnđ</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- No payment records message (display if no records available) -->
+        <p class="no-payments">No payment records available.</p>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Cinemagic. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

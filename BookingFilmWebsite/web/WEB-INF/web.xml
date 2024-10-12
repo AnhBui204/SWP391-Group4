@@ -1,8 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <servlet>
+        <servlet-name>GoogleServlet</servlet-name>
+        <servlet-class>Controller.GoogleServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MovieServlet</servlet-name>
+        <servlet-class>Controller.MovieServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UploadProfilePicture</servlet-name>
+        <servlet-class>Controller.UploadProfilePicture</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TheatreServlet</servlet-name>
         <url-pattern>/TheatreServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GoogleServlet</servlet-name>
+        <url-pattern>/GoogleServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MovieServlet</servlet-name>
+        <url-pattern>/MovieServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UploadProfilePicture</servlet-name>
+        <url-pattern>/UploadProfilePicture</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>HomePage.jsp</welcome-file>
@@ -19,4 +43,17 @@
         <servlet-name>UserServlet</servlet-name>
         <url-pattern>/UserServlet</url-pattern>
     </servlet-mapping>
+    
+    <multipart-config>
+        <location>/tmp</location>
+        <max-file-size>20848820</max-file-size> <!-- 20MB -->
+        <max-request-size>418018841</max-request-size> <!-- 40MB -->
+        <file-size-threshold>1048576</file-size-threshold> <!-- 1MB -->
+    </multipart-config>
+    
+    <context-param>
+        <param-name>UPLOAD_DIRECTORY</param-name>
+        <param-value>D:/Hoc/Ky 5/SWP391/BookingFilmWebsite/web/image/Avatar/</param-value> <!-- Đường dẫn lưu trữ thực -->
+    </context-param>
+
 </web-app>

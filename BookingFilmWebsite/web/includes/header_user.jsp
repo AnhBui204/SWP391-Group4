@@ -22,7 +22,7 @@
                 <!-- Navbar -->
                 <nav class="navbar">
                     <ul>
-                        <li><a href="#">Mua Vé</a></li>
+                        <li><a href="MovieServlet">Mua Vé</a></li>
                         <li><a href="#">Phim</a></li>
                         <li><a href="#">Góc Điện Ảnh</a></li>
                         <li><a href="#">Sự Kiện</a></li>
@@ -34,7 +34,7 @@
                     <div class="profile-container">
                         <div class="profile">
                             <img src="image/logo/logo.png" alt="Avatar" class="avatar">
-                            <span class="username">${user}</span>
+                            <span class="username">${users.username}</span>
                             <span class="stars">0 Stars</span>
                         </div>
                         <div class="dropdown-menu">

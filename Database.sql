@@ -1,7 +1,7 @@
-﻿CREATE DATABASE DEMO;
-USE DEMO;
+﻿CREATE DATABASE a;
+USE a;
 
-CREATE TABLE User (
+CREATE TABLE Users (
     UserID CHAR(6) PRIMARY KEY,
     UserName NVARCHAR(50) UNIQUE,
     FName NVARCHAR(50),  -- First Name
@@ -15,6 +15,8 @@ CREATE TABLE User (
     MoneyLeft MONEY CHECK (MoneyLeft >= 0),
     Avatar NVARCHAR(MAX)
 );
+
+select * from Users
 
 -- Foods and Drinks Table
 CREATE TABLE FoodsAndDrinks (
@@ -74,12 +76,38 @@ CREATE TABLE Movies (
     MovieName NVARCHAR(100),
 	Duration INT, 
     Country NVARCHAR(50),
-    Director NVARCHAR(50),
-    MovieType NVARCHAR(50),
+	Manufacturer NVARCHAR(100),
+    Director NVARCHAR(100),
     ReleaseDate DATE,
-	ImagePath VARCHAR(255),
-    Rate DECIMAL(3,1) CHECK (Rate >= 0 AND Rate <= 10)
+	ImgPortrait VARCHAR(512),
+	ImgLandscape VARCHAR(512),
+	MovieDescription NVARCHAR(512),
+	Rate DECIMAL(2,1) CHECK (Rating >= 0 AND Rating <= 10);
 );
+
+CREATE VIEW MovieRatings AS
+SELECT 
+    MovieID, 
+    AVG(Rating) AS AverageRate
+FROM 
+    Ratings
+GROUP BY 
+    MovieID;
+
+UPDATE Movies
+SET Rate = (SELECT AVG(Rating) 
+            FROM Ratings 
+            WHERE Ratings.MovieID = Movies.MovieID);
+
+CREATE TABLE Ratings (
+    RatingID INT PRIMARY KEY IDENTITY(1,1),
+    UserID CHAR(6),
+    MovieID CHAR(6),
+    Rating DECIMAL(2,1) CHECK (Rating >= 0 AND Rating <= 10),
+    CONSTRAINT FK_Movie FOREIGN KEY (MovieID) REFERENCES Movies(MovieID),
+    CONSTRAINT FK_User FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
 
 -- Junction table for Movie-Genre relationship
 CREATE TABLE MovieGenres (
@@ -95,7 +123,7 @@ CREATE TABLE Shows (
     ShowID CHAR(6) PRIMARY KEY,
     StartTime DATETIME,  
     EndTime DATETIME,   
-    MovieID CHAR(6),     
+    MovieID CHAR(6),		
     FOREIGN KEY (MovieID) REFERENCES Movies(MovieID)
 );
 
@@ -154,12 +182,36 @@ CREATE TABLE Tickets (
     FOREIGN KEY (VoucherID) REFERENCES Vouchers(VoucherID)
 );
 
+CREATE table WorkHis(
+	WorkId char(6) primary key,
+	WorkName char(512),
+	WorkDescription char(512),
+	StartTime date,
+	EndTime date,
+	StaffId char(6) 
+	foreign key (StaffId) references Users(UserId)
+)
+
+CREATE TABLE Report(
+	ReportId char(6) primary key,
+	ReportTitle char(512),
+	ReportDescription char(512),
+	TimeCreate date,
+	UserId char(6)
+	foreign key (UserId) references Users(UserId)
+)
+
 
 -- Thêm Users (thêm vài tài khoản mẫu)
 INSERT Users(UserID, UserName, FName, LName, Pass, Email, Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar)
 VALUES 
-('U00001', 'Admin', 'John', 'Doe', '123', 'admin@example.com', 'Admin', '0905000001', 'Male', '1985-05-01', 1000000, 'admin.png'),
-('U00002', 'Staff', 'Jane', 'Smith', '456', 'staff@example.com', 'Staff', '0905000002', 'Female', '1990-08-15', 500000, 'staff.png'),
+('AD0001', 'Admin', 'John', 'Doe', '123', 'admin@example.com', 'Admin', '0905000001', 'Male', '1985-05-01', 1000000, 'admin.png'),
+('T00001', 'StaffVC', 'PAnh', 'Smith', '456', 'staff1@example.com', 'Staff', '0905004002', 'Female', '1990-08-15', 500000, 'staff.png'),
+('T00002', 'StaffLT', 'Anh', 'Smith', '456', 'staff2@example.com', 'Staff', '0905005002', 'Male', '1990-08-15', 500000, 'staff.png'),
+('T00003', 'StaffGL', 'Luan', 'Smith', '456', 'staff3@example.com', 'Staff', '0905003202', 'Male', '1990-08-15', 500000, 'staff.png'),
+('T00004', 'StaffRIO', 'Diddy', 'Smith', '456', 'staff4@example.com', 'Staff', '0905062002', 'Female', '1990-08-15', 500000, 'staff.png'),
+('T00005', 'StaffMT', 'Dien', 'Smith', '456', 'staff5@example.com', 'Staff', '0905067002', 'Male', '1990-08-15', 500000, 'staff.png'),
+('T00006', 'StaffSL', 'Tien', 'Smith', '456', 'staff6@example.com', 'Staff', '0905000123', 'Male', '1990-08-15', 500000, 'staff.png'),
 ('U00003', 'User1', 'Tom', 'Johnson', '123', 'user1@example.com', 'User', '0905000003', 'Male', '2000-02-10', 300000, 'user1.png'),
 ('U00004', 'User2', 'Alice', 'Brown', '123', 'user2@example.com', 'User', '0905000004', 'Female', '1998-11-21', 100000, 'user2.png');
 
@@ -424,60 +476,60 @@ INSERT INTO Seats (SeatID, SeatName, RoomID, TheatreID) VALUES
 
 	--Room 3
 	-- Row A (random 8 seats)
-    ('S00425', 'A1', 'R00003', 'T00001'), ('S00426', 'A3', 'R00003', 'T00001'), ('S00427', 'A5', 'R00003', 'T00001'),
-    ('S00428', 'A7', 'R00003', 'T00001'), ('S00429', 'A9', 'R00003', 'T00001'), ('S00430', 'A10', 'R00003', 'T00001'),
-    ('S00431', 'A12', 'R00003', 'T00001'), ('S00432', 'A13', 'R00003', 'T00001'),
+    ('S00425', 'A1', 'R00003', 'T00001'), ('S00426', 'A2', 'R00003', 'T00001'), ('S00427', 'A3', 'R00003', 'T00001'),
+    ('S00428', 'A4', 'R00003', 'T00001'), ('S00429', 'A5', 'R00003', 'T00001'), ('S00430', 'A6', 'R00003', 'T00001'),
+    ('S00431', 'A7', 'R00003', 'T00001'), ('S00432', 'A8', 'R00003', 'T00001'),
 
     -- Row B (random 9 seats)
-    ('S00433', 'B2', 'R00003', 'T00001'), ('S00434', 'B4', 'R00003', 'T00001'), ('S00435', 'B6', 'R00003', 'T00001'),
-    ('S00436', 'B7', 'R00003', 'T00001'), ('S00437', 'B8', 'R00003', 'T00001'), ('S00438', 'B10', 'R00003', 'T00001'),
-    ('S00439', 'B11', 'R00003', 'T00001'), ('S00440', 'B13', 'R00003', 'T00001'), ('S00441', 'B14', 'R00003', 'T00001'),
+    ('S00433', 'B1', 'R00003', 'T00001'), ('S00434', 'B2', 'R00003', 'T00001'), ('S00435', 'B3', 'R00003', 'T00001'),
+    ('S00436', 'B4', 'R00003', 'T00001'), ('S00437', 'B5', 'R00003', 'T00001'), ('S00438', 'B6', 'R00003', 'T00001'),
+    ('S00439', 'B7', 'R00003', 'T00001'), ('S00440', 'B8', 'R00003', 'T00001'), ('S00441', 'B9', 'R00003', 'T00001'),
 
     -- Row C (random 7 seats)
-    ('S00442', 'C1', 'R00003', 'T00001'), ('S00443', 'C3', 'R00003', 'T00001'), ('S00444', 'C5', 'R00003', 'T00001'),
-    ('S00445', 'C6', 'R00003', 'T00001'), ('S00446', 'C8', 'R00003', 'T00001'), ('S00447', 'C9', 'R00003', 'T00001'),
-    ('S00448', 'C11', 'R00003', 'T00001'),
+    ('S00442', 'C1', 'R00003', 'T00001'), ('S00443', 'C2', 'R00003', 'T00001'), ('S00444', 'C3', 'R00003', 'T00001'),
+    ('S00445', 'C4', 'R00003', 'T00001'), ('S00446', 'C5', 'R00003', 'T00001'), ('S00447', 'C6', 'R00003', 'T00001'),
+    ('S00448', 'C7', 'R00003', 'T00001'),
 
     -- Row D (random 6 seats)
-    ('S00449', 'D2', 'R00003', 'T00001'), ('S00450', 'D4', 'R00003', 'T00001'), ('S00451', 'D5', 'R00003', 'T00001'),
-    ('S00452', 'D7', 'R00003', 'T00001'), ('S00453', 'D9', 'R00003', 'T00001'), ('S00454', 'D10', 'R00003', 'T00001'),
+    ('S00449', 'D1', 'R00003', 'T00001'), ('S00450', 'D2', 'R00003', 'T00001'), ('S00451', 'D3', 'R00003', 'T00001'),
+    ('S00452', 'D4', 'R00003', 'T00001'), ('S00453', 'D5', 'R00003', 'T00001'), ('S00454', 'D6', 'R00003', 'T00001'),
 
     -- Row E (random 8 seats)
-    ('S00455', 'E1', 'R00003', 'T00001'), ('S00456', 'E3', 'R00003', 'T00001'), ('S00457', 'E5', 'R00003', 'T00001'),
-    ('S00458', 'E6', 'R00003', 'T00001'), ('S00459', 'E7', 'R00003', 'T00001'), ('S00460', 'E9', 'R00003', 'T00001'),
-    ('S00461', 'E11', 'R00003', 'T00001'), ('S00462', 'E12', 'R00003', 'T00001'),
+    ('S00455', 'E1', 'R00003', 'T00001'), ('S00456', 'E2', 'R00003', 'T00001'), ('S00457', 'E3', 'R00003', 'T00001'),
+    ('S00458', 'E4', 'R00003', 'T00001'), ('S00459', 'E5', 'R00003', 'T00001'), ('S00460', 'E6', 'R00003', 'T00001'),
+    ('S00461', 'E7', 'R00003', 'T00001'), ('S00462', 'E8', 'R00003', 'T00001'),
 
     -- Row F (random 9 seats)
-    ('S00463', 'F1', 'R00003', 'T00001'), ('S00464', 'F3', 'R00003', 'T00001'), ('S00465', 'F4', 'R00003', 'T00001'),
-    ('S00466', 'F5', 'R00003', 'T00001'), ('S00467', 'F7', 'R00003', 'T00001'), ('S00468', 'F9', 'R00003', 'T00001'),
-    ('S00469', 'F11', 'R00003', 'T00001'), ('S00470', 'F12', 'R00003', 'T00001'), ('S00471', 'F14', 'R00003', 'T00001'),
+    ('S00463', 'F1', 'R00003', 'T00001'), ('S00464', 'F2', 'R00003', 'T00001'), ('S00465', 'F3', 'R00003', 'T00001'),
+    ('S00466', 'F4', 'R00003', 'T00001'), ('S00467', 'F5', 'R00003', 'T00001'), ('S00468', 'F6', 'R00003', 'T00001'),
+    ('S00469', 'F7', 'R00003', 'T00001'), ('S00470', 'F8', 'R00003', 'T00001'), ('S00471', 'F9', 'R00003', 'T00001'),
 
     -- Row G (random 7 seats)
-    ('S00472', 'G2', 'R00003', 'T00001'), ('S00473', 'G4', 'R00003', 'T00001'), ('S00474', 'G5', 'R00003', 'T00001'),
-    ('S00475', 'G7', 'R00003', 'T00001'), ('S00476', 'G8', 'R00003', 'T00001'), ('S00477', 'G10', 'R00003', 'T00001'),
-    ('S00478', 'G12', 'R00003', 'T00001'),
+    ('S00472', 'G1', 'R00003', 'T00001'), ('S00473', 'G2', 'R00003', 'T00001'), ('S00474', 'G3', 'R00003', 'T00001'),
+    ('S00475', 'G4', 'R00003', 'T00001'), ('S00476', 'G5', 'R00003', 'T00001'), ('S00477', 'G6', 'R00003', 'T00001'),
+    ('S00478', 'G7', 'R00003', 'T00001'),
 
     -- Row H (random 6 seats)
-    ('S00483', 'H2', 'R00003', 'T00001'), ('S00484', 'H4', 'R00003', 'T00001'), 
-    ('S00485', 'H5', 'R00003', 'T00001'), ('S00486', 'H7', 'R00003', 'T00001'), 
-    ('S00487', 'H9', 'R00003', 'T00001'), ('S00488', 'H10', 'R00003', 'T00001'),
+    ('S00483', 'H1', 'R00003', 'T00001'), ('S00484', 'H2', 'R00003', 'T00001'), 
+    ('S00485', 'H3', 'R00003', 'T00001'), ('S00486', 'H4', 'R00003', 'T00001'), 
+    ('S00487', 'H5', 'R00003', 'T00001'), ('S00488', 'H6', 'R00003', 'T00001'),
 
     -- Row I (random 7 seats)
-    ('S00489', 'I1', 'R00003', 'T00001'), ('S00490', 'I3', 'R00003', 'T00001'), 
-    ('S00491', 'I4', 'R00003', 'T00001'), ('S00492', 'I6', 'R00003', 'T00001'), 
-    ('S00493', 'I8', 'R00003', 'T00001'), ('S00494', 'I9', 'R00003', 'T00001'), 
-    ('S00495', 'I11', 'R00003', 'T00001'),
+    ('S00489', 'I1', 'R00003', 'T00001'), ('S00490', 'I2', 'R00003', 'T00001'), 
+    ('S00491', 'I3', 'R00003', 'T00001'), ('S00492', 'I4', 'R00003', 'T00001'), 
+    ('S00493', 'I5', 'R00003', 'T00001'), ('S00494', 'I6', 'R00003', 'T00001'), 
+    ('S00495', 'I7', 'R00003', 'T00001'),
 
     -- Row J (random 5 seats)
-    ('S00496', 'J2', 'R00003', 'T00001'), ('S00497', 'J4', 'R00003', 'T00001'), 
-    ('S00498', 'J6', 'R00003', 'T00001'), ('S00499', 'J7', 'R00003', 'T00001'), 
-    ('S00500', 'J10', 'R00003', 'T00001'),
+    ('S00496', 'J1', 'R00003', 'T00001'), ('S00497', 'J2'/, 'R00003', 'T00001'), 
+    ('S00498', 'J3', 'R00003', 'T00001'), ('S00499', 'J4', 'R00003', 'T00001'), 
+    ('S00500', 'J5', 'R00003', 'T00001'),
 
     -- Row K (random 8 seats)
     ('S00501', 'K1', 'R00003', 'T00001'), ('S00502', 'K2', 'R00003', 'T00001'), 
-    ('S00503', 'K3', 'R00003', 'T00001'), ('S00504', 'K5', 'R00003', 'T00001'), 
-    ('S00505', 'K7', 'R00003', 'T00001'), ('S00506', 'K9', 'R00003', 'T00001'), 
-    ('S00507', 'K11', 'R00003', 'T00001'), ('S00508', 'K12', 'R00003', 'T00001'),
+    ('S00503', 'K3', 'R00003', 'T00001'), ('S00504', 'K4', 'R00003', 'T00001'), 
+    ('S00505', 'K5', 'R00003', 'T00001'), ('S00506', 'K6', 'R00003', 'T00001'), 
+    ('S00507', 'K7', 'R00003', 'T00001'), ('S00508', 'K8', 'R00003', 'T00001'),
 
 	INSERT INTO Seats (SeatID, SeatName, RoomID, TheatreID) VALUES
 	
@@ -2346,28 +2398,25 @@ INSERT INTO Seats (SeatID, SeatName, RoomID, TheatreID) VALUES
 
 
 -- Thêm Movies (các bộ phim)
-INSERT INTO Movies (MovieID, MovieName, Duration, Country, Director, MovieType, ReleaseDate, Rate)
+INSERT INTO Movies (MovieID, MovieName, Duration, Country, Manufacturer, Director, ReleaseDate, ImgPortrait, ImgLandscape)
 VALUES 
-	('M00001', 'Avengers: Endgame', 'Anthony Russo, Joe Russo', 'Action', '2019-04-26', 8.4),
-	('M00002', 'The Lion King', 'Jon Favreau', 'Animation', '2019-07-19', 7.0),
-	('M00003', 'Parasite', 'Bong Joon-ho', 'Drama', '2019-05-30', 8.6),
-	('M00004', 'Dune', 'Denis Villeneuve', 'Sci-fi', '2021-10-22', 8.2),
-	('M00005', 'Spider-Man: No Way Home', 'Jon Watts', 'Action', '2021-12-17', 8.7),
-	('M00006', 'Soul', 'Pete Docter', 'Animation', '2020-12-25', 8.1),
-	('M00007', 'Tenet', 'Christopher Nolan', 'Sci-fi', '2020-08-26', 7.4),
-	('M00008', 'The Matrix Resurrections', 'Lana Wachowski', 'Action', '2021-12-22', 6.8),
-	('M00009', 'Joker', 'Todd Phillips', 'Drama', '2019-10-04', 8.4),
-	('M00010', 'Once Upon a Time in Hollywood', 'Quentin Tarantino', 'Drama', '2019-07-26', 7.6),
-	('M00011', 'Black Widow', 'Cate Shortland', 'Action', '2021-07-09', 6.8),
-	('M00012', 'Mulan', 'Niki Caro', 'Action', '2020-09-04', 5.7),
-	('M00013', 'Wonder Woman 1984', 'Patty Jenkins', 'Action', '2020-12-25', 5.4),
-	('M00014', 'A Quiet Place Part II', 'John Krasinski', 'Horror', '2021-05-28', 7.7),
-	('M00015', 'The French Dispatch', 'Wes Anderson', 'Comedy', '2021-10-22', 7.6),
-	('M00016', 'The Green Knight', 'David Lowery', 'Fantasy', '2021-07-30', 6.7),
-	('M00017', 'No Time to Die', 'Cary Joji Fukunaga', 'Action', '2021-09-30', 6.9),
-	('M00018', 'Free Guy', 'Shawn Levy', 'Action', '2021-08-13', 7.1),
-	('M00019', 'Demon Slayer: Mugen Train', 'Haruo Sotozaki', 'Animation', '2020-10-16', 8.4),
-	('M00020', 'Cruella', 'Craig Gillespie', 'Comedy', '2021-05-28', 7.4);
+	('M00001', 'Joker: Folie À Deux Điên Có Đôi', 138, 'Mỹ', 'DC Entertainment, Warner Bros', 'Todd Phillips', '2024-10-03', 'image/MovieImg/P/Joker.jpg', 'image/MovieImg/L/Joker.jpg'),
+	('M00002', 'Kumanthong: Chiêu Hồn Vong Nhi', 101, 'Philippines', 'Viva Films', 'Todd Phillips', '2024-10-03', 'image/MovieImg/P/Kumathong.jpg', 'image/MovieImg/L/Kumathong.jpg'),
+	('M00003', 'Mộ Đom Đóm', 89, 'Nhật Bản', 'Studio Ghibli', 'Takahata Isao', '2024-10-03', 'image/MovieImg/P/Jack.jpg', 'image/MovieImg/L/Jack.jpg'),
+	('M00004', 'Đố Anh Còng Được Tôi', 118, 'Hàn Quốc', 'CJ Entertainment', 'Seung-Wan Ryoo', '2024-09-26', 'image/MovieImg/P/DoAnhCongDuocToi.jpg', 'image/MovieImg/L/DoAnhCongDuocToi.jpg'),
+	('M00005', 'Vị Thành Viên(400 Cú Đấm)', 109, 'Pháp', 'Les Films du Carrosse', 'François', '2024-10-03', 'image/MovieImg/P/400cudam.jpg', 'image/MovieImg/L/400cudam.jpg'),
+	('M00006', 'Gã Trùm Vô Danh', 102, 'Hàn Quốc', 'Đang cập nhật', 'Lim Sung Yong', '2024-10-04', 'image/MovieImg/P/GaTrumVoDanh.jpg', 'image/MovieImg/L/GaTrumVoDanh.jpg'),
+	('M00007', 'Joker Folie À Deux', 138, 'America', 'DC Entertainment, Warner Bros', 'Todd Phillips', '2024-10-03', 'image/MovieImg/P/Joker.jpg', 'image/MovieImg/L/Joker.jpg'),
+	('M00008', 'Cậu Bé Cá Heo', 85, 'Iran', 'Sky Frame', 'Mohammad Kheyrandish', '2024-09-27', 'image/MovieImg/P/Dophin.jpg', 'image/MovieImg/L/Dophin.jpg'),
+	('M00009', 'Hẹn hò với sát nhân', 95, 'Mỹ', 'AGC Studios', 'Anna Kendrick', '2024-10-04', 'image/MovieImg/P/DateWithKiller.jpg', 'image/MovieImg/L/DateWithKiller.jpg'),
+	('M00010', 'Transformers Một', 104, 'Mỹ', 'Paramount Pictures', 'Josh Cooley', '2024-09-27', 'image/MovieImg/P/Transformer.jpg', 'image/MovieImg/L/Transformer.jpg'),
+	('M00011', 'Minh Hôn', 92, 'Hàn Quốc', 'Đang cập nhật', 'Lee Se Won', '2024-09-26', 'image/MovieImg/P/MinhHon.jpg', 'image/MovieImg/L/MinhHon.jpg'),
+	('M00012', 'Cám', 122, 'Việt Nam', 'Production Q', 'Trần Hữu Tấn', '2024-09-19', 'image/MovieImg/P/Cam.jpg', 'image/MovieImg/L/Cam.jpg'),
+	('M00013', 'Báo Thủ Đi Tìm Chủ', 88, 'Canada', 'Second Chance Productions', 'Kevin Donovan, Gottfried Roodt', '2024-09-13', 'image/MovieImg/P/Pets.jpg', 'image/MovieImg/L/Pets.jpg'),
+	('M00014', 'Mắt Biếc', 117, 'Việt Nam', 'Galaxy M&E, November Film', 'Victor Vũ', '2024-09-04', 'image/MovieImg/P/Matbiec.jpg', 'image/MovieImg/L/Matbiec.jpg'),
+	('M00015', 'Làm Giàu Với Ma', 112, 'Việt Nam', 'BlueBells Studios', 'Trung Lùn', '2024-08-29', 'image/MovieImg/P/Lamgiauvoima.jpg', 'image/MovieImg/L/Lamgiauvoima.jpg');
+
+
 -- Thêm Shows (suất chiếu phim)
 INSERT INTO Shows (ShowID, StartTime, EndTime, MovieID)
 VALUES 
@@ -2505,3 +2554,28 @@ WHERE r.TheatreID='T00001'
 select * from Theatres where theatreID = 'T00001'
 
 --Thêm trigger truy suất người tên người đặt vé khi ấn vào ô ticketOrder
+
+-- Truy suất movie detail
+SELECT 
+    M.MovieID,
+    M.MovieName,
+    M.Duration,
+    M.Country,
+    M.Director,
+    M.ReleaseDate,
+    M.ImgPortrait,
+    M.ImgLandscape,
+    M.Rate,
+    STRING_AGG(G.GenreName, ', ') AS Genres
+FROM 
+    Movies M
+JOIN 
+    MovieGenres MG ON M.MovieID = MG.MovieID
+JOIN 
+    Genres G ON MG.GenreID = G.GenreID
+GROUP BY 
+    M.MovieID, M.MovieName, M.Duration, M.Country, M.Director, 
+    M.ReleaseDate, M.ImgPortrait, M.ImgLandscape, M.Rate;
+
+
+	SELECT Avatar FROM Users WHERE UserID = 'U00003';

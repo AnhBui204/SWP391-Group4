@@ -1,6 +1,9 @@
 
 
+<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="Model.Movie" %>
+<%@ page import="Model.MovieDB" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -27,7 +30,13 @@
                 </div>
 
             </div>
+
             <div class="box2_dangchieu" id="box2_dangchieu_id">
+                <%
+                    MovieDB movieDB = new MovieDB();
+                    List<Movie> mvList = movieDB.getAllMovies();
+                    for (Movie movie : mvList) {
+                %> 
                 <div class="box2-1">
                     <div class="skin">
                         <div class="layer">
@@ -36,7 +45,7 @@
                         </div>
 
                     </div>
-                    <img src="./image/temp/temp1.jpg" alt="alt"/>
+                    <img src="<%= movie.getImgPortrait()%>" alt="alt"/>
                     <div class="box3">
                         <div class="danhgia">
 
@@ -47,147 +56,10 @@
                         </div>
                     </div>
 
-                </div>
-                <div class="box2-1">
-                    <div class="skin">
-                        <div class="layer">
-                            <p>Mua vé</p>
-                            <p>Trailer</p>
-                        </div>
-
-                    </div>
-                    <img src="./image/logo/logo.png" alt="alt"/>
-                    <div class="box3">
-                        <div class="danhgia">
-
-                            <p><i class="fas fa-star"></i> 8.0</p>
-                        </div>
-                        <div class="dotuoi">
-                            <p>T16</p>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="box2-1">
-                    <div class="skin">
-                        <div class="layer">
-                            <p>Mua vé</p>
-                            <p>Trailer</p>
-                        </div>
-
-                    </div>
-                    <img src="./image/temp/temp1.jpg" alt="alt"/>
-                    <div class="box3">
-                        <div class="danhgia">
-
-                            <p><i class="fas fa-star"></i> 8.0</p>
-                        </div>
-                        <div class="dotuoi">
-                            <p>T16</p>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="box2-1">
-                    <div class="skin">
-                        <div class="layer">
-                            <p>Mua vé</p>
-                            <p>Trailer</p>
-                        </div>
-
-                    </div>
-                    <img src="./image/temp/temp1.jpg" alt="alt"/>
-                    <div class="box3">
-                        <div class="danhgia">
-
-                            <p><i class="fas fa-star"></i> 8.0</p>
-                        </div>
-                        <div class="dotuoi">
-                            <p>T16</p>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="box2-1">
-                    <div class="skin">
-                        <div class="layer">
-                            <p>Mua vé</p>
-                            <p>Trailer</p>
-                        </div>
-
-                    </div>
-                    <img src="./image/temp/temp1.jpg" alt="alt"/>
-                    <div class="box3">
-                        <div class="danhgia">
-
-                            <p><i class="fas fa-star"></i> 8.0</p>
-                        </div>
-                        <div class="dotuoi">
-                            <p>T16</p>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="box2-1">
-                    <div class="skin">
-                        <div class="layer">
-                            <p>Mua vé</p>
-                            <p>Trailer</p>
-                        </div>
-
-                    </div>
-                    <img src="./image/logo/logo.png" alt="alt"/>
-                    <div class="box3">
-                        <div class="danhgia">
-
-                            <p><i class="fas fa-star"></i> 8.0</p>
-                        </div>
-                        <div class="dotuoi">
-                            <p>T16</p>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="box2-1">
-                    <div class="skin">
-                        <div class="layer">
-                            <p>Mua vé</p>
-                            <p>Trailer</p>
-                        </div>
-
-                    </div>
-                    <img src="./image/logo/logo.png" alt="alt"/>
-                    <div class="box3">
-                        <div class="danhgia">
-
-                            <p><i class="fas fa-star"></i> 8.0</p>
-                        </div>
-                        <div class="dotuoi">
-                            <p>T16</p>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="box2-1">
-                    <div class="skin">
-                        <div class="layer">
-                            <p>Mua vé</p>
-                            <p>Trailer</p>
-                        </div>
-
-                    </div>
-                    <img src="./image/temp/temp1.jpg" alt="alt"/>
-                    <div class="box3">
-                        <div class="danhgia">
-
-                            <p><i class="fas fa-star"></i> 8.0</p>
-                        </div>
-                        <div class="dotuoi">
-                            <p>T16</p>
-                        </div>
-                    </div>
-
-                </div>
+                </div> 
+                <%
+                    }
+                %>
             </div>
 
             <div class="box2_sapchieu hidden" id="box2_sapchieu_id">
@@ -447,7 +319,7 @@
             var hiddenElement1 = document.getElementById('box2_dangchieu_id');
             var hiddenElement2 = document.getElementById('box2_sapchieu_id');
             var hiddenElement3 = document.getElementById('box2_IMAX_id');
-            
+
             document.getElementById('dangchieu_button').addEventListener('click', function () {
                 glowbutton1.classList.add('glow');
                 glowbutton2.classList.remove('glow');

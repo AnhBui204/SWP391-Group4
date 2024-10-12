@@ -3,17 +3,28 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/Theatre.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/Movie.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/AdminDashBoard.jsp</file>
             <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Controller/UserServlet.java</file>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/updateTheatre.jsp</file>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/TheatreDB.java</file>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Controller/TheatreServlet.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/User.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/Booking.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/css/headers.css</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/Login.jsp</file>
             <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/MovieDB.java</file>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/css/admindbs.css</file>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/cinema.jsp</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/includes/header_user.jsp</file>
             <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/addTheatre.jsp</file>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/css/body.css</file>
             <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/DatabaseInfo.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/CustomerProfile.jsp</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Controller/MovieServlet.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/includes/header.jsp</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/includes/body.jsp</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/admin.html</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/Payment.html</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/customer.jsp</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/HomePage.jsp</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/UserDB.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/BookingDB.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Controller/UploadProfilePicture.java</file>
         </group>
     </open-files>
 </project-private>

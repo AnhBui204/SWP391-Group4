@@ -15,11 +15,25 @@ public class User implements Serializable {
     private String sex;
     private String dob;
     private String money;
+    private String avatar;
 
     public User() {
     }
 
-    public User(String userID, String username,String password, String fName, String lName, String email, String role, String phone, String sex, String dob, String money) {
+    public User(String userID, String username,String password, String fName, String lName, String email, String role, String phone, String sex, String dob) {
+        this.userID = userID;
+        this.username = username;
+        this.fName = fName;
+        this.lName = lName;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.phone = phone;
+        this.sex = sex;
+        this.dob = dob;
+    }
+
+    public User(String userID, String username, String fName, String lName, String password, String email, String role, String phone, String sex, String dob, String money, String avatar) {
         this.userID = userID;
         this.username = username;
         this.fName = fName;
@@ -31,22 +45,10 @@ public class User implements Serializable {
         this.sex = sex;
         this.dob = dob;
         this.money = money;
+        this.avatar = avatar;
     }
     
-    public User(String username, String password, String role, String email, String userID) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.email = email;
-        this.userID = userID;
-    }
-
-    public User(String userID, String username, String password, String email) {
-        this.userID = userID;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
+    
 
     public String getUserID() {
         return userID;
@@ -136,9 +138,17 @@ public class User implements Serializable {
         this.lName = lName;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     @Override
     public String toString() {
-        return "User{" + "userID=" + userID + ", username=" + username + ", password=" + password + ", fName=" + fName + ", lName=" + lName + ", email=" + email + ", role=" + role + ", phone=" + phone + ", sex=" + sex + ", dob=" + dob + ", money=" + money + '}';
+        return "User{" + "userID=" + userID + ", username=" + username + ", password=" + password + ", fName=" + fName + ", lName=" + lName + ", email=" + email + ", role=" + role + ", phone=" + phone + ", sex=" + sex + ", dob=" + dob + ", money=" + money +", avatar=" + avatar + '}';
     }
 
     

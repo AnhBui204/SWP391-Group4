@@ -9,7 +9,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width= , initial-scale=1.0">
-        <link rel="stylesheet" href="admins.css">
+        <link rel="stylesheet" href="css/admins.css">
         <link rel="stylesheet"
               href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
         <title>Document</title>
@@ -179,6 +179,7 @@
                                     <th>Sex</th>
                                     <th class='dob'>Date of Birth</th>
                                     <th>Money Left</th>
+                                    <th>Role</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -200,6 +201,7 @@
                                     <td><%= user.getSex()%></td>
                                     <td class='dob'><%= user.getDob()%></td>
                                     <td class='money'><%= user.getMoney()%> $</td>
+                                    <td><%= user.getRole() %></td>
                                 </tr>
                                 <%
                                     }

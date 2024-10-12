@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Form with Icons</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffd08e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .payment-container {
+            width: 600px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .order-info {
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .order-info span {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .timer {
+            float: right;
+            color: orange;
+            font-size: 14px;
+        }
+
+        .payment-tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .payment-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+        }
+
+        .payment-tab.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 80%;
+            padding: 10px 40px; /* Leave space for the icon */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-group .fa {
+            position: absolute;
+            left: 10px;
+            top: 40px;
+            color: #007bff;
+        }
+
+        .card-image {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .card-image img {
+            width: 100px;
+        }
+
+        .security-info {
+            font-size: 12px;
+            color: green;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .security-info img {
+            margin-right: 5px;
+        }
+
+        .security-info .fa {
+            margin-right: 5px;
+        }
+
+        .submit-btn {
+            background-color: orange;
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background-color: darkorange;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="payment-container">
+    <div class="order-info">
+        Mã đơn hàng <strong>TK1234</strong> 
+        <span>160,000 ₫</span>
+        <span class="timer"><i class="fas fa-clock"></i> 06:50</span>
+    </div>
+
+    <div class="payment-tabs">
+        <div class="payment-tab active"><i class="fas fa-credit-card"></i> Thẻ quốc tế (VISA, Master, JCB, Amex)</div>
+        <div class="payment-tab"><i class="fas fa-university"></i> Thẻ nội địa</div>
+        <div class="payment-tab"><i class="fas fa-qrcode"></i> Quét mã QR</div>
+    </div>
+
+    <div class="form-group">
+        <label for="card-number">Số thẻ</label>
+        <i class="fas fa-credit-card"></i>
+        <input type="text" id="card-number" placeholder="XXXX-XXXX-XXXX-XXXX">
+    </div>
+
+    <div class="form-group">
+        <label for="expiry-date">Ngày hết hạn</label>
+        <i class="far fa-calendar-alt"></i>
+        <input type="text" id="expiry-date" placeholder="MM/YY">
+    </div>
+
+    <div class="form-group">
+        <label for="cvv">CVV/CVC</label>
+        <i class="fas fa-lock"></i>
+        <input type="text" id="cvv" placeholder="123">
+    </div>
+
+    <div class="form-group">
+        <label for="card-name">Tên in trên thẻ</label>
+        <i class="fas fa-user"></i>
+        <input type="text" id="card-name" placeholder="CARD HOLDER NAME">
+    </div>
+
+    <div class="card-image">
+        <img src="https://via.placeholder.com/100x60.png?text=CARD" alt="Card Image">
+    </div>
+
+    <div class="security-info">
+        <i class="fas fa-shield-alt"></i>
+        Giao dịch an toàn với PCI-DSS và ISO 27001
+    </div>
+
+    <button class="submit-btn">TIẾP TỤC</button>
+</div>
+
+</body>
+</html>
