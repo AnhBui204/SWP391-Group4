@@ -87,26 +87,40 @@ public class TheatreDB {
     }
 
     // Method to add a new theatre
-    public void addTheatre(Theatre theatre) {
+    public void addTheatre(String theatreName, String theatreLocation) {
         try (Connection con = getConnect()) {
-            String sql = "INSERT INTO Theatres (Name, Location) VALUES (?, ?)";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, theatre.getTheatreName());
-            ps.setString(2, theatre.getTheatreLocation());
-            ps.executeUpdate();
+
+            String getMaxIdSql = "SELECT TOP 1 TheatreID FROM Theatres ORDER BY TheatreID DESC";
+            PreparedStatement getMaxIdPs = con.prepareStatement(getMaxIdSql);
+            ResultSet rs = getMaxIdPs.executeQuery();
+
+            String nextId = "T00001";
+            if (rs.next()) {
+                String lastId = rs.getString("TheatreID");
+                int lastNumericPart = Integer.parseInt(lastId.substring(1));
+                int nextNumericPart = lastNumericPart + 1;
+                nextId = String.format("T%05d", nextNumericPart);
+            }
+
+            String insertSql = "INSERT INTO Theatres (TheatreID, TheatreName, TheatreLocation) VALUES (?, ?, ?)";
+            PreparedStatement insertPs = con.prepareStatement(insertSql);
+            insertPs.setString(1, nextId);
+            insertPs.setString(2, theatreName);
+            insertPs.setString(3, theatreLocation);
+            insertPs.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     // Method to update a theatre
-    public void updateTheatre(Theatre theatre) {
+    public void updateTheatre(String theatreID, String theatreName, String theatreLocation) {
         try (Connection con = getConnect()) {
-            String sql = "UPDATE Theatres SET Name = ?, Location = ? WHERE TheatreID = ?";
+            String sql = "UPDATE Theatres SET TheatreName = ?, TheatreLocation = ? WHERE TheatreID = ?";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, theatre.getTheatreName());
-            ps.setString(2, theatre.getTheatreLocation());
-            ps.setString(3, theatre.getTheatreID());
+            ps.setString(1, theatreName);
+            ps.setString(2, theatreLocation);
+            ps.setString(3, theatreID);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

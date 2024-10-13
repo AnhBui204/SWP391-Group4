@@ -4,9 +4,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Galaxy Cinema</title>
-        <link rel="stylesheet" href="../css/headers.css"/>
-        <link rel="stylesheet" href="../css/body.css"/>
+        <title>CineLuxe Cinema</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -27,7 +25,7 @@
                 <!-- Navbar -->
                 <nav class="navbar">
                     <ul>
-                        <li><a href="MovieServlet">Mua Vé</a></li>
+                        <li><a href="MovieServlet?action=booking">Mua Vé</a></li>
                         <li><a href="#">Phim</a></li>
                         <li><a href="#">Góc Điện Ảnh</a></li>
                         <li><a href="#">Sự Kiện</a></li>

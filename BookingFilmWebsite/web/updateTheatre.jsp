@@ -116,7 +116,7 @@
         <%
             } else {
         %>
-        <form action="UpdateTheatreServlet" method="post">
+        <form action="TheatreServlet?action=update" method="post">
             <div class="form-group">
                 <label for="id">Theatre ID:</label>
                 <input class="form-control" type="text" id="id" name="theatreID" value="<%= theatre.getTheatreID()%>" readonly>

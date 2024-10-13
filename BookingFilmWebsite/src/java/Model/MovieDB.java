@@ -40,7 +40,7 @@ public class MovieDB {
 
     // Add Movie to the database
     public static boolean addMovie(Movie movie) {
-        String sql = "INSERT INTO Movies (MovieID, MovieName, Duration, Country, Manufacturer, Director, ReleaseDate, ImgPortrait, ImgLandscape) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Movies (MovieID, MovieName, Duration, Country, Manufacturer, Director, ReleaseDate, ImgPortrait, ImgLandscape, Description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             // Lấy MovieID tiếp theo
@@ -56,7 +56,7 @@ public class MovieDB {
             ps.setDate(7, movie.getReleaseDate());
             ps.setString(8, movie.getImgPortrait());
             ps.setString(9, movie.getImgLandscape());
-
+            ps.setString(10, movie.getDescription());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -80,8 +80,8 @@ public class MovieDB {
                 Date releaseDate = rs.getDate("ReleaseDate");
                 String imgPortrait = rs.getString("ImgPortrait");
                 String imgLandscape = rs.getString("ImgPortrait");
-
-                Movie movie = new Movie(movieID, movieName, duration, country, manufacturer, director, imgPortrait, imgLandscape, releaseDate);
+                String des = rs.getString("MovieDescription");
+                Movie movie = new Movie(movieID, movieName, duration, country, manufacturer, director, imgPortrait, imgLandscape, releaseDate, des);
                 movieList.add(movie);
             }
         } catch (SQLException e) {
@@ -106,8 +106,9 @@ public class MovieDB {
                 String imgPortrait = rs.getString("ImgPortrait");
                 String imgLandscape = rs.getString("ImgLandscape");
                 Date releaseDate = rs.getDate("ReleaseDate");
+                String des = rs.getString("MovieDecripstion");
 
-                return new Movie(movieID, movieName, duration, country, manufacturer, director, imgPortrait, imgLandscape, releaseDate);
+                return new Movie(movieID, movieName, duration, country, manufacturer, director, imgPortrait, imgLandscape, releaseDate, des);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -117,7 +118,7 @@ public class MovieDB {
 
     // Update a Movie in the database
     public static boolean updateMovie(Movie movie) {
-        String sql = "UPDATE Movies SET MovieName = ?, Duration = ?, Country = ?, Manufacturer = ?, Director = ?, ReleaseDate = ?, ImgPortrait = ?, ImgLandscape = ? WHERE MovieID = ?";
+        String sql = "UPDATE Movies SET MovieName = ?, Duration = ?, Country = ?, Manufacturer = ?, Director = ?, ReleaseDate = ?, ImgPortrait = ?, ImgLandscape = ?, MovieDescription WHERE MovieID = ?";
         try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             // Set các giá trị cần cập nhật cho PreparedStatement
@@ -129,7 +130,8 @@ public class MovieDB {
             ps.setDate(6, movie.getReleaseDate());
             ps.setString(7, movie.getImgPortrait());
             ps.setString(8, movie.getImgLandscape());
-            ps.setString(9, movie.getMovieID());  // Điều kiện WHERE MovieID
+            ps.setString(9, movie.getDescription());
+            ps.setString(10, movie.getMovieID());  // Điều kiện WHERE MovieID
 
             return ps.executeUpdate() > 0;  // Nếu có dòng nào bị ảnh hưởng thì trả về true
         } catch (SQLException e) {

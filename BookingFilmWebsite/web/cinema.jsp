@@ -242,11 +242,13 @@
                                         <td><%= ci.getTheatreLocation()%></td>
                                         <td>
                                             <!-- Update and Delete buttons -->
-                                            <form action="TheatreServlet" method="POST">
-                                                <input type="hidden" name="cinemaID" value="<%= ci.getTheatreID()%>">
+                                            <form action="updateTheatre.jsp" method="GET">
+                                                <input type="hidden" name="theatreID" value="<%= ci.getTheatreID()%>">
                                                 <button style="background-color: var(--clr-primary)" type="submit" name="action" value="update">Update</button>
-
-                                                <!-- Open Modal Button -->
+                                            </form>
+                                            <!-- Open Modal Button -->
+                                            <form action="TheatreServlet?action=delete" method="POST">
+                                                <input type="hidden" name="theatreID" value="<%= ci.getTheatreID()%>">
                                                 <button class="open-btn" style="background-color: var(--clr-danger)" type="button" id="openModal-<%= ci.getTheatreID()%>">Delete</button>
 
                                                 <!-- Modal -->
@@ -254,7 +256,7 @@
                                                     <div class="modal-content">
                                                         <h2>Are you sure you want to delete <%= ci.getTheatreID()%>?</h2>
                                                         <button class="delete-btn" id="closeModal-<%= ci.getTheatreID()%>">Cancel</button>
-                                                        <button class="delete-btn" style="background-color: var(--clr-danger)">Delete</button>
+                                                        <button type="submit" class="delete-btn" style="background-color: var(--clr-danger)">Delete</button>
                                                     </div>
                                                 </div>
 
@@ -305,5 +307,5 @@
         </div>
 
     </body>
-    <script src="admin.js"></script>
+    <script src="js/admin.js"></script>
 </html>

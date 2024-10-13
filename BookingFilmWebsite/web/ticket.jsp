@@ -207,5 +207,5 @@
             </main>
 
     </body>
-    <script src="admin.js"></script>
+    <script src="js/admin.js"></script>
 </html>

@@ -104,14 +104,14 @@
     <body>
         <div class="container mt-5">
             <h2>Add New Theatre</h2>
-            <form action="AddTheatreServlet" method="post">
+            <form action="TheatreServlet?action=add" method="post">
                 <div class="form-group">
                     <label for="name">Theatre Name:</label>
-                    <input type="text" class="form-control" id="name" name="name" required>
+                    <input type="text" class="form-control" id="name" name="theatreName" required>
                 </div>
                 <div class="form-group">
                     <label for="location">Location:</label>
-                    <input type="text" class="form-control" id="location" name="location" required>
+                    <input type="text" class="form-control" id="location" name="theatreLocation" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Add Theatre</button>
             </form>

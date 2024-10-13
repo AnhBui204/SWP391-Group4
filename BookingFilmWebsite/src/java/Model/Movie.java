@@ -21,7 +21,7 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(String movieID, String movieName, int duration, String country, String manufacturer, String director, String imgPortrait, String imgLandscape, Date releaseDate) {
+    public Movie(String movieID, String movieName, int duration, String country, String manufacturer, String director, String imgPortrait, String imgLandscape, Date releaseDate, String description ) {
         this.movieID = movieID;
         this.movieName = movieName;
         this.duration = duration;
@@ -31,6 +31,7 @@ public class Movie {
         this.imgPortrait = imgPortrait;
         this.imgLandscape = imgLandscape;
         this.releaseDate = releaseDate;
+        this.description = description;
     }
 
     public String getMovieID() {

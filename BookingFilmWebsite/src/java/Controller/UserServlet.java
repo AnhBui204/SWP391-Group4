@@ -49,9 +49,6 @@ public class UserServlet extends HttpServlet {
             case "uploadprofileimage":
                 handleUploadProfileImage(request, response); // Case for image upload
                 break;
-            case "displayprofileimage":
-                handleDisplayProfileImage(request, response); // Case for image display
-                break;
             default:
                 response.sendRedirect("error.jsp");
                 break;
@@ -114,7 +111,7 @@ public class UserServlet extends HttpServlet {
                 Cookie password = new Cookie("pass", URLEncoder.encode(a.getPassword(), "UTF-8"));
                 response.addCookie(userName);
                 response.addCookie(password);
-                String encodedURL = response.encodeRedirectURL("StaffDashBoard.jsp");
+                String encodedURL = response.encodeRedirectURL("crudMV.jsp");
                 response.sendRedirect(encodedURL);
             }
         } else {
@@ -269,25 +266,6 @@ public class UserServlet extends HttpServlet {
             }
         }
         return null;
-    }
-
-    // Method to handle profile image display
-    private void handleDisplayProfileImage(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String userID = request.getParameter("userID");
-
-        // Fetch the avatar path from the database
-        String avatarPath = UserDB.getAvatarByUserID(userID);
-
-        if (avatarPath != null) {
-            // Set the image path for display
-            request.setAttribute("avatarPath", avatarPath);
-            // Forward to a JSP to display the image
-            request.getRequestDispatcher("/uploadResult.jsp").forward(request, response);
-        } else {
-            // Handle case where there is no image
-            response.getWriter().write("No image found.");
-        }
     }
 
     @Override

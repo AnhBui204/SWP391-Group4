@@ -1,59 +1,83 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controller;
 
 import Model.Theatre;
 import Model.TheatreDB;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author ANH BUI
- */
 public class TheatreServlet extends HttpServlet {
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         // Get the action parameter to decide the operation
         String action = request.getParameter("action");
-        String theatreID = request.getParameter("cinemaID");
 
-        TheatreDB theatreDB = new TheatreDB();
+        if (action == null) {
+            action = "view"; // Default action
+        }
 
-        if ("update".equals(action)) {
-            // Redirect to the update page
-            request.setAttribute(theatreID, theatreID);
-            response.sendRedirect("updateTheatre.jsp?theatreID=" + theatreID);
-        } else if ("delete".equals(action)) {
-            // Perform the deletion of the theatre
-            theatreDB.deleteTheatre(theatreID);
-            // Redirect back to the list of theatres
-            response.sendRedirect("cinema.jsp");
-        } else if ("add".equals(action)) {
-            // Handle adding a new theatre
-            String name = request.getParameter("theatreName");
-            String location = request.getParameter("theatreLocation");
-
-            Theatre newTheatre = new Theatre();
-            newTheatre.setTheatreName(name);
-            newTheatre.setTheatreLocation(location);
-
-            theatreDB.addTheatre(newTheatre);
-            // Redirect back to the theatre list
-            response.sendRedirect("cinema.jsp");
+        switch (action.toLowerCase()) {
+            case "add":
+                handleAddTheatre(request, response);
+                break;
+            case "update":
+                handleUpdateTheatre(request, response);
+                break;
+            case "delete":
+                handleDeleteTheatre(request, response);
+                break;
+            case "view":
+                response.sendRedirect("cinema.jsp");
+                break;
+            default:
+                response.sendRedirect("error.jsp");
+                break;
         }
     }
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Default behavior is to forward to the cinema.jsp
+    private void handleAddTheatre(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Handle adding a new theatre
+        String name = request.getParameter("theatreName");
+        String location = request.getParameter("theatreLocation");
+
+        TheatreDB theatreDB = new TheatreDB();
+        theatreDB.addTheatre(name, location);
         response.sendRedirect("cinema.jsp");
+    }
+
+    private void handleUpdateTheatre(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String theatreID = request.getParameter("theatreID");
+        String name = request.getParameter("newTheatreName");
+        String location = request.getParameter("newTheatreLocation");
+
+        TheatreDB theatreDB = new TheatreDB();
+        theatreDB.updateTheatre(theatreID, name, location);
+        response.sendRedirect("cinema.jsp?theatreID=" + theatreID);
+    }
+
+    private void handleDeleteTheatre(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String theatreID = request.getParameter("theatreID");
+
+        TheatreDB theatreDB = new TheatreDB();
+        theatreDB.deleteTheatre(theatreID);
+        response.sendRedirect("cinema.jsp");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
 }

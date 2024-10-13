@@ -1,5 +1,5 @@
-﻿CREATE DATABASE a;
-USE a;
+﻿CREATE DATABASE testcases;
+USE testcases;
 
 CREATE TABLE Users (
     UserID CHAR(6) PRIMARY KEY,
@@ -16,33 +16,31 @@ CREATE TABLE Users (
     Avatar NVARCHAR(MAX)
 );
 
-select * from Users
-
--- Foods and Drinks Table
-CREATE TABLE FoodsAndDrinks (
-    ComboID CHAR(6) PRIMARY KEY,
-    ComboName NVARCHAR(100),
-	ImagePath VARCHAR(255),
-    Price MONEY CHECK (Price >= 0)
-);
-
--- Table for Booking
-CREATE TABLE Booking(
-    BookingID CHAR(6) PRIMARY KEY,
-    UserID CHAR(6),
-	TicketID CHAR(6),
-	ComboID CHAR(6),
-    BookingDate DATE,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID),    
-	FOREIGN KEY (ComboID) REFERENCES FoodsAndDrinks(ComboID)
-);
-
 
 -- Table for Theatres
 CREATE TABLE Theatres(
     TheatreID CHAR(6) PRIMARY KEY,
     TheatreName NVARCHAR(50) UNIQUE,
     TheatreLocation NVARCHAR(150)
+);
+
+-- Foods and Drinks Table
+CREATE TABLE FoodsAndDrinks (
+    ComboID CHAR(6) PRIMARY KEY,
+    ComboName NVARCHAR(100),
+	TheatreID CHAR(6),
+	ImagePath VARCHAR(255),
+    Price MONEY CHECK (Price >= 0),
+	FOREIGN KEY (TheatreID) REFERENCES Theatres(TheatreID) 
+);
+
+-- Table for Booking
+CREATE TABLE Booking(
+    BookingID CHAR(6) PRIMARY KEY,
+    UserID CHAR(6),
+	ComboID CHAR(6),
+    BookingDate DATE,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
 
@@ -81,23 +79,10 @@ CREATE TABLE Movies (
     ReleaseDate DATE,
 	ImgPortrait VARCHAR(512),
 	ImgLandscape VARCHAR(512),
-	MovieDescription NVARCHAR(512),
-	Rate DECIMAL(2,1) CHECK (Rating >= 0 AND Rating <= 10);
-);
+	MovieDescription NVARCHAR(4000),
+	Rate DECIMAL(2,1) CHECK (Rate >= 0 AND Rate <= 10)
+	);
 
-CREATE VIEW MovieRatings AS
-SELECT 
-    MovieID, 
-    AVG(Rating) AS AverageRate
-FROM 
-    Ratings
-GROUP BY 
-    MovieID;
-
-UPDATE Movies
-SET Rate = (SELECT AVG(Rating) 
-            FROM Ratings 
-            WHERE Ratings.MovieID = Movies.MovieID);
 
 CREATE TABLE Ratings (
     RatingID INT PRIMARY KEY IDENTITY(1,1),
@@ -121,8 +106,8 @@ CREATE TABLE MovieGenres (
 -- Table for Shows
 CREATE TABLE Shows (
     ShowID CHAR(6) PRIMARY KEY,
-    StartTime DATETIME,  
-    EndTime DATETIME,   
+	ShowDate DATE, 
+    StartTime TIME,  
     MovieID CHAR(6),		
     FOREIGN KEY (MovieID) REFERENCES Movies(MovieID)
 );
@@ -159,9 +144,11 @@ CREATE TABLE MovieActors (
 CREATE TABLE Vouchers (
     VoucherID CHAR(6) PRIMARY KEY,
 	VoucherName NVARCHAR(50) UNIQUE,
+	 TheatreID CHAR(6),
     Price MONEY CHECK (Price >= 0),
 	ImagePath VARCHAR(255),
-    ExpiryDate DATE
+    ExpiryDate DATE,
+	FOREIGN KEY (TheatreID) REFERENCES Theatres(TheatreID) 
 );
 
 
@@ -238,11 +225,11 @@ VALUES
 ('R00006', N'Phòng 6', 'T00001'),
 ('R00007', N'Phòng 7', 'T00001'),
 --2 Lotte
-('R00008', N'Phòng 1', 'T00001'),
-('R00009', N'Phòng 2', 'T00001'),
-('R00010', N'Phòng 3', 'T00001'),
-('R00011', N'Phòng 4', 'T00001'),
-('R00012', N'Phòng 5', 'T00001'),
+('R00008', N'Phòng 1', 'T00002'),
+('R00009', N'Phòng 2', 'T00002'),
+('R00010', N'Phòng 3', 'T00002'),
+('R00011', N'Phòng 4', 'T00002'),
+('R00012', N'Phòng 5', 'T00002'),
 --3 Galaxy
 ('R00013', N'Phòng 1', 'T00003'),
 ('R00014', N'Phòng 2', 'T00003'),
@@ -2398,58 +2385,51 @@ INSERT INTO Seats (SeatID, SeatName, RoomID, TheatreID) VALUES
 
 
 -- Thêm Movies (các bộ phim)
-INSERT INTO Movies (MovieID, MovieName, Duration, Country, Manufacturer, Director, ReleaseDate, ImgPortrait, ImgLandscape)
+INSERT INTO Movies (MovieID, MovieName, Duration, Country, Manufacturer, Director, ReleaseDate, ImgPortrait, ImgLandscape, MovieDescription)
 VALUES 
-	('M00001', 'Joker: Folie À Deux Điên Có Đôi', 138, 'Mỹ', 'DC Entertainment, Warner Bros', 'Todd Phillips', '2024-10-03', 'image/MovieImg/P/Joker.jpg', 'image/MovieImg/L/Joker.jpg'),
-	('M00002', 'Kumanthong: Chiêu Hồn Vong Nhi', 101, 'Philippines', 'Viva Films', 'Todd Phillips', '2024-10-03', 'image/MovieImg/P/Kumathong.jpg', 'image/MovieImg/L/Kumathong.jpg'),
-	('M00003', 'Mộ Đom Đóm', 89, 'Nhật Bản', 'Studio Ghibli', 'Takahata Isao', '2024-10-03', 'image/MovieImg/P/Jack.jpg', 'image/MovieImg/L/Jack.jpg'),
-	('M00004', 'Đố Anh Còng Được Tôi', 118, 'Hàn Quốc', 'CJ Entertainment', 'Seung-Wan Ryoo', '2024-09-26', 'image/MovieImg/P/DoAnhCongDuocToi.jpg', 'image/MovieImg/L/DoAnhCongDuocToi.jpg'),
-	('M00005', 'Vị Thành Viên(400 Cú Đấm)', 109, 'Pháp', 'Les Films du Carrosse', 'François', '2024-10-03', 'image/MovieImg/P/400cudam.jpg', 'image/MovieImg/L/400cudam.jpg'),
-	('M00006', 'Gã Trùm Vô Danh', 102, 'Hàn Quốc', 'Đang cập nhật', 'Lim Sung Yong', '2024-10-04', 'image/MovieImg/P/GaTrumVoDanh.jpg', 'image/MovieImg/L/GaTrumVoDanh.jpg'),
-	('M00007', 'Joker Folie À Deux', 138, 'America', 'DC Entertainment, Warner Bros', 'Todd Phillips', '2024-10-03', 'image/MovieImg/P/Joker.jpg', 'image/MovieImg/L/Joker.jpg'),
-	('M00008', 'Cậu Bé Cá Heo', 85, 'Iran', 'Sky Frame', 'Mohammad Kheyrandish', '2024-09-27', 'image/MovieImg/P/Dophin.jpg', 'image/MovieImg/L/Dophin.jpg'),
-	('M00009', 'Hẹn hò với sát nhân', 95, 'Mỹ', 'AGC Studios', 'Anna Kendrick', '2024-10-04', 'image/MovieImg/P/DateWithKiller.jpg', 'image/MovieImg/L/DateWithKiller.jpg'),
-	('M00010', 'Transformers Một', 104, 'Mỹ', 'Paramount Pictures', 'Josh Cooley', '2024-09-27', 'image/MovieImg/P/Transformer.jpg', 'image/MovieImg/L/Transformer.jpg'),
-	('M00011', 'Minh Hôn', 92, 'Hàn Quốc', 'Đang cập nhật', 'Lee Se Won', '2024-09-26', 'image/MovieImg/P/MinhHon.jpg', 'image/MovieImg/L/MinhHon.jpg'),
-	('M00012', 'Cám', 122, 'Việt Nam', 'Production Q', 'Trần Hữu Tấn', '2024-09-19', 'image/MovieImg/P/Cam.jpg', 'image/MovieImg/L/Cam.jpg'),
-	('M00013', 'Báo Thủ Đi Tìm Chủ', 88, 'Canada', 'Second Chance Productions', 'Kevin Donovan, Gottfried Roodt', '2024-09-13', 'image/MovieImg/P/Pets.jpg', 'image/MovieImg/L/Pets.jpg'),
-	('M00014', 'Mắt Biếc', 117, 'Việt Nam', 'Galaxy M&E, November Film', 'Victor Vũ', '2024-09-04', 'image/MovieImg/P/Matbiec.jpg', 'image/MovieImg/L/Matbiec.jpg'),
-	('M00015', 'Làm Giàu Với Ma', 112, 'Việt Nam', 'BlueBells Studios', 'Trung Lùn', '2024-08-29', 'image/MovieImg/P/Lamgiauvoima.jpg', 'image/MovieImg/L/Lamgiauvoima.jpg');
+	('M00001', 'Joker: Folie À Deux Điên Có Đôi', 138, 'Mỹ', 'DC Entertainment, Warner Bros', 'Todd Phillips', '2024-10-03', 'image/MovieImg/P/Joker.jpg', 'image/MovieImg/L/Joker.jpg', N'Không ngoa khi nói rằng, Joker là nhân vật phản diện nổi tiếng hàng đầu thế giới. Kẻ thù của Batman là cái tên mang tính biểu tượng từ truyện tranh đến màn ảnh rộng. Năm 2019, Todd Phillips và Joaquin Phoenix mang đến cho khán giả một Joker cực kì khác biệt, chưa từng có trong lịch sử. Phim thành công nhận 11 đề cử Oscar và thắng 2 giải, trong đó có Nam chính xuất sắc nhất cho Joaquin Phoenix. Lần này, Joker 2 trở lại, mang đến cho khán giả bộ đôi diễn viên trong mơ – Joaquin Phoenix tiếp tục trở thành Arthur Fleck còn vai diễn Harley Quinn thuộc về Lady Gaga. Chưa tham gia nhiều phim, nữ ca sĩ huyền thoại vẫn nhận được sự tin tưởng từ công chúng bởi diễn xuất chất lượng trong A Star Is Born (2018), House Of Gucci (2021).   Folie À Deux là căn bệnh rối loạn tâm thần chia sẻ. Chứng bệnh khiến cả hai người cùng tiếp xúc với nguồn năng lực tiêu cực trong tâm trí. Dường như, ở Joker 2, gã hề đã “lây lan” căn bệnh đến Harley Quinn, khiến cả hai người họ “điên có đôi”. Tên phim đã khắc họa được một phần nội dung, xoáy sâu vào mối quan hệ độc hại giữa Joker và Harley Quinn. Ít nhất 15 bài hát nổi tiếng sẽ tái hiện lại trong Joker: Folie À Deux. Joker và Harley Quinn luôn đi kèm âm thanh từ bản nhạc bất hủ Close To You, What The World Needs Now,… Có lẽ, chỉ có âm nhạc mới thể hiện nổi sự điên loạn và chứng rối loạn ảo tưởng. Ngoài ra, âm nhạc còn giúp Joker: Folie À Deux khác biệt với tác phẩm thuộc DC Comic từ trước tới nay cũng như phát huy sở trường của Lady Gaga. Tất nhiên, dù hát ca nhiều bao nhiêu, phim vẫn dán nhãn R, tràn ngập bạo lực.'),
+	('M00002', 'Kumanthong: Chiêu Hồn Vong Nhi', 101, 'Philippines', 'Viva Films', 'Todd Phillips', '2024-10-03', 'image/MovieImg/P/Kumathong.jpg', 'image/MovieImg/L/Kumathong.jpg',N'Đau buồn sau cái chết của con trai, Sarah đã đến vùng đất tâm linh xứ Chùa Vàng. Tại đây, cô nhờ sự giúp đỡ của một thầy tu nổi tiếng và sử dụng tro cốt đứa bé để tạo nên bức tượng Kumanthong. Tưởng chừng đây là cách giúp mẹ con đoàn tụ, nào ngờ hành động này gián tiếp triệu hồi những oan hồn ngạ quỷ đến gieo rắc nỗi ám ảnh kinh hoàng với cả gia đình Sarah. Liệu số phận của Sarah và người thân sẽ ra sao?'),
+	('M00003', 'Mộ Đom Đóm', 89, 'Nhật Bản', 'Studio Ghibli', 'Takahata Isao', '2024-10-03', 'image/MovieImg/P/Jack.jpg', 'image/MovieImg/L/Jack.jpg',N'Grave Of The Fireflies/ Mộ Đom Đóm là một trong những kiệt tác vĩ đại nhất của điện ảnh Nhật Bản, do hãng Ghibli lừng danh sản xuất. Bộ phim kể về nước Nhật thời hậu chiến, sau cuộc ném bom dữ dội của Mỹ. Anh em Seita và Setsuko mất mẹ, phải đấu tranh để tồn tại giữa cảnh đất nước điêu tàn. Thế nhưng, ở hoàn cảnh ngặt nghèo này, việc kiếm bữa ăn qua ngày vô cùng khó khăn…'),
+	('M00004', 'Đố Anh Còng Được Tôi', 118, 'Hàn Quốc', 'CJ Entertainment', 'Seung-Wan Ryoo', '2024-09-26', 'image/MovieImg/P/DoAnhCongDuocToi.jpg', 'image/MovieImg/L/DoAnhCongDuocToi.jpg',N'Các thanh tra kỳ cựu nổi tiếng đã hoạt động trở lại! Thám tử Seo Do-cheol (HWANG Jung-min) và đội điều tra tội phạm nguy hiểm của anh không ngừng truy lùng tội phạm cả ngày lẫn đêm, đặt cược cả cuộc sống cá nhân của họ.  Nhận một vụ án sát hại một giáo sư, đội thanh tra nhận ra những mối liên hệ với các vụ án trong quá khứ và nảy sinh những nghi ngờ về một kẻ giết người hàng loạt. Điều này đã khiến cả nước rơi vào tình trạng hỗn loạn. Khi đội thanh tra đi sâu vào cuộc điều tra, kẻ sát nhân đã chế nhạo họ bằng cách công khai tung ra một đoạn giới thiệu trực tuyến, chỉ ra nạn nhân tiếp theo và làm gia tăng sự hỗn loạn.  Để giải quyết mối đe dọa ngày càng leo thang, nhóm đã kết nạp một sĩ quan tân binh trẻ Park Sun-woo (JUNG Hae-in), dẫn đến những khúc mắc và đầy rẫy bất ngờ trong vụ án.'),
+	('M00005', 'Vị Thành Viên(400 Cú Đấm)', 109, 'Pháp', 'Les Films du Carrosse', 'François', '2024-10-03', 'image/MovieImg/P/400cudam.jpg', 'image/MovieImg/L/400cudam.jpg',N''),
+	('M00006', 'Gã Trùm Vô Danh', 102, 'Hàn Quốc', 'Đang cập nhật', 'Lim Sung Yong', '2024-10-04', 'image/MovieImg/P/GaTrumVoDanh.jpg', 'image/MovieImg/L/GaTrumVoDanh.jpg',N''),
+	('M00007', 'Fubao: Bảo Bối Của Ông', 94, 'Hàn Quốc', 'Đang Cập Nhật', 'Đang Cập Nhật', '2024-10-10', 'image/MovieImg/P/Panda.jpg', 'image/MovieImg/L/Panda.jpg',N'Bộ phim kể về cuộc hành trình trưởng thành của gấu trúc khổng lồ Fubao ở Hàn Quốc từ khi sinh ra đến khi quay trở về Trung Quốc. Đó là một hành trình đẹp đẽ và tràn ngập yêu thương của em bên gia đình, đặc biệt là hai ông. Bằng những thước phim chân thật, giản dị ghi lại hình ảnh chú gấu trúc nghịch ngợm dễ thương, bộ phim chắc chắn sẽ làm đổ gục những người yêu gấu trúc vì độ "dưỡng thê" của nó!'),
+	('M00008', 'Cậu Bé Cá Heo', 85, 'Iran', 'Sky Frame', 'Mohammad Kheyrandish', '2024-09-27', 'image/MovieImg/P/Dophin.jpg', 'image/MovieImg/L/Dophin.jpg',N'Được giải cứu và nuôi dạy bởi đàn cá heo sau một vụ tai nạn máy bay trên biển, Dolphin Boy / Cậu Bé Cá Heo dần lớn lên với một cuộc sống vô tư dưới những con sóng biển êm đềm cho đến khi một con quái vật độc ác nắm quyền cai trị thế giới dưới nước. Bị đày trở lại đất liền, cậu bé được người thuyền trưởng tốt bụng nhận về nuôi. Với sự giúp đỡ của người bạn đồng hành mới, cậu bé dấn thân vào cuộc hành trình giải quyết bí ẩn về danh tính thực sự của mình.Với mỗi chiến thắng, họ tiến gần hơn đến việc làm sáng tỏ ý định độc ác của tên quái vật xấu xa và khôi phục lại sự cân bằng cho thế giới dưới nước./'),
+	('M00009', 'Hẹn hò với sát nhân', 95, 'Mỹ', 'AGC Studios', 'Anna Kendrick', '2024-10-04', 'image/MovieImg/P/DateWithKiller.jpg', 'image/MovieImg/L/DateWithKiller.jpg',N''),
+	('M00010', 'Transformers Một', 104, 'Mỹ', 'Paramount Pictures', 'Josh Cooley', '2024-09-27', 'image/MovieImg/P/Transformer.jpg', 'image/MovieImg/L/Transformer.jpg',N''),
+	('M00011', 'Minh Hôn', 92, 'Hàn Quốc', 'Đang cập nhật', 'Lee Se Won', '2024-09-26', 'image/MovieImg/P/MinhHon.jpg', 'image/MovieImg/L/MinhHon.jpg',N''),
+	('M00012', 'Cám', 122, 'Việt Nam', 'Production Q', 'Trần Hữu Tấn', '2024-09-19', 'image/MovieImg/P/Cam.jpg', 'image/MovieImg/L/Cam.jpg',N'Câu chuyện phim là dị bản kinh dị đẫm máu lấy cảm hứng từ truyện cổ tích nổi tiếng Tấm Cám, nội dung chính của phim xoay quanh Cám - em gái cùng cha khác mẹ của Tấm đồng thời sẽ có nhiều nhân vật và chi tiết sáng tạo, gợi cảm giác vừa lạ vừa quen cho khán giả. Sau loạt tác phẩm kinh dị ăn khách như Tết Ở Làng Địa Ngục, Kẻ Ăn Hồn... bộ đôi nhà sản xuất Hoàng Quân - đạo diễn Trần Hữu Tấn đã tiếp tục với một dị bản của cổ tích Việt Nam mang tên Cám. Cùng dàn diễn viên tiềm năng, vai Tấm do diễn viên Rima Thanh Vy thủ vai, trong khi vai Cám được trao cho gương mặt rất quen thuộc - Lâm Thanh Mỹ. Ngoài ra vai mẹ kế của diễn viên Thúy Diễm và vai Hoàng tử do Hải Nam đảm nhận. Dị bản sẽ cho một góc nhìn hoàn toàn khác về Tấm Cám khi sự thay đổi đến từ người nuôi cá bống lại là Cám. Cô bé có ngoại hình dị dạng, khiến cả gia đình bị dân làng cho là phù thủy. Cũng vì thế mà Cám mới là đứa con bị đối xử tệ bạc, bắt phải lựa gạo chứ không phải Tấm. Cùng với bài đồng dao về cá bống, giọng nói của Bụt trong phim mới cũng vang lên khi hỏi: “Vì sao con khóc?”. Thế nhưng, nó không mang màu sắc dịu hiền, thân thương của một vì thần tiên trong văn hóa Việt Nam mà đậm chất ma mị, kinh dị. Liệu đây có đúng là Bụt hay chính là ác quỷ đội lốt đã lừa dối Tấm và Cám từ lâu để đưa họ vào cái bẫy chết chóc? '),
+	('M00013', 'Báo Thủ Đi Tìm Chủ', 88, 'Canada', 'Second Chance Productions', 'Kevin Donovan, Gottfried Roodt', '2024-09-13', 'image/MovieImg/P/Pets.jpg', 'image/MovieImg/L/Pets.jpg',N''),
+	('M00014', 'Mắt Biếc', 117, 'Việt Nam', 'Galaxy M&E, November Film', 'Victor Vũ', '2024-09-04', 'image/MovieImg/P/Matbiec.jpg', 'image/MovieImg/L/Matbiec.jpg',N'Đạo diễn Victor Vũ trở lại với một tác phẩm chuyển thể từ truyện ngắn cùng tên nổi tiếng của nhà văn Nguyễn Nhật Ánh: Mắt Biếc. Phim kể về chuyện tình đơn phương của chàng thanh niên Ngạn dành cho cô bạn từ thuở nhỏ Hà Lan... Ngạn và Hà Lan vốn là hai người bạn từ thuở nhỏ, cùng ở làng Đo Đo an bình. Họ cùng nhau đi học, cùng trải qua quãng đời áo trắng ngây thơ vụng dại với những cảm xúc bồi hồi của tuổi thiếu niên.'),
+	('M00015', 'Làm Giàu Với Ma', 112, 'Việt Nam', 'BlueBells Studios', 'Trung Lùn', '2024-08-29', 'image/MovieImg/P/Lamgiauvoima.jpg', 'image/MovieImg/L/Lamgiauvoima.jpg',N'Phim mới Làm Giàu Với Ma kể về Lanh (Tuấn Trần) - con trai của ông Đạo làm nghề mai táng (Hoài Linh), lâm vào đường cùng vì cờ bạc. Trong cơn túng quẫn, “duyên tình” đẩy đưa anh gặp một ma nữ (Diệp Bảo Ngọc) và cùng nhau thực hiện những “kèo thơm" để phục vụ mục đích của cả hai.');
 
 
 -- Thêm Shows (suất chiếu phim)
-INSERT INTO Shows (ShowID, StartTime, EndTime, MovieID)
+INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
 VALUES 
-	('SH0001', '2024-09-13 14:00:00', '2024-09-13 16:30:00', 'M00001'),
-	('SH0002', '2024-09-13 17:00:00', '2024-09-13 19:30:00', 'M00002'),
-	('SH0003', '2024-09-13 20:00:00', '2024-09-13 22:30:00', 'M00003'),
-	('SH0004', '2024-09-14 14:00:00', '2024-09-14 16:30:00', 'M00004'),
-	('SH0005', '2024-09-14 17:00:00', '2024-09-14 19:30:00', 'M00005'),
-	('SH0006', '2024-09-14 20:00:00', '2024-09-14 22:30:00', 'M00006'),
-	('SH0007', '2024-09-15 14:00:00', '2024-09-15 16:30:00', 'M00004'),
-	('SH0008', '2024-09-15 17:00:00', '2024-09-15 19:30:00', 'M00005'),
-	('SH0009', '2024-09-16 14:00:00', '2024-09-16 16:30:00', 'M00007'),
-	('SH0010', '2024-09-16 17:00:00', '2024-09-16 19:30:00', 'M00007'),
-	('SH0011', '2024-09-16 20:00:00', '2024-09-16 22:30:00', 'M00007'),
-	('SH0012', '2024-09-17 14:00:00', '2024-09-17 16:30:00', 'M00008'),
-	('SH0013', '2024-09-17 17:00:00', '2024-09-17 19:30:00', 'M00009'),
-	('SH0014', '2024-09-17 20:00:00', '2024-09-17 22:30:00', 'M00010'),
-	('SH0015', '2024-09-18 14:00:00', '2024-09-18 16:30:00', 'M00010'),
-	('SH0016', '2024-09-18 17:00:00', '2024-09-18 19:30:00', 'M00011'),
-	('SH0017', '2024-09-18 20:00:00', '2024-09-18 22:30:00', 'M00012'),
-	('SH0018', '2024-09-19 14:00:00', '2024-09-19 16:30:00', 'M00012'),
-	('SH0019', '2024-09-19 17:00:00', '2024-09-19 19:30:00', 'M00012'),
-	('SH0020', '2024-09-19 20:00:00', '2024-09-19 22:30:00', 'M00013'),
-	('SH0021', '2024-09-20 14:00:00', '2024-09-20 16:30:00', 'M00014'),
-	('SH0022', '2024-09-20 17:00:00', '2024-09-20 19:30:00', 'M00015'),
-	('SH0023', '2024-09-20 20:00:00', '2024-09-20 22:30:00', 'M00015'),
-	('SH0024', '2024-09-21 14:00:00', '2024-09-21 16:30:00', 'M00016'),
-	('SH0025', '2024-09-21 17:00:00', '2024-09-21 19:30:00', 'M00017'),
-	('SH0026', '2024-09-21 20:00:00', '2024-09-21 22:30:00', 'M00018'),
-	('SH0027', '2024-09-22 14:00:00', '2024-09-22 16:30:00', 'M00019'),
-	('SH0028', '2024-09-22 17:00:00', '2024-09-22 19:30:00', 'M00020'),
-	('SH0029', '2024-09-22 20:00:00', '2024-09-22 22:30:00', 'M00020'),
-	('SH0030', '2024-09-23 14:00:00', '2024-09-23 16:30:00', 'M00020');
+	('SH0001', '2024-09-13', '16:30:00', 'M00001'),
+	('SH0002', '2024-09-10', '19:30:00', 'M00002'),
+	('SH0003', '2024-09-13', '22:30:00', 'M00003'),
+	('SH0004', '2024-09-14', '16:30:00', 'M00004'),
+	('SH0005', '2024-09-14', '19:30:00', 'M00005'),
+	('SH0006', '2024-09-14', '22:30:00', 'M00006'),
+	('SH0007', '2024-09-15', '16:30:00', 'M00004'),
+	('SH0008', '2024-09-15', '19:30:00', 'M00005'),
+	('SH0009', '2024-09-16', '16:30:00', 'M00007'),
+	('SH0010', '2024-09-16', '19:30:00', 'M00007'),
+	('SH0011', '2024-09-16', '22:30:00', 'M00007'),
+	('SH0012', '2024-09-17', '16:30:00', 'M00008'),
+	('SH0013', '2024-09-17', '19:30:00', 'M00009'),
+	('SH0014', '2024-09-17', '22:30:00', 'M00010'),
+	('SH0015', '2024-09-18', '16:30:00', 'M00010'),
+	('SH0016', '2024-09-18', '19:30:00', 'M00011'),
+	('SH0017', '2024-09-18', '22:30:00', 'M00012'),
+	('SH0018', '2024-09-19', '6:30:00', 'M00012'),
+	('SH0019', '2024-09-19', '19:30:00', 'M00012'),
+	('SH0020', '2024-09-19', '22:30:00', 'M00013'),
+	('SH0021', '2024-09-20', '16:30:00', 'M00014'),
+	('SH0022', '2024-09-20', '19:30:00', 'M00015'),
+	('SH0023', '2024-09-20', '22:30:00', 'M00015');
 
 -- Thêm ShowSeats 
 --Rap 1----------------------------------------------------------------
@@ -2490,32 +2470,41 @@ VALUES
 ('M00002', 'A00003');
 
 -- Thêm Vouchers (voucher khuyến mãi)
-INSERT INTO Vouchers (VoucherID, Price, VoucherName, ExpiryDate)
+INSERT INTO Vouchers (VoucherID, Price, VoucherName, TheatreID, ExpiryDate)
 VALUES 
-('V00001', 50000, N'Voucher1', '2024-12-31'),
-('V00002', 100000, N'Voucher2', '2024-11-30');
+('V00001', 50000, N'Voucher1', 'T00001', '2024-12-31'),
+('V00002', 100000, N'Voucher2' ,'T00001', '2024-11-30');
 
 -- Thêm FoodsAndDrinks (đồ ăn và nước uống)
-INSERT INTO FoodsAndDrinks (ComboID, ComboName, Price)
+INSERT INTO FoodsAndDrinks (ComboID, ComboName, TheatreID, ImagePath, Price)
 VALUES 
-('C00001', N'Bắp rang + Nước ngọt', 60000),
-('C00002', N'Bắp rang lớn + Nước ngọt lớn', 80000);
+('C00001', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00001', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00001', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00001', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00001', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00001', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00001', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00001', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00001', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00001', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00001', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/f1.jpg', 60000);
 
 -- Thêm Booking (đơn đặt vé)
-INSERT INTO Booking (BookingID, CustomerID, BookingDate)
+INSERT INTO Booking (BookingID, UserID, ComboID, BookingDate)
 VALUES 
-('B00001', 'U00003', '2024-09-10'),
-('B00002', 'U00004', '2024-09-11'),
-('B00003', 'U00003', '2024-09-12'),
-('B00004', 'U00004', '2024-09-12');
+('B00001', 'U00003', 'C00002', '2024-09-10'),
+('B00002', 'U00004', 'C00001', '2024-09-11'),
+('B00003', 'U00003', 'C00001', '2024-09-12'),
+('B00004', 'U00004', 'C00002', '2024-09-12');
 
 -- Thêm Tickets (vé đã đặt)
-INSERT INTO Tickets (TicketID, BookingID, ShowID, SeatID, VoucherID, Price, TicketStatus, BookingDate)
+INSERT INTO Tickets (TicketID, BookingID, ShowID, TheatreID, RoomID, SeatID, VoucherID, Price, TicketStatus, BookingDate)
 VALUES 
-('TK0001', 'B00001', 'SH0001', 'S00001', 'C00001', 'V00001', 120000,'Pending', '2024-09-10 13:00:00'),
-('TK0001', 'B00002', 'SH0002', 'S00004', 'C00002', 'V00002', 150000, 'Paid', '2024-09-11 14:00:00'),
-('TK0003', 'B00003', 'SH0003', 'S00006', 'C00001', 'V00002', 100000, 'Paid','2024-09-12 15:00:00'),
-('TK0004', 'B00004', 'SH0004', 'S00007', 'C00001', 'V00001', 130000, 'Paid', '2024-09-12 16:00:00'); 
+('TK0001', 'B00001', 'SH0001', 'SH0001', 'T00001', 'R00001', 'S00001', 'V00001', 120000,'Pending', '2024-09-10'),
+('TK0001', 'B00002', 'SH0002', 'SH0004', 'T00001', 'R00001', 'S00002', 'V00002', 150000, 'Paid', '2024-09-11'),
+('TK0003', 'B00003', 'SH0003', 'SH0006', 'T00001', 'R00001', 'S00003', 'V00002', 100000, 'Paid','2024-09-12'),
+('TK0004', 'B00004', 'SH0004', 'SH0007', 'T00001', 'R00001', 'S00004', 'V00001', 130000, 'Paid', '2024-09-12'); 
 
 
 
@@ -2523,7 +2512,7 @@ select Username, Pass , UserID, Email, Phone, Sex, DateOfBirth, MoneyLeft from U
 
 select * from Rooms
 
-DROP TABLE IF EXISTS Rooms;
+DROP TABLE IF EXISTS The;
 
 SELECT 
     TD.TicketID,
@@ -2579,3 +2568,18 @@ GROUP BY
 
 
 	SELECT Avatar FROM Users WHERE UserID = 'U00003';
+
+	
+CREATE VIEW MovieRatings AS
+SELECT 
+    MovieID, 
+    AVG(Rating) AS AverageRate
+FROM 
+    Ratings
+GROUP BY 
+    MovieID;
+
+UPDATE Movies
+SET Rate = (SELECT AVG(Rating) 
+            FROM Ratings 
+            WHERE Ratings.MovieID = Movies.MovieID);
