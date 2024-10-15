@@ -10,8 +10,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     text-align: center; 
     font-weight: bold; 
     margin-top: 3px; 
-    padding: 0 40px;
+    padding: 20px;
     font-size: medium;
+    max-height: 70px;
+    min-height: 70px;
 }
 
 .menu-items button {

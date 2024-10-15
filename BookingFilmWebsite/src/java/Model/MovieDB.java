@@ -4,9 +4,12 @@ import static Model.DatabaseInfo.DBURL;
 import static Model.DatabaseInfo.DRIVERNAME;
 import static Model.DatabaseInfo.PASSDB;
 import static Model.DatabaseInfo.USERDB;
+import static Model.UserDB.getConnect;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MovieDB {
 
@@ -40,7 +43,7 @@ public class MovieDB {
 
     // Add Movie to the database
     public static boolean addMovie(Movie movie) {
-        String sql = "INSERT INTO Movies (MovieID, MovieName, Duration, Country, Manufacturer, Director, ReleaseDate, ImgPortrait, ImgLandscape, Description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Movies (MovieID, MovieName, Duration, Country, Manufacturer, Director, ReleaseDate, ImgPortrait, ImgLandscape, MovieDescription) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             // Lấy MovieID tiếp theo
@@ -106,7 +109,7 @@ public class MovieDB {
                 String imgPortrait = rs.getString("ImgPortrait");
                 String imgLandscape = rs.getString("ImgLandscape");
                 Date releaseDate = rs.getDate("ReleaseDate");
-                String des = rs.getString("MovieDecripstion");
+                String des = rs.getString("MovieDescription");
 
                 return new Movie(movieID, movieName, duration, country, manufacturer, director, imgPortrait, imgLandscape, releaseDate, des);
             }
@@ -118,7 +121,7 @@ public class MovieDB {
 
     // Update a Movie in the database
     public static boolean updateMovie(Movie movie) {
-        String sql = "UPDATE Movies SET MovieName = ?, Duration = ?, Country = ?, Manufacturer = ?, Director = ?, ReleaseDate = ?, ImgPortrait = ?, ImgLandscape = ?, MovieDescription WHERE MovieID = ?";
+        String sql = "UPDATE Movies SET MovieName = ?, Duration = ?, Country = ?, Manufacturer = ?, Director = ?, ReleaseDate = ?, ImgPortrait = ?, ImgLandscape = ?, MovieDescription = ? WHERE MovieID = ?";
         try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             // Set các giá trị cần cập nhật cho PreparedStatement
@@ -188,12 +191,46 @@ public class MovieDB {
             e.printStackTrace();
         }
     }
+    
+    public static void uploadPImage(String movieID, String PImagePath) {
+        String query = "UPDATE Movies SET ImgPortrait = ? WHERE MovieID = ?";
+
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, PImagePath);  // Save the path instead of a BLOB
+            stmt.setString(2, movieID);
+
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("ImgPortrait path updated successfully.");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Failed to upload avatar ImgPortrait.");
+        }
+    }
+    
+    public static void uploadLImage(String movieID, String LImagePath) {
+        String query = "UPDATE Movies SET ImgLandscape = ? WHERE MovieID = ?";
+
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, LImagePath);  // Save the path instead of a BLOB
+            stmt.setString(2, movieID);
+
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("ImgLandscape path updated successfully.");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Failed to upload ImgLandscape path.");
+        }
+    }
 
 
     public static void main(String[] args) {
         // Thêm một bộ phim mới
 //        System.out.println("Thêm bộ phim mới:");
-//        Movie newMovie = new Movie(null, "Inception", 148, "USA", "Warner Bros", "Christopher Nolan", "inception_portrait.jpg", "inception_landscape.jpg",  Date.valueOf("2010-07-16"));
+//        Movie newMovie = new Movie(null, "Inception", 148, "USA", "Warner Bros", "Christopher Nolan", "inception_portrait.jpg", "inception_landscape.jpg",  Date.valueOf("2010-07-16"), "Hello mấy cưng");
 //        if (MovieDB.addMovie(newMovie)) {
 //            System.out.println("Thêm bộ phim thành công!");
 //        } else {
@@ -207,40 +244,40 @@ public class MovieDB {
             System.out.println(movie);
         }
 
-        Movie fetchedMovie = MovieDB.getMovieById("M00016");
-        if (fetchedMovie != null) {
-            System.out.println("Bộ phim: " + fetchedMovie);
-        } else {
-            System.out.println("Không tìm thấy bộ phim với ID 'M00016'.");
-        }
-
-        // Cập nhật bộ phim
-        System.out.println("\nCập nhật bộ phim:");
-        if (fetchedMovie != null) {
-            fetchedMovie.setMovieName("Inception (Updated)");
-            fetchedMovie.setDuration(150);  // Thay đổi thời gian
-            if (MovieDB.updateMovie(fetchedMovie)) {
-                System.out.println("Cập nhật bộ phim thành công!");
-                System.out.println(fetchedMovie);
-            } else {
-                System.out.println("Cập nhật bộ phim thất bại!");
-            }
-        }
-
-        // Xóa bộ phim
-        System.out.println("\nXóa bộ phim với ID 'M00001':");
-        if (MovieDB.deleteMovie("M00001")) {
-            System.out.println("Xóa bộ phim thành công!");
-        } else {
-            System.out.println("Xóa bộ phim thất bại!");
-        }
-
-        // Kiểm tra lại danh sách bộ phim sau khi xóa
-        System.out.println("\nDanh sách tất cả các bộ phim sau khi xóa:");
-        movies = MovieDB.getAllMovies();
-        for (Movie movie : movies) {
-            System.out.println(movie);
-        }
+//        Movie fetchedMovie = MovieDB.getMovieById("M00016");
+//        if (fetchedMovie != null) {
+//            System.out.println("Bộ phim: " + fetchedMovie);
+//        } else {
+//            System.out.println("Không tìm thấy bộ phim với ID 'M00016'.");
+//        }
+//
+//        // Cập nhật bộ phim
+//        System.out.println("\nCập nhật bộ phim:");
+//        if (fetchedMovie != null) {
+//            fetchedMovie.setMovieName("Inception (Updated)");
+//            fetchedMovie.setDuration(150);  // Thay đổi thời gian
+//            if (MovieDB.updateMovie(fetchedMovie)) {
+//                System.out.println("Cập nhật bộ phim thành công!");
+//                System.out.println(fetchedMovie);
+//            } else {
+//                System.out.println("Cập nhật bộ phim thất bại!");
+//            }
+//        }
+//
+//        // Xóa bộ phim
+//        System.out.println("\nXóa bộ phim với ID 'M00017':");
+//        if (MovieDB.deleteMovie("M00017")) {
+//            System.out.println("Xóa bộ phim thành công!");
+//        } else {
+//            System.out.println("Xóa bộ phim thất bại!");
+//        }
+//
+//        // Kiểm tra lại danh sách bộ phim sau khi xóa
+//        System.out.println("\nDanh sách tất cả các bộ phim sau khi xóa:");
+//        movies = MovieDB.getAllMovies();
+//        for (Movie movie : movies) {
+//            System.out.println(movie);
+//        }
     }
 
 }

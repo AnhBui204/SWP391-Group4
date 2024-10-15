@@ -1,2 +1,5 @@
 - Thêm bảng issue lưu ID user và user report. Reply thì lấy email của user qua id và reply về mail
 - Chỉnh db mỗi rạp mỗi staff( idea: cho userID của staff = id của rạp để xác minh staff của rạp nào)
+
+
+- Thêm giá ghế trong movie

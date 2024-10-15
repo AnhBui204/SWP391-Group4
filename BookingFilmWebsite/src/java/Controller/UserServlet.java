@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.sql.Date;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024,
         maxFileSize = 1024 * 1024 * 5,
@@ -64,65 +65,63 @@ public class UserServlet extends HttpServlet {
         User a = db.getUsers(user, pass);
 
         if (a != null && a.getPassword().equals(pass)) {
+            HttpSession session = request.getSession();
+
             if (a.getRole().equals("Admin")) {
                 // Admin login
-                HttpSession session = request.getSession();
                 session.setAttribute("user", a.getUsername());
                 session.setAttribute("users", a);
                 session.setAttribute("pass", a.getPassword());
                 session.setAttribute("role", "Admin");
-
-                session.setMaxInactiveInterval(30 * 60); // Session expiry
+                session.setMaxInactiveInterval(30 * 60);
                 Cookie userName = new Cookie("user", URLEncoder.encode(a.getUsername(), "UTF-8"));
-                Cookie password = new Cookie("pass", URLEncoder.encode(a.getPassword(), "UTF-8"));
                 response.addCookie(userName);
+                Cookie password = new Cookie("pass", URLEncoder.encode(a.getPassword(), "UTF-8"));
                 response.addCookie(password);
+
+                // Đặt thông báo thành công
+                session.setAttribute("successMessage", "Đăng nhập thành công!");
+
                 String encodedURL = response.encodeRedirectURL("AdminDashBoard.jsp");
                 response.sendRedirect(encodedURL);
 
             } else if (a.getRole().equals("User")) {
                 // User login
-                HttpSession session = request.getSession();
                 session.setAttribute("user", a.getUsername());
                 session.setAttribute("users", a);
                 session.setAttribute("pass", a.getPassword());
-                session.setAttribute("id", a.getUserID()); //added
+                session.setAttribute("id", a.getUserID());
                 session.setAttribute("role", "User");
+                session.setMaxInactiveInterval(30 * 60);
 
-                session.setMaxInactiveInterval(30 * 60); // Session expiry
-                Cookie userName = new Cookie("user", URLEncoder.encode(a.getUsername(), "UTF-8"));
-                Cookie password = new Cookie("pass", URLEncoder.encode(a.getPassword(), "UTF-8"));
-                response.addCookie(userName);
-                response.addCookie(password);
+                // Đặt thông báo thành công
+                session.setAttribute("successMessage", "Đăng nhập thành công!");
+
                 String encodedURL = response.encodeRedirectURL("HomePage.jsp");
                 response.sendRedirect(encodedURL);
-
             } else if (a.getRole().equals("Staff")) {
                 // Staff login
-                HttpSession session = request.getSession();
                 session.setAttribute("user", a.getUsername());
                 session.setAttribute("users", a);
                 session.setAttribute("pass", a.getPassword());
-                session.setAttribute("id", a.getUserID()); //added
+                session.setAttribute("id", a.getUserID());
                 session.setAttribute("role", "Staff");
+                session.setMaxInactiveInterval(30 * 60);
 
-                session.setMaxInactiveInterval(30 * 60); // Session expiry
-                Cookie userName = new Cookie("user", URLEncoder.encode(a.getUsername(), "UTF-8"));
-                Cookie password = new Cookie("pass", URLEncoder.encode(a.getPassword(), "UTF-8"));
-                response.addCookie(userName);
-                response.addCookie(password);
+                // Đặt thông báo thành công
+                session.setAttribute("successMessage", "Đăng nhập thành công!");
+
                 String encodedURL = response.encodeRedirectURL("crudMV.jsp");
                 response.sendRedirect(encodedURL);
             }
         } else {
-            request.setAttribute("errorMessage", "Wrong username or password. Please try again.");
-            request.getRequestDispatcher("HomePage.jsp").forward(request, response);
+            request.setAttribute("errorMessage", "Tên người dùng hoặc mật khẩu sai. Vui lòng thử lại.");
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
         }
     }
 
     private void handleLogout(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Invalidate the session
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
@@ -137,6 +136,10 @@ public class UserServlet extends HttpServlet {
             }
         }
 
+        // Đặt thông báo đăng xuất thành công
+        HttpSession newSession = request.getSession(true);
+        newSession.setAttribute("successMessage", "Đăng xuất thành công!");
+
         // Redirect to login page
         response.sendRedirect("HomePage.jsp");
     }
@@ -144,28 +147,38 @@ public class UserServlet extends HttpServlet {
     private void handleSignUp(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String username = request.getParameter("uname");
+            String username = request.getParameter("username");
             String email = request.getParameter("email");
-            String password = request.getParameter("psw");
-            String fname = request.getParameter("fname");
-            String lname = request.getParameter("lname");
-
-            if (username == null || email == null || password == null || username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                request.setAttribute("errorMessage", "All fields are required.");
-                request.getRequestDispatcher("signup.jsp").forward(request, response);
-                return;
-            }
-
+            String password = request.getParameter("password");
+            String fname = request.getParameter("firstName");
+            String lname = request.getParameter("lastName");
+            String phone = request.getParameter("phone");
+            String sex = request.getParameter("gender");
+            String dobString = request.getParameter("dob");
+            Date dob = Date.valueOf(dobString);
             String role = "User"; // Default role for signup
-            String id = "1"; // Should be generated or auto-incremented in the database
+            System.out.println("Username: " + username);
+            System.out.println("Email: " + email);
+            System.out.println("Password: " + password);
+            System.out.println("First Name: " + fname);
+            System.out.println("Last Name: " + lname);
+            System.out.println("Phone: " + phone);
+            System.out.println("Gender: " + sex);
+            System.out.println("Date of Birth: " + dobString);
 
             UserDB db = new UserDB();
-            User newUser = new User(username, password, fname, lname, role, email, id);
+            User newUser = new User(null, username, password, fname, lname, email, role, phone, sex, dob);
             db.insert(newUser);
-            response.sendRedirect("HomePage.jsp");
+
+            // Đặt thông báo thành công
+            HttpSession session = request.getSession();
+            session.setAttribute("successMessage", "Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.");
+
+            response.sendRedirect("Login.jsp");
+
         } catch (Exception e) {
-            request.setAttribute("error", "Error adding user: " + e.getMessage());
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            request.setAttribute("errorMessage", "Đã xảy ra lỗi trong quá trình đăng ký. Vui lòng thử lại.");
+            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         }
     }
 
@@ -239,7 +252,7 @@ public class UserServlet extends HttpServlet {
                 // Lưu đường dẫn tương đối hoặc tuyệt đối vào database
                 String fileURLPath = "image/Avatar/" + fileName;  // Có thể thay đổi theo yêu cầu
                 UserDB.uploadProfileImage(userID, fileURLPath);
-
+                System.out.println(fileURLPath);
                 // Tạo phản hồi JSON thành công
                 jsonResponse = String.format("{\"newAvatarPath\": \"%s\", \"message\": \"Image uploaded and saved successfully.\"}", fileURLPath);
             } catch (IOException ex) {

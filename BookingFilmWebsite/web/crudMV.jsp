@@ -3,6 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@page import="Model.Movie" %>
 <%@page import="Model.MovieDB" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">   
     <head>
@@ -15,7 +16,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="css/movie_styles.css"/>
+        <link rel="stylesheet" href="css/movie_styless.css"/>
     </head>
     <body>        
         <!-- Navbar Start -->
@@ -117,10 +118,23 @@
                                             <div  class="col-lg-3 col-md-6 col-sm-12 pb-1">
                                                 <div class="card product-item border-0 mb-4">
                                                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                                                        <input type="hidden" name="movieID" value="<%= movie.getMovieID()%>" />
                                                         <img class="img-fluid w-100" src="<%= movie.getImgPortrait()%>" alt="">
                                                         <div class="overlay"> <!-- Thêm overlay -->
                                                             <div class="icon-actions"> <!-- Action icons -->
-                                                                <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Update" style="background-color: green;">&#xE254;</i></a>
+                                                                <a href="#editEmployeeModal" 
+                                                                   class="edit" 
+                                                                   data-toggle="modal" 
+                                                                   data-id="<%= movie.getMovieID()%>" 
+                                                                   data-name="<%= movie.getMovieName()%>" 
+                                                                   data-duration="<%= movie.getDuration()%>" 
+                                                                   data-country="<%= movie.getCountry()%>" 
+                                                                   data-manufacturer="<%= movie.getManufacturer()%>" 
+                                                                   data-director="<%= movie.getDirector()%>" 
+                                                                   data-rldate="<%= movie.getReleaseDate()%>" 
+                                                                   data-des="<%= movie.getDescription()%>">
+                                                                    <i class="material-icons" data-toggle="tooltip" title="Update" style="background-color: green;">&#xE254;</i>
+                                                                </a>
                                                                 <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete" style="background-color: red;">&#xE872;</i></a>
                                                             </div>
                                                         </div>
@@ -128,7 +142,7 @@
                                                 </div>
                                                 <p class="movie-title"><%= movie.getMovieName()%></p>
                                             </div>
-                                            <%                                                
+                                            <%
                                                 }
                                                 String getNextID = movieDB.getNextMovieID();
                                             %>
@@ -140,12 +154,12 @@
                     </div>
                 </div>
             </div>
-                                        
+
             <!--Add Modal HTML -->
             <div id="addEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="MovieServlet?action=add" method="POST">
+                        <form action="MovieServlet?action=add" method="POST" enctype="multipart/form-data">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Thêm Phim</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -153,7 +167,7 @@
                             <div class="modal-body">					
                                 <div class="form-group">
                                     <label>Movie ID: </label>
-                                    <input type="text" value="<%= getNextID %>" class="form-control" readonly>
+                                    <input type="text" value="<%= getNextID%>" class="form-control" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="movieName">Movie Name: </label>
@@ -179,17 +193,17 @@
                                     <label for="myFile">
                                         <i class="fa fa-file-image-o" aria-hidden="true" style="margin-right: 5px;"></i>Portrait Image:
                                     </label>
-                                    <input type="file" id="myFile" name="filename" style="padding: 5px;
+                                    <input type="file" id="myFile" name="imageP" style="padding: 5px;
                                            margin-bottom: 10px;
                                            border-radius: 5px;
                                            border: none;
                                            box-shadow: 0 0 5px gray;">
                                 </div>
                                 <div class="form-group">
-                                    <label for="myFile">
+                                    <label for="myFiles">
                                         <i class="fa fa-file-image-o" aria-hidden="true" style="margin-right: 5px;"></i>Landscape Image:
                                     </label>
-                                    <input type="file" id="myFile" name="filename" style="padding: 5px;
+                                    <input type="file" id="myFiles" name="imageL" style="padding: 5px;
                                            margin-bottom: 10px;
                                            border-radius: 5px;
                                            border: none;
@@ -200,10 +214,11 @@
                                     <input type="date" name="rldate" class="form-control id=rldate" required>
                                 </div>	
                                 <div class="form-group">
-                                    <label for="movieDes">Desctiption: </label>
-                                    <input type="text" name="movieDes" id="movieDes" class="form-control" required>
+                                    <label for="movieDes">Description: </label>
+                                    <textarea name="movieDes" id="movieDes" class="form-control" rows="4" required></textarea>
                                 </div>
-                                
+
+
                             </div>
                             <div class="modal-footer">
                                 <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
@@ -214,11 +229,11 @@
                 </div>
             </div>
 
-            <!--Edit Modal HTML -->
+            <!-- Update Modal HTML -->
             <div id="editEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form>
+                        <form action="MovieServlet?action=update" method="POST" enctype="multipart/form-data">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Cập Nhật Phim</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -226,60 +241,85 @@
                             <div class="modal-body">					
                                 <div class="form-group">
                                     <label>Movie ID: </label>
-                                    <input type="text" class="form-control" required>
+                                    <input type="text" name="movieID" id="movieID" value="" class="form-control" readonly>
                                 </div>
                                 <div class="form-group">
-                                    <label>Movie Name: </label>
-                                    <input type="text" class="form-control" required>
+                                    <label for="movieName">Movie Name: </label>
+                                    <input type="text" name="movieName" id="movieName" value="" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Duration: </label>
-                                    <input type="text" class="form-control" required>
+                                    <label for="duration">Duration: </label>
+                                    <input type="text" name="duration" id="duration" value="" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Country: </label>
-                                    <input type="text" class="form-control" required>
+                                    <label for="country">Country: </label>
+                                    <input type="text" name="country" id="country" value="" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label> Movie Type: </label>
-                                    <input type="text" class="form-control" required>
+                                    <label for="manufacturer"> Manufacturer: </label>
+                                    <input type="text" name="manufacturer" id="manufacturer" value="" class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <label>Release Date: </label>
-                                    <input type="date" class="form-control" required>
-                                </div>	
+                                    <label for="director"> Director: </label>
+                                    <input type="text" name="director" id="director" value="" class="form-control">
+                                </div>
                                 <div class="form-group">
                                     <label for="myFile">
-                                        <i class="fa fa-file-image-o" aria-hidden="true" style="margin-right: 5px;"></i> Image:
+                                        <i class="fa fa-file-image-o" aria-hidden="true" style="margin-right: 5px;"></i>Portrait Image:
                                     </label>
-                                    <input type="file" id="myFile" name="filename" style="padding: 5px;
+                                    <input type="file" id="myFile" name="imageP" style="padding: 5px;
                                            margin-bottom: 10px;
                                            border-radius: 5px;
                                            border: none;
                                            box-shadow: 0 0 5px gray;">
+                                    <!-- Optionally display the existing portrait image -->
+                                    <img src="${movie.imageP}" alt="Portrait Image" style="width:100px; margin-top:5px;">
                                 </div>
+                                <div class="form-group">
+                                    <label for="myFiles">
+                                        <i class="fa fa-file-image-o" aria-hidden="true" style="margin-right: 5px;"></i>Landscape Image:
+                                    </label>
+                                    <input type="file" id="myFiles" name="imageL" style="padding: 5px;
+                                           margin-bottom: 10px;
+                                           border-radius: 5px;
+                                           border: none;
+                                           box-shadow: 0 0 5px gray;">
+                                    <!-- Optionally display the existing landscape image -->
+                                    <img src="${movie.imageL}" alt="Landscape Image" style="width:100px; margin-top:5px;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="rldate">Release Date: </label>
+                                    <input type="date" name="rldate" id="rldate" value="" class="form-control" required>
+                                </div>	
+                                <div class="form-group">
+                                    <label for="movieDes">Description: </label>
+                                    <textarea name="movieDes" id="movieDes" class="form-control" rows="4" required></textarea>
+                                </div>
+
+
                             </div>
                             <div class="modal-footer">
                                 <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                                <input type="submit" class="btn btn-info" value="Save">
+                                <input type="submit" class="btn btn-success" value="Update">
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
 
+
             <!--Delete Modal HTML -->
             <div id="deleteEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form>
+                        <form action="MovieServlet?action=delete" method="post">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Xóa Phim</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
                             <div class="modal-body">					
-                                <p>Bạn có chắc chắn muốn xóa phim này không ?</p>
-                                <p class="text-warning"><small>Hành động này không thể hoàn tác.</small></p>
+                                <p>Bạn có chắc muốn xóa phim này?</p>
+                                <input type="hidden" name="movieID" id="deleteMovieID" value="">
                             </div>
                             <div class="modal-footer">
                                 <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
@@ -292,4 +332,34 @@
 
         </div>
     </body>
+    <script>
+        $(document).on("click", ".delete", function () {
+            var movieID = $(this).closest('.product-item').find('input[name="movieID"]').val();
+            $("#deleteMovieID").val(movieID);
+        });
+
+
+        $(document).on('click', '.edit', function () {
+            var movieID = $(this).data('id');
+            var movieName = $(this).data('name');
+            var duration = $(this).data('duration');
+            var country = $(this).data('country');
+            var manufacturer = $(this).data('manufacturer');
+            var director = $(this).data('director');
+            var rldate = $(this).data('rldate');
+            var des = $(this).data('des');
+
+            // Điền dữ liệu vào modal
+            $('#editEmployeeModal input[name="movieID"]').val(movieID);
+            $('#editEmployeeModal input[name="movieName"]').val(movieName);
+            $('#editEmployeeModal input[name="duration"]').val(duration);
+            $('#editEmployeeModal input[name="country"]').val(country);
+            $('#editEmployeeModal input[name="manufacturer"]').val(manufacturer);
+            $('#editEmployeeModal input[name="director"]').val(director);
+            $('#editEmployeeModal input[name="rldate"]').val(rldate);
+            $('#editEmployeeModal textarea[name="movieDes"]').val(des);
+        });
+
+
+    </script>
 </html>

@@ -55,5 +55,12 @@
         <param-name>UPLOAD_DIRECTORY</param-name>
         <param-value>D:/Hoc/Ky 5/SWP391/BookingFilmWebsite/web/image/Avatar/</param-value> <!-- Đường dẫn lưu trữ thực -->
     </context-param>
-
+    <context-param>
+        <param-name>UPLOAD_PDIRECTORY</param-name>
+        <param-value>D:/Hoc/Ky 5/SWP391/BookingFilmWebsite/web/image/MovieImg/P/</param-value> <!-- Đường dẫn lưu trữ thực -->
+    </context-param>
+    <context-param>
+        <param-name>UPLOAD_LDIRECTORY</param-name>
+        <param-value>D:/Hoc/Ky 5/SWP391/BookingFilmWebsite/web/image/MovieImg/L/</param-value> <!-- Đường dẫn lưu trữ thực -->
+    </context-param>
 </web-app>

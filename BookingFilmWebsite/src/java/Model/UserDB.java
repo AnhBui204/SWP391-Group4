@@ -1,5 +1,6 @@
 package Model;
 
+import static Model.MovieDB.getConnect;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,7 +50,7 @@ public class UserDB implements DatabaseInfo {
                 String role = rs.getString(7);
                 String phone = rs.getString(8);
                 String sex = rs.getString(9);
-                String DOB = rs.getString(10);
+                Date DOB = rs.getDate(10);
                 String money = rs.getString(11);
                 String avatar = rs.getString(12);
 
@@ -83,7 +84,7 @@ public class UserDB implements DatabaseInfo {
                 String role = rs.getString(7);
                 String phone = rs.getString(8);
                 String sex = rs.getString(9);
-                String DOB = rs.getString(10);
+                Date DOB = rs.getDate(10);
                 String money = rs.getString(11);
                 String avatar = rs.getString(12);
 
@@ -114,65 +115,42 @@ public class UserDB implements DatabaseInfo {
         return maxId;
     }
 
-    // Phương thức để tìm các ID bị thiếu
-    public TreeSet<Integer> findMissingIds() {
-        TreeSet<Integer> missingIds = new TreeSet<>();
-        String query = "SELECT CAST(SUBSTRING(UserId, 3, LEN(UserId) - 2) AS INT) AS numId FROM Users WHERE UserId LIKE 'US%' ORDER BY numId";
-
-        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
-            ResultSet rs = stmt.executeQuery();
-            int expectedId = 1;
-            while (rs.next()) {
-                int actualId = rs.getInt("numId");
-                while (expectedId < actualId) {
-                    missingIds.add(expectedId);
-                    expectedId++;
-                }
-                expectedId++;
+    // Phương thức để tạo ID mới hoặc lấy lại ID bị thiếu
+    public static String getNextUserID() {
+        String sql = "SELECT 'U' + RIGHT('00000' + CAST(CAST(SUBSTRING(MAX(UserID), 2, 5) AS INT) + 1 AS VARCHAR(5)), 5) AS NextID FROM Users";
+        try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getString("NextID");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return missingIds;
-    }
-
-    // Phương thức để tạo ID mới hoặc lấy lại ID bị thiếu
-    public String generateNewUserId() {
-        TreeSet<Integer> missingIds = findMissingIds();
-        if (!missingIds.isEmpty()) {
-            // Lấy ID nhỏ nhất bị thiếu
-            int smallestMissingId = missingIds.first();
-            return String.format("U%05d", smallestMissingId);
-        }
-
-        // Nếu không có ID nào bị thiếu, tạo ID mới dựa trên ID lớn nhất hiện có
-        String maxId = getMaxUserId();
-        if (maxId == null) {
-            return "U00001"; // ID khởi tạo đầu tiên nếu không có bản ghi nào
-        }
-
-        // Tăng phần số của ID lên 1
-        int numericId = Integer.parseInt(maxId) + 1;
-        return String.format("U%05d", numericId);
+        // Nếu không có ID nào trước đó, trả về 'M00001' (ID đầu tiên)
+        return "U00001";
     }
 
     // Phương thức để thêm người dùng mới
-    public void insert(User user) {
-        String newUserId = generateNewUserId();
+    public boolean insert(User user) {
+        String newUserId = getNextUserID();
         user.setUserID(newUserId);
-        String sql = "INSERT INTO Users (UserID, UserName, Pass, FName, LName, Role, Email) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Users (UserID, UserName, Pass, FName, LName, Email, Phone, Sex, DateOfBirth, Role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, user.getUserID());
             stmt.setString(2, user.getUsername());
             stmt.setString(3, user.getPassword());
-            stmt.setString(4, user.getRole());
-            stmt.setString(5, user.getEmail());
+            stmt.setString(4, user.getfName());
+            stmt.setString(5, user.getfName());
+            stmt.setString(6, user.getEmail());
+            stmt.setString(7, user.getPhone());
+            stmt.setString(8, user.getSex());
+            stmt.setDate(9, user.getDob());
+            stmt.setString(10, user.getRole());
             stmt.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return false;
     }
 
 //-----------------------------------------------------------------------------------
@@ -185,7 +163,7 @@ public class UserDB implements DatabaseInfo {
             stmt.setString(3, user.getEmail());
             stmt.setString(4, user.getPhone());
             stmt.setString(5, user.getSex());
-            stmt.setString(6, user.getDob());
+            stmt.setDate(6, user.getDob());
             stmt.setString(7, user.getUserID());
 
             int rc = stmt.executeUpdate();
@@ -217,7 +195,7 @@ public class UserDB implements DatabaseInfo {
                 String role = rs.getString("Role");
                 String phone = rs.getString("Phone");
                 String sex = rs.getString("Sex");
-                String dob = rs.getString("DateOfBirth");
+                Date dob = rs.getDate("DateOfBirth");
                 String money = rs.getString("MoneyLeft");
                 String avatar = rs.getString("Avatar");
                 // Assuming all are regular users by default
@@ -264,16 +242,20 @@ public class UserDB implements DatabaseInfo {
     }
 
     public static void main(String[] args) {
-//        ArrayList<User> list = UserDB.listAllUsers();
-//        for (User user : list) {
-//            System.out.println(user);
-//        }
+        ArrayList<User> list = UserDB.listAllUsers();
+        for (User user : list) {
+            System.out.println(user);
+        }
+
+        String newUserId = getNextUserID();
+        System.out.println(newUserId);
         User s = UserDB.getUsers("user2", "123");
         System.out.println(s);
         System.out.println(s.getRole());
         
         User v = UserDB.getUsersByID("U00003");
         System.out.println(v);
+        
     }
 }
 

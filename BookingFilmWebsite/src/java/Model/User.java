@@ -1,7 +1,7 @@
 package Model;
 
 import java.io.Serializable;
-
+import java.sql.Date;
 public class User implements Serializable {
 
     private String userID;
@@ -13,14 +13,14 @@ public class User implements Serializable {
     private String role;
     private String phone;
     private String sex;
-    private String dob;
+    private Date dob;
     private String money;
     private String avatar;
 
     public User() {
     }
 
-    public User(String userID, String username,String password, String fName, String lName, String email, String role, String phone, String sex, String dob) {
+    public User(String userID, String username,String password, String fName, String lName, String email, String role, String phone, String sex, Date dob) {
         this.userID = userID;
         this.username = username;
         this.fName = fName;
@@ -33,7 +33,7 @@ public class User implements Serializable {
         this.dob = dob;
     }
 
-    public User(String userID, String username, String fName, String lName, String password, String email, String role, String phone, String sex, String dob, String money, String avatar) {
+    public User(String userID, String username, String fName, String lName, String password, String email, String role, String phone, String sex, Date dob, String money, String avatar) {
         this.userID = userID;
         this.username = username;
         this.fName = fName;
@@ -106,11 +106,11 @@ public class User implements Serializable {
         this.sex = sex;
     }
 
-    public String getDob() {
+    public Date getDob() {
         return dob;
     }
 
-    public void setDob(String dob) {
+    public void setDob(Date dob) {
         this.dob = dob;
     }
 

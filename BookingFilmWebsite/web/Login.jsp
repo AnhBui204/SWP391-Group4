@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -9,8 +10,40 @@
         <link href="" rel="stylesheet">
         <script src="https://apis.google.com/js/platform.js" async defer></script>
     </head>
+
     <body>
+        <script>
+            // Hàm để ẩn thông báo sau một khoảng thời gian
+            function hideNotification() {
+                const notification = document.getElementById("notification");
+                if (notification) {
+                    setTimeout(() => {
+                        notification.style.display = 'none';
+                    }, 2000); // Thời gian timeout là 5000 milliseconds (5 giây)
+                }
+            }
+
+            // Gọi hàm khi trang được tải
+            window.onload = hideNotification;
+        </script>
+
         <section class="h-100 gradient-form" style="background-color: #eee;">
+            <c:if test="${not empty sessionScope.successMessage}">
+                <div id="notification" class="alert alert-success">
+                    ${sessionScope.successMessage}
+                </div>
+                <c:remove var="successMessage" scope="session" />
+            </c:if>
+
+            <c:if test="${not empty requestScope.errorMessage}">
+                <div id="notification" class="alert alert-danger">
+                    ${requestScope.errorMessage}
+                </div>
+                <c:remove var="successMessage" scope="session" />
+            </c:if>
+
+
+
             <div class="container py-1 h-70">
                 <div class="row d-flex justify-content-center align-items-center h-100">
                     <div class="col-xl-10">
@@ -18,6 +51,8 @@
                             <div class="row g-0">
                                 <div class="col-lg-6">
                                     <div class="card-body p-md-5 mx-md-4">
+
+
                                         <div class="text-center">
                                             <img src="image/logo/logo.png" alt="Logo" style="width: 185px;">
                                             <h4 class="mt-1 mb-5 pb-1">Login</h4>
@@ -37,10 +72,9 @@
                                             </div>
 
                                             <div class="text-center pt-1 mb-5 pb-1">
-                                                <button type="submit" class="btn btn-warning">Login</button>
-                                                <br>
-                                                <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/BookingFilmWebsite/Login.jsp&response_type=code
-                                                   &client_id=375465691355-c20ocp2cb0lnhhept5ssqsrgjukm3ceq.apps.googleusercontent.com&approval_prompt=force">Login With Google</a> 
+                                                <button type="button" class="btn btn-outline-danger" onclick="window.location.href = 'https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/BookingFilmWebsite/Login.jsp&response_type=code&client_id=375465691355-c20ocp2cb0lnhhept5ssqsrgjukm3ceq.apps.googleusercontent.com&approval_prompt=force'">
+                                                    <i class="fab fa-google"></i> Login with Google
+                                                </button>
                                                 <br>
                                                 <a href="ForgetPassword.jsp">Forgot Password?</a>
                                             </div>
@@ -53,7 +87,7 @@
 
                                             <div class="d-flex align-items-center justify-content-center pb-4">
                                                 <p class="mb-0 me-2">Don't have an account?</p>
-                                                <a href="../signin/signin.jsp" class="btn btn-outline-warning">Sign Up</a>
+                                                <a href="SignUp.jsp" class="btn btn-outline-warning">Sign Up</a>
                                             </div>
                                         </form>
                                     </div>
@@ -77,14 +111,14 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script>
-            function onSignIn(googleUser) {
-                // Handle sign-in logic here.
-                var profile = googleUser.getBasicProfile();
-                console.log('ID: ' + profile.getId());
-                console.log('Name: ' + profile.getName());
-                console.log('Image URL: ' + profile.getImageUrl());
-                console.log('Email: ' + profile.getEmail());
-            }
+        function onSignIn(googleUser) {
+            // Handle sign-in logic here.
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId());
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail());
+        }
         </script>
     </body>
 </html>
