@@ -8,16 +8,22 @@ public class FoodAndDrink {
     
     private String comboID;
     private String comboName;
+    private String theatreID;
+    private String imagePath;
     private double price;
 
     public FoodAndDrink() {
     }
 
-    public FoodAndDrink(String comboID, String comboName, double price) {
+    public FoodAndDrink(String comboID, String comboName, String theatreID, String imagePath, double price) {
         this.comboID = comboID;
         this.comboName = comboName;
+        this.theatreID = theatreID;
+        this.imagePath = imagePath;
         this.price = price;
     }
+
+    
 
     public String getComboID() {
         return comboID;
@@ -43,8 +49,24 @@ public class FoodAndDrink {
         this.price = price;
     }
 
+    public String getTheatreID() {
+        return theatreID;
+    }
+
+    public void setTheatreID(String theatreID) {
+        this.theatreID = theatreID;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     @Override
     public String toString() {
-        return "FoodAndDrink{" + "comboID=" + comboID + ", comboName=" + comboName + ", price=" + price + '}';
+        return "FoodAndDrink{" + "comboID=" + comboID + ", comboName=" + comboName + ", theatreID=" + theatreID + ", imagePath=" + imagePath + ", price=" + price + '}';
     }
 }

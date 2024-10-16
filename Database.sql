@@ -1,5 +1,5 @@
-﻿CREATE DATABASE testcases;
-USE testcases;
+﻿CREATE DATABASE test;
+USE test;
 
 CREATE TABLE Users (
     UserID CHAR(6) PRIMARY KEY,
@@ -15,7 +15,6 @@ CREATE TABLE Users (
     MoneyLeft MONEY CHECK (MoneyLeft >= 0),
     Avatar NVARCHAR(MAX)
 );
-
 
 -- Table for Theatres
 CREATE TABLE Theatres(
@@ -59,7 +58,6 @@ CREATE TABLE Seats(
     RoomID CHAR(6),
 	TheatreID CHAR(6),
 	FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID),
-    UNIQUE(RoomID, SeatName)
 );
 
 -- Table for Genres
@@ -80,7 +78,8 @@ CREATE TABLE Movies (
 	ImgPortrait VARCHAR(512),
 	ImgLandscape VARCHAR(512),
 	MovieDescription NVARCHAR(4000),
-	Rate DECIMAL(2,1) CHECK (Rate >= 0 AND Rate <= 10)
+	Rate DECIMAL(2,1) CHECK (Rate >= 0 AND Rate <= 10),
+	TicketPrice Int
 	);
 
 
@@ -258,7 +257,7 @@ VALUES
 
 
 -- Thêm Seats (ghế tại các phòng chiếu)
-INSERT INTO Seats (SeatID, SeatName, RoomID, TheatreID) VALUES
+	INSERT INTO Seats (SeatID, SeatName, RoomID, TheatreID) VALUES
 	
 	--Rap 1 Vincom -------------------------------------------------------------
     -- Room R00001
@@ -508,7 +507,7 @@ INSERT INTO Seats (SeatID, SeatName, RoomID, TheatreID) VALUES
     ('S00495', 'I7', 'R00003', 'T00001'),
 
     -- Row J (random 5 seats)
-    ('S00496', 'J1', 'R00003', 'T00001'), ('S00497', 'J2'/, 'R00003', 'T00001'), 
+    ('S00496', 'J1', 'R00003', 'T00001'), ('S00497', 'J2', 'R00003', 'T00001'), 
     ('S00498', 'J3', 'R00003', 'T00001'), ('S00499', 'J4', 'R00003', 'T00001'), 
     ('S00500', 'J5', 'R00003', 'T00001'),
 
@@ -516,7 +515,7 @@ INSERT INTO Seats (SeatID, SeatName, RoomID, TheatreID) VALUES
     ('S00501', 'K1', 'R00003', 'T00001'), ('S00502', 'K2', 'R00003', 'T00001'), 
     ('S00503', 'K3', 'R00003', 'T00001'), ('S00504', 'K4', 'R00003', 'T00001'), 
     ('S00505', 'K5', 'R00003', 'T00001'), ('S00506', 'K6', 'R00003', 'T00001'), 
-    ('S00507', 'K7', 'R00003', 'T00001'), ('S00508', 'K8', 'R00003', 'T00001'),
+    ('S00507', 'K7', 'R00003', 'T00001'), ('S00508', 'K8', 'R00003', 'T00001');
 
 	INSERT INTO Seats (SeatID, SeatName, RoomID, TheatreID) VALUES
 	
@@ -1073,8 +1072,9 @@ INSERT INTO Seats (SeatID, SeatName, RoomID, TheatreID) VALUES
     ('S01550', 'F1', 'R00011', 'T00002'), ('S01551', 'F2', 'R00011', 'T00002'), ('S01552', 'F3', 'R00011', 'T00002'),
     ('S01553', 'F4', 'R00011', 'T00002'), ('S01554', 'F5', 'R00011', 'T00002'), ('S01555', 'F6', 'R00011', 'T00002'),
     ('S01556', 'F7', 'R00011', 'T00002'), ('S01557', 'F8', 'R00011', 'T00002'), ('S01558', 'F9', 'R00011', 'T00002'),
-    ('S01559', 'F10', 'R00011', 'T00002'),
+    ('S01559', 'F10', 'R00011', 'T00002');
 
+	INSERT INTO Seats (SeatID, SeatName, RoomID, TheatreID) VALUES
 	-- Room 5
 	-- Row A (5 seats)
     ('S01560', 'A1', 'R00012', 'T00002'), ('S01561', 'A2', 'R00012', 'T00002'), ('S01562', 'A3', 'R00012', 'T00002'),
@@ -2443,8 +2443,9 @@ WHERE RoomID = 'R00001' AND TheatreID = 'T00001';
 INSERT INTO ShowSeats (ShowID, SeatID, RoomID, TheatreID, IsAvailable)
 SELECT 'SH0004', SeatID, RoomID, TheatreID, 1
 FROM Seats
-WHERE RoomID = 'R00002' AND TheatreID = 'T00001'; 
+WHERE RoomID = 'R00009' AND TheatreID = 'T00002'; 
 
+select * from Seats where TheatreID='T00002'
 INSERT INTO ShowSeats (ShowID, SeatID, RoomID, TheatreID, IsAvailable)
 SELECT 'SH0001', SeatID, RoomID, TheatreID, 1
 FROM Seats
@@ -2452,7 +2453,7 @@ WHERE RoomID = 'R00007' AND TheatreID = 'T00001';
 
 Select * from Shows
 
-Select * from ShowSeats
+Select * from Seats where TheatreID='T00002'
 
 Select * from ShowSeats where ShowID = 'SH0001' and RoomID = 'R00001'
 
@@ -2471,26 +2472,36 @@ VALUES
 ('M00002', 'A00003');
 
 -- Thêm Vouchers (voucher khuyến mãi)
-INSERT INTO Vouchers (VoucherID, Price, VoucherName, TheatreID, ExpiryDate)
+INSERT INTO Vouchers (VoucherID, Price, VoucherName, TheatreID, ImagePath, ExpiryDate)
 VALUES 
-('V00001', 50000, N'Voucher1', 'T00001', '2024-12-31'),
-('V00002', 100000, N'Voucher2' ,'T00001', '2024-11-30');
-
+('V00001', 50000, N'Voucher1', 'T00001' , 'image/Voucher/CGV1.jpg', '2024-12-31'),
+('V00002', 100000, N'Voucher2' ,'T00001' , 'image/Voucher/CGV2.jpg', '2024-11-30'),
+('V00003', 50000, N'Voucher3', 'T00001' , 'image/Voucher/CGV3.jpg', '2024-12-31'),
+('V00004', 100000, N'Voucher4' ,'T00001' , 'image/Voucher/CGV4.jpg', '2024-11-30'),
+('V00005', 50000, N'Voucher5', 'T00001' , 'image/Voucher/CGV5.jpg', '2024-12-31'),
+('V00006', 100000, N'Voucher6' ,'T00001' , 'image/Voucher/GL1.jpg', '2024-11-30');
 -- Thêm FoodsAndDrinks (đồ ăn và nước uống)
 INSERT INTO FoodsAndDrinks (ComboID, ComboName, TheatreID, ImagePath, Price)
 VALUES 
-('C00001', N'Bắp rang + 2 Nước ngọt','T00001', 'image/FoodsAndDrinks/f1.jpg', 60000),
-('C00001', N'Bắp rang + 2 Nước ngọt','T00002', 'image/FoodsAndDrinks/f1.jpg', 60000),
-('C00001', N'Bắp rang + 2 Nước ngọt','T00003', 'image/FoodsAndDrinks/f1.jpg', 60000),
-('C00001', N'Bắp rang + 2 Nước ngọt','T00004', 'image/FoodsAndDrinks/f1.jpg', 60000),
-('C00001', N'Bắp rang + 2 Nước ngọt','T00005', 'image/FoodsAndDrinks/f1.jpg', 60000),
-('C00001', N'Bắp rang + 2 Nước ngọt','T00006', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00001', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00002', N'Bắp rang + Nước ngọt','T00002', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00003', N'Bắp rang + Nước ngọt','T00003', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00004', N'Bắp rang + Nước ngọt','T00004', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00005', N'Bắp rang + Nước ngọt','T00005', 'image/FoodsAndDrinks/f1.jpg', 60000),
+('C00006', N'Bắp rang + Nước ngọt','T00006', 'image/FoodsAndDrinks/f1.jpg', 60000),
 
-('C00001', N'Bắp rang + 2 Nước ngọt','T00001', 'image/FoodsAndDrinks/f2.jpg', 60000),
-('C00001', N'Bắp rang + 2 Nước ngọt','T00001', 'image/FoodsAndDrinks/f3.jpg', 60000),
-('C00001', N'Bắp rang + 2 Nước ngọt','T00001', 'image/FoodsAndDrinks/f4.jpg', 60000),
-('C00001', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/f5.jpg', 60000),
-('C00001', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/f6.jpg', 60000);
+('C00007', N'Bắp rang + 2 Nước ngọt','T00001', 'image/FoodsAndDrinks/f2.jpg', 80000),
+('C00008', N'Bắp rang + 2 Nước ngọt','T00002', 'image/FoodsAndDrinks/f2.jpg', 80000),
+('C00009', N'Bắp rang + 2 Nước ngọt','T00003', 'image/FoodsAndDrinks/f2.jpg', 80000),
+('C00010', N'Bắp rang + 2 Nước ngọt','T00004', 'image/FoodsAndDrinks/f2.jpg', 80000),
+('C00011', N'Bắp rang + 2 Nước ngọt','T00005', 'image/FoodsAndDrinks/f2.jpg', 80000),
+('C00012', N'Bắp rang + 2 Nước ngọt','T00006', 'image/FoodsAndDrinks/f2.jpg', 80000),
+
+('C00003', N'Bắp rang + 2 Nước ngọt','T00001', 'image/FoodsAndDrinks/CGV1.jpg', 60000),
+('C00004', N'Bắp rang + 2 Nước ngọt','T00001', 'image/FoodsAndDrinks/CGV2.jpg', 60000),
+('C00005', N'Bắp rang + 2 Nước ngọt','T00001', 'image/FoodsAndDrinks/CGV3.jpg', 60000),
+('C00006', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/CGV4.jpg', 60000),
+('C00007', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/CGV5.jpg', 60000);
 
 -- Thêm Booking (đơn đặt vé)
 INSERT INTO Booking (BookingID, UserID, ComboID, BookingDate)

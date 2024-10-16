@@ -9,15 +9,19 @@ public class Voucher {
 
     private String voucherID;
     private String voucherName;
+    private String TheatreID;
+    private String imgPath;
     private double price;
     private Date expiryDate;
 
     public Voucher() {
     }
 
-    public Voucher(String voucherID, String voucherName, double price, Date expiryDate) {
+    public Voucher(String voucherID, String voucherName, String TheatreID, String imgPath, double price, Date expiryDate) {
         this.voucherID = voucherID;
         this.voucherName = voucherName;
+        this.TheatreID = TheatreID;
+        this.imgPath = imgPath;
         this.price = price;
         this.expiryDate = expiryDate;
     }
@@ -54,9 +58,25 @@ public class Voucher {
         this.expiryDate = expiryDate;
     }
 
+    public String getTheatreID() {
+        return TheatreID;
+    }
+
+    public void setTheatreID(String TheatreID) {
+        this.TheatreID = TheatreID;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
+
     @Override
     public String toString() {
-        return "Voucher{" + "voucherID=" + voucherID + ", voucherName=" + voucherName + ", price=" + price + ", expiryDate=" + expiryDate + '}';
+        return "Voucher{" + "voucherID=" + voucherID + ", voucherName=" + voucherName + ", TheatreID=" + TheatreID + ", imgPath=" + imgPath + ", price=" + price + ", expiryDate=" + expiryDate + '}';
     }
     
 }

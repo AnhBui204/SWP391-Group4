@@ -1,5 +1,7 @@
 package Controller;
 
+import Model.Theatre;
+import Model.TheatreDB;
 import Model.UserDB;
 import Model.User;
 import jakarta.servlet.RequestDispatcher;
@@ -101,11 +103,15 @@ public class UserServlet extends HttpServlet {
                 response.sendRedirect(encodedURL);
             } else if (a.getRole().equals("Staff")) {
                 // Staff login
+
+                TheatreDB theatreDB = new TheatreDB();
+                Theatre cinema = theatreDB.getTheatreById(a.getUserID());
                 session.setAttribute("user", a.getUsername());
                 session.setAttribute("users", a);
                 session.setAttribute("pass", a.getPassword());
                 session.setAttribute("id", a.getUserID());
                 session.setAttribute("role", "Staff");
+                session.setAttribute("theatre", cinema);
                 session.setMaxInactiveInterval(30 * 60);
 
                 // Đặt thông báo thành công

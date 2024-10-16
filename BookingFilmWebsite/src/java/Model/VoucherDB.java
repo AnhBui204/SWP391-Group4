@@ -4,6 +4,7 @@ import static Model.DatabaseInfo.DBURL;
 import static Model.DatabaseInfo.DRIVERNAME;
 import static Model.DatabaseInfo.PASSDB;
 import static Model.DatabaseInfo.USERDB;
+import static Model.MovieDB.getConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +13,8 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class VoucherDB {
 
@@ -30,16 +33,30 @@ public class VoucherDB {
         return null;
     }
 
+    public static String getNextVoucherID() {
+        String sql = "SELECT 'V' + RIGHT('00000' + CAST(CAST(SUBSTRING(MAX(VoucherID), 2, 5) AS INT) + 1 AS VARCHAR(5)), 5) AS NextID FROM Vouchers";
+        try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getString("NextID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        // Nếu không có ID nào trước đó, trả về 'M00001' (ID đầu tiên)
+        return "V00001";
+    }
+
     // Create a new voucher
     public static boolean createVoucher(Voucher voucher) {
-        String sql = "INSERT INTO Vouchers (VoucherID, VoucherName, Price, ExpiryDate) VALUES (?, ?, ?, ?)";
-        try (Connection conn = getConnect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, voucher.getVoucherID());
+        String sql = "INSERT INTO Vouchers (VoucherID, VoucherName, TheatreID, ImagePath, Price, ExpiryDate) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            String nextID = getNextVoucherID();
+            pstmt.setString(1, nextID);
             pstmt.setString(2, voucher.getVoucherName());
-            pstmt.setDouble(3, voucher.getPrice());
-            pstmt.setDate(4, voucher.getExpiryDate());
+            pstmt.setString(3, voucher.getTheatreID());
+            pstmt.setString(4, voucher.getImgPath());
+            pstmt.setDouble(5, voucher.getPrice());
+            pstmt.setDate(6, voucher.getExpiryDate());
 
             return pstmt.executeUpdate() > 0; // return true if the insert was successful
         } catch (SQLException e) {
@@ -51,18 +68,19 @@ public class VoucherDB {
     // Read/Get a voucher by voucherID
     public static Voucher getVoucherById(String voucherID) {
         String sql = "SELECT * FROM Vouchers WHERE VoucherID = ?";
-        try (Connection conn = getConnect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, voucherID);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
                 return new Voucher(
-                    rs.getString("VoucherID"),
-                    rs.getString("VoucherName"),
-                    rs.getDouble("Price"),
-                    rs.getDate("ExpiryDate")
+                        rs.getString("VoucherID"),
+                        rs.getString("VoucherName"),
+                        rs.getString("TheatreID"),
+                        rs.getString("ImagePath"),
+                        rs.getDouble("Price"),
+                        rs.getDate("ExpiryDate")
                 );
             }
         } catch (SQLException e) {
@@ -73,14 +91,15 @@ public class VoucherDB {
 
     // Update a voucher
     public static boolean updateVoucher(Voucher voucher) {
-        String sql = "UPDATE Vouchers SET VoucherName = ?, Price = ?, ExpiryDate = ? WHERE VoucherID = ?";
-        try (Connection conn = getConnect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        String sql = "UPDATE Vouchers SET VoucherName = ?, TheatreID = ?, ImagePath = ?, Price = ?, ExpiryDate = ? WHERE VoucherID = ?";
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, voucher.getVoucherName());
-            pstmt.setDouble(2, voucher.getPrice());
-            pstmt.setDate(3, voucher.getExpiryDate());
-            pstmt.setString(4, voucher.getVoucherID());
+            pstmt.setString(2, voucher.getTheatreID());
+            pstmt.setString(3, voucher.getImgPath());
+            pstmt.setDouble(4, voucher.getPrice());
+            pstmt.setDate(5, voucher.getExpiryDate());
+            pstmt.setString(6, voucher.getVoucherID());
 
             return pstmt.executeUpdate() > 0; // return true if the update was successful
         } catch (SQLException e) {
@@ -92,8 +111,7 @@ public class VoucherDB {
     // Delete a voucher
     public static boolean deleteVoucher(String voucherID) {
         String sql = "DELETE FROM Vouchers WHERE VoucherID = ?";
-        try (Connection conn = getConnect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, voucherID);
             return pstmt.executeUpdate() > 0; // return true if the deletion was successful
@@ -108,16 +126,16 @@ public class VoucherDB {
         List<Voucher> vouchers = new ArrayList<>();
         String sql = "SELECT * FROM Vouchers";
 
-        try (Connection conn = getConnect();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
                 Voucher voucher = new Voucher(
-                    rs.getString("VoucherID"),
-                    rs.getString("VoucherName"),
-                    rs.getDouble("Price"),
-                    rs.getDate("ExpiryDate")
+                        rs.getString("VoucherID"),
+                        rs.getString("VoucherName"),
+                        rs.getString("TheatreID"),
+                        rs.getString("ImagePath"),
+                        rs.getDouble("Price"),
+                        rs.getDate("ExpiryDate")
                 );
                 vouchers.add(voucher);
             }
@@ -127,34 +145,64 @@ public class VoucherDB {
 
         return vouchers;
     }
-    
-    // Example of how to test in the main method
-    public static void main(String[] args) {
-        // Test creating a voucher
-        Voucher newVoucher = new Voucher("V001", "Discount 50%", 50.0, Date.valueOf("2024-12-31"));
-        if (createVoucher(newVoucher)) {
-            System.out.println("Voucher created successfully");
-        }
 
-        // Test getting all vouchers
-        List<Voucher> vouchers = getAllVouchers();
-        for (Voucher voucher : vouchers) {
-            System.out.println(voucher);
-        }
+    //List voucher by theatreID
+    public static List<Voucher> getAllVouchersByTheatreID(String theatreID) {
+        List<Voucher> vouchers = new ArrayList<>();
+        String sql = "SELECT * FROM Vouchers where TheatreID = ?";
 
-        // Test updating a voucher
-        Voucher updateVoucher = getVoucherById("V001");
-        if (updateVoucher != null) {
-            updateVoucher.setPrice(60.0);
-            if (updateVoucher(updateVoucher)) {
-                System.out.println(updateVoucher);
-                System.out.println("Voucher updated successfully");
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, theatreID);
+            try (ResultSet rs = pstmt.executeQuery()) {
+
+                while (rs.next()) {
+                    Voucher voucher = new Voucher(
+                            rs.getString("VoucherID"),
+                            rs.getString("VoucherName"),
+                            rs.getString("TheatreID"),
+                            rs.getString("ImagePath"),
+                            rs.getDouble("Price"),
+                            rs.getDate("ExpiryDate")
+                    );
+                    vouchers.add(voucher);
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        // Test deleting a voucher
-        if (deleteVoucher("V001")) {
-            System.out.println("Voucher deleted successfully");
+        return vouchers;
+    }
+
+    public static void uploadPImage(String voucherID, String VcImagePath) {
+        String query = "UPDATE Vouchers SET ImagePath = ? WHERE VoucherID = ?";
+
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, VcImagePath);  // Save the path instead of a BLOB
+            stmt.setString(2, voucherID);
+
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Image Voucher updated successfully.");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Failed to upload image.");
+        }
+    }
+
+    public static void main(String[] args) {
+        // Test getting all vouchers
+//        List<Voucher> vouchers = getAllVouchers();
+//        for (Voucher voucher : vouchers) {
+//            System.out.println(voucher);
+//        }
+//        String nextId = getNextVoucherID();
+//        System.out.println(nextId);
+        
+        List<Voucher> vouchersID = getAllVouchersByTheatreID("T00001");
+        for (Voucher voucher : vouchersID) {
+            System.out.println(voucher);
         }
     }
 }

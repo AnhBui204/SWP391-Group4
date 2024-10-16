@@ -5,18 +5,22 @@
         <group>
             <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/Movie.java</file>
             <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Controller/UserServlet.java</file>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/Booking.jsp</file>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/User.java</file>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/updateTheatre.jsp</file>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Controller/TheatreServlet.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/FoodAndDrinkDB.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/Voucher.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/TheatreDB.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/Offers.jsp</file>
             <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/MovieDB.java</file>
             <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/Login.jsp</file>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/SignUp.jsp</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Controller/FoodAndDrinkServlet.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Controller/VoucherServlet.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/crudFD.jsp</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/CustomerProfile.jsp</file>
             <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Controller/MovieServlet.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/VoucherDB.java</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/WEB-INF/web.xml</file>
             <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/crudMV.jsp</file>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/includes/body.jsp</file>
+            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/FoodAndDrink.java</file>
             <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/HomePage.jsp</file>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/src/java/Model/UserDB.java</file>
         </group>
     </open-files>
 </project-private>
