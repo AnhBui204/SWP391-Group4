@@ -4,8 +4,6 @@
  */
 package Controller;
 
-import Model.ShowSeatDB;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,14 +11,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  * @author ADMIN
  */
-public class Seat extends HttpServlet {
+public class CheckLogin extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +35,10 @@ public class Seat extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Seat</title>");
+            out.println("<title>Servlet CheckLogin</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Seat at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CheckLogin at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,10 +54,10 @@ public class Seat extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
- protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-  
-}
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -72,46 +68,21 @@ public class Seat extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    String theatreName = request.getParameter("theatreName");
-    String showDate = request.getParameter("selectedDate");
-    String movieName = request.getParameter("movieName"); 
-    String startTime = request.getParameter("selectedTime");
-    String movieID = request.getParameter("movieID");
-    String theatreID = request.getParameter("theatreID");
-    String movieImg= request.getParameter("movieImg");
-        System.out.println(movieID);
-        System.out.println("theatreID: "+theatreID);
-        System.out.println(movieImg);
-System.out.println("Theatre Name: " + theatreName);
-System.out.println("Movie Name: " + movieName);
-System.out.println("Show Date: " + showDate);
-System.out.println("Start Time: " + startTime);
-
-    List<String> availableSeats = ShowSeatDB.getSeatsForShow(movieID, theatreID, startTime, showDate);
-    List<String> rowLabels = new ArrayList<>();
-for (String seat : availableSeats) {
-    String rowLabel = seat.substring(0, 1);
-    if (!rowLabels.contains(rowLabel)) {
-        rowLabels.add(rowLabel);
+   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false); // Không tạo session mới nếu chưa có
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        
+        if (session != null && session.getAttribute("user") != null) {
+            // Người dùng đã đăng nhập
+            out.print("{\"loggedIn\": true}");
+        } else {
+            // Người dùng chưa đăng nhập
+            out.print("{\"loggedIn\": false}");
+        }
+        
+        out.flush();
     }
-}
-    System.out.println("Available Seats: " + availableSeats);
-    
-    HttpSession session = request.getSession();
-    session.setAttribute("theatreName", theatreName);
-    session.setAttribute("movieName", movieName);
-    session.setAttribute("selectedDate", showDate);
-    session.setAttribute("selectedTime", startTime);
-    session.setAttribute("theatreID",theatreID);
-    session.setAttribute("movieImg", movieImg);
-    request.setAttribute("rowLabels", rowLabels);
-    request.setAttribute("availableSeats", availableSeats);
-   request.getRequestDispatcher("SeatSelect.jsp").forward(request, response);
-}
-
-
 
     /**
      * Returns a short description of the servlet.

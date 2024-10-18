@@ -55,6 +55,7 @@
                     <div class="card-body text-center">
                         <h5 id="info-theatre">Rạp: ${sessionScope.theatreName}</h5>
                         <input type="hidden" name="theatreID" value="${sessionScope.theatreID}" />
+                        <img src="${sessionScope.movieImg}" alt="Poster phim" class="img-fluid my-3" style="max-height: 150px;">
                         <h5 id="info-movie">${sessionScope.movieName}</h5>
                         <h5 id="info-date">Ngày: ${sessionScope.selectedDate}</h5>
                         <h5 id="info-time">Suất: ${sessionScope.selectedTime}</h5>

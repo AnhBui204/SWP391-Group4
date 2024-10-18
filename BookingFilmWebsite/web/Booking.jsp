@@ -79,11 +79,33 @@
                         <h5 id="selected-time">Giờ chiếu: Chưa chọn</h5>
                     </div>
                 </div>
+<!-- Modal thông báo -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Thông báo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn cần đăng nhập để tiếp tục đặt vé. Hãy đăng nhập ngay!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <a href="Login.jsp" class="btn btn-primary">Đăng nhập</a>
+            </div>
+        </div>
+    </div>
+</div>
 
               <form id="bookingForm" action="Seat" method="post">
     <input type="hidden" name="theatreID" id="theatreID" value="" />
      <input type="hidden" name="theatreName" id="theatreName" value="" />
     <input type="hidden" name="movieName" id="movieName" value="" />
+    <input type="hidden" name="movieImg" id="movieImg" value="" />
+
     <input type="hidden" name="movieID" id="movieID" value="" /> 
     <input type="hidden" name="selectedDate" id="selectedDate" value="" />
     <input type="hidden" name="selectedTime" id="selectedTime" value="" />
@@ -171,7 +193,8 @@ movieImgElement.alt = `Ảnh của ${movie.movieName}`;
 movieImgElement.className = "movie-img-right";
 movieImgElement.style.width = "100px";
 movieImgElement.style.height = "150px";
-
+ document.getElementById('movieImg').value = movie.imgPortrait;
+ 
 const cardBodyRight = document.querySelector('.card-body.text-center');
 
 // Xóa ảnh cũ nếu có
@@ -264,11 +287,20 @@ function updateHiddenFields(event) {
     // Ngăn chặn form gửi trước khi cập nhật các trường ẩn
     event.preventDefault();
 
+    const isLoggedIn = <%= (session.getAttribute("user") != null) ? "true" : "false" %>;
+
+    if (!isLoggedIn) {
+        // Hiển thị modal đăng nhập
+        $('#loginModal').modal('show');
+        return;
+    }
+
     const selectedDate = document.getElementById('select-date').value;
     const selectedTime = document.getElementById('select-time').value;
     const theatreID = document.getElementById('select-theatre').value;
     const movieID = document.getElementById('movieID').value;
-
+const movieImg = document.getElementById('movieImg').value;
+    console.log("Movie Image: ", movieImg);
     document.getElementById('selectedDate').value = selectedDate;
     document.getElementById('selectedTime').value = selectedTime;
     document.getElementById('theatreID').value = theatreID;
@@ -277,6 +309,8 @@ function updateHiddenFields(event) {
     // Gửi form sau khi đã cập nhật
     document.getElementById('bookingForm').submit();
 }
+
+
 
     </script>
 </body>
