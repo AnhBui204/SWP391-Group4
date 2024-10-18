@@ -30,11 +30,12 @@
                     <div class="card-body p-4">
                         <h5 class="card-title">Chọn rạp</h5>
                         <select id="select-theatre" class="form-control">
-                            <option>Chọn rạp</option>
+                            <option value="">Chọn rạp</option>
                             <c:forEach var="rap" items="${theatres}">
                                 <option value="${rap.theatreID}">${rap.theatreName}</option> 
                             </c:forEach>
                         </select>
+                        <span id="notification-theatre" class="text-danger" style="display: none; border: none;"></span>
                     </div>
                 </div>
 
@@ -46,7 +47,9 @@
                         <div id="movie-list" class="movie-list">
                             <div id="movie-options" class="movie-options"></div> 
                         </div>
-       
+      <span id="notification-movie" class="text-danger" style="display: none; border: none;"></span>
+
+
                     </div>
                 </div>
 
@@ -57,6 +60,9 @@
                         <select id="select-date" class="form-control">
                             <option value="">Chọn ngày</option>
                         </select>
+                 <span id="notification-date" class="text-danger" style="display: none; border: none;"></span>
+
+
                     </div>
 
                     <div class="card-body">
@@ -64,6 +70,9 @@
                         <select id="select-time" class="form-control">
                             <option value="">Chọn suất chiếu</option>
                         </select>
+                       <span id="notification-time" class="text-danger" style="display: none; border: none;"></span>
+
+
                     </div>
                 </div>
             </div>
@@ -140,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedTheatre.textContent = theatreID ? this.options[this.selectedIndex].text : 'Chưa chọn rạp';
          document.getElementById('theatreName').value = theatreID ? this.options[this.selectedIndex].text : '';
         movieOptions.innerHTML = ''; 
-
+        resetNotifications();
         if (theatreID) {
             fetch('Sort', {
                 method: 'POST',
@@ -249,7 +258,7 @@ cardBodyRight.insertBefore(movieImgElement, document.getElementById('selected-mo
         const theatreID = selectTheatre.value;
          const showDate = this.value;  
    selectedDate.textContent = showDate ? `Ngày: `+ showDate : 'Ngày: Chưa chọn';
-
+  resetNotifications();
         if (movieID && theatreID && showDate) {
             fetch('SelectDate', {
                 method: 'POST',
@@ -280,9 +289,27 @@ cardBodyRight.insertBefore(movieImgElement, document.getElementById('selected-mo
     document.getElementById('select-time').addEventListener('change', function() {
         const timeSelected = this.value;
         selectedTime.textContent = timeSelected ? `Suất:` + timeSelected : 'Suất:Chưa chọn';
+          resetNotifications();
     });
 });
+function resetNotifications() {
+    const notificationTheatreElement = document.getElementById('notification-theatre');
+    const notificationMovieElement = document.getElementById('notification-movie');
+    const notificationDateElement = document.getElementById('notification-date');
+    const notificationTimeElement = document.getElementById('notification-time');
 
+    notificationTheatreElement.innerHTML = '';
+    notificationTheatreElement.style.display = 'none';
+
+    notificationMovieElement.innerHTML = '';
+    notificationMovieElement.style.display = 'none';
+
+    notificationDateElement.innerHTML = '';
+    notificationDateElement.style.display = 'none';
+
+    notificationTimeElement.innerHTML = '';
+    notificationTimeElement.style.display = 'none';
+}
 function updateHiddenFields(event) {
     // Ngăn chặn form gửi trước khi cập nhật các trường ẩn
     event.preventDefault();
@@ -297,19 +324,57 @@ function updateHiddenFields(event) {
 
     const selectedDate = document.getElementById('select-date').value;
     const selectedTime = document.getElementById('select-time').value;
-    const theatreID = document.getElementById('select-theatre').value;
+    const theatreID = document.getElementById('select-theatre').value; // Thay đổi để lấy giá trị từ select
     const movieID = document.getElementById('movieID').value;
-const movieImg = document.getElementById('movieImg').value;
-    console.log("Movie Image: ", movieImg);
-    document.getElementById('selectedDate').value = selectedDate;
-    document.getElementById('selectedTime').value = selectedTime;
-    document.getElementById('theatreID').value = theatreID;
-    document.getElementById('movieID').value = movieID;
 
-    // Gửi form sau khi đã cập nhật
-    document.getElementById('bookingForm').submit();
+    // Kiểm tra các trường đã được chọn
+    let notificationTheatre = '';
+    let notificationMovie = '';
+    let notificationDate = '';
+    let notificationTime = '';
+
+    if (!theatreID) {
+        notificationTheatre = 'Bạn chưa chọn rạp.<br>';
+    }
+    if (!movieID) {
+        notificationMovie = 'Bạn chưa chọn phim.<br>';
+    }
+    if (!selectedDate) {
+        notificationDate = 'Bạn chưa chọn ngày.<br>';
+    }
+    if (!selectedTime) {
+        notificationTime = 'Bạn chưa chọn suất chiếu.<br>';
+    }
+
+    const notificationTheatreElement = document.getElementById('notification-theatre');
+    const notificationMovieElement = document.getElementById('notification-movie');
+    const notificationDateElement = document.getElementById('notification-date');
+    const notificationTimeElement = document.getElementById('notification-time');
+
+    // Hiện thông báo cho từng mục nếu có
+    notificationTheatreElement.innerHTML = notificationTheatre;
+    notificationTheatreElement.style.display = notificationTheatre ? 'block' : 'none';
+
+    notificationMovieElement.innerHTML = notificationMovie;
+    notificationMovieElement.style.display = notificationMovie ? 'block' : 'none';
+
+    notificationDateElement.innerHTML = notificationDate;
+    notificationDateElement.style.display = notificationDate ? 'block' : 'none';
+
+    notificationTimeElement.innerHTML = notificationTime;
+    notificationTimeElement.style.display = notificationTime ? 'block' : 'none';
+
+    if (!notificationTheatre && !notificationMovie && !notificationDate && !notificationTime) {
+        // Cập nhật các trường ẩn
+        document.getElementById('selectedDate').value = selectedDate;
+        document.getElementById('selectedTime').value = selectedTime;
+        document.getElementById('theatreID').value = theatreID;
+        document.getElementById('movieID').value = movieID;
+
+        // Gửi form sau khi đã cập nhật
+        document.getElementById('bookingForm').submit();
+    }
 }
-
 
 
     </script>
