@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width= , initial-scale=1.0">
+    <link rel="stylesheet" href="">
+    <title>VWH</title>
+</head>
+<style>
+    /* Style for body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Style for main container */
+main {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Style for the heading */
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* Style for the cinema selection dropdown */
+.cinemas {
+    margin-bottom: 20px;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* Style for the date input */
+.date {
+    margin-bottom: 20px;
+}
+
+input[type="date"] {
+    width: 97%;
+    padding: 10px 11px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #5a5959;
+    color: #f4f4f4;
+}
+
+td {
+    color: #555;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Responsive layout */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    main {
+        padding: 15px;
+    }
+
+    select, input[type="date"] {
+        width: 100%;
+    }
+}
+
+</style>
+<body>
+
+
+        <main>
+            <h1>Work History</h1>
+
+            <div class="cinemas">
+                <select name="cinemas" id="cinemas">
+                    <option value="starlight">Starlight Đà Nẵng </option>
+                    <option value="rio">Rio Đà Nẵng</option>
+                    <option value="CGVVincom">CGV Vincom Đà Nẵng</option>
+                    <option value="CGVPlaza">CGV Vĩnh Trung Plaza </option>
+                    <option value="lotte">Lotte Đà Nẵng</option>
+                    <option value="Galaxy">Galaxy Đà Nẵng</option>
+                    <option value="audi">Audi</option>
+                </select>
+            </div>
+            <div class="date">
+                <input type="date">
+            </div>
+
+            <div class="recent_order">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Staff ID</th>
+                            <th>Staff Name</th>
+                            <th>Active</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ST0001</td>
+                            <td>Luan</td>
+                            <td>Add new voucher</td>
+                            <td>24/09/2024</td>
+                        </tr>
+                        <tr>
+                            <td>ST0001</td>
+                            <td>Luan</td>
+                            <td>Add new moive</td>
+                            <td>28/08/2024</td>
+                        </tr>
+                        <tr>
+                            <td>ST0002</td>
+                            <td>Anh</td>
+                            <td>Update moive description</td>
+                            <td>12/08/2024</td>
+                        </tr>
+                        <tr>
+                            <td>ST0003</td>
+                            <td>PAnh</td>
+                            <td>Remove expired voucher</td>
+                            <td>10/07/2024</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

@@ -4,46 +4,37 @@ import static Model.DatabaseInfo.DBURL;
 import static Model.DatabaseInfo.DRIVERNAME;
 import static Model.DatabaseInfo.PASSDB;
 import static Model.DatabaseInfo.USERDB;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SeatDB {
+public class SeatDB implements DatabaseInfo {
 
     public static Connection getConnect() {
         try {
             Class.forName(DRIVERNAME);
+            return DriverManager.getConnection(DBURL, USERDB, PASSDB);
         } catch (ClassNotFoundException e) {
-            System.out.println("Error loading driver" + e);
-        }
-        try {
-            Connection con = DriverManager.getConnection(DBURL, USERDB, PASSDB);
-            return con;
+            System.out.println("Error loading driver: " + e);
         } catch (SQLException e) {
             System.out.println("Error: " + e);
         }
         return null;
     }
 
+    // Method to get a seat by SeatID
     public static Seat getSeat(String seatID) {
         Seat seat = null;
         try (Connection con = getConnect()) {
-            String query = "SELECT SeatID, FlightID, SeatNumber, SeatType, IsAvailable FROM Seat WHERE SeatID=?";
+            String query = "SELECT SeatID, SeatName, RoomID, TheatreID FROM Seats WHERE SeatID=?";
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString(1, seatID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                seat = new Seat(rs.getString("SeatID"), rs.getString("FlightID"), rs.getInt("SeatNumber"), rs.getString("SeatType"), rs.getInt("IsAvailable"));
+                seat = new Seat(rs.getString("SeatID"), rs.getString("SeatName"), rs.getString("RoomID"), rs.getString("TheatreID"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, null, ex);
@@ -51,21 +42,16 @@ public class SeatDB {
         return seat;
     }
 
-    public static List<Seat> getSeatByFlight(String FlightID) {
+    // Method to get all seats in a specific room
+    public static List<Seat> getSeatsByRoom(String roomID) {
         List<Seat> seatList = new ArrayList<>();
         try (Connection con = getConnect()) {
-            String query = "SELECT seatID, flightID, seatNumber, seatType, IsAvailable FROM Seat WHERE FlightID=?";
+            String query = "SELECT SeatID, SeatName, RoomID, TheatreID FROM Seats WHERE RoomID=?";
             PreparedStatement stmt = con.prepareStatement(query);
-            stmt.setString(1, FlightID);
+            stmt.setString(1, roomID);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                Seat seat = new Seat(
-                        rs.getString("seatID"),
-                        rs.getString("flightID"),
-                        rs.getInt("seatNumber"),
-                        rs.getString("seatType"),
-                        rs.getInt("IsAvailable")
-                );
+                Seat seat = new Seat(rs.getString("SeatID"), rs.getString("SeatName"), rs.getString("RoomID"), rs.getString("TheatreID"));
                 seatList.add(seat);
             }
         } catch (SQLException ex) {
@@ -74,75 +60,75 @@ public class SeatDB {
         return seatList;
     }
 
-    public static Seat bookSeat(String seatID) {
-        Seat bookedSeat = null;
+    // Method to insert a new seat
+    public static void insert(Seat seat) {
+        String sql = "INSERT INTO Seats (SeatID, SeatName, RoomID, TheatreID) VALUES (?, ?, ?, ?)";
         try (Connection con = getConnect()) {
-            String updateQuery = "UPDATE Seat SET IsAvailable = 0 WHERE SeatID = ?";
-            try (PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
-                updateStmt.setString(1, seatID);
-                int rowsUpdated = updateStmt.executeUpdate();
-                if (rowsUpdated > 0) {
-                    Logger.getLogger(RoomDB.class.getName()).log(Level.INFO, "Seat updated successfully for Seat ID: " + seatID);
-                    bookedSeat = getSeat(seatID);
-                } else {
-                    Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "No rows updated for Seat ID: " + seatID);
-                }
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, seat.getSeatID());
+            stmt.setString(2, seat.getSeatName());
+            stmt.setString(3, seat.getRoomID());
+            stmt.setString(4, seat.getTheatreID());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    // Method to update an existing seat
+    public static void update(Seat seat) {
+        String sql = "UPDATE Seats SET SeatName=?, RoomID=?, TheatreID=? WHERE SeatID=?";
+        try (Connection con = getConnect()) {
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, seat.getSeatName());
+            stmt.setString(2, seat.getRoomID());
+            stmt.setString(3, seat.getTheatreID());
+            stmt.setString(4, seat.getSeatID());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    // Method to delete a seat
+    public static int delete(String seatID) {
+        int rowsAffected = 0;
+        try (Connection con = getConnect()) {
+            String sql = "DELETE FROM Seats WHERE SeatID=?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, seatID);
+            rowsAffected = stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rowsAffected;
+    }
+
+    // Method to list all seats
+    public static List<Seat> listAll() {
+        List<Seat> seatList = new ArrayList<>();
+        try (Connection con = getConnect()) {
+            String query = "SELECT SeatID, SeatName, RoomID, TheatreID FROM Seats";
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Seat seat = new Seat(rs.getString("SeatID"), rs.getString("SeatName"), rs.getString("RoomID"), rs.getString("TheatreID"));
+                seatList.add(seat);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error booking seat with ID: " + seatID, ex);
+            Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return bookedSeat;
+        return seatList;
     }
 
-    public static String insertBookingSeat(String userID, BigDecimal totalPrice, String status) {
-        String seatBookingID = null;
-        String insertBookingSeatSQL = "INSERT INTO Booking_Ticket(TicketBookingID, UserID, TotalPrice, Status, CreatedDate) VALUES (?, ?, ?, ?, GETDATE())";
-        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(insertBookingSeatSQL)) {
-            seatBookingID = generateUniqueBookingID();
-            pstmt.setString(1, seatBookingID);
-            pstmt.setString(2, userID);
-            pstmt.setBigDecimal(3, totalPrice);
-            pstmt.setString(4, status);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error inserting booking seat: " + userID, e);
-        }
-        return seatBookingID;
-    }
-
-    public static boolean insertBookingTicketDetail(String bookingTicketID, String seatID, BigDecimal price, String status) throws ParseException {
-        String insertBookingTicketDetailSQL = "INSERT INTO Booking_Ticket_Detail (BookingTicketID, SeatID, Price, Status) VALUES (?, ?, ?, ?)";
-        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(insertBookingTicketDetailSQL)) {
-            pstmt.setString(1, bookingTicketID);
-            pstmt.setString(2, seatID);
-            pstmt.setBigDecimal(3, price);
-            pstmt.setString(4, status);
-            int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public List<String> getBookingTicketIDBySeatID(String seatID) {
-        List<String> bookingTicketID = new ArrayList<>();
-        String query = "SELECT BookingTicketID FROM Booking_Ticket_Detail WHERE seatID = ?";
-        try (Connection conn = getConnect(); PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setString(1, seatID);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    bookingTicketID.add(resultSet.getString("BookingTicketID"));
-                }
-            }
-        } catch (SQLException e) {
-            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error fetching BookingTicketIDs by SeatID: " + seatID, e);
-        }
-        return bookingTicketID;
-    }
-
-    private static String generateUniqueBookingID() {
-        String uniqueID = UUID.randomUUID().toString().substring(0, 6);
-        return uniqueID;
+    public static void main(String[] args) {
+        // Example usage
+        Seat a = getSeat("S00001");
+        System.out.println(a);
+        // List all seats
+//        List<Seat> seats = listAll();
+//        for (Seat seat : seats) {
+//            System.out.println(seat);
+//        }
     }
 }

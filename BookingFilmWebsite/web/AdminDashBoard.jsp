@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width= , initial-scale=1.0">
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="css/admins.css">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <title>Document</title>
@@ -42,7 +42,7 @@
                     <span class="material-symbols-outlined">
                         movie
                     </span>
-                    <h3>Cinema</h3>
+                    <h3>Theatre</h3>
                 </a>
                 <a href="ticket.jsp">
                     <span class="material-symbols-outlined">

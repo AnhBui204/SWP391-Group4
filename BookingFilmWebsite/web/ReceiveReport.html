@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Report - Cinemagic</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    /* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffd08e;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+p {
+    color: #555;
+    font-size: 16px;
+}
+
+/* Navigation Bar */
+nav {
+    background-color: #007BFF;
+    padding: 15px;
+    color: white;
+    text-align: center;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+/* Main Container */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2, h3 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Report Details */
+.report-details {
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+}
+
+.report-details p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.report-details h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+/* Response Form */
+.response-form {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.response-form textarea {
+    width: 97%;
+    height: 150px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.response-form button {
+    background-color: #Fa7c5a;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.response-form button:hover {
+    background-color: #ffd08e;
+}
+
+/* Back Button */
+.back-button {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.back-button a {
+    color: #Fa7c5a;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back-button a:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    background-color: #007BFF;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+</style>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <h1>Cinemagic Admin Panel</h1>
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">User Management</a></li>
+            <li><a href="#">Reports</a></li>
+            <li><a href="#">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <h2>Staff Report Details</h2>
+        
+        <!-- Report Information -->
+        <div class="report-details">
+            <h3>Report from: John Smith</h3>
+            <p><strong>Phone Number:</strong> +1 234 567 8901</p>
+            <p><strong>Email:</strong> john.smith@example.com</p>
+            <p><strong>Address:</strong> 123 Main St, California</p>
+            <p><strong>Reported Issue:</strong> Issue with payment gateway during booking process. Transaction failed but payment was deducted.</p>
+        </div>
+
+        <!-- Admin Response Form -->
+        <div class="response-form">
+            <h3>Reply to Report</h3>
+            <form action="submit-response" method="POST">
+                <textarea name="response" placeholder="Write your reply here..." required></textarea>
+                <br>
+                <button type="submit">Send Reply</button>
+            </form>
+        </div>
+        
+        <!-- Back Button -->
+        <div class="back-button">
+            <a href="admin-dashboard.html">Back to Dashboard</a>
+        </div>
+    </div>
+
+</body>
+</html>

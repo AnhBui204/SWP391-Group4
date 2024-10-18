@@ -31,7 +31,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <link rel="stylesheet" href="bs/css/bootstrap.css"/>
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.css"/>
         <link rel="stylesheet" href="css/ForgetPassword_css.css"/>
     </head>
     <body>
@@ -69,4 +69,3 @@
 </html>
 <%@include file="includes/footer.jsp" %>
 <link rel="stylesheet" href="css/footer.css" />
-
