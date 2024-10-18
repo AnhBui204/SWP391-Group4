@@ -1,0 +1,160 @@
+body {
+        background-color: #f8f9fa;
+      }
+
+      .card {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-title {
+        font-weight: bold;
+      }
+
+      .btn-warning {
+        border-radius: 20px;
+        padding: 10px 20px;
+      }
+
+      .btn-light {
+        border-radius: 20px;
+        padding: 10px 20px;
+      }
+
+      select.form-control {
+        border-radius: 10px;
+        padding: 12px;
+        font-size: 16px;
+        height: auto;
+        line-height: 1.5;
+      }
+      .progress-bar {
+        display: flex;
+        justify-content: center;
+        padding: 10px 0;
+        background-color: white;
+        margin-bottom: 5px;
+      }
+
+      .progress-bar ul {
+        list-style: none;
+        display: flex;
+        width: 80%;
+        padding: 0;
+        margin: 0;
+      }
+
+      .progress-bar li {
+        flex: 1;
+        text-align: center;
+        color: #d3d3d3;
+        font-size: 16px;
+        position: relative;
+      }
+
+      .progress-bar li.active {
+        color: #0056b3;
+        font-weight: bold;
+      }
+
+      .progress-bar li:before {
+        content: "";
+        height: 2px;
+        width: 100%;
+        background-color: #d3d3d3;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        z-index: -1;
+      }
+
+      .progress-bar li.active:before {
+        background-color: #0056b3;
+      }
+
+      .progress-bar li:last-child:before {
+        display: none;
+      }
+     
+
+
+
+      .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .tag {
+        padding: 10px 20px;
+        background-color: #f1f1f1;
+        border-radius: 20px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        transition: background-color 0.3s;
+      }
+
+      .tag:hover {
+        background-color: #e0e0e0;
+      }
+
+      .tag.active {
+        background-color: #0056b3;
+        color: white;
+        border: 1px solid #0056b3;
+      }
+      .movie-list {
+    display: flex; /* Sử dụng flexbox */
+    flex-direction: row;
+   
+    cursor: pointer;
+      max-height: 400px; 
+}
+
+#movie-options {
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 10px; 
+    width: 100%; 
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px; 
+    overflow-y: auto; 
+    z-index: 1000;
+}
+
+.movie-item {
+    cursor: pointer; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    width: 100px; 
+    text-align: center; 
+}
+
+
+.movie-img {
+    max-width: 100px; 
+    height: auto; 
+    margin-left: 8px;
+     margin-right: 10px;
+    margin-top: -10;
+}
+.movie-options div {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+
+.movie-options div:hover {
+    background-color: #f0f0f0;
+}
+
+.movie-list.open .movie-options {
+    display: block; /* Hiển thị danh sách phim khi nhấp vào */
+}
+
+      

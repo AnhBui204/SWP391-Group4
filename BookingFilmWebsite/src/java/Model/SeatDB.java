@@ -42,7 +42,6 @@ public class SeatDB implements DatabaseInfo {
         return seat;
     }
 
-    // Method to get all seats in a specific room
     public static List<Seat> getSeatsByRoom(String roomID) {
         List<Seat> seatList = new ArrayList<>();
         try (Connection con = getConnect()) {
@@ -74,6 +73,7 @@ public class SeatDB implements DatabaseInfo {
             Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
 
     // Method to update an existing seat
     public static void update(Seat seat) {

@@ -147,6 +147,41 @@ public class ShowSeatDB {
         }
         return bookingTicketID;
     }
+public static List<String> getSeatsForShow(String movieID, String theatreID, String startTime, String showDate) {
+    List<String> seats = new ArrayList<>();
+
+    String query = "SELECT s.SeatName " +
+                   "FROM Seats s " +
+                   "JOIN ShowSeats ss ON s.SeatID = ss.SeatID " +
+                   "JOIN Rooms r ON s.RoomID = r.RoomID " +
+                   "JOIN Theatres t ON r.TheatreID = t.TheatreID " +
+                   "JOIN Shows sh ON ss.ShowID = sh.ShowID " +
+                   "WHERE sh.MovieID = ? " +
+                   "AND t.TheatreID = ? " +
+                   "AND sh.StartTime = ? " +
+                   "AND sh.ShowDate = ?";
+
+    try (Connection conn = getConnect();
+         PreparedStatement pstmt = conn.prepareStatement(query)) { 
+        pstmt.setString(1, movieID);  
+        pstmt.setString(2, theatreID);   
+        pstmt.setString(3, startTime);
+        pstmt.setString(4, showDate);
+        
+        ResultSet rs = pstmt.executeQuery();
+        while (rs.next()) {
+            String seatName = rs.getString("SeatName");
+            seats.add(seatName);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return seats;
+}
+
+
+
 
     private static String generateUniqueBookingID() {
         String uniqueID = UUID.randomUUID().toString().substring(0, 6);
@@ -155,15 +190,18 @@ public class ShowSeatDB {
     
     
     public static void main(String[] args) {
-        // Example usage
+       String showDate = "2024-09-13";  // Ngày chiếu
+        String startTime = "14:00:00";      // Giờ chiếu
+        String theatreName = "CGV Vincom Đà Nẵng";  // Tên rạp
+        String movieName = "Inception"; // Tên phim
 
-        //List all seats
-//        List<ShowSeat> seats = getSeatByRoom("R00007");
-//        for (ShowSeat seat : seats) {
-//            System.out.println(seat);
-//        }
-        bookSeat("S00001");
-        ShowSeat a = getShowSeat("S00001");
-        System.out.println(a);
-    }
+        // Gọi phương thức và in kết quả
+        List<String> seats = getSeatsForShow(showDate, startTime, theatreName, movieName);
+        System.out.println("Danh sách ghế có sẵn:");
+        for (String seat : seats) {
+            System.out.println(seat);
+        }
+    
+    
+}
 }

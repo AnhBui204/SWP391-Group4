@@ -4,10 +4,7 @@
  */
 package Model;
 
-/**
- *
- * @author ANH BUI
- */
+
 public class BookingDB {
     
 }

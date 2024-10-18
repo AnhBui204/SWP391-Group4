@@ -26,7 +26,7 @@ public class UserDB implements DatabaseInfo {
     public static User getUsers(String username, String password) {
         User user = null;
         String query = "select UserName, Pass, FName , LName , UserID, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft "
-                + "from Customers where CustomerName =? and Pass=? ";
+                + "from Users where UserName =? and Pass=? ";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
 
@@ -62,7 +62,7 @@ public class UserDB implements DatabaseInfo {
 
     public String getMaxUserId() {
         String maxId = null;
-        String query = "SELECT MAX(CAST(SUBSTRING(UserId, 3, LEN(UserId) - 2) AS INT)) AS maxId FROM Customers WHERE UserId LIKE 'US%'";
+        String query = "SELECT MAX(CAST(SUBSTRING(UserId, 3, LEN(UserId) - 2) AS INT)) AS maxId FROM Users WHERE UserId LIKE 'US%'";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
             ResultSet rs = stmt.executeQuery();
@@ -79,7 +79,7 @@ public class UserDB implements DatabaseInfo {
     // Phương thức để tìm các ID bị thiếu
     public TreeSet<Integer> findMissingIds() {
         TreeSet<Integer> missingIds = new TreeSet<>();
-        String query = "SELECT CAST(SUBSTRING(UserId, 3, LEN(UserId) - 2) AS INT) AS numId FROM Customers WHERE UserId LIKE 'US%' ORDER BY numId";
+        String query = "SELECT CAST(SUBSTRING(UserId, 3, LEN(UserId) - 2) AS INT) AS numId FROM Users WHERE UserId LIKE 'US%' ORDER BY numId";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
             ResultSet rs = stmt.executeQuery();
@@ -123,7 +123,7 @@ public class UserDB implements DatabaseInfo {
     public void insert(User user) {
         String newUserId = generateNewUserId();
         user.setUserID(newUserId);
-        String sql = "INSERT INTO Customers (CustomerID, CustomerName, Pass,FName,LName, Role, Email) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Users (UserID, UserName, Pass,FName,LName, Role, Email) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, user.getUserID());
@@ -139,7 +139,7 @@ public class UserDB implements DatabaseInfo {
 
 //-----------------------------------------------------------------------------------
     public User updateUser(User user) {
-        String query = "UPDATE Customers SET CustomerName=?, password=? WHERE CustomerID=?";
+        String query = "UPDATE Users SET UserName=?, password=? WHERE UserID=?";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
 
@@ -157,14 +157,14 @@ public class UserDB implements DatabaseInfo {
 
     public static ArrayList<User> listAllUsers() {
         ArrayList<User> userList = new ArrayList<>();
-        String query = "SELECT CustomerID, CustomerName,Pass , FName , LName, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft FROM Customers";
+        String query = "SELECT UserID, UserName,Pass , FName , LName, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft FROM Users";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                String userID = rs.getString("CustomerID");
-                String username = rs.getString("CustomerName");
+                String userID = rs.getString("UserID");
+                String username = rs.getString("UserName");
                 String password = rs.getString("Pass");
                 String fname = rs.getString("FName");
                 String lname = rs.getString("LName");

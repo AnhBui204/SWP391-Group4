@@ -73,6 +73,7 @@ public class TheatreDB {
         }
         return cinemaList;
     }
+  
 
     // Method to delete a theatre
     public void deleteTheatre(String theatreID) {
@@ -114,8 +115,7 @@ public class TheatreDB {
     }
 
     public static void main(String[] args) {
-        Theatre a = getTheatreById("T00001");
-        System.out.println(a);
+     
         ArrayList<Theatre> list = TheatreDB.listAllTheatres();
         for (Theatre ci : list) {
             System.out.println(ci);

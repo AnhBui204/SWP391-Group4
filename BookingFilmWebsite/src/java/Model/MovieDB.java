@@ -25,101 +25,62 @@ public class MovieDB {
         return null;
     }
 
-    // Add Movie to the database
-    public static boolean addMovie(Movie movie) {
-        String sql = "INSERT INTO Movies (MovieID, MovieName, Duration, Country, Director, MovieType, ReleaseDate, Rate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = getConnect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-             
-            ps.setString(1, movie.getMovieID());
-            ps.setString(2, movie.getMovieName());
-            ps.setInt(3, movie.getDuration());
-            ps.setString(4, movie.getCountry());
-            ps.setString(5, movie.getDirector());
-            ps.setString(6, movie.getMovieType());
-            ps.setDate(7, movie.getReleaseDate());
-            ps.setDouble(8, movie.getRate());
-            
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+
+  
+   public static List<Movie> getMoviesByTheatreID(String theatreID) throws SQLException {
+    List<Movie> movies = new ArrayList<>();
+  String sql = "SELECT DISTINCT m.MovieID, m.MovieName, m.ImgPortrait, m.Rate, m.AgeRating " +
+                 "FROM Movies m " +
+                 "JOIN Shows s ON m.MovieID = s.MovieID " +
+                 "JOIN ShowSeats ss ON s.ShowID = ss.ShowID " +
+                 "WHERE ss.TheatreID = ?"; 
+    
+    try (Connection conn = getConnect(); 
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, theatreID);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            Movie movie = new Movie();
+            movie.setMovieID(rs.getString("MovieID"));
+            movie.setMovieName(rs.getString("MovieName"));
+            movie.setImgPortrait(rs.getString("ImgPortrait"));
+            movie.setAgeRating(rs.getString("AgeRating"));  
+            movies.add(movie);
         }
-        return false;
     }
 
-    // Get all Movies from the database
-    public static List<Movie> getAllMovies() {
-        List<Movie> movieList = new ArrayList<>();
-        String sql = "SELECT * FROM Movies";
-        try (Connection conn = getConnect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+    return movies;
+}
+
+
+  public static List<Date> getShowDateByMovieIDAndTheatreID(String movieID, String theatreID) {
+        List<Date> showDates = new ArrayList<>();
+        String query = "SELECT DISTINCT S.ShowDate " +
+                   "FROM Shows S " +
+                   "JOIN ShowSeats SS ON S.ShowID = SS.ShowID " +
+                   "WHERE S.MovieID = ? AND SS.TheatreID = ?";
+
+        try (Connection connection = getConnect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
              
-            while (rs.next()) {
-                String movieID = rs.getString("MovieID");
-                String movieName = rs.getString("MovieName");
-                int duration = rs.getInt("Duration");
-                String country = rs.getString("Country");
-                String director = rs.getString("Director");
-                String movieType = rs.getString("MovieType");
-                Date releaseDate = rs.getDate("ReleaseDate");
-                double rate = rs.getDouble("Rate");
-                
-                Movie movie = new Movie(movieID, movieName, duration, country, director, movieType, releaseDate, rate);
-                movieList.add(movie);
+            preparedStatement.setString(1, movieID);
+            preparedStatement.setString(2, theatreID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                showDates.add(resultSet.getDate("ShowDate"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Xử lý ngoại lệ (in ra lỗi)
         }
-        return movieList;
+
+        return showDates;
     }
 
-    // Get a Movie by ID
-    public static Movie getMovieById(String movieID) {
-        String sql = "SELECT * FROM Movies WHERE MovieID = ?";
-        try (Connection conn = getConnect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-             
-            ps.setString(1, movieID);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                String movieName = rs.getString("MovieName");
-                int duration = rs.getInt("Duration");
-                String country = rs.getString("Country");
-                String director = rs.getString("Director");
-                String movieType = rs.getString("MovieType");
-                Date releaseDate = rs.getDate("ReleaseDate");
-                double rate = rs.getDouble("Rate");
-                
-                return new Movie(movieID, movieName, duration, country, director, movieType, releaseDate, rate);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
-    // Update a Movie in the database
-    public static boolean updateMovie(Movie movie) {
-        String sql = "UPDATE Movies SET MovieName = ?, Duration = ?, Country = ?, Director = ?, MovieType = ?, ReleaseDate = ?, Rate = ? WHERE MovieID = ?";
-        try (Connection conn = getConnect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-             
-            ps.setString(1, movie.getMovieName());
-            ps.setInt(2, movie.getDuration());
-            ps.setString(3, movie.getCountry());
-            ps.setString(4, movie.getDirector());
-            ps.setString(5, movie.getMovieType());
-            ps.setDate(6, movie.getReleaseDate());
-            ps.setDouble(7, movie.getRate());
-            ps.setString(8, movie.getMovieID());
-            
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+
 
     // Delete a Movie from the database
     public static boolean deleteMovie(String movieID) {
@@ -135,27 +96,23 @@ public class MovieDB {
         return false;
     }
     
-    public static void main(String[] args) {
-        // Adding a movie
-        Movie newMovie = new Movie("M12345", "Inception", 148, "USA", "Christopher Nolan", "Sci-Fi", Date.valueOf("2010-07-16"), 8.8);
-        MovieDB.addMovie(newMovie);
-        
-        // Listing all movies
-        List<Movie> movies = MovieDB.getAllMovies();
-        for (Movie movie : movies) {
-            System.out.println(movie);
-        }
-        
-        // Fetching a single movie by ID
-        Movie fetchedMovie = MovieDB.getMovieById("M12345");
-        System.out.println(fetchedMovie);
-        
-        // Updating a movie
-        fetchedMovie.setRate(9.0);
-        MovieDB.updateMovie(fetchedMovie);
-        System.out.println(fetchedMovie);
-        // Deleting a movie
-        MovieDB.deleteMovie("M12345");
-    }
+  public static void main(String[] args) {
+        // Thay thế theatreID bằng ID của rạp mà bạn muốn truy vấn
+        String theatreID = "T00002"; // Ví dụ ID rạp
 
+        try {
+            List<Movie> movies = MovieDB.getMoviesByTheatreID(theatreID);
+            for (Movie movie : movies) {
+                System.out.println("Movie ID: " + movie.getMovieID());
+                System.out.println("Movie Name: " + movie.getMovieName());
+                System.out.println("Rate: " + movie.getRate());
+                System.out.println("R:"+movie.getAgeRating());
+                System.out.println("Imgae" +movie.getImgPortrait());
+                System.out.println("---------------------------");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // In ra lỗi nếu có
+        }
+    }
 }
+

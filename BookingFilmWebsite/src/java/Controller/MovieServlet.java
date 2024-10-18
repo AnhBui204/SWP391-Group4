@@ -4,10 +4,7 @@
  */
 package Controller;
 
-import Model.Movie;
-import Model.MovieDB;
-import Model.Show;
-import Model.ShowDB;
+
 import Model.Theatre;
 import Model.TheatreDB;
 import java.io.IOException;
@@ -41,14 +38,9 @@ public class MovieServlet extends HttpServlet {
  @Override
 protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {   
-        List<Movie> movie = MovieDB.getAllMovies();
         List<Theatre> theatre = TheatreDB.listAllTheatres();
-        List<Show> shows = ShowDB.getAllShows();
-        request.setAttribute("movie", movie);
-        request.setAttribute("theatre", theatre);
-        request.setAttribute("shows", shows);
+        request.setAttribute("theatres", theatre);
         request.getRequestDispatcher("Booking.jsp").forward(request, response);
-    
 }
 
 

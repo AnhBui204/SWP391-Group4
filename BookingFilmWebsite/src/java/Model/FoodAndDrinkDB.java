@@ -48,26 +48,7 @@ public class FoodAndDrinkDB {
     }
 
     // Read/Get a voucher by voucherID
-    public static FoodAndDrink getComboById(String ComboID) {
-        String sql = "SELECT * FROM FoodsAndDrinks WHERE ComboID = ?";
-        try (Connection conn = getConnect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, ComboID);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return new FoodAndDrink(
-                    rs.getString("ComboID"),
-                    rs.getString("ComboName"),
-                    rs.getDouble("Price")
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+ 
 
     // Update a combo
     public static boolean updateCombo(FoodAndDrink combo) {
@@ -100,56 +81,48 @@ public class FoodAndDrinkDB {
         }
     }
 
-    public static List<FoodAndDrink> getAllCombo() {
-        List<FoodAndDrink> combos = new ArrayList<>();
-        String sql = "SELECT * FROM FoodsAndDrinks";
+     public static List<FoodAndDrink> getFoodsAndDrinksByTheatreID(String theatreID) {
+        List<FoodAndDrink> foodsAndDrinks = new ArrayList<>();
+        String sql = "SELECT ComboID, ComboName, TheatreID, ImagePath, Price FROM FoodsAndDrinks WHERE TheatreID = ?";
 
-        try (Connection conn = getConnect();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+        try (Connection conn = getConnect(); 
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            pstmt.setString(1, theatreID);
+            ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                FoodAndDrink combo = new FoodAndDrink(
-                    rs.getString("ComboID"),
-                    rs.getString("ComboName"),
-                    rs.getDouble("Price")
-                );
-                combos.add(combo);
+                String comboID = rs.getString("ComboID");
+                String comboName = rs.getString("ComboName");
+                String imagePath = rs.getString("ImagePath");
+                double price = rs.getDouble("Price");
+                foodsAndDrinks.add(new FoodAndDrink(comboID, comboName, theatreID, imagePath, price));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return combos;
+        
+        return foodsAndDrinks;
     }
-    
     // Example of how to test in the main method
     public static void main(String[] args) {
-        // Test creating a voucher
-        FoodAndDrink newCombo = new FoodAndDrink("C12345", "Bắp rang big size + Pepsi bigsize", 150000.0);
-        if (createCombo(newCombo)) {
-            System.out.println("Combo created successfully");
-        }
-
-        // Test getting all vouchers
-        List<FoodAndDrink> combos = getAllCombo();
-        for (FoodAndDrink combo : combos) {
-            System.out.println(combo);
-        }
-
-        // Test updating a voucher
-        FoodAndDrink updatedCombo = getComboById("C12345");
-        if (updatedCombo != null) {
-            updatedCombo.setPrice(160.0);
-            if (updateCombo(updatedCombo)) {
-                System.out.println(updatedCombo);
-                System.out.println("Combo updated successfully");
+         FoodAndDrinkDB foodAndDrinkDB = new FoodAndDrinkDB();
+        
+        // Giả sử TheatreID bạn muốn tìm kiếm là "TH001"
+        String theatreID = "T00001"; 
+        List<FoodAndDrink> foodsAndDrinks = foodAndDrinkDB.getFoodsAndDrinksByTheatreID(theatreID);
+        
+        // In kết quả ra màn hình
+        if (foodsAndDrinks.isEmpty()) {
+            System.out.println("Không tìm thấy đồ ăn và thức uống nào cho TheatreID: " + theatreID);
+        } else {
+            System.out.println("Danh sách đồ ăn và thức uống cho TheatreID: " + theatreID);
+            for (FoodAndDrink foodAndDrink : foodsAndDrinks) {
+                System.out.println("ComboID: " + foodAndDrink.getComboID() +
+                                   ", Tên combo: " + foodAndDrink.getComboName() +
+                                   ", Giá: " + foodAndDrink.getPrice() +
+                                   ", Hình ảnh: " + foodAndDrink.getImagePath());
             }
-        }
-
-        // Test deleting a voucher
-        if (deleteCombo("C12345")) {
-            System.out.println("Voucher deleted successfully");
         }
     }
 }

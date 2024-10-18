@@ -5,29 +5,47 @@
 package Model;
 import java.sql.Date;
 
+
 public class Movie {
-    
     private String movieID;
     private String movieName;
     private int duration;
     private String country;
+    private String manufacturer;
     private String director;
-    private String movieType;
     private Date releaseDate;
+    private String imgPortrait;
+    private String imgLandscape;
+    private String movieDescription;
     private double rate;
-
+    private String AgeRating;
     public Movie() {
     }
 
-    public Movie(String movieID, String movieName, int duration, String country, String director, String movieType, Date releaseDate, double rate) {
+
+    public Movie(String movieID, String movieName, int duration, String country, String manufacturer, 
+                 String director, Date releaseDate, String imgPortrait, String imgLandscape, 
+                 String movieDescription, double rate, String AgeRating) {
         this.movieID = movieID;
         this.movieName = movieName;
         this.duration = duration;
         this.country = country;
+        this.manufacturer = manufacturer;
         this.director = director;
-        this.movieType = movieType;
         this.releaseDate = releaseDate;
+        this.imgPortrait = imgPortrait;
+        this.imgLandscape = imgLandscape;
+        this.movieDescription = movieDescription;
         this.rate = rate;
+        this.AgeRating=AgeRating;
+    }
+
+    public String getAgeRating() {
+        return AgeRating;
+    }
+
+    public void setAgeRating(String AgeRating) {
+        this.AgeRating = AgeRating;
     }
 
     public String getMovieID() {
@@ -62,6 +80,14 @@ public class Movie {
         this.country = country;
     }
 
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
     public String getDirector() {
         return director;
     }
@@ -70,20 +96,36 @@ public class Movie {
         this.director = director;
     }
 
-    public String getMovieType() {
-        return movieType;
-    }
-
-    public void setMovieType(String movieType) {
-        this.movieType = movieType;
-    }
-
     public Date getReleaseDate() {
         return releaseDate;
     }
 
     public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public String getImgPortrait() {
+        return imgPortrait;
+    }
+
+    public void setImgPortrait(String imgPortrait) {
+        this.imgPortrait = imgPortrait;
+    }
+
+    public String getImgLandscape() {
+        return imgLandscape;
+    }
+
+    public void setImgLandscape(String imgLandscape) {
+        this.imgLandscape = imgLandscape;
+    }
+
+    public String getMovieDescription() {
+        return movieDescription;
+    }
+
+    public void setMovieDescription(String movieDescription) {
+        this.movieDescription = movieDescription;
     }
 
     public double getRate() {
@@ -96,8 +138,7 @@ public class Movie {
 
     @Override
     public String toString() {
-        return "Movie{" + "movieID=" + movieID + ", movieName=" + movieName + ", duration=" + duration + ", country=" + country + ", director=" + director + ", movieType=" + movieType + ", releaseDate=" + releaseDate + ", rate=" + rate + '}';
+        return "Movie{" + "movieID=" + movieID + ", movieName=" + movieName + ", duration=" + duration + ", country=" + country + ", manufacturer=" + manufacturer + ", director=" + director + ", releaseDate=" + releaseDate + ", imgPortrait=" + imgPortrait + ", imgLandscape=" + imgLandscape + ", movieDescription=" + movieDescription + ", rate=" + rate + '}';
     }
-    
     
 }

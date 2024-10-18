@@ -1,25 +1,35 @@
 
 package Model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 
 
 public class Show {
     
     private String showID;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private LocalDate showDate;
+    private LocalTime startTime;
     private String movieID;
 
     public Show() {
     }
 
-    public Show(String showID, LocalDateTime startTime, LocalDateTime endTime, String movieID) {
+    public Show(String showID,LocalDate showDate ,LocalTime startTime,  String movieID) {
         this.showID = showID;
+        this.showDate=showDate;
         this.startTime = startTime;
-        this.endTime = endTime;
+
         this.movieID = movieID;
+    }
+
+    public LocalDate getShowDate() {
+        return showDate;
+    }
+
+    public void setShowDate(LocalDate showDate) {
+        this.showDate = showDate;
     }
 
     public String getShowID() {
@@ -30,21 +40,15 @@ public class Show {
         this.showID = showID;
     }
 
-    public LocalDateTime getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
 
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
 
     public String getMovieID() {
         return movieID;
@@ -56,7 +60,7 @@ public class Show {
 
     @Override
     public String toString() {
-        return "Show{" + "showID=" + showID + ", startTime=" + startTime + ", endTime=" + endTime + ", movieID=" + movieID + '}';
+        return "Show{" + "showID=" + showID + ", startTime=" + startTime  + ", movieID=" + movieID + '}';
     }
     
     
