@@ -74,16 +74,32 @@ public class RoomDB implements DatabaseInfo {
     public static List<Room> getRoomsByCinema(String cinemaID) {
         List<Room> roomList = new ArrayList<>();
         try (Connection con = getConnect()) {
-            String query = "SELECT RoomID, RoomName, t.TheatreName FROM Rooms "
-                    + "r inner join Theatres t on r.TheatreID = t.TheatreID\n"
-                    + "WHERE r.TheatreID=?";
+            String query = "SELECT * FROM Rooms WHERE TheatreID=?";
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString(1, cinemaID);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Room room = new Room(rs.getString("RoomID"),
                         rs.getString("RoomName"),
-                        rs.getString("TheatreName"));
+                        cinemaID);
+                roomList.add(room);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return roomList;
+    }
+    
+    public static List<Room> getAllRoom() {
+        List<Room> roomList = new ArrayList<>();
+        try (Connection con = getConnect()) {
+            String query = "SELECT * FROM Rooms";
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Room room = new Room(rs.getString("RoomID"),
+                        rs.getString("RoomName"),
+                        rs.getString("TheatreID"));
                 roomList.add(room);
             }
         } catch (SQLException ex) {
@@ -138,7 +154,7 @@ public class RoomDB implements DatabaseInfo {
 //        for (Room r : rooms) {
 //            System.out.println(r);
 //        }
-        List<Room> rooms = getRoomByShow("SH0001");
+        List<Room> rooms = getAllRoom();
         for (Room r : rooms) {
             System.out.println(r);
         }

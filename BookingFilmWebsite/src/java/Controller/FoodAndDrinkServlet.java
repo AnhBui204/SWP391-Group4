@@ -51,34 +51,34 @@ public class FoodAndDrinkServlet extends HttpServlet {
         String sPrice = request.getParameter("price");
         int price = Integer.parseInt(sPrice);
         String theatreID = request.getParameter("theatreID");
-        
-        // Handling imageL file upload
+
+        // Handling image file upload
         Part filePart = request.getPart("filename");
-        String fileName = filePart.getSubmittedFileName();  // Use getSubmittedFileName() to get the original file name
+        String fileName = filePart.getSubmittedFileName();
         String uploadPath = getUploadCBDirectory(request);
         String fileURLPath = "";
 
         if (fileName != null && !fileName.isEmpty()) {
-            String filePath = uploadPath + fileName;  // Append the file name to the directory
+            String filePath = uploadPath + fileName;
             fileURLPath = "image/FoodsAndDrinks/" + fileName;
             try {
-                filePart.write(filePath);  // Save the file
+                filePart.write(filePath);
                 System.out.println("File uploaded to: " + filePath);
-                request.setAttribute("message", "Image uploaded and saved successfully.");
             } catch (IOException ex) {
-                System.out.println("Error writing fileL: " + ex.getMessage());
-                request.setAttribute("message", "Error writing fileL: " + ex.getMessage());
+                System.out.println("Error writing file: " + ex.getMessage());
+                request.setAttribute("message", "Error writing file: " + ex.getMessage());
             }
-        } else {
-            request.setAttribute("message", "No image file selected or invalid file.");
         }
 
-        // Create Movie object and store it in DB
+        // Create FoodAndDrink object and store it in DB
         FoodAndDrink combo = new FoodAndDrink(null, name, theatreID, fileURLPath, price);
         FoodAndDrinkDB.createCombo(combo);
+
+        // Set success message
+        request.setAttribute("message", "Food and Drink combo added successfully!");
         request.getRequestDispatcher("crudFD.jsp").forward(request, response);
     }
-    
+
     private void handleUpdateCB(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String id = request.getParameter("comboID");
@@ -86,41 +86,44 @@ public class FoodAndDrinkServlet extends HttpServlet {
         String sPrice = request.getParameter("price");
         int price = Integer.parseInt(sPrice);
         String theatreID = request.getParameter("theatreID");
-        
-        // Handling imageL file upload
+
+        // Handling image file upload
         Part filePart = request.getPart("filename");
-        String fileName = filePart.getSubmittedFileName();  // Use getSubmittedFileName() to get the original file name
+        String fileName = filePart.getSubmittedFileName();
         String uploadPath = getUploadCBDirectory(request);
-        FoodAndDrink s = FoodAndDrinkDB.getComboById(id);
-        String fileURLPath = s.getImagePath();
+        FoodAndDrink existingCombo = FoodAndDrinkDB.getComboById(id);
+        String fileURLPath = existingCombo.getImagePath();
+
         if (fileName != null && !fileName.isEmpty()) {
-            String filePath = uploadPath + fileName;  // Append the file name to the directory
+            String filePath = uploadPath + fileName;
             fileURLPath = "image/FoodsAndDrinks/" + fileName;
             try {
-                filePart.write(filePath);  // Save the file
+                filePart.write(filePath);
                 System.out.println("File uploaded to: " + filePath);
-                request.setAttribute("message", "ImageL uploaded and saved successfully.");
             } catch (IOException ex) {
-                System.out.println("Error writing fileL: " + ex.getMessage());
-                request.setAttribute("message", "Error writing fileL: " + ex.getMessage());
+                System.out.println("Error writing file: " + ex.getMessage());
+                request.setAttribute("message", "Error writing file: " + ex.getMessage());
             }
-        } else {
-            request.setAttribute("message", "No imageL file selected or invalid file.");
         }
 
-        // Create Movie object and store it in DB
+        // Create FoodAndDrink object and store it in DB
         FoodAndDrink combo = new FoodAndDrink(id, name, theatreID, fileURLPath, price);
         FoodAndDrinkDB.updateCombo(combo);
+
+        // Set success message
+        request.setAttribute("message", "Food and Drink combo updated successfully!");
         request.getRequestDispatcher("crudFD.jsp").forward(request, response);
     }
-    
+
     private void handleDeleteCB(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String comboID = request.getParameter("comboID");
-        System.out.println("Hello"+comboID);
+        System.out.println("Deleting combo: " + comboID);
         FoodAndDrinkDB.deleteCombo(comboID);
-        request.getRequestDispatcher("crudFD.jsp").forward(request, response);
 
+        // Set success message
+        request.setAttribute("message", "Food and Drink combo deleted successfully!");
+        request.getRequestDispatcher("crudFD.jsp").forward(request, response);
     }
 
     private String getFileName(Part part) {

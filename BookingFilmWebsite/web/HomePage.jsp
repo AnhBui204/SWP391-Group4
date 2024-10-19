@@ -6,7 +6,7 @@
         if (notification) {
             setTimeout(() => {
                 notification.style.display = 'none';
-            }, 2000); // Th?i gian timeout là 5000 milliseconds (5 giây)
+            }, 2000); 
         }
     }
 
@@ -46,7 +46,7 @@
 <%@include file="includes/footer.jsp" %>
 
 
-<link rel="stylesheet" href="css/headers.css" />
+<link rel="stylesheet" href="css/headerssj1.css" />
 <link rel="stylesheet" href="css/body.css" />
 <link rel="stylesheet" href="css/voucher.css" />
 <link rel="stylesheet" href="css/footer.css" />

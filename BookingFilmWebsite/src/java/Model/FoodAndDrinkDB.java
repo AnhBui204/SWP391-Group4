@@ -40,7 +40,7 @@ public class FoodAndDrinkDB {
         // Nếu không có ID nào trước đó, trả về 'M00001' (ID đầu tiên)
         return "C00001";
     }
-    
+
     // Create a new combo (food and drink item)
     public static boolean createCombo(FoodAndDrink combo) {
         if (combo == null) {
@@ -48,8 +48,7 @@ public class FoodAndDrinkDB {
         }
 
         String sql = "INSERT INTO FoodsAndDrinks (ComboID, ComboName, TheatreID, ImagePath, Price) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = getConnect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             String nextID = getNextComboID();
             pstmt.setString(1, nextID);
             pstmt.setString(2, combo.getComboName());
@@ -66,19 +65,18 @@ public class FoodAndDrinkDB {
     // Get combo by ID
     public static FoodAndDrink getComboById(String comboID) {
         String sql = "SELECT * FROM FoodsAndDrinks WHERE ComboID = ?";
-        try (Connection conn = getConnect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, comboID);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
                 return new FoodAndDrink(
-                    rs.getString("ComboID"),
-                    rs.getString("ComboName"),
-                    rs.getString("TheatreID"), // Added theatreID
-                    rs.getString("ImagePath"), // Added imagePath
-                    rs.getDouble("Price")
+                        rs.getString("ComboID"),
+                        rs.getString("ComboName"),
+                        rs.getString("TheatreID"), // Added theatreID
+                        rs.getString("ImagePath"), // Added imagePath
+                        rs.getInt("Price")
                 );
             }
         } catch (SQLException e) {
@@ -94,8 +92,7 @@ public class FoodAndDrinkDB {
         }
 
         String sql = "UPDATE FoodsAndDrinks SET ComboName = ?, TheatreID = ?, ImagePath = ?, Price = ? WHERE ComboID = ?";
-        try (Connection conn = getConnect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, combo.getComboName());
             pstmt.setString(2, combo.getTheatreID()); // Added theatreID
@@ -112,8 +109,7 @@ public class FoodAndDrinkDB {
     // Delete combo
     public static boolean deleteCombo(String comboID) {
         String sql = "DELETE FROM FoodsAndDrinks WHERE ComboID = ?";
-        try (Connection conn = getConnect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, comboID);
             System.out.println("Xóa thành công");
@@ -127,17 +123,15 @@ public class FoodAndDrinkDB {
     public static List<FoodAndDrink> getAllCombos() {
         List<FoodAndDrink> combos = new ArrayList<>();
         String sql = "SELECT * FROM FoodsAndDrinks";
-        try (Connection conn = getConnect();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
                 FoodAndDrink combo = new FoodAndDrink(
-                    rs.getString("ComboID"),
-                    rs.getString("ComboName"),
-                    rs.getString("TheatreID"), // Added theatreID
-                    rs.getString("ImagePath"), // Added imagePath
-                    rs.getDouble("Price")
+                        rs.getString("ComboID"),
+                        rs.getString("ComboName"),
+                        rs.getString("TheatreID"), // Added theatreID
+                        rs.getString("ImagePath"), // Added imagePath
+                        rs.getInt("Price")
                 );
                 combos.add(combo);
             }
@@ -146,7 +140,41 @@ public class FoodAndDrinkDB {
         }
         return combos;
     }
-    
+
+    public List<FoodAndDrink> getCombosByPage(String theatreID, int page, int combosPerPage) {
+        List<FoodAndDrink> combos = new ArrayList<>();
+        String query = "SELECT * FROM FoodsAndDrinks WHERE TheatreID = ? ORDER BY ComboID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        try {
+            PreparedStatement ps = getConnect().prepareStatement(query);
+            ps.setString(1, theatreID);
+            ps.setInt(2, (page - 1) * combosPerPage); // Tính toán offset
+            ps.setInt(3, combosPerPage); // Số combo mỗi trang
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                // Lấy thông tin combo từ ResultSet và thêm vào danh sách
+                combos.add(new FoodAndDrink(rs.getString("ComboID"), rs.getString("ComboName"), rs.getString("TheatreID"), rs.getString("ImagePath"), rs.getInt("Price")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return combos;
+    }
+
+    public int getTotalCombosByTheatre(String theatreID) {
+        String query = "SELECT COUNT(*) FROM FoodsAndDrinks WHERE TheatreID = ?";
+        try {
+            PreparedStatement ps = getConnect().prepareStatement(query);
+            ps.setString(1, theatreID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1); // Trả về tổng số combo
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     //List voucher by theatreID
     public static List<FoodAndDrink> getAllCombosByTheatreID(String theatreID) {
         List<FoodAndDrink> FoodAndDrinks = new ArrayList<>();
@@ -162,7 +190,7 @@ public class FoodAndDrinkDB {
                             rs.getString("ComboName"),
                             rs.getString("TheatreID"),
                             rs.getString("ImagePath"),
-                            rs.getDouble("Price")
+                            rs.getInt("Price")
                     );
                     FoodAndDrinks.add(combo);
                 }
@@ -173,7 +201,7 @@ public class FoodAndDrinkDB {
 
         return FoodAndDrinks;
     }
-    
+
     public static void uploadPImage(String comboID, String CBImagePath) {
         String query = "UPDATE FoodsAndDrinks SET ImagePath = ? WHERE ComboID = ?";
 

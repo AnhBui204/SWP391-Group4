@@ -69,8 +69,10 @@ header {
     color:grey;
     margin-bottom:20px;
     display: flex;
+    justify-content: center;
     align-items: center;
     gap: 10px;
+    flex-direction: column;
 }
 
 .user-info img {
@@ -214,8 +216,8 @@ select:focus option:first-child {
 }
 
 .avatar {
-    width: 40px;
-    height: 40px;
+    width: 50%;
+    height: 50%;
     border-radius: 50%;
     margin-right: 10px;
 }
@@ -250,7 +252,7 @@ select:focus option:first-child {
     padding: 5px;
     text-decoration: none;
     color: black;
-    max-width: 150px;
+    max-width: 110px;
 }
 
 .dropdown-item:hover {

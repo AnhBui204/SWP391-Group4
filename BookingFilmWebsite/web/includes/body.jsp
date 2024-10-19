@@ -1,4 +1,4 @@
-
+﻿
 
 <%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -41,22 +41,35 @@
                     <div class="skin">
                         <div class="layer">
                             <p>Mua vé</p>
-                            <p>Trailer</p>
+                            <form action="MovieDetailServlet" method="post">
+                                <input type="text" name="MovieId" value="<%=movie.getMovieID()%>" hidden/>
+                                <input type="text" name="MovieName" value="<%=movie.getMovieName()%>" hidden/>
+                                <input type="text" name="Duration" value="<%=movie.getDuration()%>" hidden/>
+                                <input type="text" name="Country" value="<%=movie.getCountry()%>" hidden/>
+                                <input type="text" name="Manufacturer" value="<%=movie.getManufacturer()%>" hidden/>
+                                <input type="text" name="Director" value="<%=movie.getDirector()%>" hidden/>
+                                <!--<input type="text" name="MovieType" value="<%//=movie.getMovieType()%>" hidden/>-->
+                                <input type="text" name="ReleaseDate" value="<%=movie.getReleaseDate()%>" hidden/>
+                                <input type="text" name="ImgP" value="<%=movie.getImgPortrait()%>" hidden/>
+                                <input type="text" name="ImgL" value="<%=movie.getImgLandscape()%>" hidden/>
+                                <input type="text" name="Rate" value="<%//=movie.getRate()%>" hidden/>
+                                <input type="submit" value="Trailer"/>
+                            </form>
+
                         </div>
 
                     </div>
-                    <img src="<%= movie.getImgPortrait()%>" alt="alt"/>
+                    <img src="<%=movie.getImgPortrait()%>" alt="Poster Portrait"/>
                     <div class="box3">
                         <div class="danhgia">
-
-                            <p><i class="fas fa-star"></i> 8.0</p>
+                            <p><i class="fas fa-star"></i> <%//=movie.getRate()%></p>
                         </div>
                         <div class="dotuoi">
                             <p>T16</p>
                         </div>
                     </div>
 
-                </div> 
+                </div>
                 <%
                     }
                 %>

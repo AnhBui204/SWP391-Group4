@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,7 +63,7 @@ public class UserDB implements DatabaseInfo {
         }
         return user;
     }
-    
+
     public static User getUsersByID(String userID) {
         User user = null;
         String query = "select UserName, FName , LName, Pass , UserID, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar "
@@ -241,21 +242,75 @@ public class UserDB implements DatabaseInfo {
         return null; // Return null if no avatar found
     }
 
-    public static void main(String[] args) {
-        ArrayList<User> list = UserDB.listAllUsers();
-        for (User user : list) {
-            System.out.println(user);
-        }
+    public static ArrayList<WorkHistory> listAllWorkHistory(String staffID) {
+        ArrayList<WorkHistory> workList = new ArrayList<>();
+        String query = "SELECT * FROM WorkHis where StaffID = ?";
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, staffID);
+            ResultSet rs = stmt.executeQuery();
 
-        String newUserId = getNextUserID();
-        System.out.println(newUserId);
-        User s = UserDB.getUsers("user2", "123");
-        System.out.println(s);
-        System.out.println(s.getRole());
-        
-        User v = UserDB.getUsersByID("U00003");
-        System.out.println(v);
-        
+            while (rs.next()) {
+                String workID = rs.getString("WorkId");
+                String des = rs.getString("WorkDescription");
+                Time time = rs.getTime("Times");
+                Date date = rs.getDate("Dates");
+
+                WorkHistory s = new WorkHistory(workID, des, time, date, staffID);
+                workList.add(s);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return workList;
+    }
+
+    public static ArrayList<WorkHistory> listWorkHistoryByDate(String staffID, String date) {
+        ArrayList<WorkHistory> list = new ArrayList<>();
+        // Your database connection logic here
+
+        try {
+            String query = "SELECT * FROM WorkHis WHERE StaffID = ? AND Dates = ?";
+            PreparedStatement ps = getConnect().prepareStatement(query);
+            ps.setString(1, staffID);
+            ps.setString(2, date);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                WorkHistory work = new WorkHistory();
+                work.setWorkID(rs.getString("WorkID"));
+                work.setWorkDes(rs.getString("WorkDescription"));
+                work.setDates(rs.getDate("Dates"));
+                work.setTimes(rs.getTime("Times"));
+                work.setStaffID(rs.getString("StaffID"));
+                list.add(work);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Close your connection here
+        }
+        return list;
+    }
+
+    public static void main(String[] args) {
+//        ArrayList<User> list = UserDB.listAllUsers();
+//        for (User user : list) {
+//            System.out.println(user);
+//        }
+//
+//        String newUserId = getNextUserID();
+//        System.out.println(newUserId);
+//        User s = UserDB.getUsers("user2", "123");
+//        System.out.println(s);
+//        System.out.println(s.getRole());
+//
+//        User v = UserDB.getUsersByID("U00003");
+//        System.out.println(v);
+
+        ArrayList<WorkHistory> list = UserDB.listWorkHistoryByDate("T00001","2024-10-16");
+        for (WorkHistory s : list) {
+            System.out.println(s);
+        }
     }
 }
 

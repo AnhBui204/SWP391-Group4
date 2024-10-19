@@ -215,7 +215,7 @@ public class UserServlet extends HttpServlet {
             }
             case "Staff" -> {
                 request.setAttribute("staff", user.getUsername());
-                RequestDispatcher dispatcher = request.getRequestDispatcher("StaffDBoard.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("crudMV.jsp");
                 dispatcher.forward(request, response);
             }
         }

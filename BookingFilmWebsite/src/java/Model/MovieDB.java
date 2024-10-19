@@ -7,6 +7,7 @@ import static Model.DatabaseInfo.USERDB;
 import static Model.UserDB.getConnect;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -82,7 +83,7 @@ public class MovieDB {
                 String director = rs.getString("Director");
                 Date releaseDate = rs.getDate("ReleaseDate");
                 String imgPortrait = rs.getString("ImgPortrait");
-                String imgLandscape = rs.getString("ImgPortrait");
+                String imgLandscape = rs.getString("ImgLandscape");
                 String des = rs.getString("MovieDescription");
                 Movie movie = new Movie(movieID, movieName, duration, country, manufacturer, director, imgPortrait, imgLandscape, releaseDate, des);
                 movieList.add(movie);
@@ -91,6 +92,44 @@ public class MovieDB {
             e.printStackTrace();
         }
         return movieList;
+    }
+
+    public List<Movie> getAllMoviesByPage(int page, int moviesPerPage) {
+        List<Movie> list = new ArrayList<>();
+        int offset = (page - 1) * moviesPerPage;  // Tính toán vị trí bắt đầu (offset)
+
+        // Sửa câu truy vấn cho SQL Server, sử dụng OFFSET và FETCH NEXT
+        String query = "SELECT * FROM Movies ORDER BY MovieID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        try {
+            PreparedStatement ps = getConnect().prepareStatement(query);
+            ps.setInt(1, offset);         // Vị trí bắt đầu lấy phim
+            ps.setInt(2, moviesPerPage);  // Số phim mỗi trang
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Movie(rs.getString("MovieID"), rs.getString("MovieName"),
+                        rs.getInt("Duration"), rs.getString("Country"), rs.getString("Manufacturer"),
+                        rs.getString("Director"), rs.getString("ImgPortrait"),
+                        rs.getString("ImgLandscape"), rs.getDate("ReleaseDate"), rs.getString("MovieDescription")));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public int getTotalMovies() {
+        String query = "SELECT COUNT(*) FROM Movies";
+        try {
+            PreparedStatement ps = getConnect().prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);  // Trả về tổng số phim
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     // Get a Movie by ID
@@ -191,7 +230,7 @@ public class MovieDB {
             e.printStackTrace();
         }
     }
-    
+
     public static void uploadPImage(String movieID, String PImagePath) {
         String query = "UPDATE Movies SET ImgPortrait = ? WHERE MovieID = ?";
 
@@ -208,7 +247,7 @@ public class MovieDB {
             throw new RuntimeException("Failed to upload avatar ImgPortrait.");
         }
     }
-    
+
     public static void uploadLImage(String movieID, String LImagePath) {
         String query = "UPDATE Movies SET ImgLandscape = ? WHERE MovieID = ?";
 
@@ -226,58 +265,195 @@ public class MovieDB {
         }
     }
 
+    public static List<String> getMovieGenre(String movieId) {
+        String sql = "select * from MovieGenres inner join Genres on Genres.GenreID = MovieGenres.GenreID where MovieGenres.MovieID = ?";
+        List<String> listGenre = new ArrayList<>();
+        try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
-    public static void main(String[] args) {
-        // Thêm một bộ phim mới
-//        System.out.println("Thêm bộ phim mới:");
-//        Movie newMovie = new Movie(null, "Inception", 148, "USA", "Warner Bros", "Christopher Nolan", "inception_portrait.jpg", "inception_landscape.jpg",  Date.valueOf("2010-07-16"), "Hello mấy cưng");
-//        if (MovieDB.addMovie(newMovie)) {
-//            System.out.println("Thêm bộ phim thành công!");
-//        } else {
-//            System.out.println("Thêm bộ phim thất bại!");
-//        }
+            ps.setString(1, movieId);
 
-        // Lấy danh sách tất cả các bộ phim
-        System.out.println("\nDanh sách tất cả các bộ phim:");
-        List<Movie> movies = MovieDB.getAllMovies();
-        for (Movie movie : movies) {
-            System.out.println(movie);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listGenre.add(rs.getString("GenreName"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listGenre;
+    }
+
+    public static HashMap<String, HashMap<String, List<String>>> getTimelineDB(String movieId) {
+        String sql = "select Shows.ShowID, MovieID, ShowDate, StartTime, ShowSeats.TheatreID, TheatreName from Shows inner join ShowSeats on Shows.ShowID = ShowSeats.ShowID inner join Theatres on Theatres.TheatreID = ShowSeats.TheatreID where Shows.MovieID = ? order by ShowDate asc, TheatreName asc";
+
+        List<String> listTime = new ArrayList<>();
+        HashMap<String, List<String>> hashTheatreNameList = new HashMap<>();
+        HashMap<String, HashMap<String, List<String>>> hashListTime = new HashMap<>();
+
+        Date showDateB4 = new Date(0, 0, 0);
+        String theatreNameB4 = null;
+
+        Date showDate = null;
+        Time startTime = null;
+        String theatreName = null;
+        try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, movieId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                showDate = rs.getDate("ShowDate");
+                startTime = rs.getTime("StartTime");
+                theatreName = rs.getString("TheatreName");
+
+//                System.out.println(showDate.toString());
+//                System.out.println(startTime.toString());
+                if (listTime.isEmpty()) {
+                    showDateB4 = showDate;
+                    theatreNameB4 = theatreName;
+                }
+
+//                if (showDate.equals(showDateB4)){
+//                    if (listTime.contains(startTime.toString()))
+//                        continue;
+//                    listTime.add(startTime.toString());
+//                    continue;
+//                }
+//                hashListTime.put(showDateB4.toString(), listTime);
+//                listTime = new ArrayList<>();
+//                listTime.add(startTime.toString());
+//                showDateB4 = showDate; 
+                if (showDate.equals(showDateB4)) {
+                    if (theatreName.equals(theatreNameB4)) {
+                        if (listTime.contains(startTime.toString())) {
+                            continue;
+                        }
+                        listTime.add(startTime.toString());
+                        continue;
+                    }
+                    hashTheatreNameList.put(theatreNameB4, listTime);
+                    listTime = new ArrayList<>();
+                    listTime.add(startTime.toString());
+
+                    theatreNameB4 = theatreName;
+                    continue;
+                }
+                hashTheatreNameList.put(theatreNameB4, listTime);
+                hashListTime.put(showDateB4.toString(), hashTheatreNameList);
+                hashTheatreNameList = new HashMap<>();
+                listTime = new ArrayList<>();
+                listTime.add(startTime.toString());
+
+                showDateB4 = showDate;
+                theatreNameB4 = theatreName;
+            }
+            if (!hashTheatreNameList.isEmpty()) {
+                hashTheatreNameList.put(theatreNameB4, listTime);
+                hashListTime.put(showDateB4.toString(), hashTheatreNameList);
+            }
+            if (showDate == null) {
+                return new HashMap<String, HashMap<String, List<String>>>();
+            }
+            hashListTime.put(showDate.toString(), hashTheatreNameList);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return hashListTime;
+    }
+
+    public static List<Movie> getMoviesByTheatreID(String theatreID) throws SQLException {
+    List<Movie> movies = new ArrayList<>();
+  String sql = "SELECT DISTINCT m.MovieID, m.MovieName, m.ImgPortrait, m.Rate, m.AgeRating " +
+                 "FROM Movies m " +
+                 "JOIN Shows s ON m.MovieID = s.MovieID " +
+                 "JOIN ShowSeats ss ON s.ShowID = ss.ShowID " +
+                 "WHERE ss.TheatreID = ?"; 
+    
+    try (Connection conn = getConnect(); 
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, theatreID);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            Movie movie = new Movie();
+            movie.setMovieID(rs.getString("MovieID"));
+            movie.setMovieName(rs.getString("MovieName"));
+            movie.setImgPortrait(rs.getString("ImgPortrait"));
+            movie.setAgeRating(rs.getString("AgeRating"));  
+            movies.add(movie);
+        }
+    }
+
+    return movies;
+}
+
+
+  public static List<Date> getShowDateByMovieIDAndTheatreID(String movieID, String theatreID) {
+        List<Date> showDates = new ArrayList<>();
+        String query = "SELECT DISTINCT S.ShowDate " +
+                   "FROM Shows S " +
+                   "JOIN ShowSeats SS ON S.ShowID = SS.ShowID " +
+                   "WHERE S.MovieID = ? AND SS.TheatreID = ?";
+
+        try (Connection connection = getConnect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             
+            preparedStatement.setString(1, movieID);
+            preparedStatement.setString(2, theatreID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                showDates.add(resultSet.getDate("ShowDate"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Xử lý ngoại lệ (in ra lỗi)
         }
 
-//        Movie fetchedMovie = MovieDB.getMovieById("M00016");
-//        if (fetchedMovie != null) {
-//            System.out.println("Bộ phim: " + fetchedMovie);
-//        } else {
-//            System.out.println("Không tìm thấy bộ phim với ID 'M00016'.");
-//        }
-//
-//        // Cập nhật bộ phim
-//        System.out.println("\nCập nhật bộ phim:");
-//        if (fetchedMovie != null) {
-//            fetchedMovie.setMovieName("Inception (Updated)");
-//            fetchedMovie.setDuration(150);  // Thay đổi thời gian
-//            if (MovieDB.updateMovie(fetchedMovie)) {
-//                System.out.println("Cập nhật bộ phim thành công!");
-//                System.out.println(fetchedMovie);
-//            } else {
-//                System.out.println("Cập nhật bộ phim thất bại!");
-//            }
-//        }
-//
-//        // Xóa bộ phim
-//        System.out.println("\nXóa bộ phim với ID 'M00017':");
-//        if (MovieDB.deleteMovie("M00017")) {
-//            System.out.println("Xóa bộ phim thành công!");
-//        } else {
-//            System.out.println("Xóa bộ phim thất bại!");
-//        }
-//
-//        // Kiểm tra lại danh sách bộ phim sau khi xóa
-//        System.out.println("\nDanh sách tất cả các bộ phim sau khi xóa:");
-//        movies = MovieDB.getAllMovies();
+        return showDates;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public static void main(String[] args) {
+
+        // Lấy danh sách tất cả các bộ phim
+//        System.out.println("\nDanh sách tất cả các bộ phim:");
+//        List<Movie> movies = MovieDB.getAllMovies();
 //        for (Movie movie : movies) {
 //            System.out.println(movie);
 //        }
+        int page = 1;  // Trang thứ nhất
+        int moviesPerPage = 8;  // Hiển thị 8 bộ phim mỗi trang
+
+        // Gọi phương thức getAllMoviesByPage để lấy danh sách phim
+        List<Movie> movies = MovieDB.getAllMoviesByPage(page, moviesPerPage);
+
+        // In ra kết quả danh sách phim để kiểm tra
+        System.out.println("Danh sách phim tại trang " + page + ":");
+        for (Movie movie : movies) {
+            System.out.println("Movie ID: " + movie.getMovieID());
+            System.out.println("Movie Name: " + movie.getMovieName());
+            System.out.println("Duration: " + movie.getDuration());
+            System.out.println("Country: " + movie.getCountry());
+            System.out.println("Manufacturer: " + movie.getManufacturer());
+            System.out.println("Director: " + movie.getDirector());
+            System.out.println("Release Date: " + movie.getReleaseDate());
+            System.out.println("Description: " + movie.getDescription());
+            System.out.println("Img Portrait: " + movie.getImgPortrait());
+            System.out.println("Img Landscape: " + movie.getImgLandscape());
+            System.out.println("----------------------------");
+        }
     }
 
 }

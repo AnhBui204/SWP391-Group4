@@ -10,12 +10,12 @@ public class FoodAndDrink {
     private String comboName;
     private String theatreID;
     private String imagePath;
-    private double price;
+    private int price;
 
     public FoodAndDrink() {
     }
 
-    public FoodAndDrink(String comboID, String comboName, String theatreID, String imagePath, double price) {
+    public FoodAndDrink(String comboID, String comboName, String theatreID, String imagePath, int price) {
         this.comboID = comboID;
         this.comboName = comboName;
         this.theatreID = theatreID;
@@ -41,11 +41,11 @@ public class FoodAndDrink {
         this.comboName = comboName;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

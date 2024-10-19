@@ -4,7 +4,6 @@
  */
 package Model;
 
-
 import static Model.DatabaseInfo.DBURL;
 import static Model.DatabaseInfo.DRIVERNAME;
 import static Model.DatabaseInfo.PASSDB;
@@ -12,11 +11,7 @@ import static Model.DatabaseInfo.USERDB;
 import static Model.SeatDB.getConnect;
 import static Model.SeatDB.getSeat;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.ParseException;
 
 import java.util.ArrayList;
@@ -41,16 +36,16 @@ public class ShowSeatDB {
         }
         return null;
     }
-    
-    public static ShowSeat getShowSeat(String seatID){
+
+    public static ShowSeat getShowSeat(String seatID) {
         ShowSeat showseat = null;
-        try (Connection con = getConnect()){
+        try (Connection con = getConnect()) {
             String query = "Select * from ShowSeats where SeatID=?";
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString(1, seatID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                showseat = new ShowSeat(rs.getString("ShowID"), rs.getString("SeatID"), rs.getString("RoomID"), rs.getString("TheatreID"), rs.getInt("IsAvailable"));
+                showseat = new ShowSeat(rs.getString("ShowID"), rs.getString("SeatID"), rs.getString("RoomID"), rs.getString("TheatreID"), rs.getInt("price"), rs.getInt("IsAvailable"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, null, ex);
@@ -58,10 +53,10 @@ public class ShowSeatDB {
         return showseat;
     }
 
- public static List<ShowSeat> getSeatByRoom(String roomID) {
+    public static List<ShowSeat> getSeatByRoom(String roomID) {
         List<ShowSeat> seatList = new ArrayList<>();
         try (Connection con = getConnect()) {
-            String query = "SELECT showID, seatID, roomID, theatreID, IsAvailable FROM ShowSeats WHERE RoomID=?";
+            String query = "SELECT showID, seatID, roomID, theatreID, price, IsAvailable FROM ShowSeats WHERE RoomID=?";
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString(1, roomID);
             ResultSet rs = stmt.executeQuery();
@@ -71,6 +66,7 @@ public class ShowSeatDB {
                         rs.getString("seatID"),
                         rs.getString("roomID"),
                         rs.getString("theatreID"),
+                        rs.getInt("price"),
                         rs.getInt("IsAvailable")
                 );
                 seatList.add(showSeat);
@@ -79,6 +75,71 @@ public class ShowSeatDB {
             Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return seatList;
+    }
+
+    public static List<ShowInfo> getShowsByRoomAndDate(String roomID, String showDate) {
+        // Initialize an empty list to hold the results
+        List<ShowInfo> showList = new ArrayList<>();
+
+        // Start the try-with-resources block for handling database connection and resources
+        try (Connection con = getConnect()) {
+            // Prepare the SQL query with parameters for RoomID and ShowDate
+            String query = "SELECT DISTINCT sh.showID, m.movieName, sh.ShowDate, sh.StartTime "
+                    + "FROM ShowSeats ss "
+                    + "INNER JOIN Shows sh ON ss.ShowID = sh.ShowID "
+                    + "INNER JOIN Movies m ON sh.MovieID = m.MovieID "
+                    + "WHERE ss.RoomID = ? "
+                    + "AND sh.ShowDate = ?";
+
+            // Create a PreparedStatement to securely execute the query with parameters
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, roomID);    // Set the RoomID parameter
+            stmt.setString(2, showDate);  // Set the ShowDate parameter
+
+            // Execute the query and get the ResultSet
+            ResultSet rs = stmt.executeQuery();
+
+            // Iterate over the ResultSet and build ShowInfo objects
+            while (rs.next()) {
+                // Extract values from the current row of the result set
+                String showID = rs.getString("showID");
+                String movieName = rs.getString("movieName");
+                Date showDateValue = rs.getDate("ShowDate");
+                Time startTime = rs.getTime("StartTime");
+
+                // Create a new ShowInfo object and populate it with values
+                ShowInfo showInfo = new ShowInfo(showID, movieName, showDateValue, startTime);
+
+                // Add the ShowInfo object to the list
+                showList.add(showInfo);
+            }
+        } catch (SQLException ex) {
+            // Log any SQLException that occurs during database access
+            Logger.getLogger(ShowDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // Return the populated list of ShowInfo objects
+        return showList;
+    }
+
+    public static boolean setShowSeat(String showID, String roomID, String theatreID) {
+        String insertQuery = "INSERT INTO ShowSeats (ShowID, SeatID, RoomID, TheatreID, price, IsAvailable) "
+                + "SELECT ?, SeatID, RoomID, TheatreID, 60000, 1 "
+                + "FROM Seats "
+                + "WHERE RoomID = ? AND TheatreID = ?";
+
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(insertQuery)) {
+
+            stmt.setString(1, showID); // Set the showID parameter
+            stmt.setString(2, roomID); // Set the roomID parameter
+            stmt.setString(3, theatreID); // Set the theatreID parameter
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0; // Return true if rows were affected
+        } catch (SQLException e) {
+            Logger.getLogger(ShowSeatDB.class.getName()).log(Level.SEVERE, "Error setting show seats: ", e);
+        }
+        return false;
     }
 
     public static ShowSeat bookSeat(String seatID) {
@@ -148,22 +209,56 @@ public class ShowSeatDB {
         return bookingTicketID;
     }
 
+    public static List<String> getSeatsForShow(String movieID, String theatreID, String startTime, String showDate) {
+        List<String> seats = new ArrayList<>();
+
+        String query = "SELECT s.SeatName "
+                + "FROM Seats s "
+                + "JOIN ShowSeats ss ON s.SeatID = ss.SeatID "
+                + "JOIN Rooms r ON s.RoomID = r.RoomID "
+                + "JOIN Theatres t ON r.TheatreID = t.TheatreID "
+                + "JOIN Shows sh ON ss.ShowID = sh.ShowID "
+                + "WHERE sh.MovieID = ? "
+                + "AND t.TheatreID = ? "
+                + "AND sh.StartTime = ? "
+                + "AND sh.ShowDate = ?";
+
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, movieID);
+            pstmt.setString(2, theatreID);
+            pstmt.setString(3, startTime);
+            pstmt.setString(4, showDate);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String seatName = rs.getString("SeatName");
+                seats.add(seatName);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return seats;
+    }
+
     private static String generateUniqueBookingID() {
         String uniqueID = UUID.randomUUID().toString().substring(0, 6);
         return uniqueID;
     }
-    
-    
+
     public static void main(String[] args) {
         // Example usage
 
         //List all seats
-//        List<ShowSeat> seats = getSeatByRoom("R00007");
-//        for (ShowSeat seat : seats) {
-//            System.out.println(seat);
+        List<ShowSeat> seats = getSeatByRoom("R00001");
+        for (ShowSeat seat : seats) {
+            System.out.println(seat);
+        }
+//        boolean result = setShowSeat("SH0001", "R00009", "T00002");
+//        if (result) {
+//            System.out.println("Seats set successfully.");
+//        } else {
+//            System.out.println("Failed to set seats.");
 //        }
-        bookSeat("S00001");
-        ShowSeat a = getShowSeat("S00001");
-        System.out.println(a);
     }
 }

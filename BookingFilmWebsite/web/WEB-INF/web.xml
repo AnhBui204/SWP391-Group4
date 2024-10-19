@@ -20,6 +20,34 @@
         <servlet-name>FoodAndDrinkServlet</servlet-name>
         <servlet-class>Controller.FoodAndDrinkServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MovieDetailServlet</servlet-name>
+        <servlet-class>Controller.MovieDetailServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FoodsAndDrinks</servlet-name>
+        <servlet-class>Controller.FoodsAndDrinks</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Seat</servlet-name>
+        <servlet-class>Controller.Seat</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SelectDate</servlet-name>
+        <servlet-class>Controller.SelectDate</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SelectSeat</servlet-name>
+        <servlet-class>Controller.SelectSeat</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Sort</servlet-name>
+        <servlet-class>Controller.Sort</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Voucher</servlet-name>
+        <servlet-class>Controller.Voucher</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TheatreServlet</servlet-name>
         <url-pattern>/TheatreServlet</url-pattern>
@@ -43,6 +71,34 @@
     <servlet-mapping>
         <servlet-name>FoodAndDrinkServlet</servlet-name>
         <url-pattern>/FoodAndDrinkServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MovieDetailServlet</servlet-name>
+        <url-pattern>/MovieDetailServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FoodsAndDrinks</servlet-name>
+        <url-pattern>/FoodsAndDrinks</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Seat</servlet-name>
+        <url-pattern>/Seat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SelectDate</servlet-name>
+        <url-pattern>/SelectDate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SelectSeat</servlet-name>
+        <url-pattern>/SelectSeat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Sort</servlet-name>
+        <url-pattern>/Sort</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Voucher</servlet-name>
+        <url-pattern>/Voucher</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>HomePage.jsp</welcome-file>

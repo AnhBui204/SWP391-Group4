@@ -18,7 +18,7 @@
                 <!-- Logo -->
                 <div class="bigLogo">
                     <div class="logo">
-                        <img src="image/logo/logo.png" alt="FPT Cinema" style="cursor: pointer;" onclick="window.location.href='HomePage.jsp';">
+                        <img src="image/logo/logo.png" alt="FPT Cinema" style="cursor: pointer;" onclick="window.location.href = 'HomePage.jsp';">
                     </div>
                     <h3 class="text">FPT CINEMA</h3>
                 </div>
@@ -33,8 +33,14 @@
                     </ul>
                 </nav>
                 <!-- User Info -->
-                <div class="signlog">
-                    <a href="Login.jsp" class="btn btn-custom">Login</a>
+                <div class="user-info">
+                    <div class="signlog">
+                        <a href="Login.jsp" class="btn btn-custom">Login</a>
+                    </div>
+                    <form action="MovieServlet?action=search" method="POST" class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-dark" type="submit">Search</button>
+                    </form>
                 </div>
             </div>
         </header>

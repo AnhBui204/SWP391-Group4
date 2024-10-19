@@ -1,5 +1,5 @@
-﻿CREATE DATABASE test;
-USE test;
+﻿CREATE DATABASE test3;
+USE test3;
 
 CREATE TABLE Users (
     UserID CHAR(6) PRIMARY KEY,
@@ -29,7 +29,7 @@ CREATE TABLE FoodsAndDrinks (
     ComboName NVARCHAR(100),
 	TheatreID CHAR(6),
 	ImagePath VARCHAR(255),
-    Price MONEY CHECK (Price >= 0),
+    Price INT check (Price >= 0),
 	FOREIGN KEY (TheatreID) REFERENCES Theatres(TheatreID) 
 );
 
@@ -39,7 +39,8 @@ CREATE TABLE Booking(
     UserID CHAR(6),
 	ComboID CHAR(6),
     BookingDate DATE,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+	FOREIGN KEY (ComboID) REFERENCES FoodsAndDrinks(ComboID)
 );
 
 
@@ -50,6 +51,7 @@ CREATE TABLE Rooms(
     TheatreID CHAR(6),
     FOREIGN KEY (TheatreID) REFERENCES Theatres(TheatreID)
 );
+
 
 -- Table for Seats 
 CREATE TABLE Seats(
@@ -78,8 +80,7 @@ CREATE TABLE Movies (
 	ImgPortrait VARCHAR(512),
 	ImgLandscape VARCHAR(512),
 	MovieDescription NVARCHAR(4000),
-	Rate DECIMAL(2,1) CHECK (Rate >= 0 AND Rate <= 10),
-	TicketPrice Int
+	Rate DECIMAL(2,1) CHECK (Rate >= 0 AND Rate <= 10)
 	);
 
 
@@ -117,6 +118,7 @@ CREATE TABLE ShowSeats (
     SeatID CHAR(6),
 	RoomID CHAR(6),
 	TheatreID CHAR(6),
+	Price INT check (Price >= 0),
     IsAvailable BIT DEFAULT 1,
     PRIMARY KEY (ShowID, SeatID, RoomID, TheatreID),
     FOREIGN KEY (ShowID) REFERENCES Shows(ShowID),
@@ -143,8 +145,8 @@ CREATE TABLE MovieActors (
 CREATE TABLE Vouchers (
     VoucherID CHAR(6) PRIMARY KEY,
 	VoucherName NVARCHAR(50) UNIQUE,
-	 TheatreID CHAR(6),
-    Price MONEY CHECK (Price >= 0),
+	TheatreID CHAR(6),
+    Price INT check (Price >= 0),
 	ImagePath VARCHAR(255),
     ExpiryDate DATE,
 	FOREIGN KEY (TheatreID) REFERENCES Theatres(TheatreID) 
@@ -160,7 +162,7 @@ CREATE TABLE Tickets (
 	RoomID CHAR(6),
     SeatID CHAR(6),
     VoucherID CHAR(6),
-    Price MONEY CHECK (Price >= 0),
+    Price INT check (Price >= 0),
     BookingDate DATETIME,
 	TicketStatus NVARCHAR(10),
     FOREIGN KEY (BookingID) REFERENCES Booking(BookingID),
@@ -170,23 +172,32 @@ CREATE TABLE Tickets (
 
 CREATE table WorkHis(
 	WorkId char(6) primary key,
-	WorkName char(512),
-	WorkDescription char(512),
-	StartTime date,
-	EndTime date,
+	WorkDescription char(4000),
+	Times Time,
+	Dates date,
 	StaffId char(6) 
 	foreign key (StaffId) references Users(UserId)
 )
 
+
 CREATE TABLE Report(
 	ReportId char(6) primary key,
 	ReportTitle char(512),
-	ReportDescription char(512),
+	ReportDescription char(4000),
 	TimeCreate date,
 	UserId char(6)
 	foreign key (UserId) references Users(UserId)
 )
 
+INSERT INTO WorkHis (WorkId, WorkDescription, Times, Dates, StaffId)
+VALUES 
+('WH0001', 'System Maintenance', '09:00:00', '2024-10-16', 'T00001'),
+('WH0002', 'Database Backup', '12:30:00', '2024-10-15', 'T00001'),
+('WH0003', 'Application Update', '15:45:00', '2024-10-14', 'T00001'),
+('WH0004', 'Security Audit', '11:00:00', '2024-10-13', 'T00001'),
+('WH0005', 'Server Optimization', '10:15:00', '2024-10-12', 'T00001');
+
+SELECT * FROM WorkHis where StaffID = 'T00001'
 
 -- Thêm Users (thêm vài tài khoản mẫu)
 INSERT Users(UserID, UserName, FName, LName, Pass, Email, Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar)
@@ -2432,18 +2443,21 @@ VALUES
 	('SH0022', '2024-09-20', '19:30:00', 'M00015'),
 	('SH0023', '2024-09-20', '22:30:00', 'M00015');
 
+	INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
+VALUES ('SH0024', '2024-09-20', '22:30:00', 'M00001');
+
 -- Thêm ShowSeats 
 --Rap 1----------------------------------------------------------------
 --Room 1
-INSERT INTO ShowSeats (ShowID, SeatID, RoomID, TheatreID, IsAvailable)
-SELECT 'SH0001', SeatID, RoomID, TheatreID, 1
+INSERT INTO ShowSeats (ShowID, SeatID, RoomID, TheatreID, price, IsAvailable)
+SELECT 'SH0001', SeatID, RoomID, TheatreID, 60000, 1
 FROM Seats
 WHERE RoomID = 'R00001' AND TheatreID = 'T00001'; 
 
 INSERT INTO ShowSeats (ShowID, SeatID, RoomID, TheatreID, IsAvailable)
-SELECT 'SH0004', SeatID, RoomID, TheatreID, 1
+SELECT 'SH0001', SeatID, RoomID, TheatreID, 1
 FROM Seats
-WHERE RoomID = 'R00009' AND TheatreID = 'T00002'; 
+WHERE RoomID = 'R00002' AND TheatreID = 'T00001'; 
 
 select * from Seats where TheatreID='T00002'
 INSERT INTO ShowSeats (ShowID, SeatID, RoomID, TheatreID, IsAvailable)
@@ -2455,7 +2469,17 @@ Select * from Shows
 
 Select * from Seats where TheatreID='T00002'
 
-Select * from ShowSeats where ShowID = 'SH0001' and RoomID = 'R00001'
+Select * from ShowSeats where ShowID = 'SH0030' and RoomID = 'R00001'
+
+SELECT showID, seatID, roomID, theatreID, price, IsAvailable FROM ShowSeats WHERE RoomID='R00001'
+
+SELECT DISTINCT sh.showID, m.movieName, sh.ShowDate, sh.StartTime
+FROM ShowSeats ss
+INNER JOIN Shows sh ON ss.ShowID = sh.ShowID
+INNER JOIN Movies m ON sh.MovieID = m.MovieID
+WHERE ss.RoomID = 'R00001' 
+AND sh.ShowDate = '2024-09-13';
+
 
 -- Thêm Actors (diễn viên)
 INSERT INTO Actors (ActorID, ActorName)
@@ -2512,12 +2536,12 @@ VALUES
 ('B00004', 'U00004', 'C00002', '2024-09-12');
 
 -- Thêm Tickets (vé đã đặt)
-INSERT INTO Tickets (TicketID, BookingID, ShowID, TheatreID, RoomID, SeatID, VoucherID, Price, TicketStatus, BookingDate)
+INSERT INTO Tickets (TicketID, BookingID, ShowID, TheatreID, RoomID, SeatID, Price, TicketStatus, BookingDate)
 VALUES 
-('TK0001', 'B00001', 'SH0001', 'SH0001', 'T00001', 'R00001', 'S00001', 'V00001', 120000,'Pending', '2024-09-10'),
-('TK0001', 'B00002', 'SH0002', 'SH0004', 'T00001', 'R00001', 'S00002', 'V00002', 150000, 'Paid', '2024-09-11'),
-('TK0003', 'B00003', 'SH0003', 'SH0006', 'T00001', 'R00001', 'S00003', 'V00002', 100000, 'Paid','2024-09-12'),
-('TK0004', 'B00004', 'SH0004', 'SH0007', 'T00001', 'R00001', 'S00004', 'V00001', 130000, 'Paid', '2024-09-12'); 
+('TK0001', 'B00001', 'SH0001', 'T00001', 'R00001', 'S00001',  120000,'Pending', '2024-09-10'),
+('TK0002', 'B00002', 'SH0002', 'T00001', 'R00001', 'S00002',  150000, 'Paid', '2024-09-11'),
+('TK0003', 'B00003', 'SH0003', 'T00001', 'R00001', 'S00003',  100000, 'Paid','2024-09-12'),
+('TK0004', 'B00004', 'SH0004', 'T00001', 'R00001', 'S00004',  130000, 'Paid', '2024-09-12'); 
 
 
 

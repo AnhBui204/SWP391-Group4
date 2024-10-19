@@ -11,13 +11,13 @@ public class Voucher {
     private String voucherName;
     private String TheatreID;
     private String imgPath;
-    private double price;
+    private int price;
     private Date expiryDate;
 
     public Voucher() {
     }
 
-    public Voucher(String voucherID, String voucherName, String TheatreID, String imgPath, double price, Date expiryDate) {
+    public Voucher(String voucherID, String voucherName, String TheatreID, String imgPath, int price, Date expiryDate) {
         this.voucherID = voucherID;
         this.voucherName = voucherName;
         this.TheatreID = TheatreID;
@@ -42,11 +42,11 @@ public class Voucher {
         this.voucherName = voucherName;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

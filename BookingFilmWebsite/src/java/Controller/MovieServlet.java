@@ -8,8 +8,15 @@ import Model.Movie;
 import Model.MovieDB;
 import Model.Show;
 import Model.ShowDB;
+import Model.ShowInfo;
+import Model.ShowSeat;
+import Model.ShowSeatDB;
 import Model.Theatre;
 import Model.TheatreDB;
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -19,7 +26,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.io.File;
-import java.sql.Date;
+import java.sql.*;
 import java.util.List;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024,
@@ -41,12 +48,30 @@ public class MovieServlet extends HttpServlet {
             case "delete":
                 handleDeleteMV(request, response);
                 break;
-//            case "display":
-//                handleDisplayMV(request, response);
-//                break;
+            case "setShow":
+                handleSetShow(request, response);
+                break;
             case "booking":
                 handleBooking(request, response);
                 break;
+            case "showSeat":
+                handleSetShowSeat(request, response);
+                break;
+            case "mvList":
+                handlegetMovieList(request, response);
+                break;
+            case "getShow":
+                handleGetShow(request, response);
+                break;
+            case "getShowInfo":
+                handleGetShowInfo(request, response);
+                break;
+            case "selectMovie":
+                handleSelectMovie(request, response);
+                break;
+//            case "search":
+//                handleSearchMovie(request, response);
+//                break;
             default:
                 response.sendRedirect("error.jsp");
                 break;
@@ -77,13 +102,11 @@ public class MovieServlet extends HttpServlet {
             try {
                 filePartP.write(filePathP);  // Save the file
                 System.out.println("File uploaded to: " + filePathP);
-                request.setAttribute("message", "ImageP uploaded and saved successfully.");
+
             } catch (IOException ex) {
                 System.out.println("Error writing fileP: " + ex.getMessage());
-                request.setAttribute("message", "Error writing fileP: " + ex.getMessage());
+
             }
-        } else {
-            request.setAttribute("message", "No imageP file selected or invalid file.");
         }
 
         // Handling imageL file upload
@@ -98,21 +121,26 @@ public class MovieServlet extends HttpServlet {
             try {
                 filePartL.write(filePathL);  // Save the file
                 System.out.println("File uploaded to: " + filePathL);
-                request.setAttribute("message", "ImageL uploaded and saved successfully.");
+
             } catch (IOException ex) {
                 System.out.println("Error writing fileL: " + ex.getMessage());
-                request.setAttribute("message", "Error writing fileL: " + ex.getMessage());
-            }
-        } else {
-            request.setAttribute("message", "No imageL file selected or invalid file.");
-        }
 
-        // Create Movie object and store it in DB
-        Movie movie = new Movie(null, name, duration, country, manufacturer, director, fileURLPathP, fileURLPathL, releaseDate, des);
-        MovieDB.addMovie(movie);
-        request.getRequestDispatcher("crudMV.jsp").forward(request, response);
+            }
+        }
+        try {
+
+            // Create Movie object and store it in DB
+            Movie movie = new Movie(null, name, duration, country, manufacturer, director, fileURLPathP, fileURLPathL, releaseDate, des);
+            MovieDB.addMovie(movie);
+            request.setAttribute("message", "Movie added successfully!");
+        } catch (Exception e) {
+            // Set error message
+            request.setAttribute("message", "Failed to add movie: " + e.getMessage());
+        } finally {
+            request.getRequestDispatcher("crudMV.jsp").forward(request, response);
+        }
     }
-    
+
     private void handleUpdateMV(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String id = request.getParameter("movieID");
@@ -125,27 +153,25 @@ public class MovieServlet extends HttpServlet {
         String rlDate = request.getParameter("rldate");
         Date releaseDate = Date.valueOf(rlDate);
         String des = request.getParameter("movieDes");
-        
+
         Movie oldMovie = MovieDB.getMovieById(id);
         // Handling imageP file upload
         Part filePartP = request.getPart("imageP");
         String fileNameP = filePartP.getSubmittedFileName();  // Use getSubmittedFileName() to get the original file name
         String uploadPathP = getUploadPDirectory(request);
         String fileURLPathP = oldMovie.getImgPortrait();
-        
+
         if (fileNameP != null && !fileNameP.isEmpty()) {
             String filePathP = uploadPathP + fileNameP;  // Append the file name to the directory
             fileURLPathP = "image/MovieImg/P/" + fileNameP;
             try {
                 filePartP.write(filePathP);  // Save the file
                 System.out.println("File uploaded to: " + filePathP);
-                request.setAttribute("message", "ImageP uploaded and saved successfully.");
+
             } catch (IOException ex) {
                 System.out.println("Error writing fileP: " + ex.getMessage());
-                request.setAttribute("message", "Error writing fileP: " + ex.getMessage());
+
             }
-        } else {
-            request.setAttribute("message", "No imageP file selected or invalid file.");
         }
 
         // Handling imageL file upload
@@ -160,116 +186,140 @@ public class MovieServlet extends HttpServlet {
             try {
                 filePartL.write(filePathL);  // Save the file
                 System.out.println("File uploaded to: " + filePathL);
-                request.setAttribute("message", "ImageL uploaded and saved successfully.");
+
             } catch (IOException ex) {
                 System.out.println("Error writing fileL: " + ex.getMessage());
-                request.setAttribute("message", "Error writing fileL: " + ex.getMessage());
+
             }
-        } else {
-            request.setAttribute("message", "No imageL file selected or invalid file.");
         }
-        // Create Movie object and store it in DB
-        Movie movie = new Movie(id, name, duration, country, manufacturer, director, fileURLPathP, fileURLPathL, releaseDate, des);
-        MovieDB.updateMovie(movie);
-        request.getRequestDispatcher("crudMV.jsp").forward(request, response);
+        try {
+            // Create Movie object and store it in DB
+            Movie movie = new Movie(id, name, duration, country, manufacturer, director, fileURLPathP, fileURLPathL, releaseDate, des);
+            MovieDB.updateMovie(movie);
+            request.setAttribute("message", "Movie update successfully!");
+        } catch (Exception e) {
+            // Set error message
+            request.setAttribute("message", "Failed to update movie: " + e.getMessage());
+        } finally {
+            request.getRequestDispatcher("crudMV.jsp").forward(request, response);
+
+        }
     }
-    
+
     private void handleDeleteMV(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String movieID = request.getParameter("movieID");
-        
-        MovieDB.deleteMovie(movieID);
-        request.getRequestDispatcher("crudMV.jsp").forward(request, response);
+        try {
+            MovieDB.deleteMovie(movieID);
+            request.setAttribute("message", "Movie delete successfully!");
+        } catch (Exception e) {
+            // Set error message
+            request.setAttribute("message", "Failed to delete movie: " + e.getMessage());
+        } finally {
+            request.getRequestDispatcher("crudMV.jsp").forward(request, response);
+
+        }
 
     }
-    
+
     private void handleBooking(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<Movie> movie = MovieDB.getAllMovies();
         List<Theatre> theatre = TheatreDB.listAllTheatres();
         List<Show> shows = ShowDB.getAllShows();
+        
         request.setAttribute("movie", movie);
-        request.setAttribute("theatre", theatre);
+        request.setAttribute("theatres", theatre);
         request.setAttribute("shows", shows);
         request.getRequestDispatcher("Booking.jsp").forward(request, response);
 
     }
 
-//    private void handleUploadPImage(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//        String userID = request.getParameter("userID");
-//        Part filePart = request.getPart("profileImage");
-//        String fileName = getFileName(filePart);
-//
-//        // Lấy đường dẫn từ method getUploadDirectory()
-//        String uploadPath = getUploadDirectory(request);
-//
-//        if (filePart != null && fileName != null && !fileName.isEmpty()) {
-//            String filePath = uploadPath + fileName;
-//            System.out.println("Upload path: " + uploadPath);
-//
-//            try {
-//                filePart.write(filePath);
-//                System.out.println("File written to: " + filePath);
-//
-//                // Lưu đường dẫn tương đối hoặc tuyệt đối vào database
-//                String fileURLPath = "image/MovieImg/P/" + fileName;  // Có thể thay đổi theo yêu cầu
-//                MovieDB.uploadPImage(userID, fileURLPath);
-//
-//                request.setAttribute("message", "Image uploaded and saved successfully.");
-//            } catch (IOException ex) {
-//                System.out.println("Error writing file: " + ex.getMessage());
-//                request.setAttribute("message", "Error writing file: " + ex.getMessage());
-//            }
-//        } else {
-//            request.setAttribute("message", "No file selected or invalid file.");
-//        }
-//
-//        // Chuyển hướng lại trang hồ sơ sau khi upload ảnh
-//        request.getRequestDispatcher("/CustomerProfile.jsp").forward(request, response);
-//    }
-//
-//    private void handleUploadLImage(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//        String userID = request.getParameter("userID");
-//        Part filePart = request.getPart("profileImage");
-//        String fileName = getFileName(filePart);
-//
-//        // Lấy đường dẫn từ method getUploadDirectory()
-//        String uploadPath = getUploadDirectory(request);
-//
-//        if (filePart != null && fileName != null && !fileName.isEmpty()) {
-//            String filePath = uploadPath + fileName;
-//            System.out.println("Upload path: " + uploadPath);
-//
-//            // Ghi file vào hệ thống file
-//            try {
-//                filePart.write(filePath);
-//                System.out.println("File written to: " + filePath);
-//
-//                // Lưu đường dẫn tương đối hoặc tuyệt đối vào database
-//                String fileURLPath = "image/MovieImg/P/" + fileName;  // Có thể thay đổi theo yêu cầu
-//                MovieDB.uploadPImage(userID, fileURLPath);
-//
-//                request.setAttribute("message", "Image uploaded and saved successfully.");
-//            } catch (IOException ex) {
-//                System.out.println("Error writing file: " + ex.getMessage());
-//                request.setAttribute("message", "Error writing file: " + ex.getMessage());
-//            }
-//        } else {
-//            request.setAttribute("message", "No file selected or invalid file.");
-//        }
-//
-//        // Chuyển hướng lại trang hồ sơ sau khi upload ảnh
-//        request.getRequestDispatcher("/CustomerProfile.jsp").forward(request, response);
-//    }
-    private String getFileName(Part part) {
-        for (String content : part.getHeader("content-disposition").split(";")) {
-            if (content.trim().startsWith("filename")) {
-                return content.substring(content.indexOf("=") + 2, content.length() - 1);
+    private void handleSetShow(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String movieID = request.getParameter("movieID");
+        String dateS = request.getParameter("showDate");
+        Date date = Date.valueOf(dateS);
+        String timeS = request.getParameter("showTime");
+        String formattedTime = timeS + ":00";
+        Time time = Time.valueOf(formattedTime);
+
+        System.out.println("Movie ID: " + movieID);
+        System.out.println("Show Date: " + dateS);
+        System.out.println("Show Time: " + timeS);
+
+        // Create show object and store it in DB
+        Show show = new Show(null, date, time, movieID);
+        ShowDB.addShow(show);
+        request.getRequestDispatcher("crudMV.jsp").forward(request, response);
+    }
+
+    private void handleSetShowSeat(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String theatreID = request.getParameter("theatreID");
+        String roomID = request.getParameter("roomID");
+        String showID = request.getParameter("selectedShowtimeID");
+
+        List<Movie> movieList = MovieDB.getAllMovies();
+        request.setAttribute("movieList", movieList);
+
+        ShowSeatDB.setShowSeat(showID, roomID, theatreID);
+        request.getRequestDispatcher("TrackingShowTime.jsp").forward(request, response);
+    }
+
+    private void handlegetMovieList(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        List<Movie> movieList = MovieDB.getAllMovies();
+        request.setAttribute("movieList", movieList);
+        request.getRequestDispatcher("TrackingShowTime.jsp").forward(request, response);
+    }
+
+    protected void handleGetShow(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String movieID = request.getParameter("movieID");
+        List<Show> showList = ShowDB.getAllShowsByMovieID(movieID); // Fetch showtimes for the selected movie
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        // Convert showList to JSON (you can use a library like Gson)
+        Gson gson = new Gson();
+        String json = gson.toJson(showList);
+        response.getWriter().write(json);
+    }
+
+    protected void handleGetShowInfo(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String roomID = request.getParameter("roomID");
+        String date = request.getParameter("date"); // Passed from the front-end
+
+        List<ShowInfo> showInfoList = ShowSeatDB.getShowsByRoomAndDate(roomID, date);
+
+        // Convert the show info list to JSON and send it back to the client
+        response.setContentType("application/json");
+        response.getWriter().write(new Gson().toJson(showInfoList));
+    }
+
+    private void handleSelectMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            JsonObject jsonObject = new Gson().fromJson(request.getReader(), JsonObject.class);
+            String movieID = jsonObject.get("movieID").getAsString();
+            String theatreID = jsonObject.get("theatreID").getAsString();
+            if (movieID.isEmpty() || theatreID.isEmpty()) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                return;
             }
+            System.out.println("Received movieID: " + movieID + ", theatreID: " + theatreID);
+            List<Date> showList = ShowDB.getShowDatesByMovieAndTheatre(movieID, theatreID);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            new Gson().toJson(showList, response.getWriter());
+        }   catch (JsonIOException | JsonSyntaxException | IOException e) {
+            // Xử lý các lỗi khác
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-        return null;
+
     }
 
     @Override

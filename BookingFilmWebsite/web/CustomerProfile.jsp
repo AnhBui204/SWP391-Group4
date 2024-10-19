@@ -1,6 +1,6 @@
 
 <%@include file="includes/header_user.jsp" %>
-<link rel="stylesheet" href="css/headers.css" />
+<link rel="stylesheet" href="css/headerssj1.css" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
@@ -23,10 +23,11 @@
                                 <i class="fa-solid fa-gift fa-2x"></i>
                                 <p class="m-0 px-2 fs-3">0 Stars</p>
                             </div>
+
                         </div>
-                        <div class="text-center mt-3">
-                            <form id="uploadForm" enctype="multipart/form-data">
-                                <input type="file" name="profileImage" id="profileImage" />
+                        <div class="d-flex justify-content-center mt-3">
+                            <form id="uploadForm"  enctype="multipart/form-data">
+                                <input type="file" class="text-center" name="profileImage" id="profileImage" />
                                 <input type="hidden" name="userID" value="${user.userID}" />
                                 <button type="button" id="uploadButton">Upload Image</button>
                             </form>
@@ -62,14 +63,14 @@
 
                         <div class="row">
                             <div class="col-md-6"> <!-- Thêm mb-3 để tạo khoảng cách dưới -->
-                                <h5>First Name</h5>
+                                <h5>Tên</h5>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
                                     <input type="text" value="${user.fName}" class="form-control fs-4" disabled />
                                 </div>
                             </div>
                             <div class="col-md-6"> <!-- Thêm mb-3 để tạo khoảng cách dưới -->
-                                <h5>Last Name</h5>
+                                <h5>Họ</h5>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
                                     <input type="text" value="${user.lName}" class="form-control fs-4" disabled />
@@ -100,6 +101,7 @@
                                 <button class="input-group-text">Thay đổi</button>
                             </div>
                         </div>
+                        <button class="btn btn-warning mt-5">Cập nhật thông tin</button>
                     </div>
                 </div>
             </c:if>

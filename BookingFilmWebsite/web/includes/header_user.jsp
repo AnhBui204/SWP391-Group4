@@ -8,6 +8,7 @@
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="../css/headerssj1.css"/>
     </head>
     <body>
         <header>
@@ -15,25 +16,28 @@
                 <!-- Logo -->
                 <div class="bigLogo">
                     <div class="logo">
-                        <img src="image/logo/logo.png" alt="FPT Cinema" style="cursor: pointer;" onclick="window.location.href='HomePage.jsp';">
+                        <img src="image/logo/logo.png" alt="FPT Cinema" style="cursor: pointer;" onclick="window.location.href = 'HomePage.jsp';">
                     </div>
                     <h3 class="text">FPT CINEMA</h3>
                 </div>
+
                 <!-- Navbar -->
                 <nav class="navbar">
-                    <ul>
+                    <ul class="">
                         <li><a href="MovieServlet?action=booking">Mua Vé</a></li>
                         <li><a href="#">Phim</a></li>
                         <li><a href="#">Góc Điện Ảnh</a></li>
                         <li><a href="#">Sự Kiện</a></li>
                         <li><a href="#">Rạp/Giá Vé</a></li>
                     </ul>
+
                 </nav>
+
                 <!-- User Info -->
                 <div class="user-info">
                     <div class="profile-container">
                         <div class="profile">
-                            <img src="image/logo/logo.png" alt="Avatar" class="avatar">
+                            <img src="${users.avatar}" alt="Avatar" class="avatar">
                             <span class="username">${users.username}</span>
                             <span class="stars">0 Stars</span>
                         </div>
@@ -43,9 +47,13 @@
                             <a href="UserServlet?action=logout" class="dropdown-item">Đăng Xuất</a>
                         </div>
                     </div>
+                    <form action="MovieServlet?action=search" method="POST" class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-dark" type="submit">Search</button>
+                    </form>
                 </div>
+
             </div>
         </header>
-
     </body>
 </html>

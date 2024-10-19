@@ -6,16 +6,18 @@ public class ShowSeat {
     private String seatID;
     private String roomID;
     private String theatreID;
+    private int price;
     private int isAvailable;
 
     public ShowSeat() {
     }
 
-    public ShowSeat(String showID, String seatID, String roomID, String theatreID, int isAvailable) {
+    public ShowSeat(String showID, String seatID, String roomID, String theatreID, int price, int isAvailable) {
         this.showID = showID;
         this.seatID = seatID;
         this.roomID = roomID;
         this.theatreID = theatreID;
+        this.price = price;
         this.isAvailable = isAvailable;
     }
 
@@ -59,11 +61,18 @@ public class ShowSeat {
         this.isAvailable = isAvailable;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
-        return "ShowSeat{" + "showID=" + showID + ", seatID=" + seatID + ", roomID=" + roomID + ", theatreID=" + theatreID + ", isAvailable=" + isAvailable + '}';
+        return "ShowSeat{" + "showID=" + showID + ", seatID=" + seatID + ", roomID=" + roomID + ", theatreID=" + theatreID + ", price=" + price + ", isAvailable=" + isAvailable + '}';
     }
-    
     
     
 }

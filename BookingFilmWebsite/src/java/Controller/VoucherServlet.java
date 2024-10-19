@@ -53,34 +53,32 @@ public class VoucherServlet extends HttpServlet {
         String expDate = request.getParameter("expiryDate");
         Date expiryDate = Date.valueOf(expDate);
         String theatreID = request.getParameter("theatreID");
-        
-        // Handling imageL file upload
+
+        // Handling image file upload
         Part filePart = request.getPart("voucherImage");
-        String fileName = filePart.getSubmittedFileName();  // Use getSubmittedFileName() to get the original file name
+        String fileName = filePart.getSubmittedFileName();
         String uploadPath = getUploadVDirectory(request);
         String fileURLPath = "";
 
         if (fileName != null && !fileName.isEmpty()) {
-            String filePath = uploadPath + fileName;  // Append the file name to the directory
+            String filePath = uploadPath + fileName;
             fileURLPath = "image/Voucher/" + fileName;
             try {
-                filePart.write(filePath);  // Save the file
-                System.out.println("File uploaded to: " + filePath);
-                request.setAttribute("message", "ImageL uploaded and saved successfully.");
+                filePart.write(filePath);
             } catch (IOException ex) {
-                System.out.println("Error writing fileL: " + ex.getMessage());
-                request.setAttribute("message", "Error writing fileL: " + ex.getMessage());
+                System.out.println("Error writing file: " + ex.getMessage());
             }
-        } else {
-            request.setAttribute("message", "No imageL file selected or invalid file.");
         }
 
-        // Create Movie object and store it in DB
+        // Create Voucher object and store it in DB
         Voucher voucher = new Voucher(null, name, theatreID, fileURLPath, price, expiryDate);
         VoucherDB.createVoucher(voucher);
+
+        // Set success message
+        request.setAttribute("message", "Voucher added successfully!");
         request.getRequestDispatcher("Offers.jsp").forward(request, response);
     }
-    
+
     private void handleUpdateVC(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String id = request.getParameter("voucherID");
@@ -90,41 +88,42 @@ public class VoucherServlet extends HttpServlet {
         String expDate = request.getParameter("expiryDate");
         Date expiryDate = Date.valueOf(expDate);
         String theatreID = request.getParameter("theatreID");
-        
-        // Handling imageL file upload
+
+        // Handling image file upload
         Part filePart = request.getPart("voucherImage");
-        String fileName = filePart.getSubmittedFileName();  // Use getSubmittedFileName() to get the original file name
+        String fileName = filePart.getSubmittedFileName();
         String uploadPath = getUploadVDirectory(request);
-        Voucher s = VoucherDB.getVoucherById(id);
-        String fileURLPath = s.getImgPath();
+        Voucher existingVoucher = VoucherDB.getVoucherById(id);
+        String fileURLPath = existingVoucher.getImgPath();
+
         if (fileName != null && !fileName.isEmpty()) {
-            String filePath = uploadPath + fileName;  // Append the file name to the directory
+            String filePath = uploadPath + fileName;
             fileURLPath = "image/Voucher/" + fileName;
             try {
-                filePart.write(filePath);  // Save the file
-                System.out.println("File uploaded to: " + filePath);
-                request.setAttribute("message", "ImageL uploaded and saved successfully.");
+                filePart.write(filePath);
             } catch (IOException ex) {
-                System.out.println("Error writing fileL: " + ex.getMessage());
-                request.setAttribute("message", "Error writing fileL: " + ex.getMessage());
+                System.out.println("Error writing file: " + ex.getMessage());
             }
-        } else {
-            request.setAttribute("message", "No imageL file selected or invalid file.");
         }
 
-        // Create Movie object and store it in DB
+        // Create Voucher object and store it in DB
         Voucher voucher = new Voucher(id, name, theatreID, fileURLPath, price, expiryDate);
         VoucherDB.updateVoucher(voucher);
+
+        // Set success message
+        request.setAttribute("message", "Voucher updated successfully!");
         request.getRequestDispatcher("Offers.jsp").forward(request, response);
     }
-    
+
     private void handleDeleteVC(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String voucherID = request.getParameter("voucherID");
-        
-        VoucherDB.deleteVoucher(voucherID);
-        request.getRequestDispatcher("Offers.jsp").forward(request, response);
 
+        VoucherDB.deleteVoucher(voucherID);
+
+        // Set success message
+        request.setAttribute("message", "Voucher deleted successfully!");
+        request.getRequestDispatcher("Offers.jsp").forward(request, response);
     }
 
     private String getFileName(Part part) {

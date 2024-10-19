@@ -7,9 +7,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     Author     : DELL
 */
 .movie-title {
-    text-align: center; 
-    font-weight: bold; 
-    margin-top: 3px; 
+    text-align: center;
+    font-weight: bold;
+    margin-top: 3px;
     padding: 20px;
     font-size: medium;
     max-height: 70px;
@@ -17,10 +17,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 }
 
 .menu-items button {
-    background-color: transparent; 
-    border: none; 
+    background-color: transparent;
+    border: none;
     text-align: left;
-    font-size: inherit; 
+    font-size: inherit;
     cursor: pointer;
     color: inherit;
 }
@@ -61,6 +61,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 .pagination {
     margin: 0;
+}
+
+.room-btn {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.room-btn:hover {
+    background-color: #eb7d5d; /* Change background on hover */
+    color: #fff; /* Text color when hovering */
+    border-color: #fff; /* Border color on hover */
 }
 
 .pagination .page-item .page-link {
@@ -266,7 +277,7 @@ input[type=text] {
 }
 
 .container-main {
-    display: flex;
+
 }
 
 
@@ -290,7 +301,6 @@ input[type=text] {
 
 .body-right {
     flex: 1;
-    margin-left: 20px;
     background-color: #f7cf90;
 }
 
@@ -426,7 +436,7 @@ input[type=text] {
 .card-header.product-img img {
     border: none; /* Bỏ viền ảnh */
     box-shadow: none; /* Bỏ hiệu ứng đổ bóng */
-    
+
 }
 
 .product-img img {

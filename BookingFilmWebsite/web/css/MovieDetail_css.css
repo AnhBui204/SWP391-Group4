@@ -66,3 +66,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     align-items: center;
     justify-content: center;
 }
+
+.each_day:hover{
+    background-color: #fac58c !important;
+    color: white;
+}
+
+.session:hover{
+    background-color: #b6b6b6;
+}

@@ -79,7 +79,7 @@ public class VoucherDB {
                         rs.getString("VoucherName"),
                         rs.getString("TheatreID"),
                         rs.getString("ImagePath"),
-                        rs.getDouble("Price"),
+                        rs.getInt("Price"),
                         rs.getDate("ExpiryDate")
                 );
             }
@@ -134,7 +134,7 @@ public class VoucherDB {
                         rs.getString("VoucherName"),
                         rs.getString("TheatreID"),
                         rs.getString("ImagePath"),
-                        rs.getDouble("Price"),
+                        rs.getInt("Price"),
                         rs.getDate("ExpiryDate")
                 );
                 vouchers.add(voucher);
@@ -144,6 +144,39 @@ public class VoucherDB {
         }
 
         return vouchers;
+    }
+
+    public List<Voucher> getVouchersByPage(String theatreID, int page, int vouchersPerPage) {
+        List<Voucher> vouchers = new ArrayList<>();
+        String query = "SELECT * FROM Vouchers WHERE TheatreID = ? ORDER BY VoucherID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        try {
+            PreparedStatement ps = getConnect().prepareStatement(query);
+            ps.setString(1, theatreID);
+            ps.setInt(2, (page - 1) * vouchersPerPage); // Tính toán offset
+            ps.setInt(3, vouchersPerPage); // Số voucher mỗi trang
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                vouchers.add(new Voucher(rs.getString("VoucherID"), rs.getString("VoucherName"), rs.getString("TheatreID"), rs.getString("ImagePath"), rs.getInt("Price"), rs.getDate("ExpiryDate")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return vouchers;
+    }
+
+    public int getTotalVouchersByTheatre(String theatreID) {
+        String query = "SELECT COUNT(*) FROM Vouchers WHERE TheatreID = ?";
+        try {
+            PreparedStatement ps = getConnect().prepareStatement(query);
+            ps.setString(1, theatreID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1); // Trả về tổng số voucher
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     //List voucher by theatreID
@@ -161,7 +194,7 @@ public class VoucherDB {
                             rs.getString("VoucherName"),
                             rs.getString("TheatreID"),
                             rs.getString("ImagePath"),
-                            rs.getDouble("Price"),
+                            rs.getInt("Price"),
                             rs.getDate("ExpiryDate")
                     );
                     vouchers.add(voucher);
@@ -199,10 +232,36 @@ public class VoucherDB {
 //        }
 //        String nextId = getNextVoucherID();
 //        System.out.println(nextId);
-        
-        List<Voucher> vouchersID = getAllVouchersByTheatreID("T00001");
-        for (Voucher voucher : vouchersID) {
-            System.out.println(voucher);
+//
+//        List<Voucher> vouchersID = getAllVouchersByTheatreID("T00001");
+//        for (Voucher voucher : vouchersID) {
+//            System.out.println(voucher);
+//        }
+
+        VoucherDB voucherDB = new VoucherDB();
+
+        // Giả sử TheatreID là 1 (bạn có thể thay đổi thành TheatreID hợp lệ)
+        String theatreID = "T00001";
+        int page = 1; // Trang hiện tại
+        int vouchersPerPage = 8; // Số lượng voucher mỗi trang
+
+        // Gọi phương thức lấy danh sách voucher theo trang
+        List<Voucher> vouchers = voucherDB.getVouchersByPage(theatreID, page, vouchersPerPage);
+
+        // In ra tổng số voucher của rạp
+        int totalVouchers = voucherDB.getTotalVouchersByTheatre(theatreID);
+        System.out.println("Tổng số voucher: " + totalVouchers);
+
+        // In ra thông tin từng voucher
+        System.out.println("Danh sách voucher ở trang " + page + ":");
+        for (Voucher voucher : vouchers) {
+            System.out.println("VoucherID: " + voucher.getVoucherID());
+            System.out.println("VoucherName: " + voucher.getVoucherName());
+            System.out.println("Price: " + voucher.getPrice());
+            System.out.println("ExpiryDate: " + voucher.getExpiryDate());
+            System.out.println("ImgPath: " + voucher.getImgPath());
+            System.out.println("-------------------------");
         }
     }
+
 }
