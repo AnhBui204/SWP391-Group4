@@ -3,3 +3,5 @@
 
 
 - Thêm giá ghế trong movie
+
+- xong homeopage, lưu ý: phải clone hết file đã thay đổi về, gồm các file css, file includes, file jsp và file carouselImage, lưu ý: file carouselImage phải nằm trong thư mục image!!!!!!!
