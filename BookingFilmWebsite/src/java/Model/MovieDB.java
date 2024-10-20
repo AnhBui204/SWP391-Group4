@@ -428,32 +428,12 @@ public class MovieDB {
     public static void main(String[] args) {
 
         // Lấy danh sách tất cả các bộ phim
-//        System.out.println("\nDanh sách tất cả các bộ phim:");
-//        List<Movie> movies = MovieDB.getAllMovies();
-//        for (Movie movie : movies) {
-//            System.out.println(movie);
-//        }
-        int page = 1;  // Trang thứ nhất
-        int moviesPerPage = 8;  // Hiển thị 8 bộ phim mỗi trang
-
-        // Gọi phương thức getAllMoviesByPage để lấy danh sách phim
-        List<Movie> movies = MovieDB.getAllMoviesByPage(page, moviesPerPage);
-
-        // In ra kết quả danh sách phim để kiểm tra
-        System.out.println("Danh sách phim tại trang " + page + ":");
+        System.out.println("\nDanh sách tất cả các bộ phim:");
+        List<Movie> movies = MovieDB.getAllMovies();
         for (Movie movie : movies) {
-            System.out.println("Movie ID: " + movie.getMovieID());
-            System.out.println("Movie Name: " + movie.getMovieName());
-            System.out.println("Duration: " + movie.getDuration());
-            System.out.println("Country: " + movie.getCountry());
-            System.out.println("Manufacturer: " + movie.getManufacturer());
-            System.out.println("Director: " + movie.getDirector());
-            System.out.println("Release Date: " + movie.getReleaseDate());
-            System.out.println("Description: " + movie.getDescription());
-            System.out.println("Img Portrait: " + movie.getImgPortrait());
-            System.out.println("Img Landscape: " + movie.getImgLandscape());
-            System.out.println("----------------------------");
+            System.out.println(movie);
         }
+        
     }
 
 }

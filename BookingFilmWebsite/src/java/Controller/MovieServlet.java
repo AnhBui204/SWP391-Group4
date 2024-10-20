@@ -117,7 +117,7 @@ public class MovieServlet extends HttpServlet {
 
         if (fileNameL != null && !fileNameL.isEmpty()) {
             String filePathL = uploadPathL + fileNameL;  // Append the file name to the directory
-            fileURLPathL = "image/MovieImg/P/" + fileNameL;
+            fileURLPathL = "image/MovieImg/L/" + fileNameL;
             try {
                 filePartL.write(filePathL);  // Save the file
                 System.out.println("File uploaded to: " + filePathL);
@@ -182,7 +182,7 @@ public class MovieServlet extends HttpServlet {
 
         if (fileNameL != null && !fileNameL.isEmpty()) {
             String filePathL = uploadPathL + fileNameL;  // Append the file name to the directory
-            fileURLPathL = "image/MovieImg/P/" + fileNameL;
+            fileURLPathL = "image/MovieImg/L/" + fileNameL;
             try {
                 filePartL.write(filePathL);  // Save the file
                 System.out.println("File uploaded to: " + filePathL);

@@ -47,6 +47,14 @@
         <link rel="stylesheet" href="bootstrap/css/bootstrap.css"/>
         <link rel="stylesheet" href="css/MovieDetail_css.css"/>
     </head>
+    <style>
+        #poster_landscape img {
+            width: 1513px;  
+            height: 738px; 
+            object-fit: cover; 
+            filter: brightness(50%);
+        }
+    </style>
     <body>
         <div class="bg-black z-n1">
             <div class="container">
@@ -119,7 +127,7 @@
                             <%
                                 for (String day : dayArr) {
                             %>
-                            <div id="D_<%=day%>" class="each_day d-flex align-items-center flex-wrap border-end bg-white mx-2 p-0 rounded" onclick="show_table('time_schedule_<%=day%>',this)">
+                            <div id="D_<%=day%>" class="each_day d-flex align-items-center flex-wrap border-end bg-white mx-2 p-0 rounded" onclick="show_table('time_schedule_<%=day%>', this)">
                                 <!--<h5 class="w-100 fs-3">Thứ 4</h5>-->
                                 <p class="w-100 m-0 fs-4 px-4"><%=day%></p>
                             </div>
@@ -188,51 +196,51 @@
                             <%
                                 }
                             %>
-<!--                            <div class="theater row my-4">
-                                <div class="col-2 p-0 d-flex justify-content-center">
-                                    <h1 class="fs-3 m-0 align-self-center">Rạp số 1</h1>
-                                </div>
-
-                                <div class="col-10 d-flex align-items-center p-0">
-                                    <div style="width: 1px; height: 100%; background-color: #dee2e6; padding: 0;"></div>
-                                    <div class="mx-3 border rounded p-2 session">
-                                        <p class="m-0">14:00 - 16:10</p>
-                                    </div>
-                                    <div class="mx-3 border rounded p-2 session">
-                                        <p class="m-0">20:00 - 22:10</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="theater row my-4">
-                                <div class="col-2 p-0 d-flex justify-content-center">
-                                    <h1 class="fs-3 m-0 align-self-center"">Rạp số 2</h1>
-                                </div>
-
-                                <div class="col-10 d-flex align-items-center p-0">
-                                    <div style="width: 1px; height: 100%; background-color: #dee2e6; padding: 0;"></div>
-                                    <div class="mx-3 border rounded p-2 session">
-                                        <p class="m-0">14:00 - 16:10</p>
-                                    </div>
-                                    <div class="mx-3 border rounded p-2 session">
-                                        <p class="m-0">20:00 - 22:10</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="theater row my-4">
-                                <div class="col-2 p-0 d-flex justify-content-center">
-                                    <h1 class="fs-3 m-0 align-self-center">Rạp số 3</h1>
-                                </div>
-
-                                <div class="col-10 d-flex align-items-center p-0">
-                                    <div style="width: 1px; height: 100%; background-color: #dee2e6; padding: 0;"></div>
-                                    <div class="mx-3 border rounded p-2 session">
-                                        <p class="m-0">14:00 - 16:10</p>
-                                    </div>
-                                    <div class="mx-3 border rounded p-2 session">
-                                        <p class="m-0">20:00 - 22:10</p>
-                                    </div>
-                                </div>
-                            </div>-->
+                            <!--                            <div class="theater row my-4">
+                                                            <div class="col-2 p-0 d-flex justify-content-center">
+                                                                <h1 class="fs-3 m-0 align-self-center">Rạp số 1</h1>
+                                                            </div>
+                            
+                                                            <div class="col-10 d-flex align-items-center p-0">
+                                                                <div style="width: 1px; height: 100%; background-color: #dee2e6; padding: 0;"></div>
+                                                                <div class="mx-3 border rounded p-2 session">
+                                                                    <p class="m-0">14:00 - 16:10</p>
+                                                                </div>
+                                                                <div class="mx-3 border rounded p-2 session">
+                                                                    <p class="m-0">20:00 - 22:10</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="theater row my-4">
+                                                            <div class="col-2 p-0 d-flex justify-content-center">
+                                                                <h1 class="fs-3 m-0 align-self-center"">Rạp số 2</h1>
+                                                            </div>
+                            
+                                                            <div class="col-10 d-flex align-items-center p-0">
+                                                                <div style="width: 1px; height: 100%; background-color: #dee2e6; padding: 0;"></div>
+                                                                <div class="mx-3 border rounded p-2 session">
+                                                                    <p class="m-0">14:00 - 16:10</p>
+                                                                </div>
+                                                                <div class="mx-3 border rounded p-2 session">
+                                                                    <p class="m-0">20:00 - 22:10</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="theater row my-4">
+                                                            <div class="col-2 p-0 d-flex justify-content-center">
+                                                                <h1 class="fs-3 m-0 align-self-center">Rạp số 3</h1>
+                                                            </div>
+                            
+                                                            <div class="col-10 d-flex align-items-center p-0">
+                                                                <div style="width: 1px; height: 100%; background-color: #dee2e6; padding: 0;"></div>
+                                                                <div class="mx-3 border rounded p-2 session">
+                                                                    <p class="m-0">14:00 - 16:10</p>
+                                                                </div>
+                                                                <div class="mx-3 border rounded p-2 session">
+                                                                    <p class="m-0">20:00 - 22:10</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>-->
                         </div>
                         <%
                             }
@@ -247,7 +255,7 @@
             </div>
         </div>
         <script>
-            
+
             function mouseOverFunction(chung) {
                 const chung_id = chung.id;
                 let parts = chung_id.split(/(\d+)/);
@@ -285,12 +293,12 @@
             function cancel_rate_movie() {
                 rate_button.classList.add("d-none");
             }
-            
+
             let showIdTableJs; // table xuat hien hien tai
             let dayPass;
-            
-            document.addEventListener("DOMContentLoaded", function() {
-                <%showIdTable = "time_schedule_" + dayArr.get(0);%>
+
+            document.addEventListener("DOMContentLoaded", function () {
+            <%showIdTable = "time_schedule_" + dayArr.get(0);%>
                 let showId = 'D_<%=dayArr.get(0)%>';
                 const timeScheduleTablefirstD = document.getElementById(showId);
                 const timeScheduleTablefirst = document.getElementById("time_schedule_<%=dayArr.get(0)%>");
@@ -299,9 +307,9 @@
                 timeScheduleTablefirstD.classList.add("border-warning");
                 showIdTableJs = '<%=showIdTable%>';
             });
-            
-            function show_table(id_table, chung){
-                if (id_table === showIdTableJs){
+
+            function show_table(id_table, chung) {
+                if (id_table === showIdTableJs) {
                     return;
                 }
                 chung.classList.add("border");

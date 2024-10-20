@@ -14,33 +14,46 @@
         <div class="overlay hidden"></div>
 
         <header>
-            <div class="header-container">
+            <div class="header-container container-fluid d-flex justify-content-between align-items-center p-3">
                 <!-- Logo -->
-                <div class="bigLogo">
-                    <div class="logo">
+                <div class="bigLogo d-flex align-items-center ms-n2">
+                    <div class="logo me-2">
                         <img src="image/logo/logo.png" alt="FPT Cinema" style="cursor: pointer;" onclick="window.location.href = 'HomePage.jsp';">
                     </div>
-                    <h3 class="text">FPT CINEMA</h3>
+                    <h3 class="text mb-0">CineLuxe Cinema</h3>
                 </div>
                 <!-- Navbar -->
                 <nav class="navbar">
-                    <ul>
-                        <li><a href="MovieServlet?action=booking">Mua Vé</a></li>
-                        <li><a href="#">Phim</a></li>
-                        <li><a href="#">Góc Điện Ảnh</a></li>
-                        <li><a href="#">Sự Kiện</a></li>
-                        <li><a href="#">Rạp/Giá Vé</a></li>
+                    <ul class="navbar-nav d-flex flex-row">
+                        <!--
+                                                <li class="nav-item me-3">
+                                                    <a class="nav-link" href="MovieServlet?action=booking">Mua Vé</a>
+                                                </li>-->
+
+                        <li class="nav-item me-3">
+                            <a class="nav-link p-0" href="MovieServlet?action=booking">
+                                <div id="raffle-red" class="entry raffle">
+                                    <div class="no-scale"></div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="#">Phim</a>
+                        </li>
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="#">Ưu Đãi</a>
+                        </li>
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="#">Rạp/Giá Vé</a>
+                        </li>
                     </ul>
                 </nav>
+
                 <!-- User Info -->
                 <div class="user-info">
                     <div class="signlog">
-                        <a href="Login.jsp" class="btn btn-custom">Login</a>
+                            <a href="Login.jsp" class="btn btn-custom">Login</a>
                     </div>
-                    <form action="MovieServlet?action=search" method="POST" class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-dark" type="submit">Search</button>
-                    </form>
                 </div>
             </div>
         </header>
@@ -48,12 +61,9 @@
         <script>
             document.getElementById('activate_button').addEventListener('click', function () {
                 var hiddenElement = document.getElementById('box_signlog');
-                if (hiddenElement.classList.contains('hidden')) {
-                    hiddenElement.classList.remove('hidden');
-                } else {
-                    hiddenElement.classList.add('hidden');
-                }
+                hiddenElement.classList.toggle('hidden');
             });
         </script>
     </body>
+
 </html>

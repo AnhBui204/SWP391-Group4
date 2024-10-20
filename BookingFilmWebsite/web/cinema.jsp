@@ -23,7 +23,7 @@
             padding: var(--card-padding);
             border: var(--card-border-radius);
             box-shadow: var(--box-shadow);
-            margin-top: 65px;
+            margin-top: 15px;
         }
 
         .userInfo h1{
@@ -232,7 +232,7 @@
                                 </thead>
                                 <tbody>
                                     <%
-                                        TheatreDB cinemaDB = new TheatreDB();
+                                        
                                         List<Theatre> list = TheatreDB.listAllTheatres();
                                         for (Theatre ci : list) {
                                     %>

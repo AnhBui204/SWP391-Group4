@@ -46,10 +46,10 @@
 <%@include file="includes/footer.jsp" %>
 
 
-<link rel="stylesheet" href="css/headerssj1.css" />
-<link rel="stylesheet" href="css/body.css" />
-<link rel="stylesheet" href="css/voucher.css" />
+<link rel="stylesheet" href="css/headerssj2.css" />
+<link rel="stylesheet" href="css/bodyssj1.css" />
+<link rel="stylesheet" href="css/vouchers.css" />
 <link rel="stylesheet" href="css/footer.css" />
 
 <script src="js/jvs.js"></script>
-<script src="js/voucher.js"></script>
+<script src="js/vouchers.js"></script>

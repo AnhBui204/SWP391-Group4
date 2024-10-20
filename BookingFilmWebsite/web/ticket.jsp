@@ -25,7 +25,7 @@
             padding: var(--card-padding);
             border: var(--card-border-radius);
             box-shadow: var(--box-shadow);
-            margin-top: 65px;
+            margin-top: 1   5px;
         }
 
         .userInfo h1{
