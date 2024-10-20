@@ -363,31 +363,31 @@ public class MovieDB {
         return hashListTime;
     }
 
-    public static List<Movie> getMoviesByTheatreID(String theatreID) throws SQLException {
-    List<Movie> movies = new ArrayList<>();
-  String sql = "SELECT DISTINCT m.MovieID, m.MovieName, m.ImgPortrait, m.Rate, m.AgeRating " +
-                 "FROM Movies m " +
-                 "JOIN Shows s ON m.MovieID = s.MovieID " +
-                 "JOIN ShowSeats ss ON s.ShowID = ss.ShowID " +
-                 "WHERE ss.TheatreID = ?"; 
-    
-    try (Connection conn = getConnect(); 
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setString(1, theatreID);
-        ResultSet rs = stmt.executeQuery();
-
-        while (rs.next()) {
-            Movie movie = new Movie();
-            movie.setMovieID(rs.getString("MovieID"));
-            movie.setMovieName(rs.getString("MovieName"));
-            movie.setImgPortrait(rs.getString("ImgPortrait"));
-            movie.setAgeRating(rs.getString("AgeRating"));  
-            movies.add(movie);
-        }
-    }
-
-    return movies;
-}
+//    public static List<Movie> getMoviesByTheatreID(String theatreID) throws SQLException {
+//    List<Movie> movies = new ArrayList<>();
+//  String sql = "SELECT DISTINCT m.MovieID, m.MovieName, m.ImgPortrait, m.Rate, m.AgeRating " +
+//                 "FROM Movies m " +
+//                 "JOIN Shows s ON m.MovieID = s.MovieID " +
+//                 "JOIN ShowSeats ss ON s.ShowID = ss.ShowID " +
+//                 "WHERE ss.TheatreID = ?"; 
+//    
+//    try (Connection conn = getConnect(); 
+//         PreparedStatement stmt = conn.prepareStatement(sql)) {
+//        stmt.setString(1, theatreID);
+//        ResultSet rs = stmt.executeQuery();
+//
+//        while (rs.next()) {
+//            Movie movie = new Movie();
+//            movie.setMovieID(rs.getString("MovieID"));
+//            movie.setMovieName(rs.getString("MovieName"));
+//            movie.setImgPortrait(rs.getString("ImgPortrait"));
+//            movie.setAgeRating(rs.getString("AgeRating"));  
+//            movies.add(movie);
+//        }
+//    }
+//
+//    return movies;
+//}
 
 
   public static List<Date> getShowDateByMovieIDAndTheatreID(String movieID, String theatreID) {

@@ -1,5 +1,5 @@
-﻿CREATE DATABASE test3;
-USE test3;
+﻿CREATE DATABASE super;
+USE super;
 
 CREATE TABLE Users (
     UserID CHAR(6) PRIMARY KEY,
@@ -144,15 +144,13 @@ CREATE TABLE MovieActors (
 -- Table for Vouchers
 CREATE TABLE Vouchers (
     VoucherID CHAR(6) PRIMARY KEY,
-	VoucherName NVARCHAR(50) UNIQUE,
+	VoucherName NVARCHAR(500) UNIQUE,
 	TheatreID CHAR(6),
-    Price INT check (Price >= 0),
 	ImagePath VARCHAR(255),
     ExpiryDate DATE,
 	FOREIGN KEY (TheatreID) REFERENCES Theatres(TheatreID) 
 );
-
-
+drop table if exists Vouchers
 -- Table for Tickets (linked to Booking, Shows, and Seats)
 CREATE TABLE Tickets (
     TicketID CHAR(6) PRIMARY KEY,
@@ -2419,29 +2417,57 @@ VALUES
 -- Thêm Shows (suất chiếu phim)
 INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
 VALUES 
-	('SH0001', '2024-09-13', '16:30:00', 'M00001'),
-	('SH0002', '2024-09-10', '19:30:00', 'M00002'),
-	('SH0003', '2024-09-13', '22:30:00', 'M00003'),
-	('SH0004', '2024-09-14', '16:30:00', 'M00004'),
-	('SH0005', '2024-09-14', '19:30:00', 'M00005'),
-	('SH0006', '2024-09-14', '22:30:00', 'M00006'),
-	('SH0007', '2024-09-15', '16:30:00', 'M00004'),
-	('SH0008', '2024-09-15', '19:30:00', 'M00005'),
-	('SH0009', '2024-09-16', '16:30:00', 'M00007'),
-	('SH0010', '2024-09-16', '19:30:00', 'M00007'),
-	('SH0011', '2024-09-16', '22:30:00', 'M00007'),
-	('SH0012', '2024-09-17', '16:30:00', 'M00008'),
-	('SH0013', '2024-09-17', '19:30:00', 'M00009'),
-	('SH0014', '2024-09-17', '22:30:00', 'M00010'),
-	('SH0015', '2024-09-18', '16:30:00', 'M00010'),
-	('SH0016', '2024-09-18', '19:30:00', 'M00011'),
-	('SH0017', '2024-09-18', '22:30:00', 'M00012'),
-	('SH0018', '2024-09-19', '6:30:00', 'M00012'),
-	('SH0019', '2024-09-19', '19:30:00', 'M00012'),
-	('SH0020', '2024-09-19', '22:30:00', 'M00013'),
-	('SH0021', '2024-09-20', '16:30:00', 'M00014'),
-	('SH0022', '2024-09-20', '19:30:00', 'M00015'),
-	('SH0023', '2024-09-20', '22:30:00', 'M00015');
+    ('SH0001', '2024-10-21', '10:00:00', 'M00001'),
+    ('SH0002', '2024-10-21', '12:30:00', 'M00002'),
+    ('SH0003', '2024-10-21', '15:00:00', 'M00003'),
+    ('SH0004', '2024-10-21', '18:30:00', 'M00004'),
+    ('SH0005', '2024-10-21', '20:00:00', 'M00005'),
+    ('SH0006', '2024-10-22', '09:15:00', 'M00006'),
+    ('SH0007', '2024-10-22', '11:45:00', 'M00004'),
+    ('SH0008', '2024-10-22', '14:30:00', 'M00005'),
+    ('SH0009', '2024-10-22', '16:15:00', 'M00007'),
+    ('SH0010', '2024-10-22', '19:00:00', 'M00007'),
+    ('SH0011', '2024-10-22', '22:30:00', 'M00008'),
+    ('SH0012', '2024-10-23', '10:30:00', 'M00009'),
+    ('SH0013', '2024-10-23', '13:00:00', 'M00010'),
+    ('SH0014', '2024-10-23', '15:30:00', 'M00010'),
+    ('SH0015', '2024-10-23', '17:45:00', 'M00011'),
+    ('SH0016', '2024-10-23', '20:00:00', 'M00012'),
+    ('SH0017', '2024-10-23', '22:15:00', 'M00013'),
+    ('SH0018', '2024-10-24', '11:00:00', 'M00014'),
+    ('SH0019', '2024-10-24', '12:30:00', 'M00015'),
+    ('SH0020', '2024-10-24', '14:00:00', 'M00001'),
+    ('SH0021', '2024-10-24', '16:00:00', 'M00002'),
+    ('SH0022', '2024-10-24', '18:00:00', 'M00003'),
+    ('SH0023', '2024-10-24', '20:00:00', 'M00004'),
+    ('SH0024', '2024-10-24', '22:00:00', 'M00005'),
+    ('SH0025', '2024-10-25', '09:00:00', 'M00006'),
+    ('SH0026', '2024-10-25', '12:00:00', 'M00007'),
+    ('SH0027', '2024-10-25', '15:00:00', 'M00008'),
+    ('SH0028', '2024-10-25', '17:00:00', 'M00009'),
+    ('SH0029', '2024-10-25', '20:00:00', 'M00010'),
+    ('SH0030', '2024-10-25', '22:00:00', 'M00011'),
+    ('SH0031', '2024-10-26', '10:00:00', 'M00012'),
+    ('SH0032', '2024-10-26', '12:15:00', 'M00013'),
+    ('SH0033', '2024-10-26', '14:30:00', 'M00014'),
+    ('SH0034', '2024-10-26', '16:45:00', 'M00015'),
+    ('SH0035', '2024-10-26', '19:00:00', 'M00001'),
+    ('SH0036', '2024-10-26', '21:15:00', 'M00002'),
+    ('SH0037', '2024-10-27', '10:30:00', 'M00003'),
+    ('SH0038', '2024-10-27', '13:00:00', 'M00004'),
+    ('SH0039', '2024-10-27', '15:30:00', 'M00005'),
+    ('SH0040', '2024-10-27', '18:00:00', 'M00006'),
+    ('SH0041', '2024-10-27', '20:30:00', 'M00007'),
+    ('SH0042', '2024-10-27', '22:00:00', 'M00008'),
+    ('SH0043', '2024-10-28', '09:15:00', 'M00009'),
+    ('SH0044', '2024-10-28', '11:45:00', 'M00010'),
+    ('SH0045', '2024-10-28', '14:30:00', 'M00011'),
+    ('SH0046', '2024-10-28', '16:15:00', 'M00012'),
+    ('SH0047', '2024-10-28', '19:00:00', 'M00013'),
+    ('SH0048', '2024-10-28', '22:30:00', 'M00014'),
+    ('SH0049', '2024-10-29', '10:30:00', 'M00015'),
+    ('SH0050', '2024-10-29', '13:00:00', 'M00001');
+
 
 	INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
 VALUES ('SH0024', '2024-09-20', '22:30:00', 'M00001');
@@ -2496,14 +2522,71 @@ VALUES
 ('M00002', 'A00003');
 
 -- Thêm Vouchers (voucher khuyến mãi)
-INSERT INTO Vouchers (VoucherID, Price, VoucherName, TheatreID, ImagePath, ExpiryDate)
+-- CGV
+INSERT INTO Vouchers (VoucherID, VoucherName, TheatreID, ImagePath, ExpiryDate)
 VALUES 
-('V00001', 50000, N'Voucher1', 'T00001' , 'image/Voucher/CGV1.jpg', '2024-12-31'),
-('V00002', 100000, N'Voucher2' ,'T00001' , 'image/Voucher/CGV2.jpg', '2024-11-30'),
-('V00003', 50000, N'Voucher3', 'T00001' , 'image/Voucher/CGV3.jpg', '2024-12-31'),
-('V00004', 100000, N'Voucher4' ,'T00001' , 'image/Voucher/CGV4.jpg', '2024-11-30'),
-('V00005', 50000, N'Voucher5', 'T00001' , 'image/Voucher/CGV5.jpg', '2024-12-31'),
-('V00006', 100000, N'Voucher6' ,'T00001' , 'image/Voucher/GL1.jpg', '2024-11-30');
+('V00001', N'SĂN LÙNG TRỌN BỘ GIFTCARD TRANSFORMERS', 'T00001' , 'image/Voucher/CGV1.jpg', '2024-12-31'),
+('V00002', N'NGÀY XƯA CÓ MỘT CHUYỆN TÌNH COMBO' ,'T00001' , 'image/Voucher/CGV2.jpg', '2024-11-30'),
+('V00003', N'ZALOPAY X CGV - MÙA NÀO CŨNG KHAO', 'T00001' , 'image/Voucher/CGV3.png', '2024-12-31'),
+('V00004', N'[PANDORA x CGV] VOUCHER ĐỘC QUYỀN 100.000 VNĐ - THOẢ THÍCH MUA SẮM TRANG SỨC!' ,'T00001' , 'image/Voucher/CGV4.jpg', '2024-11-30'),
+('V00005', N'MUA/NẠP THẺ QUÀ TẶNG - NHẬN LƯỢT CHƠI GẮP THÚ', 'T00001' , 'image/Voucher/CGV5.png', '2024-12-31'),
+('V00006', N'XEM TEE YOD 2 CÙNG ĐỊNH DẠNG IMAX NHẬN NGAY QUÀ TẶNG' ,'T00001' , 'image/Voucher/CGV6.jpg', '2024-11-30'),
+('V00007', N'THẺ XINH TẶNG NÀNG - DEAL GIẢM 100 NGÀN', 'T00001' , 'image/Voucher/CGV7.jpg', '2024-12-31'),
+('V00008', N'THÁNG 10 NGẬP TRÀN QUÀ TẶNG' ,'T00001' , 'image/Voucher/CGV8.jpg', '2024-11-30'),
+('V00009', N'Mua 02 vé xem phim 2D với giá 110.000 VND bằng Thẻ KBank Cashback Plus tại CGV', 'T00001' , 'image/Voucher/CGV9.jpg', '2024-12-31'),
+('V00010', N'BỐNG BỐNG BOARD GAME, RA "CÊ" MANG VỀ!' ,'T00001' , 'image/Voucher/CGV10.jpg', '2024-11-30'),
+('V00011', N'SĂN THẺ XỊN, RINH ĐIỂM CAO - BST THẺ QUÀ TẶNG MỚI ROBOT HOANG DÃ', 'T00001' , 'image/Voucher/CGV11.jpg', '2024-12-31'),
+('V00012', N'QUÀ TẶNG SINH NHẬT THÀNH VIÊN CGV TRONG THÁNG 10' ,'T00001' , 'image/Voucher/CGV12.jpg', '2024-11-30'),
+
+--Galaxy
+('V00013', N'Đám Cưới Xa Hoa - Ưu Đãi Xa Xỉ Chỉ Có Ở Galaxy Cinema', 'T00003' , 'image/Voucher/GL1.jpg', '2024-12-31'),
+('V00014', N'VNPAY giảm đến 10k!' ,'T00003' , 'image/Voucher/GL2.jpg', '2024-11-30'),
+('V00015', N'Mưa Quà Tặng Cho Thành Viên Galaxy Cinema 2024', 'T00003' , 'image/Voucher/GL3.jpg', '2024-12-31'),
+('V00016', N'Voucher ShopeePay Giảm 10K Dành Tặng Các Stars!' ,'T00003' , 'image/Voucher/GL4.jpg', '2024-11-30'),
+('V00017', N'Happy Day - Vé chỉ từ 50k', 'T00003' , 'image/Voucher/GL5.jpg', '2024-12-31'),
+('V00018', N'Giảm 25% Khi Đặt Xe Đến Galaxy Parc Mall Q8' ,'T00003' , 'image/Voucher/GL6.jpg', '2024-11-30'),
+('V00019', N'U22 Vui Vẻ - Bắp Nước Siêu Hạt Dẻ', 'T00003' , 'image/Voucher/GL7.jpg', '2024-12-31'),
+('V00020', N'Xem Phim Hay – Ngất Ngây Cùng Bánh Phồng Dế Rec Rec' ,'T00003' , 'image/Voucher/GL8.jpg', '2024-11-30'),
+('V00021', N'Ngày Tri Ân Của Galaxy Cinema - Ngày Thứ Hai ĐẦU TIÊN Mỗi Tháng', 'T00003' , 'image/Voucher/GL9.jpg', '2024-12-31'),
+('V00022', N'Giá Vé U22 - Chỉ Từ 45k' ,'T00003' , 'image/Voucher/GL10.jpg', '2024-11-30'),
+('V00023', N'Tiêu Chí Phân Loại Phim Theo Lứa Tuổi', 'T00003' , 'image/Voucher/GL11.jpg', '2024-12-31'),
+('V00024', N'Mua 2 tặng 1!' ,'T00003' , 'image/Voucher/GL12.jpg', '2024-11-30'),
+
+--Lotte Cinema
+('V00025', N'MUA COMBO LY - REFILL MIỄN PHÍ', 'T00002' , 'image/Voucher/LC1.jpg', '2024-12-31'),
+('V00026', N'GIÁ VÉ ĐẶC BIỆT DÀNH CHO CÁC CÁN BỘ CÔNG CHỨC VIÊN CHỨC XEM PHIM TẠI LOTTE CINEMA WESTLAKE' ,'T00002' , 'image/Voucher/LC2.jpg', '2024-11-30'),
+('V00027', N'LOTTE CINEMA GOLDVIEW: CHILL PHIM THẢ GIA – GIÁ CHỈ 100K !!!', 'T00002' , 'image/Voucher/LC3.png', '2024-12-31'),
+('V00028', N'CHUỖI ƯU ĐÃI HẤP DẪN KHI XEM PHIM TẠI LOTTE CINEMA WEST LAKE' ,'T00002' , 'image/Voucher/LC4.jpg', '2024-11-30'),
+('V00029', N'RA MẮT LY MỚI MÙA HALLOWEEN', 'T00002' , 'image/Voucher/LC5.jpg', '2024-12-31'),
+('V00030', N'RA MẮT LY NƯỚC LOTTE CINEMA x THỎ BẢY MÀU' ,'T00002' , 'image/Voucher/LC6.jpg', '2024-11-30'),
+('V00031', N'MOMO DAY: 55K/VÉ THỨ 3 HÀNG TUẦN TẠI LOTTE CINEMA', 'T00002' , 'image/Voucher/LC7.jpg', '2024-12-31'),
+('V00032', N'LOVELY DAY- TẶNG CODE GIẢM GIÁ 10K KHI ĐẶT VÉ XEM PHIM TẠI LOTTE CINEMA NAM SÀI GÒN (Q7)' ,'T00002' , 'image/Voucher/LC8.jpg', '2024-11-30'),
+('V00033', N'XEM PHIM TRƯỚC TRẢ SAU LẤY CODE GIẢM ĐẾN 50K VỚI HOME PAYLATER', 'T00002' , 'image/Voucher/LC9.jpg', '2024-12-31'),
+('V00034', N'NHẬP CODE SHOPEE PAY, NHẬN NGAY ƯU ĐÃI' ,'T00002' , 'image/Voucher/LC10.jpg', '2024-11-30'),
+
+--Rio Cinema
+('V00035', N'Mừng Ngày Phụ Nữ Việt Nam 20/10 tại Rạp Phim RIO', 'T00002' , 'image/Voucher/Rio1.png', '2024-12-31'),
+('V00036', N'PHIM HAY HẾT Ý – KHÔNG XEM HƠI PHÍ' ,'T00002' , 'image/Voucher/Rio2.jpg', '2024-11-30'),
+('V00037', N'Đặt vé xem phim trên ứng dụng Mobile Banking', 'T00004' , 'image/Voucher/Rio3.jpg', '2024-12-31'),
+('V00038', N'THỨ 2 CUỐI THÁNG ĐỒNG GIÁ VÉ 45K MUA 2 TẶNG 1 NƯỚC' ,'T00004' , 'image/Voucher/Rio4.jpg', '2024-11-30'),
+('V00039', N'THỨ 5 HẰNG TUẦN REFILL BẮP NƯỚC', 'T00004' , 'image/Voucher/Rio5.jpg', '2024-12-31'),
+('V00040', N'THỨ 2 HÀNG TUẦN - GIẢM 50% COMBO BẮP NƯỚC' ,'T00004' , 'image/Voucher/Rio6.jpg', '2024-11-30'),
+('V00041', N'THỨ 3 HẰNG TUẦN ĐỒNG GIÁ 45K', 'T00004' , 'image/Voucher/Rio7.jpg', '2024-12-31'),
+('V00042', N'XEM PHIM SỚM - KHUYA' ,'T00004' , 'image/Voucher/Rio8.jpg', '2024-11-30'),
+
+--Metiz Cinema
+('V00043', N'Rio Voucher 8' ,'T00004' , 'image/Voucher/Metiz1.jpg', '2024-11-30'),
+('V00044', N'Rio Voucher 9', 'T00004' , 'image/Voucher/Metiz2.jpg', '2024-12-31'),
+('V00045', N'Rio Voucher 10' ,'T00004' , 'image/Voucher/Metiz3.jpg', '2024-11-30'),
+('V00046', N'Rio Voucher 11', 'T00004' , 'image/Voucher/Metiz4.jpg', '2024-12-31'),
+('V00047', N'Rio Voucher 12' ,'T00004' , 'image/Voucher/Metiz5.jpg', '2024-11-30'),
+('V00048', N'Metiz Voucher 1', 'T00005' , 'image/Voucher/Metiz6.jpg', '2024-12-31'),
+('V00049', N'Metiz Voucher 2' ,'T00005' , 'image/Voucher/Metiz7.jpg', '2024-11-30'),
+('V00050', N'Metiz Voucher 3', 'T00005' , 'image/Voucher/Metiz8.jpg', '2024-12-31'),
+('V00052', N'Metiz Voucher 4' ,'T00005' , 'image/Voucher/Metiz9.jpg', '2024-11-30'),
+('V00053', N'Metiz Voucher 5', 'T00005' , 'image/Voucher/Metiz10.jpg', '2024-12-31');
+
+
 -- Thêm FoodsAndDrinks (đồ ăn và nước uống)
 INSERT INTO FoodsAndDrinks (ComboID, ComboName, TheatreID, ImagePath, Price)
 VALUES 
@@ -2521,11 +2604,11 @@ VALUES
 ('C00011', N'Bắp rang + 2 Nước ngọt','T00005', 'image/FoodsAndDrinks/f2.jpg', 80000),
 ('C00012', N'Bắp rang + 2 Nước ngọt','T00006', 'image/FoodsAndDrinks/f2.jpg', 80000),
 
-('C00003', N'Bắp rang + 2 Nước ngọt','T00001', 'image/FoodsAndDrinks/CGV1.jpg', 60000),
-('C00004', N'Bắp rang + 2 Nước ngọt','T00001', 'image/FoodsAndDrinks/CGV2.jpg', 60000),
-('C00005', N'Bắp rang + 2 Nước ngọt','T00001', 'image/FoodsAndDrinks/CGV3.jpg', 60000),
-('C00006', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/CGV4.jpg', 60000),
-('C00007', N'Bắp rang + Nước ngọt','T00001', 'image/FoodsAndDrinks/CGV5.jpg', 60000);
+('C00013', N'Bắp rang + Nước ngọt (Big size)','T00001', 'image/FoodsAndDrinks/CGV1.jpg', 100000),
+('C00014', N'Mua 1 bắp tặng 1 bắp','T00001', 'image/FoodsAndDrinks/CGV2.jpg', 40000),
+('C00015', N'Big size Báp rang','T00001', 'image/FoodsAndDrinks/CGV3.jpg', 60000),
+('C00016', N'Bắp rang vị Caramel, Milo','T00001', 'image/FoodsAndDrinks/CGV4.jpg', 80000),
+('C00017', N'Bắp ngăn đôi, Gồm 4 vị','T00001', 'image/FoodsAndDrinks/CGV5.jpg', 150000);
 
 -- Thêm Booking (đơn đặt vé)
 INSERT INTO Booking (BookingID, UserID, ComboID, BookingDate)
