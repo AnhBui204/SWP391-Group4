@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+
+        <link rel="stylesheet" href="css/styles.css">
+        <title>Revenue Statistic</title>
+        <style>
+            .optionCinema {
+                margin: 20px 0;
+                padding: 10px;
+                background-color: #f5f5f5;
+            }
+
+            .optionCinema .filter {
+                display: flex;
+                align-items: center;
+                padding-left: 14px;
+            }
+
+            .optionCinema label {
+                font-size: 16px;
+                font-weight: 600;
+                margin-right: 15px;
+                color: #333;
+            }
+
+            .optionCinema select {
+                width: 250px;
+                padding: 8px;
+                font-size: 14px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                background-color: #fff;
+                color: #333;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                transition: border-color 0.3s;
+            }
+
+            .optionCinema select:focus {
+                border-color: #41a9c9;
+                outline: none;
+            }
+
+            .optionCinema select option {
+                padding: 10px;
+                font-size: 14px;
+                color: #333;
+            }
+
+
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="topbar">
+                <div class="logo">
+                    <h2>Brand.</h2>
+                </div>
+                <div class="search">
+                    <input type="text" name="search" placeholder="search here">
+                    <label for="search"><i class="fas fa-search"></i></label>
+                </div>
+                <i class="fas fa-bell"></i>
+                <div class="user">
+                    <img src="img/user.png" alt="">
+                </div>
+            </div>
+            <div class="sidebar">
+                <ul>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-th-large"></i>
+                            <div>Dashboard</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="main">
+                <div class="cards">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="number">1217</div>
+                            <div class="card-name">Movies</div>
+                        </div>
+                        <div class="icon-box1">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="number">42</div>
+                            <div class="card-name">report</div>
+                        </div>
+                        <div class="icon-box2">
+                            <i class="fa fa-bell"></i>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="number">8</div>
+                            <div class="card-name">Cinema</div>
+                        </div>
+                        <div class="icon-box3">
+                            <i class="fa fa-film"></i>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="number">$4500</div>
+                            <div class="card-name">Earnings</div>
+                        </div>
+                        <div class="icon-box4">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="optionCinema">
+                    <div class="filter">
+                        <label for="cinemaSelect">Select Cinema:</label>
+                        <select id="cinemaSelect">
+                            <option value="Starlight Đà Nẵng" selected>Starlight Đà Nẵng</option>
+                            <option value="Rio Đà Nẵng">Rio Đà Nẵng</option>
+                            <option value="CGV Vĩnh Trung Plaza">CGV Vĩnh Trung Plaza</option>
+                            <option value="CGV Vincom Đà Nẵng">CGV Vincom Đà Nẵng</option>
+                            <option value="Lotte Đà Nẵng">Lotte Đà Nẵng</option>
+                            <option value="Galaxy Đà Nẵng">Galaxy Đà Nẵng</option>
+                            <option value="Metiz Cinema">Metiz Cinema</option>
+                            <option value="IF Đà Nẵng">IF Đà Nẵng</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="charts">
+                    <div class="chart">
+                        <h2>Earnings (past 12 months)</h2>
+                        <div>
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart doughnut-chart">
+                        <h2>Cinema</h2>
+                        <div>
+                            <canvas id="doughnut"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+        <script src="js/chart1.js"></script>
+        <script src="js/chart2.js"></script>
+    </body>
+
+</html>
