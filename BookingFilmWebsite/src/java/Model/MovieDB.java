@@ -348,7 +348,7 @@ public class MovieDB {
                 showDateB4 = showDate;
                 theatreNameB4 = theatreName;
             }
-            if (!hashTheatreNameList.isEmpty()) {
+            if (!listTime.isEmpty()) {
                 hashTheatreNameList.put(theatreNameB4, listTime);
                 hashListTime.put(showDateB4.toString(), hashTheatreNameList);
             }
@@ -414,24 +414,123 @@ public class MovieDB {
         return showDates;
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    public static double getAvgRate(String movieId) {
+        String sql = "select round(avg(Rating), 1) as Rating from Ratings where MovieID = ?";
+        double avgRate = 0;
+        try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, movieId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                avgRate = rs.getDouble("Rating");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return avgRate;
+    }
+
+    public static int getNumRate(String movieId) {
+        String sql = "select count(UserID) as Line from Ratings where MovieID = ?";
+        int numRate = 0;
+        try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, movieId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                numRate = rs.getInt("Line");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return numRate;
+    }
+
+    public static boolean isUserRate(String userId, String movieId) {
+        String sql = "select UserID from Ratings where UserID = ? and MovieID = ?";
+        boolean result = false;
+        try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, userId);
+            ps.setString(2, movieId);
+
+            ResultSet rs = ps.executeQuery();
+
+            result = rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    public static void addOrUpdateRate(String userId, String movieId, int rate) {
+
+        if (isUserRate(userId, movieId)) {
+            String sql = "update Ratings set Rating = ? where UserID = ? and MovieID = ?";  // chua co danh gia
+
+            try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+                ps.setInt(1, rate);
+                ps.setString(2, userId);
+                ps.setString(3, movieId);
+
+                ResultSet rs = ps.executeQuery();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            String sql = "insert into Ratings(UserID, MovieID, Rating) values (?,?,?)";  // chua co danh gia
+
+            try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+                ps.setString(1, userId);
+                ps.setString(2, movieId);
+                ps.setInt(3, rate);
+
+                ResultSet rs = ps.executeQuery();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
     
     
     public static void main(String[] args) {
 
         // Lấy danh sách tất cả các bộ phim
-        System.out.println("\nDanh sách tất cả các bộ phim:");
-        List<Movie> movies = MovieDB.getAllMovies();
-        for (Movie movie : movies) {
-            System.out.println(movie);
+//        System.out.println("\nDanh sách tất cả các bộ phim:");
+//        List<Movie> movies = MovieDB.getAllMovies();
+//        for (Movie movie : movies) {
+//            System.out.println(movie);
+//        }
+
+        HashMap<String, HashMap<String, List<String>>> hm = getTimelineDB("M00001");
+        
+        System.out.println(hm.size());
+        
+        for(String str: hm.keySet()){
+            System.out.println(str);
+            HashMap<String, List<String>> hmm = hm.get(str);
+            System.out.println(hmm.size());
+            for (String strr: hmm.keySet()){
+                System.out.println(strr);
+                System.out.println(hmm.get(strr));
+            }
         }
         
     }

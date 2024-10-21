@@ -14,7 +14,7 @@
     }
     String showIdTable = "";
 %>
-﻿<div id="rate" class="d-flex justify-content-center align-items-center d-none">
+<div id="rate" class="d-flex justify-content-center align-items-center d-none">
     <div id="rate_box" class="bg-white text-center rounded">
         <div class="d-flex justify-content-end" style="padding-top: 3.5rem">
             <button type="button" class="btn-close" aria-label="Close" style="margin-bottom: 1rem;" onclick="cancel_rate_movie(this)"></button>
@@ -23,17 +23,52 @@
         <div class="position-relative mt-4">
             <i class="fa-solid fa-star text-warning fa-7x"></i>
             <div id="ratio">
-                <h1 class="m-0 text-white">8.0</h1>
+                <h1 class="m-0 text-white"><%=MovieDB.getAvgRate(movieId)%></h1>
             </div>
         </div>
-        <div class=" mt-4">
-            <i id="star1" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
+        <div class=" mt-4 d-flex">
+            <form action="MovieDetailServlet" method="post">
+                <input type="text" value="2" name="rate" hidden/>
+                <input type="text" value="<%=movieId%>" name="mvId" hidden/>
+                <button type="submit" class="border-0 bg-white">
+                    <i id="star1" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
+                </button>
+            </form>
+            <form action="MovieDetailServlet" method="post">
+                <input type="text" value="4" name="rate" hidden/>
+                <input type="text" value="<%=movieId%>" name="mvId" hidden/>
+                <button type="submit" class="border-0 bg-white">
+                    <i id="star2" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
+                </button>
+            </form>
+            <form action="MovieDetailServlet" method="post">
+                <input type="text" value="6" name="rate" hidden/>
+                <input type="text" value="<%=movieId%>" name="mvId" hidden/>
+                <button type="submit" class="border-0 bg-white">
+                    <i id="star3" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
+                </button>
+            </form>
+            <form action="MovieDetailServlet" method="post">
+                <input type="text" value="8" name="rate" hidden/>
+                <input type="text" value="<%=movieId%>" name="mvId" hidden/>
+                <button type="submit" class="border-0 bg-white">
+                    <i id="star4" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
+                </button>
+            </form>
+            <form action="MovieDetailServlet" method="post">
+                <input type="text" value="10" name="rate" hidden/>
+                <input type="text" value="<%=movieId%>" name="mvId" hidden/>
+                <button type="submit" class="border-0 bg-white">
+                    <i id="star5" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
+                </button>
+            </form>
+<!--            <i id="star1" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this, 2)"></i>
             <i id="star2" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
             <i id="star3" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
             <i id="star4" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
-            <i id="star5" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
+            <i id="star5" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>-->
         </div>
-        <p class=" mt-2 text-grey">1234 votes</p>
+        <p class=" mt-2 text-grey"><%=MovieDB.getNumRate(movieId)%> votes</p>
     </div>
 </div>
 <%@include file="includes/header.jsp" %>
@@ -44,13 +79,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        <link rel="stylesheet" href="bootstrap/css/bootstrap.css"/>
+        <link rel="stylesheet" href="bs/css/bootstrap.css"/>
         <link rel="stylesheet" href="css/MovieDetail_css.css"/>
     </head>
     <style>
         #poster_landscape img {
-            width: 1513px;  
-            height: 738px; 
+            width: 100vw;  
+            height: 100vh; 
             object-fit: cover; 
             filter: brightness(50%);
         }
@@ -80,9 +115,9 @@
                             <div class="mt-2">
                                 <div class="bg-secondary-subtle d-inline fs-1 p-1 rounded" id="rate_button">
                                     <i class="fa-solid fa-star text-warning fa-1x d-inline"></i>
-                                    <h3 class="d-inline fs-1" onclick="rate_movie()">8.0</h3>
+                                    <h3 class="d-inline fs-1" onclick="rate_movie()"><%=MovieDB.getAvgRate(movieId)%></h3>
                                 </div>
-                                <p class="d-inline mx-2 h5">(1234 votes)</p>
+                                <p class="d-inline mx-2 h5">(<%=MovieDB.getNumRate(movieId)%> votes)</p>
                             </div>
                             <div class="mt-2">
                                 <div class="mt-2 bg-secondary-subtle d-inline fs-4 p-2 rounded"><p class="d-inline fs-4">Quốc gia: </p><p class="d-inline fs-4 fw-bold"><%= request.getAttribute("country")%></p></div>
@@ -247,7 +282,7 @@
                         %>
                         <div class="col-1"></div>
                         <div id="poster_portrait_2" class="col-2">
-                            <img src="${param.ImgP}" alt="alt" class="img-fluid"/>
+                            <img src="<%=request.getAttribute("imgP")%>" alt="alt" class="img-fluid"/>
                         </div>
                         <div class="col-1"></div>
                     </div>
@@ -271,7 +306,7 @@
 
                 }
 
-                for (let i = id_number; i >= 0; i--) {
+                for (let i = id_number; i > 0; i--) {
                     let temp_id = "star" + i;
                     const the_star = document.getElementById(temp_id);
 
@@ -296,12 +331,18 @@
 
             let showIdTableJs; // table xuat hien hien tai
             let dayPass;
-
+<%
+                String dayArr0 = "";
+                if (dayArr.size() != 0){
+                    dayArr0 = dayArr.get(0);
+    }
+                showIdTable = "time_schedule_" + dayArr0;
+            %>
             document.addEventListener("DOMContentLoaded", function () {
-            <%showIdTable = "time_schedule_" + dayArr.get(0);%>
-                let showId = 'D_<%=dayArr.get(0)%>';
+            
+                let showId = 'D_<%=dayArr0%>';
                 const timeScheduleTablefirstD = document.getElementById(showId);
-                const timeScheduleTablefirst = document.getElementById("time_schedule_<%=dayArr.get(0)%>");
+                const timeScheduleTablefirst = document.getElementById("time_schedule_<%=dayArr0%>");
                 timeScheduleTablefirst.classList.remove("d-none");
                 timeScheduleTablefirstD.classList.add("border");
                 timeScheduleTablefirstD.classList.add("border-warning");
@@ -323,7 +364,7 @@
             }
 
         </script>
-        <script src="bootstrap/js/bootstrap.bundle.js"></script>
+        <script src="bs/js/bootstrap.bundle.js"></script>
     </body>
 </html>
 <%@include file="includes/footer.jsp" %>

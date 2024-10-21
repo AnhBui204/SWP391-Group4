@@ -56,8 +56,8 @@
             <h2>------- Phim Đang Chiếu -------</h2>
         </div>
         <div class="container">
-
-            <form action="MovieDetailServlet" method="POST" class="row" id="box2_dangchieu_id">
+            <div class="row" id="box2_dangchieu_id">
+            <!--<form action="MovieDetailServlet" method="POST" class="row" id="box2_dangchieu_id">-->
                 <%
                     MovieDB movieDB = new MovieDB();
                     List<Movie> mvList = movieDB.getAllMovies();
@@ -68,7 +68,7 @@
                         <div class="skin">
                             <div class="layer">
                                 <p>Mua vé</p>
-
+                                <form action="MovieDetailServlet" method="post">
                                 <input type="text" name="MovieId" value="<%=movie.getMovieID()%>" hidden/>
                                 <input type="text" name="MovieName" value="<%=movie.getMovieName()%>" hidden/>
                                 <input type="text" name="Duration" value="<%=movie.getDuration()%>" hidden/>
@@ -81,7 +81,9 @@
                                 <input type="text" name="ImgL" value="<%=movie.getImgLandscape()%>" hidden/>
                                 <input type="text" name="Rate" value="<%//=movie.getRate()%>" hidden/>
                                 
-                                <p>Trailer</p>
+                                <input type="submit" value="Trailer"/>
+                                <!--<p>Trailer</p>-->
+                                </form>
                             </div>
                         </div>
                         <img src="<%= movie.getImgPortrait()%>" alt="alt" class="img-fluid small-image" />
@@ -98,7 +100,8 @@
                 <%
                     }
                 %>
-            </form>
+<!--            </form>-->
+            </div>
         </div>
 
         <style>
