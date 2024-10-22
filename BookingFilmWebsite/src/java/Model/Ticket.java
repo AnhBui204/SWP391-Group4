@@ -5,33 +5,30 @@
 package Model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Ticket implements Serializable {
-    
-    private String ticketID;
+  private String ticketID;
     private String bookingID;
-    private String showID;
-    private String seatID;
-    private String comboID;
-    private String voucherID;
-    private double price;
-    private String status;
+    private String userID;
+    private String bookingSeatID;
+    private String roomID;
+    private String bookingComboID;
     private Date bookingDate;
+    private BigDecimal totalPrice;
 
     public Ticket() {
     }
-
-    public Ticket(String ticketID, String bookingID, String showID, String seatID, String comboID, String voucherID, double price,String status, Date bookingDate) {
+ public Ticket(String ticketID, String bookingID, String userID, String bookingSeatID, String roomID, String bookingComboID, Date bookingDate, BigDecimal totalPrice) {
         this.ticketID = ticketID;
         this.bookingID = bookingID;
-        this.showID = showID;
-        this.seatID = seatID;
-        this.comboID = comboID;
-        this.voucherID = voucherID;
-        this.price = price;
-        this.status = status;
+        this.userID = userID;
+        this.bookingSeatID = bookingSeatID;
+        this.roomID = roomID;
+        this.bookingComboID = bookingComboID;
         this.bookingDate = bookingDate;
+        this.totalPrice = totalPrice;
     }
 
     public String getTicketID() {
@@ -42,14 +39,6 @@ public class Ticket implements Serializable {
         this.ticketID = ticketID;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getBookingID() {
         return bookingID;
     }
@@ -58,44 +47,36 @@ public class Ticket implements Serializable {
         this.bookingID = bookingID;
     }
 
-    public String getShowID() {
-        return showID;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setShowID(String showID) {
-        this.showID = showID;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
-    public String getSeatID() {
-        return seatID;
+    public String getBookingSeatID() {
+        return bookingSeatID;
     }
 
-    public void setSeatID(String seatID) {
-        this.seatID = seatID;
+    public void setBookingSeatID(String bookingSeatID) {
+        this.bookingSeatID = bookingSeatID;
     }
 
-    public String getComboID() {
-        return comboID;
+    public String getRoomID() {
+        return roomID;
     }
 
-    public void setComboID(String comboID) {
-        this.comboID = comboID;
+    public void setRoomID(String roomID) {
+        this.roomID = roomID;
     }
 
-    public String getVoucherID() {
-        return voucherID;
+    public String getBookingComboID() {
+        return bookingComboID;
     }
 
-    public void setVoucherID(String voucherID) {
-        this.voucherID = voucherID;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
+    public void setBookingComboID(String bookingComboID) {
+        this.bookingComboID = bookingComboID;
     }
 
     public Date getBookingDate() {
@@ -106,10 +87,23 @@ public class Ticket implements Serializable {
         this.bookingDate = bookingDate;
     }
 
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     @Override
     public String toString() {
-        return "Ticket{" + "ticketID=" + ticketID + ", bookingID=" + bookingID + ", showID=" + showID + ", seatID=" + seatID + ", comboID=" + comboID + ", voucherID=" + voucherID + ", price=" + price + ", bookingDate=" + bookingDate + '}';
+        return "Ticket{" + "ticketID=" + ticketID + ", bookingID=" + bookingID + ", userID=" + userID + ", bookingSeatID=" + bookingSeatID + ", roomID=" + roomID + ", bookingComboID=" + bookingComboID + ", bookingDate=" + bookingDate + ", totalPrice=" + totalPrice + '}';
     }
-    
+
+   
+
+
+  
+  
     
 }

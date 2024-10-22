@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import Model.SeatDetail;
 import Model.ShowSeatDB;
 
 import java.io.IOException;
@@ -14,7 +15,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -88,15 +92,33 @@ System.out.println("Theatre Name: " + theatreName);
 System.out.println("Movie Name: " + movieName);
 System.out.println("Show Date: " + showDate);
 System.out.println("Start Time: " + startTime);
-
-    List<String> availableSeats = ShowSeatDB.getSeatsForShow(movieID, theatreID, startTime, showDate);
-    List<String> rowLabels = new ArrayList<>();
-for (String seat : availableSeats) {
-    String rowLabel = seat.substring(0, 1);
-    if (!rowLabels.contains(rowLabel)) {
-        rowLabels.add(rowLabel);
+List<SeatDetail> availableSeats = ShowSeatDB.getSeatsForShow(movieID, theatreID, startTime, showDate);
+Set<String> rowLabels = new HashSet<>();
+if (availableSeats != null) {
+    for (SeatDetail seat : availableSeats) {
+        String seatName = seat.getSeatName();
+        if (seatName != null && seatName.length() > 0) {
+            String rowLabel = seatName.substring(0, 1);
+            rowLabels.add(rowLabel);
+        }
     }
 }
+if (availableSeats != null && !availableSeats.isEmpty()) {
+    for (SeatDetail seat : availableSeats) {
+        String seatName = seat.getSeatName();
+        int isAvailable = seat.getIsAvailables();
+        double price = seat.getPrice();
+
+
+        System.out.println("Seat: " + seatName + ", Available: " + isAvailable + ", Price: " + price);
+    }
+} else {
+    System.out.println("Không có ghế nào có sẵn.");
+}
+List<String> rowLabelList = new ArrayList<>(rowLabels);
+
+Collections.sort(rowLabelList);
+
     System.out.println("Available Seats: " + availableSeats);
     
     HttpSession session = request.getSession();
@@ -108,6 +130,8 @@ for (String seat : availableSeats) {
     session.setAttribute("movieImg", movieImg);
     request.setAttribute("rowLabels", rowLabels);
     request.setAttribute("availableSeats", availableSeats);
+  
+    
    request.getRequestDispatcher("SeatSelect.jsp").forward(request, response);
 }
 

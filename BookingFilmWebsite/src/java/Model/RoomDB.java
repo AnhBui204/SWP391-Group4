@@ -4,9 +4,10 @@ import static Model.DatabaseInfo.DBURL;
 import static Model.DatabaseInfo.DRIVERNAME;
 import static Model.DatabaseInfo.PASSDB;
 import static Model.DatabaseInfo.USERDB;
-import static Model.ShowSeatDB.getConnect;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -128,19 +129,94 @@ public class RoomDB implements DatabaseInfo {
             Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+public static String getRoomIdBySeatNamesAndShowDateAndTime(String seatNames, String showDate, String startTime) {
+    String roomId = null;
 
-    public static void main(String[] args) {
-        // Example usage (you can uncomment to test):
-        Room room = getRoom("R00001");
-        System.out.println(room);
-        System.out.println("-----------");
-//        List<Room> rooms = getRoomsByCinema("T00001");
-//        for (Room r : rooms) {
-//            System.out.println(r);
-//        }
-        List<Room> rooms = getRoomByShow("SH0001");
-        for (Room r : rooms) {
-            System.out.println(r);
+    // Kiểm tra danh sách ghế không rỗng
+    if (!seatNames.isEmpty()) {
+        // Tách chuỗi và loại bỏ khoảng trắng
+        List<String> seatNameList = Arrays.asList(seatNames.split(",\\s*"));
+
+        // Tạo placeholder cho điều kiện IN
+        String seatNamesPlaceholder = String.join(",", Collections.nCopies(seatNameList.size(), "?"));
+
+        String query = "SELECT ss.RoomID " +
+                       "FROM ShowSeats ss " +
+                       "JOIN Seats se ON ss.SeatID = se.SeatID " +
+                       "JOIN Shows sh ON ss.ShowID = sh.ShowID " +
+                       "WHERE se.SeatName IN (" + seatNamesPlaceholder + ") " +
+                       "AND sh.ShowDate = ? " +
+                       "AND sh.StartTime = ?";
+
+        try (Connection con = getConnect(); 
+             PreparedStatement preparedStatement = con.prepareStatement(query)) {
+
+            // Đặt giá trị cho các tham số ghế
+            for (int i = 0; i < seatNameList.size(); i++) {
+                preparedStatement.setString(i + 1, seatNameList.get(i).trim()); // Loại bỏ khoảng trắng
+            }
+
+            // Đặt giá trị cho tham số ngày và giờ
+            preparedStatement.setString(seatNameList.size() + 1, showDate);
+            preparedStatement.setString(seatNameList.size() + 2, startTime);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    roomId = resultSet.getString("RoomID");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
+    return roomId; // Trả về RoomID hoặc null nếu không tìm thấy
+}
+
+
+
+
+
+public static String getRoomIDFromShow(String showID) {
+    String roomId = null;
+    String query = "SELECT DISTINCT RoomID FROM ShowSeats WHERE ShowID = ?";
+
+    try (Connection con = getConnect()) {
+        PreparedStatement preparedStatement = con.prepareStatement(query);
+        preparedStatement.setString(1, showID);
+
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            if (resultSet.next()) {
+                roomId = resultSet.getString("RoomID");
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return roomId; // Trả về RoomID hoặc null nếu không tìm thấy
+}
+
+
+
+
+
+
+
+public static void main(String[] args) {
+        // Thay thế bằng tên ghế và ID suất chiếu thực tế mà bạn muốn kiểm tra
+//     List<String> seatNames = Arrays.asList("A1", "A2"); // Ví dụ: tên ghế
+//        String showID = "S00001"; // Ví dụ: ID suất chiếu
+//        String showDate = "2024-09-13";
+//        String startTime = "16:30:00";
+//        String roomId = RoomDB.getRoomIdBySeatNamesAndShowDateAndTime(seatNames, showDate, startTime);
+//
+//        if (roomId != null) {
+//            System.out.println("Room ID: " + roomId);
+//        } else {
+//            System.out.println("Không tìm thấy Room ID cho ghế: " + seatNames + " và Show ID: " + showID);
+//        }
+//    }
+
+}
 }

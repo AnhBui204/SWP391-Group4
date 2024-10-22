@@ -7,6 +7,7 @@ import static Model.DatabaseInfo.USERDB;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +42,52 @@ public class SeatDB implements DatabaseInfo {
         }
         return seat;
     }
+public static String getSeatIDByName(String seatName, String roomID, String theatreID) {
+    String sql = "SELECT SeatID FROM Seats WHERE SeatName = ? AND RoomID = ? AND TheatreID = ?";
+    try (Connection conn = getConnect(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, seatName);
+        stmt.setString(2, roomID);
+        stmt.setString(3, theatreID);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return rs.getString("SeatID");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null; // Trả về null nếu không tìm thấy
+}
+public static List<String> getSeatIDsFromNames(String seatNames, String roomID) {
+    List<String> seatIDs = new ArrayList<>();
+    // Tách chuỗi thành danh sách các ghế
+    List<String> seatNameList = Arrays.asList(seatNames.split(",\\s*")); // Tách chuỗi và loại bỏ khoảng trắng
+
+    String sql = "SELECT se.SeatID " +
+                 "FROM Seats se " +
+                 "JOIN ShowSeats ss ON se.SeatID = ss.SeatID " +
+                 "WHERE se.SeatName = ? " +
+                 "AND ss.RoomID = ?";
+
+    try (Connection conn = getConnect(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        for (String seatName : seatNameList) {
+            stmt.setString(1, seatName);
+            stmt.setString(2, roomID);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                seatIDs.add(rs.getString("SeatID")); // Lưu SeatID vào danh sách
+            }
+            // Clear parameters before the next iteration
+            stmt.clearParameters(); // Xóa các tham số đã đặt
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return seatIDs; // Trả về danh sách SeatID
+}
+
+
+
 
     public static List<Seat> getSeatsByRoom(String roomID) {
         List<Seat> seatList = new ArrayList<>();
@@ -122,13 +169,17 @@ public class SeatDB implements DatabaseInfo {
     }
 
     public static void main(String[] args) {
-        // Example usage
-        Seat a = getSeat("S00001");
-        System.out.println(a);
-        // List all seats
-//        List<Seat> seats = listAll();
-//        for (Seat seat : seats) {
-//            System.out.println(seat);
-//        }
+        // Dữ liệu giả lập cho test
+        String seatNames = "D12, D13, E13, E14, E2, G2, G3, G4"; // Thay thế bằng tên ghế thực tế
+        String roomID = "R00001"; // ID phòng chiếu
+
+        // Gọi phương thức để lấy SeatID
+        List<String> seatIDs = getSeatIDsFromNames(seatNames, roomID);
+
+        // In ra danh sách SeatID
+        System.out.println("Danh sách SeatID:");
+        for (String seatID : seatIDs) {
+            System.out.println(seatID);
+        }
     }
 }

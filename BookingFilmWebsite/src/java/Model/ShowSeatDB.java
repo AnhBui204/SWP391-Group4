@@ -20,7 +20,9 @@ import java.sql.SQLException;
 import java.text.ParseException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,7 +52,7 @@ public class ShowSeatDB {
             stmt.setString(1, seatID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                showseat = new ShowSeat(rs.getString("ShowID"), rs.getString("SeatID"), rs.getString("RoomID"), rs.getString("TheatreID"), rs.getInt("IsAvailable"));
+                showseat = new ShowSeat(rs.getString("ShowID"), rs.getString("SeatID"), rs.getString("RoomID"), rs.getString("TheatreID"), rs.getInt("IsAvailable"),   rs.getInt("Price"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, null, ex);
@@ -61,7 +63,7 @@ public class ShowSeatDB {
  public static List<ShowSeat> getSeatByRoom(String roomID) {
         List<ShowSeat> seatList = new ArrayList<>();
         try (Connection con = getConnect()) {
-            String query = "SELECT showID, seatID, roomID, theatreID, IsAvailable FROM ShowSeats WHERE RoomID=?";
+            String query = "SELECT showID, seatID, roomID, theatreID, IsAvailable,Price FROM ShowSeats WHERE RoomID=?";
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString(1, roomID);
             ResultSet rs = stmt.executeQuery();
@@ -71,7 +73,8 @@ public class ShowSeatDB {
                         rs.getString("seatID"),
                         rs.getString("roomID"),
                         rs.getString("theatreID"),
-                        rs.getInt("IsAvailable")
+                        rs.getInt("IsAvailable"),
+                        rs.getInt("Price")
                 );
                 seatList.add(showSeat);
             }
@@ -147,38 +150,42 @@ public class ShowSeatDB {
         }
         return bookingTicketID;
     }
-public static List<String> getSeatsForShow(String movieID, String theatreID, String startTime, String showDate) {
-    List<String> seats = new ArrayList<>();
+ public static List<SeatDetail> getSeatsForShow(String movieID, String theatreID, String startTime, String showDate) {
+        List<SeatDetail> seats = new ArrayList<>();
 
-    String query = "SELECT s.SeatName " +
-                   "FROM Seats s " +
-                   "JOIN ShowSeats ss ON s.SeatID = ss.SeatID " +
-                   "JOIN Rooms r ON s.RoomID = r.RoomID " +
-                   "JOIN Theatres t ON r.TheatreID = t.TheatreID " +
-                   "JOIN Shows sh ON ss.ShowID = sh.ShowID " +
-                   "WHERE sh.MovieID = ? " +
-                   "AND t.TheatreID = ? " +
-                   "AND sh.StartTime = ? " +
-                   "AND sh.ShowDate = ?";
+        String query = "SELECT s.SeatName, ss.IsAvailable, ss.Price " +
+                       "FROM Seats s " +
+                       "JOIN ShowSeats ss ON s.SeatID = ss.SeatID " +
+                       "JOIN Rooms r ON s.RoomID = r.RoomID " +
+                       "JOIN Theatres t ON r.TheatreID = t.TheatreID " +
+                       "JOIN Shows sh ON ss.ShowID = sh.ShowID " +
+                       "WHERE sh.MovieID = ? " +
+                       "AND t.TheatreID = ? " +
+                       "AND sh.StartTime = ? " +
+                       "AND sh.ShowDate = ?";
 
-    try (Connection conn = getConnect();
-         PreparedStatement pstmt = conn.prepareStatement(query)) { 
-        pstmt.setString(1, movieID);  
-        pstmt.setString(2, theatreID);   
-        pstmt.setString(3, startTime);
-        pstmt.setString(4, showDate);
-        
-        ResultSet rs = pstmt.executeQuery();
-        while (rs.next()) {
-            String seatName = rs.getString("SeatName");
-            seats.add(seatName);
+        try (Connection conn = getConnect();
+             PreparedStatement pstmt = conn.prepareStatement(query)) { 
+            pstmt.setString(1, movieID);  
+            pstmt.setString(2, theatreID);   
+            pstmt.setString(3, startTime);
+            pstmt.setString(4, showDate);
+            
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String seatName = rs.getString("SeatName");
+                int isAvailable = rs.getInt("IsAvailable") ;
+                int price = rs.getInt("Price");
+
+                SeatDetail seatDetails = new SeatDetail(seatName, isAvailable, price);
+                seats.add(seatDetails);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
 
-    return seats;
-}
+        return seats;
+    }
 
 
 
@@ -189,19 +196,19 @@ public static List<String> getSeatsForShow(String movieID, String theatreID, Str
     }
     
     
-    public static void main(String[] args) {
-       String showDate = "2024-09-13";  // Ngày chiếu
-        String startTime = "14:00:00";      // Giờ chiếu
-        String theatreName = "CGV Vincom Đà Nẵng";  // Tên rạp
-        String movieName = "Inception"; // Tên phim
+  public static void main(String[] args) {
+    String movieID = "M00001";
+    String theatreID = "T00001";
+    String startTime = "16:30:00";
+    String showDate = "2024-09-13";
 
-        // Gọi phương thức và in kết quả
-        List<String> seats = getSeatsForShow(showDate, startTime, theatreName, movieName);
-        System.out.println("Danh sách ghế có sẵn:");
-        for (String seat : seats) {
-            System.out.println(seat);
-        }
-    
-    
+    List<SeatDetail> seats = getSeatsForShow(movieID, theatreID, startTime, showDate);
+
+    System.out.println("Danh sách ghế cho suất chiếu:");
+    for (SeatDetail seat : seats) {
+        System.out.println(seat); // In ra thông tin ghế
+        System.out.println("Is Available: " + seat.getIsAvailables()); // Kiểm tra trạng thái có sẵn
+    }
 }
+
 }

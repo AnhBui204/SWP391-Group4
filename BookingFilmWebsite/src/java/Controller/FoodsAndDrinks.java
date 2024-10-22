@@ -75,11 +75,14 @@ public class FoodsAndDrinks extends HttpServlet {
             throws ServletException, IOException {
       String selectedSeats = request.getParameter("selectedSeats");
         String theatreID = request.getParameter("theatreID");
+        String totalPrice = request.getParameter("totalPrice");
         System.out.println("theatreID:"+theatreID);
+        System.out.println("Price: "+totalPrice);
       HttpSession session = request.getSession();
       List<FoodAndDrink> combo = FoodAndDrinkDB.getFoodsAndDrinksByTheatreID(theatreID);
         System.out.println(combo);
       session.setAttribute("selectedSeats", selectedSeats);
+      session.setAttribute("totalPrice", totalPrice);
       request.setAttribute("foodMenu", combo);
         request.getRequestDispatcher("DrinkAndFood.jsp").forward(request, response);
     }

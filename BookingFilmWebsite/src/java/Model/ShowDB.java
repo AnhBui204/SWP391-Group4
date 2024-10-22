@@ -59,6 +59,28 @@ public static List<Show> getAllShows() {
 
     return showList;
 }
+public static String getShowID(String showDate, String startTime) {
+    String showID = null;
+    String sql = "SELECT ShowID FROM Shows WHERE ShowDate = ? AND StartTime = ? ";
+
+    try (Connection conn = getConnect(); 
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, showDate);
+        pstmt.setString(2, startTime);
+      
+
+        try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                showID = rs.getString("ShowID"); // Lấy giá trị ShowID từ kết quả truy vấn
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    
+    return showID;
+}
 
  public static List<String> getShowDatesByMovieAndTheatre(String movieID, String theatreID) {
         List<String> showDates = new ArrayList<>();
@@ -88,7 +110,24 @@ public static List<Show> getAllShows() {
         
         return showDates; 
     }
+public static String getShowIDFromDateAndTime(Date showDate, Time startTime) {
+    String showID = null;
+    String sql = "SELECT ShowID FROM Shows WHERE ShowDate = ? AND StartTime = ?"; // Cập nhật để sử dụng showDate và startTime
 
+    try (Connection conn = getConnect(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setDate(1, new java.sql.Date(showDate.getTime())); // Chuyển đổi Date sang java.sql.Date
+        stmt.setTime(2, startTime); // Sử dụng startTime
+
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            showID = rs.getString("ShowID");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return showID; // Trả về ShowID
+}
 
 
 
@@ -120,14 +159,13 @@ public static List<Show> getAllShows() {
                  "(SELECT ShowID FROM ShowSeats WHERE TheatreID = ? AND IsAvailable = 1)";
 
     try {
-       Connection conn = getConnect(); // Lấy kết nối từ phương thức getConnect()
-    PreparedStatement    pstmt = conn.prepareStatement(sql); // Tạo PreparedStatement
-
+       Connection conn = getConnect(); 
+    PreparedStatement    pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, movieID);
         pstmt.setDate(2, java.sql.Date.valueOf(showDate));
         pstmt.setString(3, theatreID);
 
-   ResultSet     resultSet = pstmt.executeQuery(); // Thực thi truy vấn
+   ResultSet resultSet = pstmt.executeQuery(); // Thực thi truy vấn
 
         // Lấy thời gian bắt đầu và thêm vào danh sách
         while (resultSet.next()) {
@@ -143,16 +181,18 @@ public static List<Show> getAllShows() {
 
  public static void main(String[] args) {
         // Ví dụ gọi phương thức getStartTimes
-        String movieID = "M00001"; // ID của phim
-        String theatreID = "T00001"; // ID của rạp
+     
+     
         String showDate = "2024-09-13"; // Ngày chiếu
+        String startTime = "16:30:00";
+       
+       String showID = getShowID(showDate, startTime);
 
-        List<String> startTimes = getStartTimes(movieID, theatreID, showDate);
-
-        // In kết quả ra console
-        System.out.println("Thời gian bắt đầu cho phim " + movieID + " tại rạp " + theatreID + " vào ngày " + showDate + ":");
-        for (String time : startTimes) {
-            System.out.println(time);
+        // Kiểm tra và hiển thị kết quả
+        if (showID != null) {
+            System.out.println("ShowID: " + showID);
+        } else {
+            System.out.println("Không tìm thấy ShowID cho ngày và giờ đã nhập.");
         }
     }
 }

@@ -4,19 +4,21 @@ public class ShowSeat {
 
     private String showID;
     private String seatID;
+
     private String roomID;
     private String theatreID;
     private int isAvailable;
-
+    private int Price;
     public ShowSeat() {
     }
 
-    public ShowSeat(String showID, String seatID, String roomID, String theatreID, int isAvailable) {
+    public ShowSeat(String showID, String seatID, String roomID, String theatreID, int isAvailable,int Price) {
         this.showID = showID;
         this.seatID = seatID;
         this.roomID = roomID;
         this.theatreID = theatreID;
         this.isAvailable = isAvailable;
+        this.Price=Price;
     }
 
     public String getShowID() {
@@ -57,6 +59,14 @@ public class ShowSeat {
 
     public void setIsAvailable(int isAvailable) {
         this.isAvailable = isAvailable;
+    }
+
+    public int getPrice() {
+        return Price;
+    }
+
+    public void setPrice(int Price) {
+        this.Price = Price;
     }
 
     @Override

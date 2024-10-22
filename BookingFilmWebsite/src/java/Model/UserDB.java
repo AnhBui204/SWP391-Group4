@@ -1,5 +1,6 @@
 package Model;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.TreeSet;
@@ -22,10 +23,25 @@ public class UserDB implements DatabaseInfo {
         }
         return null;
     }
+ public static void uploadProfileImage(String userID, String avatarPath) {
+        String query = "UPDATE Users SET Avatar = ? WHERE UserID = ?";
 
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, avatarPath);  // Save the path instead of a BLOB
+            stmt.setString(2, userID);
+
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Avatar path updated successfully.");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Failed to upload avatar path.");
+        }
+    }
     public static User getUsers(String username, String password) {
         User user = null;
-        String query = "select UserName, Pass, FName , LName , UserID, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft "
+        String query = "select UserName, FName , LName, Pass , UserID, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar "
                 + "from Users where UserName =? and Pass=? ";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
@@ -37,19 +53,19 @@ public class UserDB implements DatabaseInfo {
             if (rs.next()) {
                 // String id = rs.getString("UserId");
                 username = rs.getString(1);
-                password = rs.getString(2);
-                String fName = rs.getString(3);
-                String lName = rs.getString(4);
+                String fName = rs.getString(2);
+                String lName = rs.getString(3);
+                password = rs.getString(4);
                 String id = rs.getString(5);
                 String email = rs.getString(6);
                 String role = rs.getString(7);
                 String phone = rs.getString(8);
                 String sex = rs.getString(9);
-                String DOB = rs.getString(10);
+                Date DOB = rs.getDate(10);
                 String money = rs.getString(11);
+                String avatar = rs.getString(12);
 
-                
-                user = new User(id, username, password, fName, lName, email, role, phone, sex, DOB, money);
+                user = new User(id, username, fName, lName, password, email, role, phone, sex, DOB, money, avatar);
             }
 
         } catch (Exception ex) {
@@ -59,7 +75,39 @@ public class UserDB implements DatabaseInfo {
     }
 //--------------------------------------------------------------------------------------------
     // Phương thức để lấy ID lớn nhất hiện có
+    public static User getUsersByID(String userID) {
+        User user = null;
+        String query = "select UserName, FName , LName, Pass , UserID, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar "
+                + "from Users where UserID =? ";
 
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+
+            stmt.setString(1, userID);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                // String id = rs.getString("UserId");
+                String username = rs.getString(1);
+                String fName = rs.getString(2);
+                String lName = rs.getString(3);
+                String password = rs.getString(4);
+                String id = rs.getString(5);
+                String email = rs.getString(6);
+                String role = rs.getString(7);
+                String phone = rs.getString(8);
+                String sex = rs.getString(9);
+                Date DOB = rs.getDate(10);
+                String money = rs.getString(11);
+                String avatar = rs.getString(12);
+
+                user = new User(id, username, fName, lName, password, email, role, phone, sex, DOB, money, avatar);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return user;
+    }
     public String getMaxUserId() {
         String maxId = null;
         String query = "SELECT MAX(CAST(SUBSTRING(UserId, 3, LEN(UserId) - 2) AS INT)) AS maxId FROM Users WHERE UserId LIKE 'US%'";
@@ -157,7 +205,7 @@ public class UserDB implements DatabaseInfo {
 
     public static ArrayList<User> listAllUsers() {
         ArrayList<User> userList = new ArrayList<>();
-        String query = "SELECT UserID, UserName,Pass , FName , LName, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft FROM Users";
+        String query = "SELECT UserID, UserName, FName , LName, Pass , Email,Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar FROM Users";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
             ResultSet rs = stmt.executeQuery();
@@ -169,14 +217,15 @@ public class UserDB implements DatabaseInfo {
                 String fname = rs.getString("FName");
                 String lname = rs.getString("LName");
                 String email = rs.getString("Email");
-                String role = rs.getString("Role"); 
+                String role = rs.getString("Role");
                 String phone = rs.getString("Phone");
                 String sex = rs.getString("Sex");
-                String dob = rs.getString("DateOfBirth");
+                Date dob = rs.getDate("DateOfBirth");
                 String money = rs.getString("MoneyLeft");
+                String avatar = rs.getString("Avatar");
                 // Assuming all are regular users by default
 
-                User user = new User(userID, username, password, fname, lname, email, role, phone, sex, dob, money);
+                User user = new User(userID, username, fname, lname, password, email, role, phone, sex, dob, money, avatar);
                 userList.add(user);
             }
         } catch (Exception ex) {
@@ -184,6 +233,25 @@ public class UserDB implements DatabaseInfo {
         }
         return userList;
     }
+public static BigDecimal getCurrentBalance(String userID) {
+    BigDecimal balance = null;
+    String sql = "SELECT MoneyLeft FROM Users WHERE userID = ?"; // Thay đổi theo cấu trúc bảng của bạn
+
+    try (Connection conn = getConnect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, userID);
+        ResultSet rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            balance = rs.getBigDecimal("MoneyLeft");
+        }
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi truy vấn số tiền của người dùng: " + e.getMessage());
+    }
+
+    return balance;
+}
 
     public static void main(String[] args) {
         ArrayList<User> list = UserDB.listAllUsers();
