@@ -509,29 +509,48 @@ public class MovieDB {
 
     }
     
+    public static List<String> getListActorsByMovieId(String movieId){
+        List<String> actorArr = new ArrayList<>();
+        String sql = "select Actors.ActorName from MovieActors inner join Actors on MovieActors.ActorID = Actors.ActorID where MovieActors.MovieID = ?";
+        try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, movieId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                actorArr.add(rs.getString("ActorName"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return actorArr;
+    }
     
     public static void main(String[] args) {
 
         // Lấy danh sách tất cả các bộ phim
-//        System.out.println("\nDanh sách tất cả các bộ phim:");
-//        List<Movie> movies = MovieDB.getAllMovies();
-//        for (Movie movie : movies) {
-//            System.out.println(movie);
-//        }
-
-        HashMap<String, HashMap<String, List<String>>> hm = getTimelineDB("M00001");
-        
-        System.out.println(hm.size());
-        
-        for(String str: hm.keySet()){
-            System.out.println(str);
-            HashMap<String, List<String>> hmm = hm.get(str);
-            System.out.println(hmm.size());
-            for (String strr: hmm.keySet()){
-                System.out.println(strr);
-                System.out.println(hmm.get(strr));
-            }
+        System.out.println("\nDanh sách tất cả các bộ phim:");
+        List<Movie> movies = MovieDB.getAllMovies();
+        for (Movie movie : movies) {
+            System.out.println(movie);
         }
+
+//        HashMap<String, HashMap<String, List<String>>> hm = getTimelineDB("M00001");
+//        
+//        System.out.println(hm.size());
+//        
+//        for(String str: hm.keySet()){
+//            System.out.println(str);
+//            HashMap<String, List<String>> hmm = hm.get(str);
+//            System.out.println(hmm.size());
+//            for (String strr: hmm.keySet()){
+//                System.out.println(strr);
+//                System.out.println(hmm.get(strr));
+//            }
+//        }
         
     }
 

@@ -2470,7 +2470,7 @@ VALUES
 
 
 	INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
-VALUES ('SH0024', '2024-09-20', '22:30:00', 'M00001');
+VALUES ('SH0052', '2024-10-21', '22:30:00', 'M00001');
 
 -- Thêm ShowSeats 
 --Rap 1----------------------------------------------------------------
@@ -2491,7 +2491,26 @@ SELECT 'SH0001', SeatID, RoomID, TheatreID, 1
 FROM Seats
 WHERE RoomID = 'R00007' AND TheatreID = 'T00001'; 
 
+select * from Shows inner join ShowSeats on Shows.ShowID = ShowSeats.ShowID inner join Theatres on ShowSeats.TheatreID = Theatres.TheatreID
+where Shows.ShowID = 'SH0001'
+
+insert into ShowSeats (ShowID, SeatID, RoomID, TheatreID, Price, IsAvailable) values
+('SH0052','S00426','R00001','T00001',NULL, 1),
+('SH0001','S00425','R00001','T00001',NULL, 1),
+('SH0020','S00425','R00001','T00001',NULL, 1),
+('SH0050','S00425','R00001','T00001',NULL, 1),
+('SH0001','S00425','R00001','T00002',NULL, 1),
+('SH0001','S00425','R00001','T00003',NULL, 1),
+('SH0050','S00427','R00001','T00001',NULL, 1)
+
+SELECT * FROM Shows 
+ORDER BY ShowDate ASC
+
+select * from ShowSeats
+
 Select * from Shows
+
+select * from Movies
 
 Select * from Seats where TheatreID='T00002'
 
@@ -2506,6 +2525,9 @@ INNER JOIN Movies m ON sh.MovieID = m.MovieID
 WHERE ss.RoomID = 'R00001' 
 AND sh.ShowDate = '2024-09-13';
 
+update Movies
+set ImgLandscape = 'image/MovieImg/L/Jack.jpeg'
+where MovieID = 'M00003'
 
 -- Thêm Actors (diễn viên)
 INSERT INTO Actors (ActorID, ActorName)

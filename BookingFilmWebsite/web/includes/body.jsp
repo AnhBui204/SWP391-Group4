@@ -26,15 +26,16 @@
             border: solid #d5d5d5;
         }
 
-        .box2-1 .skin p{
+        .box2-1 .skin p,input{
             width: 50%;
             margin: auto;
             margin-bottom: 20px;
-            color: black;
+            color: white;
             border: solid #f47f19;
             text-align: center;
-            background-color: #eb7d5d;
+            background-color: #f5821e;
             padding: 8px 15px;
+            border-radius: 10px;
         }
 
         .box2-1 .skin .layer{
@@ -47,7 +48,7 @@
             opacity: 100%;
         }
 
-        .box2-1 .skin p:hover{
+        .box2-1 .skin p,input:hover{
             background-color: #ffa75a;
         }
     </style>
@@ -66,9 +67,9 @@
                 <div class="col-md-3 col-6 mb-4"> <!-- col-md-3 for larger screens, col-6 for mobile -->
                     <div class="box2-1">
                         <div class="skin">
-                            <div class="layer">
+                            <div class="layer fs-4">
                                 <p>Mua vé</p>
-                                <form action="MovieDetailServlet" method="post">
+                                <form action="MovieDetailServlet" method="post" class="d-flex justify-content-center">
                                 <input type="text" name="MovieId" value="<%=movie.getMovieID()%>" hidden/>
                                 <input type="text" name="MovieName" value="<%=movie.getMovieName()%>" hidden/>
                                 <input type="text" name="Duration" value="<%=movie.getDuration()%>" hidden/>
@@ -88,10 +89,10 @@
                         </div>
                         <img src="<%= movie.getImgPortrait()%>" alt="alt" class="img-fluid small-image" />
                         <div class="box3">
-                            <div class="danhgia">
+                            <div class="danhgia fs-4">
                                 <p><i class="fas fa-star"></i> 8.0</p>
                             </div>
-                            <div class="dotuoi">
+                            <div class="dotuoi fs-4">
                                 <p>T16</p>
                             </div>
                         </div>

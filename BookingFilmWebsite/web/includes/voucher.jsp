@@ -10,12 +10,12 @@
     <title>Vendor Voucher</title>
    
 </head>
-<body>
+<body class="bodyy">
     <main>
-        <header>
+        <header class="headerr">
             <h1>TIN KHUYẾN MÃI</h1>
         </header>
-        <section>
+        <section class="sectionn">
             <% 
                 List<Voucher> listvc = VoucherDB.getAllVouchers();
                 for(Voucher vc : listvc){

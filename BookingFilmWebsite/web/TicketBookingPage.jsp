@@ -3,8 +3,7 @@
     Created on : Sep 10, 2024, 8:10:34 PM
     Author     : ANH BUI
 --%>
-<%@include file="includes/headerNavbar.jsp" %>
-<link rel="stylesheet" href="css/headers.css" />
+<%@include file="includes/header.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>

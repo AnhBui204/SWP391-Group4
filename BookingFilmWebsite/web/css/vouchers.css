@@ -1,29 +1,29 @@
 /* Styling for the page */
-body {
+.bodyy {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
 }
 
-header {
+.headerr {
     text-align: center;
     padding: 20px;
     background-color: #ff5733;
     color: white;
 }
 
-header h1 {
+.headerr h1 {
     font-size: 36px;
     margin: 0;
 }
 
-header p {
+.headerr p {
     margin-top: 10px;
     font-size: 24px;
 }
 
-section {
+.sectionn {
     display: flex;
     padding: 20px;
     overflow-x: hidden; /* Hide horizontal scrollbar */
