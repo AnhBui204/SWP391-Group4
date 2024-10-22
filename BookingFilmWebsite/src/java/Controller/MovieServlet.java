@@ -66,9 +66,7 @@ public class MovieServlet extends HttpServlet {
             case "getShowInfo":
                 handleGetShowInfo(request, response);
                 break;
-            case "selectMovie":
-                handleSelectMovie(request, response);
-                break;
+            
 //            case "search":
 //                handleSearchMovie(request, response);
 //                break;
@@ -224,13 +222,8 @@ public class MovieServlet extends HttpServlet {
 
     private void handleBooking(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Movie> movie = MovieDB.getAllMovies();
         List<Theatre> theatre = TheatreDB.listAllTheatres();
-        List<Show> shows = ShowDB.getAllShows();
-        
-        request.setAttribute("movie", movie);
         request.setAttribute("theatres", theatre);
-        request.setAttribute("shows", shows);
         request.getRequestDispatcher("Booking.jsp").forward(request, response);
 
     }
@@ -301,26 +294,6 @@ public class MovieServlet extends HttpServlet {
         response.getWriter().write(new Gson().toJson(showInfoList));
     }
 
-    private void handleSelectMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            JsonObject jsonObject = new Gson().fromJson(request.getReader(), JsonObject.class);
-            String movieID = jsonObject.get("movieID").getAsString();
-            String theatreID = jsonObject.get("theatreID").getAsString();
-            if (movieID.isEmpty() || theatreID.isEmpty()) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
-            System.out.println("Received movieID: " + movieID + ", theatreID: " + theatreID);
-            List<Date> showList = ShowDB.getShowDatesByMovieAndTheatre(movieID, theatreID);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            new Gson().toJson(showList, response.getWriter());
-        }   catch (JsonIOException | JsonSyntaxException | IOException e) {
-            // Xử lý các lỗi khác
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
-
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

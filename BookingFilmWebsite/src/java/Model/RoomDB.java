@@ -7,6 +7,8 @@ import static Model.DatabaseInfo.USERDB;
 import static Model.ShowSeatDB.getConnect;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +28,70 @@ public class RoomDB implements DatabaseInfo {
         }
         return null;
     }
+public static String getRoomIdBySeatNamesAndShowDateAndTime(String seatNames, String showDate, String startTime) {
+    String roomId = null;
+
+    // Kiểm tra danh sách ghế không rỗng
+    if (!seatNames.isEmpty()) {
+        // Tách chuỗi và loại bỏ khoảng trắng
+        List<String> seatNameList = Arrays.asList(seatNames.split(",\\s*"));
+
+        // Tạo placeholder cho điều kiện IN
+        String seatNamesPlaceholder = String.join(",", Collections.nCopies(seatNameList.size(), "?"));
+
+        String query = "SELECT ss.RoomID " +
+                       "FROM ShowSeats ss " +
+                       "JOIN Seats se ON ss.SeatID = se.SeatID " +
+                       "JOIN Shows sh ON ss.ShowID = sh.ShowID " +
+                       "WHERE se.SeatName IN (" + seatNamesPlaceholder + ") " +
+                       "AND sh.ShowDate = ? " +
+                       "AND sh.StartTime = ?";
+
+        try (Connection con = getConnect(); 
+             PreparedStatement preparedStatement = con.prepareStatement(query)) {
+
+            // Đặt giá trị cho các tham số ghế
+            for (int i = 0; i < seatNameList.size(); i++) {
+                preparedStatement.setString(i + 1, seatNameList.get(i).trim()); // Loại bỏ khoảng trắng
+            }
+
+            // Đặt giá trị cho tham số ngày và giờ
+            preparedStatement.setString(seatNameList.size() + 1, showDate);
+            preparedStatement.setString(seatNameList.size() + 2, startTime);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    roomId = resultSet.getString("RoomID");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    return roomId; // Trả về RoomID hoặc null nếu không tìm thấy
+}
+
+
+public static String getRoomIDFromShow(String showID) {
+    String roomId = null;
+    String query = "SELECT DISTINCT RoomID FROM ShowSeats WHERE ShowID = ?";
+
+    try (Connection con = getConnect()) {
+        PreparedStatement preparedStatement = con.prepareStatement(query);
+        preparedStatement.setString(1, showID);
+
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            if (resultSet.next()) {
+                roomId = resultSet.getString("RoomID");
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return roomId; // Trả về RoomID hoặc null nếu không tìm thấy
+}
 
     // Method to get room details by RoomID
     public static Room getRoom(String roomID) {

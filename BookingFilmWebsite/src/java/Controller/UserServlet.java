@@ -52,9 +52,9 @@ public class UserServlet extends HttpServlet {
             case "uploadprofileimage":
                 handleUploadProfileImage(request, response); // Case for image upload
                 break;
-            case "updateProfile":
-                handleUpdateProfile(request, response); // Case for image upload
-                break;
+//            case "updateProfile":
+//                handleUpdateProfile(request, response); // Case for image upload
+//                break;
             default:
                 response.sendRedirect("error.jsp");
                 break;

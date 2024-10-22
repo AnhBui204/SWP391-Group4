@@ -7,6 +7,7 @@ import static Model.DatabaseInfo.USERDB;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +42,34 @@ public class SeatDB implements DatabaseInfo {
         }
         return seat;
     }
+public static List<String> getSeatIDsFromNames(String seatNames, String roomID) {
+    List<String> seatIDs = new ArrayList<>();
+    // Tách chuỗi thành danh sách các ghế
+    List<String> seatNameList = Arrays.asList(seatNames.split(",\\s*")); // Tách chuỗi và loại bỏ khoảng trắng
 
+    String sql = "SELECT se.SeatID " +
+                 "FROM Seats se " +
+                 "JOIN ShowSeats ss ON se.SeatID = ss.SeatID " +
+                 "WHERE se.SeatName = ? " +
+                 "AND ss.RoomID = ?";
+
+    try (Connection conn = getConnect(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        for (String seatName : seatNameList) {
+            stmt.setString(1, seatName);
+            stmt.setString(2, roomID);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                seatIDs.add(rs.getString("SeatID")); // Lưu SeatID vào danh sách
+            }
+            // Clear parameters before the next iteration
+            stmt.clearParameters(); // Xóa các tham số đã đặt
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return seatIDs; // Trả về danh sách SeatID
+}
     // Method to get all seats in a specific room
     public static List<Seat> getSeatsByRoom(String roomID) {
         List<Seat> seatList = new ArrayList<>();

@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,25 @@ public class UserDB implements DatabaseInfo {
         }
         return user;
     }
+public static BigDecimal getCurrentBalance(String userID) {
+    BigDecimal balance = null;
+    String sql = "SELECT MoneyLeft FROM Users WHERE userID = ?"; // Thay đổi theo cấu trúc bảng của bạn
 
+    try (Connection conn = getConnect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, userID);
+        ResultSet rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            balance = rs.getBigDecimal("MoneyLeft");
+        }
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi truy vấn số tiền của người dùng: " + e.getMessage());
+    }
+
+    return balance;
+}
     public static User getUsersByID(String userID) {
         User user = null;
         String query = "select UserName, FName , LName, Pass , UserID, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar "
