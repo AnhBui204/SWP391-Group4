@@ -13,6 +13,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -128,8 +129,10 @@ public class MovieDetailServlet extends HttpServlet {
             response.getWriter().println(ex);
         }
         } else {
+            HttpSession session = request.getSession();
+            String userId = (String) session.getAttribute("id");
             String mvId = request.getParameter("mvId");
-            MovieDB.addOrUpdateRate("T00001", mvId, Integer.parseInt(rate));
+            MovieDB.addOrUpdateRate(userId, mvId, Integer.parseInt(rate));
 
             try {
                 //        processRequest(request, response);

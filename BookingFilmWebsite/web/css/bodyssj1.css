@@ -162,7 +162,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     height: 40px;
 }
 
-#box_signlog .login_button button,a{
+/*#box_signlog .login_button button,a{
     width: 90%;
     margin: 1% 5%;
 }
@@ -170,7 +170,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 #box_signlog .no_account p,a{
     width: 90%;
     margin: 1% 5%;
-}
+}*/
 
 .hidden {
     display: none;

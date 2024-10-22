@@ -7,23 +7,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     Author     : DELL
 */
 
-body {
+/*body {
     margin: 0;
     font-family: Arial;
-}
+}*/
 
 .footer {
     background: linear-gradient(135deg, #F4A460, #FFE4B5);
     color: #681740;
     padding: 10px 0;
-}
-
-.container {
-    display: flex;
-    justify-content: space-around;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+     margin: 0;
+    font-family: Arial;
 }
 
 .footer-column {

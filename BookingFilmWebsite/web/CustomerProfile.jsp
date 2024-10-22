@@ -1,6 +1,11 @@
-
+<%
+    String user = (String) session.getAttribute("user");
+    if (user == null) { %>
+<%@include file="includes/header.jsp" %>
+<% } else { %>
 <%@include file="includes/header_user.jsp" %>
-<link rel="stylesheet" href="css/headerssj2.css" />
+<% }%>
+<link rel="stylesheet" href="css/headerssj2.css">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
@@ -8,7 +13,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Chỉnh sửa hồ sơ</title>
-        <link rel="stylesheet" href="bootstrap/css/bootstrap.css"/>
+        <link rel="stylesheet" href="bs/css/bootstrap.min.css"/>
+
         <link rel="stylesheet" href="css/CustomerProfile_css.css">
     </head>
     <body>
@@ -101,7 +107,11 @@
                                 <button class="input-group-text">Thay đổi</button>
                             </div>
                         </div>
-                        <button class="btn btn-warning mt-5">Cập nhật thông tin</button>
+
+                        <button type="button" class="btn btn-warning mt-3" data-bs-toggle="modal" data-bs-target="#updateProfileModal">
+                            Cập nhật
+                        </button>
+
                     </div>
                 </div>
             </c:if>
@@ -109,9 +119,55 @@
                 <p>No user information available.</p>
             </c:if>
         </div>
-        <script src="bs/js/bootstrap.bundle.js"></script>
+
+
+
+        <div class="modal" id="updateProfileModal" tabindex="-1" aria-labelledby="simpleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateProfileModalLabel">Cập nhật thông tin cá nhân</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="updateProfileForm" action="UserServlet?action=updateProfile" method="POST">
+
+                            <div class="mb-3">
+                                <p class="m-0">Tên <span class="text-danger">*</span></p>
+                                <input type="text" required name="firstName" placeholder="Tên" class="w-100 fs-5"/>
+                            </div>
+                            <div class="mb-3">
+                                <p class="m-0">Họ <span class="text-danger">*</span></p>
+                                <input type="text" required name="lastName" placeholder="Họ" class="w-100 fs-5"/>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <p class="m-0">Số điện thoại <span class="text-danger">*</span></p>
+                                <input type="tel" id="phone" name="phone" required placeholder="Số điện thoại" class="w-100 fs-5"/>
+                                <p id="phoneError" class="error-message">Số điện thoại đã được sử dụng.</p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="m-0">Giới tính</p>
+                                <select name="gender" class="w-100 fs-5" style="padding: 1px 2px;">
+                                    <option>Nam</option>
+                                    <option>Nữ</option>
+                                    <option>Khác</option>
+                                </select>
+                            </div>
+                            
+                            <input type="hidden" name="userID" value="${user.userID}" />
+                            <button type="button" class="btn btn-primary" id="saveProfileButton">Lưu thay đổi</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </body>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="bs/js/bootstrap.bundle.js"></script>
     <script>
         $(document).ready(function () {
             $('#uploadButton').click(function () {
@@ -124,8 +180,7 @@
                     contentType: false,
                     processData: false,
                     success: function (response) {
-                        // Cập nhật lại ảnh đại diện trên trang
-                        $('#profileImageDisplay').attr('src', response.newAvatarPath);
+                        $('#profileImage').attr('src', response.newAvatarPath);
                         alert(response.message);
                     },
                     error: function () {
@@ -133,9 +188,33 @@
                     }
                 });
             });
+
+            // Handle profile update form submission
+            $('#saveProfileButton').click(function () {
+                var updateData = {
+                    userID: $('#updateProfileForm input[name="userID"]').val(),
+                    email: $('#updateEmail').val(),
+                    phone: $('#updatePhone').val(),
+                    password: $('#updatePassword').val()
+                };
+
+                $.ajax({
+                    url: 'UserServlet?action=updateProfile',
+                    type: 'POST',
+                    data: updateData,
+                    success: function (response) {
+                        alert(response.message);
+                        $('#updateProfileModal').modal('hide'); // Hide the modal after success
+                        // Optionally update the displayed information on the page
+                    },
+                    error: function () {
+                        alert('Profile update failed.');
+                    }
+                });
+            });
         });
     </script>
 
     <%@include file="includes/footer.jsp" %>
-    <link rel="stylesheet" href="css/footer.css" />
+    <link rel="stylesheet" href="css/footerssj2.css" />
 </html>

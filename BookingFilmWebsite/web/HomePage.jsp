@@ -49,7 +49,7 @@
 <link rel="stylesheet" href="css/headerssj2.css" />
 <link rel="stylesheet" href="css/bodyssj1.css" />
 <link rel="stylesheet" href="css/vouchers.css" />
-<link rel="stylesheet" href="css/footer.css" />
+<link rel="stylesheet" href="css/footerssj2.css" />
 
 <script src="js/jvs.js"></script>
 <script src="js/vouchers.js"></script>

@@ -1,3 +1,4 @@
+<%@page import="Model.Movie"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="Model.ShowDB"%>
@@ -5,6 +6,7 @@
 <%@ page import="Model.MovieDB" %>
 <%
     String movieId = (String) request.getAttribute("movieId");
+    Movie movie = MovieDB.getMovieById(movieId);
     HashMap<String, HashMap<String, List<String>>> hmDay = MovieDB.getTimelineDB(movieId);
     List<String> dayArr = new ArrayList<>();
     if (!hmDay.isEmpty()) {
@@ -13,6 +15,7 @@
         }
     }
     String showIdTable = "";
+    List<String> actorArr = MovieDB.getListActorsByMovieId(movieId);
 %>
 <div id="rate" class="d-flex justify-content-center align-items-center d-none">
     <div id="rate_box" class="bg-white text-center rounded">
@@ -71,8 +74,14 @@
         <p class=" mt-2 text-grey"><%=MovieDB.getNumRate(movieId)%> votes</p>
     </div>
 </div>
+<%
+    String user = (String) session.getAttribute("user");
+    if (user == null) { %>
 <%@include file="includes/header.jsp" %>
-<link rel="stylesheet" href="css/headerssj1.css" />
+<% } else { %>
+<%@include file="includes/header_user.jsp" %>
+<% }%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -80,6 +89,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link rel="stylesheet" href="bs/css/bootstrap.css"/>
+        <link rel="stylesheet" href="css/headerssj2.css"/>
         <link rel="stylesheet" href="css/MovieDetail_css.css"/>
     </head>
     <style>
@@ -140,15 +150,16 @@
                                 <div class="mt-2 bg-secondary-subtle d-inline fs-4 p-2 rounded"><p class="d-inline fs-4">Đạo diễn: </p><p class="d-inline fs-4 fw-bold"><%= request.getAttribute("director")%></p></div>
                             </div>
                             <div class="mt-3">
-                                <div class="mt-2 bg-secondary-subtle d-inline fs-4 p-2 rounded"><p class="d-inline fs-4">Diễn viên: </p><p class="d-inline fs-4 fw-bold">người 1, người 2, người 3</p></div>
+                                <div class="mt-2 bg-secondary-subtle d-inline fs-4 p-2 rounded"><p class="d-inline fs-4">Diễn viên: </p><p class="d-inline fs-4 fw-bold"><%for (String actor: actorArr){%><%=actor+", "%><%}%></p></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div id="movie_introduction" class="row z-1 position-relative" style="background-color: rgba(255,255,255,0.5); margin-top: 250px;">
+                <div id="movie_introduction" class="row z-1 position-relative text-white" style="background-color: rgba(255,255,255,0.5); margin-top: 250px;">
                     <h1 class="col-12 display-5 pt-5 px-4">Giới Thiệu Phim</h1>
-                    <p class="col-12 fs-4 fw-medium px-5 pb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a venenatis nulla. Nullam malesuada dignissim augue, at lobortis urna fermentum sed. Sed a facilisis leo. Aliquam dapibus augue sem, sed finibus nisi elementum non. Aliquam sollicitudin tincidunt odio eget ornare. Aenean non ornare dolor. Mauris non lorem vitae erat rhoncus ullamcorper eget fermentum leo. Vivamus bibendum tellus sit amet velit gravida, ut pharetra tellus aliquet. Nunc ac nisi et turpis consequat tempor.</p>
+<!--                    <p class="col-12 fs-4 fw-medium px-5 pb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a venenatis nulla. Nullam malesuada dignissim augue, at lobortis urna fermentum sed. Sed a facilisis leo. Aliquam dapibus augue sem, sed finibus nisi elementum non. Aliquam sollicitudin tincidunt odio eget ornare. Aenean non ornare dolor. Mauris non lorem vitae erat rhoncus ullamcorper eget fermentum leo. Vivamus bibendum tellus sit amet velit gravida, ut pharetra tellus aliquet. Nunc ac nisi et turpis consequat tempor.</p>-->
+                    <p class="col-12 fs-4 fw-medium px-5 pb-4 mt-3"><%=movie.getDescription()%></p>
                 </div>
 
                 <div id="movie_schedule" class="row mt-5 mb-5 pb-5" style="background-color: rgba(255,255,255,0.5);">
@@ -368,4 +379,4 @@
     </body>
 </html>
 <%@include file="includes/footer.jsp" %>
-<link rel="stylesheet" href="css/footer.css" />
+<link rel="stylesheet" href="css/footerssj2.css" />

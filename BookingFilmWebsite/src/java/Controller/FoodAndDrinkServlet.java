@@ -111,7 +111,7 @@ public class FoodAndDrinkServlet extends HttpServlet {
         FoodAndDrinkDB.updateCombo(combo);
 
         // Set success message
-        request.setAttribute("message", "Food and Drink combo updated successfully!");
+        request.setAttribute("message", "Food and Drink combo cc successfully!");
         request.getRequestDispatcher("crudFD.jsp").forward(request, response);
     }
 

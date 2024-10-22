@@ -1,5 +1,5 @@
-﻿CREATE DATABASE super;
-USE super;
+﻿CREATE DATABASE supers;
+USE supers;
 
 CREATE TABLE Users (
     UserID CHAR(6) PRIMARY KEY,
@@ -150,22 +150,42 @@ CREATE TABLE Vouchers (
     ExpiryDate DATE,
 	FOREIGN KEY (TheatreID) REFERENCES Theatres(TheatreID) 
 );
-drop table if exists Vouchers
+
 -- Table for Tickets (linked to Booking, Shows, and Seats)
 CREATE TABLE Tickets (
-    TicketID CHAR(6) PRIMARY KEY,
-    BookingID CHAR(6),
-    ShowID CHAR(6),
-	TheatreID CHAR(6),
-	RoomID CHAR(6),
-    SeatID CHAR(6),
-    VoucherID CHAR(6),
-    Price INT check (Price >= 0),
-    BookingDate DATETIME,
-	TicketStatus NVARCHAR(10),
+    TicketID CHAR(6) PRIMARY KEY,         -- ID duy nhất cho mỗi vé
+    UserID CHAR(6) NOT NULL,              -- ID người dùng (khóa ngoại)
+    BookingID CHAR(6) NOT NULL,           -- ID đặt chỗ (khóa ngoại)
+    BookingSeatID CHAR(6) NOT NULL,-- ID ghế đã đặt (khóa ngoại)
+    RoomID CHAR(6) NOT NULL,
+    BookingComboID CHAR(6) NULL,          -- ID combo đã đặt (có thể NULL)
+    BookingDate DATE NOT NULL,          -- Ngày đặt vé
+    TotalPrice MONEY CHECK (TotalPrice >= 0), -- Tổng giá vé (có thể tính tổng giá của ghế và combo)
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),                      -- Khóa ngoại tham chiếu đến bảng Users
+    FOREIGN KEY (BookingID) REFERENCES Booking(BookingID),              -- Khóa ngoại tham chiếu đến bảng Booking
+    FOREIGN KEY (BookingSeatID) REFERENCES Booking_Seats(BookingSeatID), -- Khóa ngoại tham chiếu đến bảng Booking_Seats
+    FOREIGN KEY (BookingComboID) REFERENCES Booking_Combos(BookingComboID) -- Khóa ngoại tham chiếu đến bảng Booking_Combos
+);
+CREATE TABLE Booking_Seats(
+    BookingSeatID CHAR(6),   -- Một ID duy nhất cho từng bản ghi ghế trong bảng
+    BookingID CHAR(6),       -- Mã của booking (có thể đặt nhiều ghế trong một booking)
+    SeatID CHAR(6),          -- Ghế cụ thể đã đặt
+    ShowID CHAR(6),          -- Suất chiếu cho ghế đã đặt
+    Price MONEY CHECK (Price >= 0), -- Giá tiền cho ghế
+    PRIMARY KEY (BookingSeatID),    -- Sử dụng BookingSeatID làm khóa chính duy nhất cho từng bản ghi
+    FOREIGN KEY (BookingID) REFERENCES Booking(BookingID),  -- Khóa ngoại tham chiếu Booking
+    FOREIGN KEY (SeatID) REFERENCES Seats(SeatID),          -- Khóa ngoại tham chiếu Ghế
+    FOREIGN KEY (ShowID) REFERENCES Shows(ShowID)           -- Khóa ngoại tham chiếu Suất chiếu
+);
+CREATE TABLE Booking_Combos (
+    BookingComboID CHAR(6), -- Một ID duy nhất cho mỗi hàng trong bảng này (tùy chọn)
+    BookingID CHAR(6) NULL,  -- BookingID có thể NULL để phản ánh việc không bắt buộc phải có combo
+    ComboID CHAR(6) NOT NULL,  -- ComboID là cần thiết để xác định combo cụ thể
+    Quantity INT CHECK (Quantity >= 0), -- Số lượng combo mua
+    Price MONEY CHECK (Price >= 0), -- Giá tiền của combo
+    PRIMARY KEY (BookingComboID), -- Sử dụng BookingComboID làm khóa chính duy nhất cho mỗi bản ghi
     FOREIGN KEY (BookingID) REFERENCES Booking(BookingID),
-    FOREIGN KEY (ShowID, SeatID, RoomID, TheatreID) REFERENCES ShowSeats(ShowID, SeatID, RoomID, TheatreID),
-    FOREIGN KEY (VoucherID) REFERENCES Vouchers(VoucherID)
+    FOREIGN KEY (ComboID) REFERENCES FoodsAndDrinks(ComboID)
 );
 
 CREATE table WorkHis(
@@ -2610,6 +2630,120 @@ VALUES
 ('C00016', N'Bắp rang vị Caramel, Milo','T00001', 'image/FoodsAndDrinks/CGV4.jpg', 80000),
 ('C00017', N'Bắp ngăn đôi, Gồm 4 vị','T00001', 'image/FoodsAndDrinks/CGV5.jpg', 150000);
 
+
+insert into Actors(ActorID, ActorName, ImagePath) values
+('A00004','Denzel Washington',NULL),
+('A00005','Leonardo DiCaprio',NULL),
+('A00006','Christian Bale',NULL),
+('A00007','Meryl Streep',NULL),
+('A00008','Jack Nicholson',NULL),
+('A00009','Cate Blanchett',NULL),
+('A00010','Viola Davis',NULL),
+('A00011','Johnny Depp',NULL),
+('A00012','Brad Pitt',NULL)
+insert into MovieActors(MovieID, ActorID) values
+('M00001','A00011'),
+('M00002','A00007'),
+('M00003','A00008'),
+('M00004','A00002'),
+('M00005','A00004'),
+('M00006','A00006'),
+('M00007','A00001'),
+('M00008','A00003'),
+('M00009','A00005'),
+('M00010','A00004'),
+('M00011','A00010'),
+('M00012','A00009'),
+('M00013','A00003'),
+('M00014','A00012'),
+('M00015','A00004'),
+('M00006','A00007'),
+('M00007','A00010'),
+('M00008','A00001'),
+('M00009','A00003'),
+('M00010','A00005')
+insert into MovieGenres(GenreID, MovieID) values
+(1,'M00001'),
+(2,'M00001'),
+(8,'M00001'),
+(11,'M00001'),
+(16,'M00001'),
+(17,'M00001'),
+(6,'M00002'),
+(11,'M00002'),
+(16,'M00002'),
+(2,'M00003'),
+(3,'M00003'),
+(6,'M00003'),
+(7,'M00003'),
+(10,'M00003'),
+(16,'M00003'),
+(5,'M00004'),
+(8,'M00004'),
+(14,'M00004'),
+(2,'M00005'),
+(6,'M00005'),
+(7,'M00005'),
+(10,'M00005'),
+(17,'M00005'),
+(1,'M00006'),
+(6,'M00006'),
+(8,'M00006'),
+(4,'M00007'),
+(7,'M00007'),
+(8,'M00007'),
+(2,'M00008'),
+(3,'M00008'),
+(5,'M00008'),
+(8,'M00008'),
+(15,'M00008'),
+(17,'M00008'),
+(1,'M00009'),
+(5,'M00009'),
+(6,'M00009'),
+(8,'M00009'),
+(14,'M00009'),
+(16,'M00009'),
+(1,'M00010'),
+(2,'M00010'),
+(6,'M00010'),
+(16,'M00010'),
+(5,'M00011'),
+(8,'M00011'),
+(14,'M00011'),
+(7,'M00012'),
+(8,'M00012'),
+(10,'M00012'),
+(14,'M00012'),
+(2,'M00013'),
+(5,'M00013'),
+(13,'M00013'),
+(17,'M00013'),
+(5,'M00014'),
+(8,'M00014'),
+(14,'M00014'),
+(16,'M00014'),
+(5,'M00015'),
+(13,'M00015')
+insert into Genres(GenreName) values
+('Action'),
+('Adventure'),
+('Animation'),
+('Biography'),
+('Comedy'),
+('Crime'),
+('Documentary'),
+('Drama'),
+('Fantasy'),
+('Historical'),
+('Horror'),
+('Musical'),
+('Mystery'),
+('Romance'),
+('Science Fiction'),
+('Thriller'),
+('Western')
+	
 -- Thêm Booking (đơn đặt vé)
 INSERT INTO Booking (BookingID, UserID, ComboID, BookingDate)
 VALUES 

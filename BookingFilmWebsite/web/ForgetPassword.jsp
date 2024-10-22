@@ -21,8 +21,13 @@
         </div>
     </div>
 </div>
+<%
+    String user = (String) session.getAttribute("user");
+    if (user == null) { %>
 <%@include file="includes/header.jsp" %>
-<link rel="stylesheet" href="css/headers.css" />
+<% } else { %>
+<%@include file="includes/header_user.jsp" %>
+<% }%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>

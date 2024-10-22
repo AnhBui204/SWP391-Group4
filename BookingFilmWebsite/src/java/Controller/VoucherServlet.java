@@ -48,8 +48,6 @@ public class VoucherServlet extends HttpServlet {
     private void handleAddVC(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String name = request.getParameter("voucherName");
-        String sPrice = request.getParameter("price");
-        int price = Integer.parseInt(sPrice);
         String expDate = request.getParameter("expiryDate");
         Date expiryDate = Date.valueOf(expDate);
         String theatreID = request.getParameter("theatreID");
@@ -71,7 +69,7 @@ public class VoucherServlet extends HttpServlet {
         }
 
         // Create Voucher object and store it in DB
-        Voucher voucher = new Voucher(null, name, theatreID, fileURLPath, price, expiryDate);
+        Voucher voucher = new Voucher(null, name, theatreID, fileURLPath, expiryDate);
         VoucherDB.createVoucher(voucher);
 
         // Set success message
@@ -83,8 +81,6 @@ public class VoucherServlet extends HttpServlet {
             throws ServletException, IOException {
         String id = request.getParameter("voucherID");
         String name = request.getParameter("voucherName");
-        String sPrice = request.getParameter("price");
-        int price = Integer.parseInt(sPrice);
         String expDate = request.getParameter("expiryDate");
         Date expiryDate = Date.valueOf(expDate);
         String theatreID = request.getParameter("theatreID");
@@ -107,7 +103,7 @@ public class VoucherServlet extends HttpServlet {
         }
 
         // Create Voucher object and store it in DB
-        Voucher voucher = new Voucher(id, name, theatreID, fileURLPath, price, expiryDate);
+        Voucher voucher = new Voucher(id, name, theatreID, fileURLPath, expiryDate);
         VoucherDB.updateVoucher(voucher);
 
         // Set success message
@@ -124,15 +120,6 @@ public class VoucherServlet extends HttpServlet {
         // Set success message
         request.setAttribute("message", "Voucher deleted successfully!");
         request.getRequestDispatcher("Offers.jsp").forward(request, response);
-    }
-
-    private String getFileName(Part part) {
-        for (String content : part.getHeader("content-disposition").split(";")) {
-            if (content.trim().startsWith("filename")) {
-                return content.substring(content.indexOf("=") + 2, content.length() - 1);
-            }
-        }
-        return null;
     }
 
     @Override

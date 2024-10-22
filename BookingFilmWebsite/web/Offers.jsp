@@ -19,6 +19,12 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/Style_Promotion.css"/>
     </head>
+    <style>
+        .voucherImg{
+            min-height: 300px;
+            max-height: 300px;
+        }
+    </style>
     <body>        
         <!-- Navbar Start -->
         <div class="container-fluid">
@@ -152,7 +158,7 @@
                                             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
                                                 <div class="card product-item border-0 mb-4">
                                                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                                                        <img class="img-fluid w-100" src="<%= voucher.getImgPath()%>" alt="">
+                                                        <img class="img-fluid voucherImg w-100" src="<%= voucher.getImgPath()%>" alt="">
                                                         <div class="overlay"> <!-- Thêm overlay -->
                                                             <div class="text"><%= voucher.getVoucherName()%></div>
                                                             <div class="icon-actions"> <!-- Action icons -->
@@ -161,7 +167,6 @@
                                                                    data-toggle="modal"
                                                                    data-id="<%= voucher.getVoucherID()%>" 
                                                                    data-name="<%= voucher.getVoucherName()%>" 
-                                                                   data-price="<%= voucher.getPrice()%>" 
                                                                    data-expirydate="<%= voucher.getExpiryDate()%>">
                                                                     <i class="material-icons" data-toggle="tooltip" title="Update" style="background-color: green;">&#xE254;</i></a>
                                                                 <a href="#deleteEmployeeModal" 
@@ -208,10 +213,6 @@
                                     <input type="text" name="voucherName" id="voucherName" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Price</label>
-                                    <input type="text" name="price" class="form-control" required>
-                                </div>
-                                <div class="form-group">
                                     <label for="expiryDate">Expiry Date</label>
                                     <input type="date" name="expiryDate" id="expiryDate" class="form-control" required>
                                 </div>
@@ -236,7 +237,8 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="VoucherServlet?action=update" method="POST" enctype="multipart/form-data">
-                            <div class="modal-header">						
+                            <div class="modal-header">			
+                                <input hidden value="${theatre.theatreID}" name="theatreID">
                                 <h4 class="modal-title">Cập Nhật Voucher</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
@@ -248,10 +250,6 @@
                                 <div class="form-group">
                                     <label for="voucherName">Name</label>
                                     <input type="text" name="voucherName" id="voucherName" value="" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="price">Price</label>
-                                    <input type="text" name="price" id="price" value="" class="form-control" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="expiryDate">Expiry Date</label>
@@ -301,13 +299,11 @@
                 $(document).on('click', '.edit', function () {
                     var voucherID = $(this).data('id');
                     var voucherName = $(this).data('name');
-                    var price = $(this).data('price');
                     var expiryDate = $(this).data('expirydate');
 
                     // Fill data into the edit modal
                     $('#editEmployeeModal input[name="voucherID"]').val(voucherID);
                     $('#editEmployeeModal input[name="voucherName"]').val(voucherName);
-                    $('#editEmployeeModal input[name="price"]').val(price);
                     $('#editEmployeeModal input[name="expiryDate"]').val(expiryDate);
                 });
 
