@@ -291,7 +291,7 @@ public class UserDB implements DatabaseInfo {
         }
         return list;
     }
-
+    
     public static void main(String[] args) {
 //        ArrayList<User> list = UserDB.listAllUsers();
 //        for (User user : list) {

@@ -8,6 +8,8 @@ import Model.Theatre;
 import Model.TheatreDB;
 import Model.Voucher;
 import Model.VoucherDB;
+import Model.WorkHistory;
+import Model.WorkHistoryDB;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,9 +17,13 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024,
@@ -25,6 +31,7 @@ import java.util.List;
         maxRequestSize = 1024 * 1024 * 5 * 5)
 public class VoucherServlet extends HttpServlet {
 
+    String tempName = "";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
@@ -43,13 +50,16 @@ public class VoucherServlet extends HttpServlet {
                 response.sendRedirect("error.jsp");
                 break;
         }
+        
+        handleUpdateWorkHistory(request, response);
+        
     }
 
     private void handleAddVC(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String name = request.getParameter("voucherName");
-        String sPrice = request.getParameter("price");
-        int price = Integer.parseInt(sPrice);
+        String name = request.getParameter("voucherName");               tempName = name; // Dien add
+//        String sPrice = request.getParameter("price");
+//        int price = Integer.parseInt(sPrice);
         String expDate = request.getParameter("expiryDate");
         Date expiryDate = Date.valueOf(expDate);
         String theatreID = request.getParameter("theatreID");
@@ -71,7 +81,8 @@ public class VoucherServlet extends HttpServlet {
         }
 
         // Create Voucher object and store it in DB
-        Voucher voucher = new Voucher(null, name, theatreID, fileURLPath, price, expiryDate);
+//        Voucher voucher = new Voucher(null, name, theatreID, fileURLPath, price, expiryDate);
+        Voucher voucher = new Voucher(null, name, theatreID, fileURLPath, expiryDate);
         VoucherDB.createVoucher(voucher);
 
         // Set success message
@@ -82,9 +93,9 @@ public class VoucherServlet extends HttpServlet {
     private void handleUpdateVC(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String id = request.getParameter("voucherID");
-        String name = request.getParameter("voucherName");
-        String sPrice = request.getParameter("price");
-        int price = Integer.parseInt(sPrice);
+        String name = request.getParameter("voucherName");               tempName = name; // Dien add
+//        String sPrice = request.getParameter("price");
+//        int price = Integer.parseInt(sPrice);
         String expDate = request.getParameter("expiryDate");
         Date expiryDate = Date.valueOf(expDate);
         String theatreID = request.getParameter("theatreID");
@@ -107,7 +118,7 @@ public class VoucherServlet extends HttpServlet {
         }
 
         // Create Voucher object and store it in DB
-        Voucher voucher = new Voucher(id, name, theatreID, fileURLPath, price, expiryDate);
+        Voucher voucher = new Voucher(id, name, theatreID, fileURLPath, expiryDate);
         VoucherDB.updateVoucher(voucher);
 
         // Set success message
@@ -117,7 +128,7 @@ public class VoucherServlet extends HttpServlet {
 
     private void handleDeleteVC(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String voucherID = request.getParameter("voucherID");
+        String voucherID = request.getParameter("voucherID");               tempName = VoucherDB.getVoucherById(voucherID).getVoucherName(); // Dien add
 
         VoucherDB.deleteVoucher(voucherID);
 
@@ -135,6 +146,39 @@ public class VoucherServlet extends HttpServlet {
         return null;
     }
 
+    private void handleUpdateWorkHistory(HttpServletRequest request, HttpServletResponse response) throws IOException{
+//        String referer = request.getHeader("referer");
+        
+        HttpSession session = request.getSession();
+        String id = (String) session.getAttribute("id");
+        String page = request.getParameter("page");
+        String whDes = "";
+        LocalDate dateCurr = LocalDate.now();
+        LocalTime timeCurr = LocalTime.now();
+        Date dateSql = Date.valueOf(dateCurr);
+        Time timeSql = Time.valueOf(timeCurr);
+        
+        WorkHistory whs = new WorkHistory();
+        if (!page.equalsIgnoreCase("setShow") || !page.equalsIgnoreCase("setRoom")){
+            
+            String action = request.getParameter("action");
+            whDes = "Action: " + action + " " + page + " " + tempName + ", Affected page: " + page + ", Executor: " + id;
+            
+        } else if (page.equalsIgnoreCase("setShow")){
+            whDes = "Action: set Show " + tempName + ", Affected page: " + page + ", Executor: " + id;
+        } else if (page.equalsIgnoreCase("setRoom")){
+            whDes = "Action: set Room in " + tempName + ", Affected page: " + page + ", Executor: " + id;
+        }
+        
+        whs.setWorkID(WorkHistoryDB.getNextWorkHisId());
+        whs.setWorkDes(whDes);
+        whs.setDates(dateSql);
+        whs.setTimes(timeSql);
+        whs.setStaffID(id);
+        
+        WorkHistoryDB.addWorkHis(whs);
+    }
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -6,6 +6,7 @@ package Controller;
 
 import Model.Movie;
 import Model.MovieDB;
+import Model.RoomDB;
 import Model.Show;
 import Model.ShowDB;
 import Model.ShowInfo;
@@ -13,6 +14,8 @@ import Model.ShowSeat;
 import Model.ShowSeatDB;
 import Model.Theatre;
 import Model.TheatreDB;
+import Model.WorkHistory;
+import Model.WorkHistoryDB;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
@@ -24,16 +27,22 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024,
         maxFileSize = 1024 * 1024 * 5,
         maxRequestSize = 1024 * 1024 * 5 * 5)
 public class MovieServlet extends HttpServlet {
-
+    
+    static String tempName = "";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
@@ -41,21 +50,26 @@ public class MovieServlet extends HttpServlet {
         switch (action) {
             case "add":
                 handleAddMV(request, response);
+                handleUpdateWorkHistory(request, response);
                 break;
             case "update":
                 handleUpdateMV(request, response);
+                handleUpdateWorkHistory(request, response);
                 break;
             case "delete":
                 handleDeleteMV(request, response);
+                handleUpdateWorkHistory(request, response);
                 break;
             case "setShow":
                 handleSetShow(request, response);
+                handleUpdateWorkHistory(request, response);
                 break;
             case "booking":
                 handleBooking(request, response);
                 break;
             case "showSeat":
                 handleSetShowSeat(request, response);
+                handleUpdateWorkHistory(request, response);
                 break;
             case "mvList":
                 handlegetMovieList(request, response);
@@ -76,11 +90,14 @@ public class MovieServlet extends HttpServlet {
                 response.sendRedirect("error.jsp");
                 break;
         }
+        
+        String page = request.getParameter("page");
+        
     }
 
     private void handleAddMV(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String name = request.getParameter("movieName");
+        String name = request.getParameter("movieName");            tempName = name; // Dien add
         String dur = request.getParameter("duration");
         String country = request.getParameter("country");
         int duration = Integer.parseInt(dur);
@@ -144,7 +161,7 @@ public class MovieServlet extends HttpServlet {
     private void handleUpdateMV(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String id = request.getParameter("movieID");
-        String name = request.getParameter("movieName");
+        String name = request.getParameter("movieName");                tempName = name; // Dien add
         String dur = request.getParameter("duration");
         String country = request.getParameter("country");
         int duration = Integer.parseInt(dur);
@@ -208,7 +225,7 @@ public class MovieServlet extends HttpServlet {
 
     private void handleDeleteMV(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String movieID = request.getParameter("movieID");
+        String movieID = request.getParameter("movieID");               tempName = MovieDB.getMovieById(movieID).getMovieName(); // Dien add
         try {
             MovieDB.deleteMovie(movieID);
             request.setAttribute("message", "Movie delete successfully!");
@@ -240,7 +257,7 @@ public class MovieServlet extends HttpServlet {
         String movieID = request.getParameter("movieID");
         String dateS = request.getParameter("showDate");
         Date date = Date.valueOf(dateS);
-        String timeS = request.getParameter("showTime");
+        String timeS = request.getParameter("showTime");               tempName = MovieDB.getMovieById(movieID).getMovieName() + " at " + date.toString() + " start in " + timeS; // Dien add
         String formattedTime = timeS + ":00";
         Time time = Time.valueOf(formattedTime);
 
@@ -258,7 +275,7 @@ public class MovieServlet extends HttpServlet {
             throws ServletException, IOException {
         String theatreID = request.getParameter("theatreID");
         String roomID = request.getParameter("roomID");
-        String showID = request.getParameter("selectedShowtimeID");
+        String showID = request.getParameter("selectedShowtimeID");               tempName = TheatreDB.getTheatreById(theatreID).getTheatreName() + " in room " + RoomDB.getRoom(roomID).getRoomName() + " at " + ShowDB.getShowById(showID).getShowDate().toString() + " " + ShowDB.getShowById(showID).getShowTime().toString() ; // Dien add
 
         List<Movie> movieList = MovieDB.getAllMovies();
         request.setAttribute("movieList", movieList);
@@ -322,6 +339,39 @@ public class MovieServlet extends HttpServlet {
 
     }
 
+    private void handleUpdateWorkHistory(HttpServletRequest request, HttpServletResponse response) throws IOException{
+//        String referer = request.getHeader("referer");
+        
+        HttpSession session = request.getSession();
+        String id = (String) session.getAttribute("id");
+        String page = request.getParameter("page");
+        String whDes = "";
+        LocalDate dateCurr = LocalDate.now();
+        LocalTime timeCurr = LocalTime.now();
+        Date dateSql = Date.valueOf(dateCurr);
+        Time timeSql = Time.valueOf(timeCurr);
+        String action = request.getParameter("action");
+
+        WorkHistory whs = new WorkHistory();
+        if ((page.equalsIgnoreCase("movie") && !action.equalsIgnoreCase("setShow")) || page.equalsIgnoreCase("food and drink") || page.equalsIgnoreCase("voucher")){
+            
+            whDes = "Action: " + action + " " + page + " " + tempName + ", Affected page: " + page + ", Executor: " + id;
+            
+        } else if (page.equalsIgnoreCase("movie") && action.equalsIgnoreCase("setShow")){
+            whDes = "Action: set Show movie " + tempName + ", Affected page: " + page + ", Executor: " + id;
+        } else if (action.equalsIgnoreCase("showSeat")){
+            whDes = "Action: set Room in " + tempName + ", Affected page: " + page + ", Executor: " + id;
+        }
+        
+        whs.setWorkID(WorkHistoryDB.getNextWorkHisId());
+        whs.setWorkDes(whDes);
+        whs.setDates(dateSql);
+        whs.setTimes(timeSql);
+        whs.setStaffID(id);
+        
+        WorkHistoryDB.addWorkHis(whs);
+    }
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

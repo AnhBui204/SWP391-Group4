@@ -25,7 +25,12 @@
         <div class="container-fluid">
             <div class="container-main row">
                 <!-- Sidebar -->
-                <div class="col-12 col-lg-3" style="padding-left: 0px ;padding-right: 0px; ">
+
+                <div class="col-12 col-lg-3" id="tempDiv">
+
+                </div>
+
+                <div class="col-12 col-lg-3" style="padding-left: 0px ;padding-right: 0px; position: fixed;">
                     <div class="sidebar" style="height: 190vh;" >
                         <div class="widget widget_collection">
                             <div class="widget-title text-center">
@@ -77,7 +82,7 @@
 
 
                 <div class="col-12 col-lg-9 " style="padding-left: 0px ;padding-right: 0px; background-color: #f7cf90; " >
-                    <div class="body-right" style="height: 190vh; ">
+                    <div class="body-right" style="height: auto; ">
 
                         <div class="container-fluid mb-5">
                             <div class="row border-top px-xl-5">
@@ -208,7 +213,7 @@
             <div id="addEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="MovieServlet?action=add" method="POST" enctype="multipart/form-data">
+                        <form action="MovieServlet?action=add&page=movie" method="POST" enctype="multipart/form-data">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Thêm Phim</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -282,7 +287,7 @@
             <div id="editEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="MovieServlet?action=update" method="POST" enctype="multipart/form-data">
+                        <form action="MovieServlet?action=update&page=movie" method="POST" enctype="multipart/form-data">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Cập Nhật Phim</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -361,7 +366,7 @@
             <div id="deleteEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="MovieServlet?action=delete" method="post">
+                        <form action="MovieServlet?action=delete&page=movie" method="post">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Xóa Phim</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -383,7 +388,7 @@
             <div id="setShowEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="MovieServlet?action=setShow" method="POST">
+                        <form action="MovieServlet?action=setShow&page=movie" method="POST">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Đặt suất chiếu</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

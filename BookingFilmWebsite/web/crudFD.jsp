@@ -32,7 +32,12 @@
         <div class="container-fluid">
             <div class="container-main row">
                 <!-- Sidebar -->
-                <div class="col-12 col-lg-3" style="padding-left: 0px ;padding-right: 0px; ">
+
+                <div class="col-12 col-lg-3" id="tempDiv">
+
+                </div>
+
+                <div class="col-12 col-lg-3" style="padding-left: 0px ;padding-right: 0px; position: fixed;">
                     <div class="sidebar" style="height: 190vh;" >
                         <div class="widget widget_collection">
                             <div class="widget-title text-center">
@@ -86,7 +91,7 @@
 
 
                 <div class="col-12 col-lg-9 " style="padding-left: 0px ;padding-right: 0px; background-color: #f7cf90; " >
-                    <div class="body-right" style="height: 150vh; ">
+                    <div class="body-right" style="height: auto; ">
 
                         <div class="container-fluid mb-5">
                             <div class="row border-top px-xl-5">
@@ -154,7 +159,7 @@
                                         </div>
 
                                         <!-- Danh sách combo -->
-                                        <div class="row px-xl-5 pb-3">
+                                        <div class="row px-xl-5 pb-3" style="height: 650px;">
                                             <%
                                                 for (FoodAndDrink cb : list) {
                                             %>
@@ -201,7 +206,7 @@
             <div id="addEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="FoodAndDrinkServlet?action=add" method="POST" enctype="multipart/form-data">
+                        <form action="FoodAndDrinkServlet?action=add&page=food%20and%20drink" method="POST" enctype="multipart/form-data">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Thêm Combo</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -244,7 +249,7 @@
             <div id="editEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="FoodAndDrinkServlet?action=update" method="POST" enctype="multipart/form-data">
+                        <form action="FoodAndDrinkServlet?action=update&page=food%20and%20drink" method="POST" enctype="multipart/form-data">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Cập Nhật Combo</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -286,7 +291,7 @@
             <div id="deleteEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="FoodAndDrinkServlet?action=delete" method="POST">
+                        <form action="FoodAndDrinkServlet?action=delete&page=food%20and%20drink" method="POST">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Xóa Combo</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

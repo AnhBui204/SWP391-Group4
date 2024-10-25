@@ -60,6 +60,10 @@
         <servlet-name>vnpayRefund</servlet-name>
         <servlet-class>com.vnpay.common.vnpayRefund</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>WorkHisServlet</servlet-name>
+        <servlet-class>Controller.WorkHisServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TheatreServlet</servlet-name>
         <url-pattern>/TheatreServlet</url-pattern>
@@ -124,6 +128,10 @@
         <servlet-name>vnpayRefund</servlet-name>
         <url-pattern>/vnpayRefund</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>WorkHisServlet</servlet-name>
+        <url-pattern>/WorkHisServlet</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>HomePage.jsp</welcome-file>
     </welcome-file-list>
@@ -155,22 +163,22 @@
     </context-param>
     <context-param>
         <param-name>UPLOAD_PDIRECTORY</param-name>
-        <param-value>D:/Hoc/Ky 5/SWP391/BookingFilmWebsite/web/image/MovieImg/P/</param-value>
+        <param-value>D:/FILE SWP/BookingWebsite/hahaha/BookingFilmWebsite/web/image/MovieImg/P/</param-value>
         <!-- Đường dẫn lưu trữ Potrail -->
     </context-param>
     <context-param>
         <param-name>UPLOAD_LDIRECTORY</param-name>
-        <param-value>D:/Hoc/Ky 5/SWP391/BookingFilmWebsite/web/image/MovieImg/L/</param-value>
+        <param-value>D:/FILE SWP/BookingWebsite/hahaha/BookingFilmWebsite/web/image/MovieImg/L/</param-value>
         <!-- Đường dẫn lưu trữ Landscape -->
     </context-param>
     <context-param>
         <param-name>UPLOAD_VDIRECTORY</param-name>
-        <param-value>D:/Hoc/Ky 5/SWP391/BookingFilmWebsite/web/image/Voucher/</param-value>
+        <param-value>D:/FILE SWP/BookingWebsite/hahaha/BookingFilmWebsite/web/image/Voucher/</param-value>
         <!-- Đường dẫn lưu trữ Voucher -->
     </context-param>
     <context-param>
         <param-name>UPLOAD_CBDIRECTORY</param-name>
-        <param-value>D:/Hoc/Ky 5/SWP391/BookingFilmWebsite/web/image/FoodsAndDrinks/</param-value>
+        <param-value>D:/FILE SWP/BookingWebsite/hahaha/BookingFilmWebsite/web/image/FoodsAndDrinks/</param-value>
         <!-- Đường dẫn lưu trữ Food and drink -->
     </context-param>
 </web-app>
