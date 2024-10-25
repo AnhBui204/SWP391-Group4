@@ -10,7 +10,7 @@
     <title>Đặt Vé Xem Phim</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="./css/Booking.css"/>
-    <link rel="stylesheet" href="./css/Seats.css"/>
+    <link rel="stylesheet" href="./css/Seat.css"/>
 </head>
 <body>
     <div class="container mt-4">
@@ -29,40 +29,52 @@
                         <h5 class="card-title">Chọn ghế</h5>
                         <div class="row d-flex">
                             <div class="col-md-10">
-                         <c:if test="${not empty availableSeats}">
-                            <div class="row">
-                                <c:forEach var="seat" items="${availableSeats}">
-                                    <c:set var="seatName" value="${seat.seatName}" />
-                                    <c:set var="isAvailable" value="${seat.isAvailables}" />
-                                    <c:set var="price" value="${seat.price}" />
-                                    <div ">
-                                        <button class="seat-button ${isAvailable == 1 ? 'available' : 'unavailable'}" 
-                                                onclick="selectSeat(this, '${price}')">
-                                            ${seatName}
-                                        </button>
+                                <c:if test="${not empty availableSeats}">
+                                    <div class="row">
+                                        <c:forEach var="seat" items="${availableSeats}">
+                                            <c:set var="seatName" value="${seat.seatName}" />
+                                            <c:set var="isAvailable" value="${seat.isAvailables}" />
+                                            <c:set var="price" value="${seat.price}" />
+                                            <div>
+                                                <button class="seat-button ${isAvailable == 1 ? 'available' : 'unavailable'}" 
+                                                         ${isAvailable == 0 ? 'disabled' : ''} 
+                                                        onclick="selectSeat(this, '${price}')">
+                                                    ${seatName}
+                                                </button>
+                                            </div>
+                                        </c:forEach>
                                     </div>
-                                </c:forEach>
-                            </div>
-                        </c:if>
-                        <c:if test="${empty availableSeats}">
-                            <p>Không có ghế nào có sẵn.</p>
-                        </c:if>
+                                </c:if>
+                                <c:if test="${empty availableSeats}">
+                                    <p>Không có ghế nào có sẵn.</p>
+                                </c:if>
 
                                 <div class="col-md-10 mx-auto mt-4">
-    <div class="row mt-3 justify-content-center"> <!-- Thêm justify-content-center để căn giữa -->
-        <div class="screen mx-auto" style="width: 80%; height: 20px; background-color: #333;"></div> 
-        <div class="screen-text text-center w-100">MÀN HÌNH</div> 
+                                    <div class="row mt-3 justify-content-center"> <!-- Thêm justify-content-center để căn giữa -->
+                                        <div class="screen mx-auto" style="width: 80%; height: 20px; background-color: #333;"></div> 
+                                        <div class="screen-text text-center w-100">MÀN HÌNH</div> 
+                                    </div>
+                                </div>
+
+                                <!-- Labels for available and unavailable seats -->
+                             <div class="row mt-3 justify-content-center">
+    <div class="col-auto">
+        <span class="badge custom-available">Có sẵn</span>
+    </div>
+    <div class="col-auto">
+        <span class="badge custom-unavailable">Không có sẵn</span>
     </div>
 </div>
 
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-</div>
-            </div>
             <div class="col-lg-4">
                 <div class="card mb-3">
-                    <div class=" text-center">
+                    <div class="text-center">
                         <h5 id="info-theatre">Rạp: ${sessionScope.theatreName}</h5>
                         <img src="${sessionScope.movieImg}" alt="Poster phim" class="img-fluid my-3" style="max-height: 150px;">
                         <h5 id="info-movie">${sessionScope.movieName}</h5>
@@ -70,7 +82,6 @@
                         <h5 id="info-time">Suất: ${sessionScope.selectedTime}</h5>
                         <h5>Ghế đã chọn: <span id="selected-seats">Chưa chọn ghế</span></h5>
                         <h5>Tổng giá: <span id="selected-price">0 VNĐ</span></h5>
-
                     </div>
                 </div>
 
@@ -104,98 +115,96 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<script>
-    let selectedSeatNames = [];
-    let selectedSeatPrices = [];
-    
-    window.selectSeat = function(button, price) {
-        const seatName = button.innerText; // Lấy tên ghế
-        const selectedSeats = document.getElementById('selected-seats');
-        const selectedPrice = document.getElementById('selected-price');
-          console.log("Selected seat price:", price);// Lấy phần tử giá
-        const maxSeats = 8;
-        const currentSelectedCount = document.querySelectorAll('.seat-button.selected').length;
+    <script>
+        let selectedSeatNames = [];
+        let selectedSeatPrices = [];
+        
+        window.selectSeat = function(button, price) {
+            const seatName = button.innerText; // Lấy tên ghế
+            const selectedSeats = document.getElementById('selected-seats');
+            const selectedPrice = document.getElementById('selected-price');
+            console.log("Selected seat price:", price); // Lấy phần tử giá
+            const maxSeats = 8;
+            const currentSelectedCount = document.querySelectorAll('.seat-button.selected').length;
 
-        if (button.classList.contains('selected')) {
-            // Nếu ghế đã được chọn
-            button.classList.remove('selected'); 
-            // Xóa ghế khỏi danh sách đã chọn
-            selectedSeatNames = selectedSeatNames.filter(name => name !== seatName);
-            selectedSeatPrices = selectedSeatPrices.filter(p => p !== parseInt(price));
-        } else {
-            // Nếu ghế chưa được chọn
-            if (currentSelectedCount >= maxSeats) {
-                // Nếu đã chọn đủ số ghế tối đa
+            if (button.classList.contains('selected')) {
+                // Nếu ghế đã được chọn
+                button.classList.remove('selected'); 
+                // Xóa ghế khỏi danh sách đã chọn
+                selectedSeatNames = selectedSeatNames.filter(name => name !== seatName);
+                selectedSeatPrices = selectedSeatPrices.filter(p => p !== parseInt(price));
+            } else {
+                // Nếu ghế chưa được chọn
+                if (currentSelectedCount >= maxSeats) {
+                    // Nếu đã chọn đủ số ghế tối đa
+                    const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+                    alertModal.show();
+                    return; // Không cho phép chọn thêm ghế
+                } 
+                button.classList.add('selected');  
+                selectedSeatNames.push(seatName);
+                selectedSeatPrices.push(parseInt(price));
+            }
+
+            const updatedSeats = getSelectedSeats();
+            selectedSeats.innerText = updatedSeats.length > 0 ? updatedSeats : 'Chưa chọn ghế';
+            const totalPrice = selectedSeatPrices.reduce((total, price) => total + price, 0);
+            selectedPrice.innerText = totalPrice + ' VNĐ'; // Cập nhật giá
+        };
+
+        window.getSelectedSeats = function() {
+            const selectedSeats = Array.from(document.querySelectorAll('.seat-button.selected'))
+                                       .map(seat => seat.innerText);
+            return selectedSeats.join(', ');
+        };
+
+        window.submitSelectedSeats = function() {
+            const selectedSeats = getSelectedSeats();
+            const totalPrice = selectedSeatPrices.reduce((total, price) => total + price, 0);
+            const maxSeats = 8;
+            const currentSelectedCount = document.querySelectorAll('.seat-button.selected').length;
+
+            if (currentSelectedCount === 0) {
+                // Nếu không chọn ghế nào
                 const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
                 alertModal.show();
-                return; // Không cho phép chọn thêm ghế
-            } 
-            button.classList.add('selected');  
-            selectedSeatNames.push(seatName);
-            selectedSeatPrices.push(parseInt(price));
-        }
+                document.querySelector('.modal-body').innerText = "Bạn phải chọn ít nhất 1 ghế.";
+                return;
+            }
 
-        const updatedSeats = getSelectedSeats();
-        selectedSeats.innerText = updatedSeats.length > 0 ? updatedSeats : 'Chưa chọn ghế';
-        const totalPrice = selectedSeatPrices.reduce((total, price) => total + price, 0);
-        selectedPrice.innerText = totalPrice + ' VNĐ'; // Cập nhật giá
-    };
+            if (currentSelectedCount > maxSeats) {
+                // Nếu đã chọn quá số ghế tối đa
+                const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+                alertModal.show();
+                document.querySelector('.modal-body').innerText = "Bạn chỉ có thể chọn tối đa 8 ghế.";
+                return;
+            }  
 
-    window.getSelectedSeats = function() {
-        const selectedSeats = Array.from(document.querySelectorAll('.seat-button.selected'))
-                                   .map(seat => seat.innerText);
-        return selectedSeats.join(', ');
-    };
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'FoodsAndDrinks'; 
 
-    window.submitSelectedSeats = function() {
-        const selectedSeats = getSelectedSeats();
-           const totalPrice = selectedSeatPrices.reduce((total, price) => total + price, 0);
-        const maxSeats = 8;
-        const currentSelectedCount = document.querySelectorAll('.seat-button.selected').length;
-
-        if (currentSelectedCount === 0) {
-            // Nếu không chọn ghế nào
-            const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
-            alertModal.show();
-            document.querySelector('.modal-body').innerText = "Bạn phải chọn ít nhất 1 ghế.";
-            return;
-        }
-
-        if (currentSelectedCount > maxSeats) {
-            // Nếu đã chọn quá số ghế tối đa
-            const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
-            alertModal.show();
-            document.querySelector('.modal-body').innerText = "Bạn chỉ có thể chọn tối đa 8 ghế.";
-            return;
-        }  
-
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = 'FoodsAndDrinks'; 
-
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'selectedSeats';
-        input.value = selectedSeats;
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'selectedSeats';
+            input.value = selectedSeats;
+            
+            const inputTotalPrice = document.createElement('input');
+            inputTotalPrice.type = 'hidden';
+            inputTotalPrice.name = 'totalPrice';
+            inputTotalPrice.value = totalPrice;
         
-        const inputTotalPrice = document.createElement('input');
-        inputTotalPrice.type = 'hidden';
-        inputTotalPrice.name = 'totalPrice';
-        inputTotalPrice.value = totalPrice;
-    
-        const theatreIDInput = document.createElement('input');
-        theatreIDInput.type = 'hidden';
-        theatreIDInput.name = 'theatreID';
-        theatreIDInput.value = '${sessionScope.theatreID}';
-        
-        form.appendChild(input);
-        form.appendChild(inputTotalPrice);
-        form.appendChild(theatreIDInput);
-        document.body.appendChild(form);
-        form.submit();
-    };
-</script>
-
-
+            const theatreIDInput = document.createElement('input');
+            theatreIDInput.type = 'hidden';
+            theatreIDInput.name = 'theatreID';
+            theatreIDInput.value = '${sessionScope.theatreID}';
+            
+            form.appendChild(input);
+            form.appendChild(inputTotalPrice);
+            form.appendChild(theatreIDInput);
+            document.body.appendChild(form);
+            form.submit();
+        };
+    </script>
 </body>
 </html>
