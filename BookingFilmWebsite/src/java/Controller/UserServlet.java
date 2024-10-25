@@ -52,9 +52,9 @@ public class UserServlet extends HttpServlet {
             case "uploadprofileimage":
                 handleUploadProfileImage(request, response); // Case for image upload
                 break;
-//            case "updateProfile":
-//                handleUpdateProfile(request, response); // Case for image upload
-//                break;
+            case "updateProfile":
+                handleUpdateProfile(request, response); // Case for image upload
+                break;
             default:
                 response.sendRedirect("error.jsp");
                 break;
@@ -289,15 +289,25 @@ public class UserServlet extends HttpServlet {
         }
         return null;
     }
-    
+
     //Update Profile
-//    private void handleUpdateProfile(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//        String fName = request.getParameter("firstName");
-//        String lName = request.getParameter("lastName");
-//        String phone = request.getParameter("firstName");
-//        String fName = request.getParameter("firstName");
-//    }
+    private void handleUpdateProfile(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String Hello = request.getParameter("Hello");
+        String userID = request.getParameter("userID");
+        
+        System.out.println(Hello);
+        System.out.println("ID: " + userID);
+        User user = UserDB.getUsersByID(userID);
+
+        // Store the user in the session
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user);
+
+        // Redirect to CustomerProfile.jsp
+        String encodedURL = response.encodeRedirectURL("CustomerProfile.jsp");
+        response.sendRedirect(encodedURL);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

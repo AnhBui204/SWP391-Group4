@@ -272,7 +272,7 @@ public static String getShowID(String showDate, String startTime) {
 //        ShowDB.deleteShow("SH001");
 
         // Lấy danh sách tất cả các show
-        List<Show> allShows = ShowDB.getAllShowsByMovieID("M00001");
+        List<String> allShows = ShowDB.getShowDatesByMovieAndTheatre("M00001","T00001");
         allShows.forEach(System.out::println);
 
     }

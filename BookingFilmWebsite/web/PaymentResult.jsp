@@ -1,7 +1,6 @@
 <%@page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -13,7 +12,6 @@
 <body>
     <div class="container mt-4">
         <h2 class="text-center">Kết Quả Thanh Toán</h2>
-
         <c:choose>
             <c:when test="${paymentSuccess}">
                 <div class="alert alert-success" role="alert">
@@ -26,7 +24,6 @@
                 </div>
             </c:otherwise>
         </c:choose>
-
         <div class="text-center">
             <button class="btn btn-primary" onclick="window.location.href='HomePage.jsp'">Quay lại trang chủ</button>
         </div>

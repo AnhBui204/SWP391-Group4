@@ -139,6 +139,16 @@
                         </span>
                         <h3>Ticket</h3>
                     </a>
+                    <a href="AdminReport.jsp">
+                        <span class="material-symbols-outlined">local_activity</span>
+                        <h3>Report</h3>
+                    </a>
+                    <a href="statistic.jsp">
+                        <span class="material-symbols-outlined">
+                            trending_up 
+                        </span>
+                        <h3>Revenue Statistic</h3>
+                    </a>
                     <a href="UserServlet?action=logout">
                         <span class="material-symbols-outlined">
                             logout

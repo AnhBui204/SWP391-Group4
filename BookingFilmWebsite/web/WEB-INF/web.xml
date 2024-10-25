@@ -41,6 +41,18 @@
         <servlet-class>Controller.SelectSeat</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>SelectMovie</servlet-name>
+        <servlet-class>Controller.SelectMovie</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PaymentServlet</servlet-name>
+        <servlet-class>Controller.PaymentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReportServlet</servlet-name>
+        <servlet-class>Controller.ReportServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>Sort</servlet-name>
         <servlet-class>Controller.Sort</servlet-class>
     </servlet>
@@ -103,6 +115,18 @@
     <servlet-mapping>
         <servlet-name>SelectSeat</servlet-name>
         <url-pattern>/SelectSeat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SelectMovie</servlet-name>
+        <url-pattern>/SelectMovie</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PaymentServlet</servlet-name>
+        <url-pattern>/PaymentServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReportServlet</servlet-name>
+        <url-pattern>/ReportServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Sort</servlet-name>

@@ -41,8 +41,10 @@
                         <hr class="w-75 mx-auto">
                         <div class="text-center mt-3 d-flex flex-column">
                             <h3 class="bg-white p-3">Chỉnh sửa hồ sơ</h3>
-                            <h3 class="mt-4 p-3">Lịch sử giao dịch</h3>
+                            <h3 class="mt-4 p-3"><a href="HistoryBooking.jsp">Lịch sử giao dịch</a></h3>
                             <h3 class="my-4 p-3">Quà tặng tích điểm</h3>
+                            <h3 class="mt-4 p-3"><a href="report.jsp?userID=${user.userID}">Báo cáo</a></h3>
+
                         </div>
                     </div>
                     <div class="col-md-1"></div>
@@ -123,46 +125,52 @@
 
 
         <div class="modal" id="updateProfileModal" tabindex="-1" aria-labelledby="simpleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="updateProfileModalLabel">Cập nhật thông tin cá nhân</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <form id="updateProfileForm" action="UserServlet?action=updateProfile" method="POST">
-
-                            <div class="mb-3">
-                                <p class="m-0">Tên <span class="text-danger">*</span></p>
-                                <input type="text" required name="firstName" placeholder="Tên" class="w-100 fs-5"/>
+                    <div class="modal-body d-flex">
+                        <div class="col-md-6">
+                            <form id="updateProfileForm" action="UserServlet?action=updateProfile" method="POST">
+                                <div class="mb-3">
+                                    <label for="firstName" class="form-label">Tên <span class="text-danger">*</span></label>
+                                    <input type="text" required name="firstName" placeholder="Tên" class="form-control" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="lastName" class="form-label">Họ <span class="text-danger">*</span></label>
+                                    <input type="text" required name="lastName" placeholder="Họ" class="form-control" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                                    <input type="tel" id="phone" name="phone" required placeholder="Số điện thoại" class="form-control" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="gender" class="form-label">Giới tính</label>
+                                    <select name="gender" class="form-select">
+                                        <option>Nam</option>
+                                        <option>Nữ</option>
+                                        <option>Khác</option>
+                                    </select>
+                                </div>
+                                <input type="hidden" name="userID" value="${user.userID}" />
+                                <button type="button" class="btn btn-primary" id="saveProfileButton">Lưu thay đổi</button>
+                            </form>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <img src="${user.avatar}" alt="Profile Image" class="img-fluid rounded-circle" style="height: 150px; width: 150px;"/>
+                            <div class="mt-3">
+                                <input type="file" class="form-control" name="profileImage" id="profileImage" />
+                                <button type="button" id="uploadButton" class="btn btn-warning mt-2">Đổi Ảnh</button>
                             </div>
-                            <div class="mb-3">
-                                <p class="m-0">Họ <span class="text-danger">*</span></p>
-                                <input type="text" required name="lastName" placeholder="Họ" class="w-100 fs-5"/>
-                            </div>
-
-
-                            <div class="mb-3">
-                                <p class="m-0">Số điện thoại <span class="text-danger">*</span></p>
-                                <input type="tel" id="phone" name="phone" required placeholder="Số điện thoại" class="w-100 fs-5"/>
-                                <p id="phoneError" class="error-message">Số điện thoại đã được sử dụng.</p>
-                            </div>
-                            <div class="mb-3">
-                                <p class="m-0">Giới tính</p>
-                                <select name="gender" class="w-100 fs-5" style="padding: 1px 2px;">
-                                    <option>Nam</option>
-                                    <option>Nữ</option>
-                                    <option>Khác</option>
-                                </select>
-                            </div>
-                            
-                            <input type="hidden" name="userID" value="${user.userID}" />
-                            <button type="button" class="btn btn-primary" id="saveProfileButton">Lưu thay đổi</button>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
 
 
     </body>
@@ -170,49 +178,58 @@
     <script src="bs/js/bootstrap.bundle.js"></script>
     <script>
         $(document).ready(function () {
-            $('#uploadButton').click(function () {
-                var formData = new FormData($('#uploadForm')[0]);
+            $('#uploadImageButton').click(function () {
+                var formData = new FormData();
+                var profileImage = $('input[name="profileImage"]')[0].files[0];
+
+                if (profileImage) {
+                    formData.append('profileImage', profileImage);
+                    formData.append('userID', $('#updateProfileForm input[name="userID"]').val()); // Add user ID
+
+                    $.ajax({
+                        url: 'UserServlet?action=uploadProfileImage',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            // Update the displayed image with the new one
+                            $('img[alt="Current Profile Image"]').attr('src', response.newAvatarPath);
+                            alert(response.message);
+                        },
+                        error: function () {
+                            alert('Upload failed.');
+                        }
+                    });
+                } else {
+                    alert('Please select an image to upload.');
+                }
+            });
+
+            $('#saveProfileButton').click(function () {
+                var formData = new FormData($('#updateProfileForm')[0]);
 
                 $.ajax({
-                    url: 'UserServlet?action=uploadProfileImage',
+                    url: 'UserServlet?action=updateProfile',
                     type: 'POST',
                     data: formData,
                     contentType: false,
                     processData: false,
                     success: function (response) {
-                        $('#profileImage').attr('src', response.newAvatarPath);
-                        alert(response.message);
-                    },
-                    error: function () {
-                        alert('Upload failed.');
-                    }
-                });
-            });
-
-            // Handle profile update form submission
-            $('#saveProfileButton').click(function () {
-                var updateData = {
-                    userID: $('#updateProfileForm input[name="userID"]').val(),
-                    email: $('#updateEmail').val(),
-                    phone: $('#updatePhone').val(),
-                    password: $('#updatePassword').val()
-                };
-
-                $.ajax({
-                    url: 'UserServlet?action=updateProfile',
-                    type: 'POST',
-                    data: updateData,
-                    success: function (response) {
                         alert(response.message);
                         $('#updateProfileModal').modal('hide'); // Hide the modal after success
-                        // Optionally update the displayed information on the page
                     },
                     error: function () {
                         alert('Profile update failed.');
                     }
                 });
+                setTimeout(function () {
+                    location.reload(); // This will refresh the page
+                }, 3000);
             });
         });
+
+
     </script>
 
     <%@include file="includes/footer.jsp" %>

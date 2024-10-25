@@ -71,15 +71,18 @@ public class FoodsAndDrinks extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
       String selectedSeats = request.getParameter("selectedSeats");
         String theatreID = request.getParameter("theatreID");
+        String totalPrice = request.getParameter("totalPrice");
         System.out.println("theatreID:"+theatreID);
+        System.out.println("Price: "+totalPrice);
       HttpSession session = request.getSession();
-      List<FoodAndDrink> combo = FoodAndDrinkDB.getAllCombosByTheatreID(theatreID);
+      List<FoodAndDrink> combo = FoodAndDrinkDB.getFoodsAndDrinksByTheatreID(theatreID);
         System.out.println(combo);
       session.setAttribute("selectedSeats", selectedSeats);
+      session.setAttribute("totalPrice", totalPrice);
       request.setAttribute("foodMenu", combo);
         request.getRequestDispatcher("DrinkAndFood.jsp").forward(request, response);
     }

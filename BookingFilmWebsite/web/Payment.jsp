@@ -4,7 +4,6 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -17,7 +16,6 @@
 <body>
     <div class="container mt-4">
         <h2 class="text-center">Thông Tin Thanh Toán</h2>
-
         <div class="row">
             <!-- Cột bên trái: Lựa chọn phương thức thanh toán -->
             <div class="col-lg-4">
@@ -41,7 +39,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Cột bên phải: Thông tin đặt vé -->
             <div class="col-lg-8">
                 <div class="card mb-3">
@@ -54,7 +51,6 @@
                         <p><strong>Ghế đã chọn:</strong> ${sessionScope.selectedSeats}</p>
                     </div>
                 </div>
-
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">Món Ăn Đã Chọn</h5>
@@ -66,7 +62,6 @@
         ${foodItem}                                           
     </li>
 </c:forEach>
-
                                 </ul>
                             </c:when>
                             <c:otherwise>
@@ -75,14 +70,12 @@
                         </c:choose>
                     </div>
                 </div>
-
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">Tổng Tiền</h5>
                         <p><strong>Tổng tiền: </strong> <span id="total-price">${param.totalPrice} VND</span></p>
                     </div>
                 </div>
-
                 <!-- Nút điều hướng -->
                 <div class="d-flex justify-content-between">
                     <button class="btn btn-light" onclick="window.history.back()">Quay lại</button>
@@ -91,7 +84,6 @@
             </div>
         </div>
     </div>
-
     <!-- Modal xác nhận thanh toán -->
     <div class="modal fade" id="confirmPaymentModal" tabindex="-1" role="dialog" aria-labelledby="confirmPaymentLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -112,7 +104,6 @@
             </div>
         </div>
     </div>
-
     <!-- Modal thông báo thành công -->
     <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -133,45 +124,35 @@
             </div>
         </div>
     </div>
-
     <!-- Thư viện JavaScript -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
     <script>
         function confirmPayment() {
     // Hiển thị modal xác nhận
     $('#confirmPaymentModal').modal('show');
 }
-
 function submitPayment() {
     const paymentForm = document.createElement("form");
     paymentForm.method = "POST";
     paymentForm.action = "PaymentServlet"; 
-
     const foodItems = document.querySelectorAll('#food-list li');
     const selectedFoodData = [];
-
     foodItems.forEach(item => {
       const foodName =item.getAttribute('data-name').replace(/\s*\(\d+\)\s*/, ''); // Remove " (number)" including surrounding spaces
-
         const foodQuantity = item.getAttribute('data-quantity').replace(')', '').trim(); // Extract quantity without ')'
-
         // Add food item to the selectedFoodData array
         selectedFoodData.push({ name: foodName, quantity: foodQuantity });
     });
-
     // Convert selected food data to JSON string
     const selectedFoodString = JSON.stringify(selectedFoodData);
-
     // Create a hidden input to hold the selected food data
     const selectedFoodInput = document.createElement("input");
     selectedFoodInput.type = "hidden";
     selectedFoodInput.name = "selectedFood"; // Input name to access in servlet
     selectedFoodInput.value = selectedFoodString; // JSON string
     paymentForm.appendChild(selectedFoodInput);
-
     // Append other necessary inputs (theatreID, totalPrice, etc.)
     const infoList = [
         { name: "theatreID", value: "${sessionScope.theatreID}" },
@@ -191,15 +172,10 @@ function submitPayment() {
         input.value = info.value; // Corresponding value
         paymentForm.appendChild(input);
     });
-
     document.body.appendChild(paymentForm); // Append the form to the body
-
     // Submit the payment form
     paymentForm.submit();
 }
-
-
-
         function redirectHome() {
             window.location.href = "HomePage.jsp"; // Redirect to your home page or any other page
         }

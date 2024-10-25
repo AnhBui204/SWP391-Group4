@@ -1,5 +1,5 @@
-﻿CREATE DATABASE supers;
-USE supers;
+﻿CREATE DATABASE superssj2;
+USE superssj2;
 
 CREATE TABLE Users (
     UserID CHAR(6) PRIMARY KEY,
@@ -23,6 +23,19 @@ CREATE TABLE Theatres(
     TheatreLocation NVARCHAR(150)
 );
 
+-- Table for Vouchers
+CREATE TABLE Vouchers (
+    ID INT IDENTITY(1,1) PRIMARY KEY,  -- Khóa chính
+    VoucherID CHAR(6) NULL,             -- Cho phép VoucherID là NULL
+    VoucherName NVARCHAR(4000) UNIQUE,
+    TheatreID CHAR(6),
+    Price MONEY CHECK (Price >= 0),
+    ImagePath VARCHAR(255),
+    ExpiryDate DATE,
+    FOREIGN KEY (TheatreID) REFERENCES Theatres(TheatreID),
+    UNIQUE (VoucherID) -- Đảm bảo VoucherID là duy nhất
+);
+
 -- Foods and Drinks Table
 CREATE TABLE FoodsAndDrinks (
     ComboID CHAR(6) PRIMARY KEY,
@@ -37,12 +50,11 @@ CREATE TABLE FoodsAndDrinks (
 CREATE TABLE Booking(
     BookingID CHAR(6) PRIMARY KEY,
     UserID CHAR(6),
-	ComboID CHAR(6),
+	VoucherID CHAR(6),
     BookingDate DATE,
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
-	FOREIGN KEY (ComboID) REFERENCES FoodsAndDrinks(ComboID)
+	FOREIGN KEY (VoucherID) REFERENCES Vouchers(VoucherID)
 );
-
 
 -- Table for Rooms
 CREATE TABLE Rooms(
@@ -141,41 +153,18 @@ CREATE TABLE MovieActors (
     FOREIGN KEY (ActorID) REFERENCES Actors(ActorID)
 );
 
--- Table for Vouchers
-CREATE TABLE Vouchers (
-    VoucherID CHAR(6) PRIMARY KEY,
-	VoucherName NVARCHAR(500) UNIQUE,
-	TheatreID CHAR(6),
-	ImagePath VARCHAR(255),
-    ExpiryDate DATE,
-	FOREIGN KEY (TheatreID) REFERENCES Theatres(TheatreID) 
-);
 
--- Table for Tickets (linked to Booking, Shows, and Seats)
-CREATE TABLE Tickets (
-    TicketID CHAR(6) PRIMARY KEY,         -- ID duy nhất cho mỗi vé
-    UserID CHAR(6) NOT NULL,              -- ID người dùng (khóa ngoại)
-    BookingID CHAR(6) NOT NULL,           -- ID đặt chỗ (khóa ngoại)
-    BookingSeatID CHAR(6) NOT NULL,-- ID ghế đã đặt (khóa ngoại)
-    RoomID CHAR(6) NOT NULL,
-    BookingComboID CHAR(6) NULL,          -- ID combo đã đặt (có thể NULL)
-    BookingDate DATE NOT NULL,          -- Ngày đặt vé
-    TotalPrice MONEY CHECK (TotalPrice >= 0), -- Tổng giá vé (có thể tính tổng giá của ghế và combo)
-    FOREIGN KEY (UserID) REFERENCES Users(UserID),                      -- Khóa ngoại tham chiếu đến bảng Users
-    FOREIGN KEY (BookingID) REFERENCES Booking(BookingID),              -- Khóa ngoại tham chiếu đến bảng Booking
-    FOREIGN KEY (BookingSeatID) REFERENCES Booking_Seats(BookingSeatID), -- Khóa ngoại tham chiếu đến bảng Booking_Seats
-    FOREIGN KEY (BookingComboID) REFERENCES Booking_Combos(BookingComboID) -- Khóa ngoại tham chiếu đến bảng Booking_Combos
-);
+
 CREATE TABLE Booking_Seats(
-    BookingSeatID CHAR(6),   -- Một ID duy nhất cho từng bản ghi ghế trong bảng
-    BookingID CHAR(6),       -- Mã của booking (có thể đặt nhiều ghế trong một booking)
-    SeatID CHAR(6),          -- Ghế cụ thể đã đặt
-    ShowID CHAR(6),          -- Suất chiếu cho ghế đã đặt
-    Price MONEY CHECK (Price >= 0), -- Giá tiền cho ghế
-    PRIMARY KEY (BookingSeatID),    -- Sử dụng BookingSeatID làm khóa chính duy nhất cho từng bản ghi
-    FOREIGN KEY (BookingID) REFERENCES Booking(BookingID),  -- Khóa ngoại tham chiếu Booking
-    FOREIGN KEY (SeatID) REFERENCES Seats(SeatID),          -- Khóa ngoại tham chiếu Ghế
-    FOREIGN KEY (ShowID) REFERENCES Shows(ShowID)           -- Khóa ngoại tham chiếu Suất chiếu
+    BookingSeatID CHAR(6),   
+    BookingID CHAR(6),       
+    SeatID CHAR(6),          
+    ShowID CHAR(6),         
+    Price MONEY CHECK (Price >= 0), 
+    PRIMARY KEY (BookingSeatID),    
+    FOREIGN KEY (BookingID) REFERENCES Booking(BookingID),  
+    FOREIGN KEY (SeatID) REFERENCES Seats(SeatID),      
+    FOREIGN KEY (ShowID) REFERENCES Shows(ShowID)          
 );
 CREATE TABLE Booking_Combos (
     BookingComboID CHAR(6), -- Một ID duy nhất cho mỗi hàng trong bảng này (tùy chọn)
@@ -186,6 +175,22 @@ CREATE TABLE Booking_Combos (
     PRIMARY KEY (BookingComboID), -- Sử dụng BookingComboID làm khóa chính duy nhất cho mỗi bản ghi
     FOREIGN KEY (BookingID) REFERENCES Booking(BookingID),
     FOREIGN KEY (ComboID) REFERENCES FoodsAndDrinks(ComboID)
+);
+
+-- Table for Tickets (linked to Booking, Shows, and Seats)
+CREATE TABLE Tickets (
+    TicketID CHAR(6) PRIMARY KEY,        
+    UserID CHAR(6) NOT NULL,             
+    BookingID CHAR(6) NOT NULL,           
+    BookingSeatID CHAR(6) NOT NULL,
+    RoomID CHAR(6) NOT NULL,
+    BookingComboID CHAR(6) NULL,         
+    BookingDate DATE NOT NULL,        
+    TotalPrice MONEY CHECK (TotalPrice >= 0), 
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),          
+    FOREIGN KEY (BookingID) REFERENCES Booking(BookingID),        
+    FOREIGN KEY (BookingSeatID) REFERENCES Booking_Seats(BookingSeatID),
+    FOREIGN KEY (BookingComboID) REFERENCES Booking_Combos(BookingComboID) 
 );
 
 CREATE table WorkHis(
@@ -200,8 +205,8 @@ CREATE table WorkHis(
 
 CREATE TABLE Report(
 	ReportId char(6) primary key,
-	ReportTitle char(512),
-	ReportDescription char(4000),
+	ReportTitle Nvarchar(512),
+	ReportDescription Nvarchar(4000),
 	TimeCreate date,
 	UserId char(6)
 	foreign key (UserId) references Users(UserId)
@@ -283,6 +288,25 @@ VALUES
 ('R00031', N'Phòng 2', 'T00006'),
 ('R00032', N'Phòng 3', 'T00006'),
 ('R00033', N'Phòng 4', 'T00006');
+SELECT seatid, price from ShowSeats	
+SELECT SeatName, Price
+FROM (
+    SELECT DISTINCT s.SeatName, ss.price,
+           LEFT(s.SeatName, PATINDEX('%[0-9]%', s.SeatName) - 1) AS SeatPrefix,
+           CAST(SUBSTRING(s.SeatName, PATINDEX('%[0-9]%', s.SeatName), LEN(s.SeatName)) AS INT) AS SeatNumber
+    FROM Seats s
+    JOIN ShowSeats ss ON s.SeatID = ss.SeatID
+    JOIN Rooms r ON s.RoomID = r.RoomID
+    JOIN Theatres t ON r.TheatreID = t.TheatreID
+    JOIN Shows sh ON ss.ShowID = sh.ShowID
+    WHERE sh.MovieID = 'M00001'
+    AND t.TheatreID = 'T00001'
+    AND sh.StartTime = '10:00:00'
+    AND sh.ShowDate = '2024-10-21'
+) AS SortedSeats
+ORDER BY SeatPrefix, SeatNumber;
+
+
 
 
 -- Thêm Seats (ghế tại các phòng chiếu)
@@ -2500,10 +2524,10 @@ SELECT 'SH0001', SeatID, RoomID, TheatreID, 60000, 1
 FROM Seats
 WHERE RoomID = 'R00001' AND TheatreID = 'T00001'; 
 
-INSERT INTO ShowSeats (ShowID, SeatID, RoomID, TheatreID, IsAvailable)
-SELECT 'SH0001', SeatID, RoomID, TheatreID, 1
+INSERT INTO ShowSeats (ShowID, SeatID, RoomID, TheatreID, price, IsAvailable)
+SELECT 'SH0001', SeatID, RoomID, TheatreID,  60000, 1
 FROM Seats
-WHERE RoomID = 'R00002' AND TheatreID = 'T00001'; 
+WHERE RoomID = 'R00008' AND TheatreID = 'T00002'; 
 
 select * from Seats where TheatreID='T00002'
 INSERT INTO ShowSeats (ShowID, SeatID, RoomID, TheatreID, IsAvailable)
@@ -2515,7 +2539,7 @@ Select * from Shows
 
 Select * from Seats where TheatreID='T00002'
 
-Select * from ShowSeats where ShowID = 'SH0030' and RoomID = 'R00001'
+Select * from ShowSeats where ShowID = 'SH0001' and RoomID = 'R00008'
 
 SELECT showID, seatID, roomID, theatreID, price, IsAvailable FROM ShowSeats WHERE RoomID='R00001'
 
@@ -2527,21 +2551,8 @@ WHERE ss.RoomID = 'R00001'
 AND sh.ShowDate = '2024-09-13';
 
 
--- Thêm Actors (diễn viên)
-INSERT INTO Actors (ActorID, ActorName)
-VALUES 
-('A00001', 'Robert Downey Jr.'),
-('A00002', 'Scarlett Johansson'),
-('A00003', 'Tom Hanks');
 
--- Thêm MovieActors (liên kết phim và diễn viên)
-INSERT INTO MovieActors (MovieID, ActorID)
-VALUES 
-('M00001', 'A00001'),
-('M00001', 'A00002'),
-('M00002', 'A00003');
-
--- Thêm Vouchers (voucher khuyến mãi)
+--Thêm Vouchers (voucher khuyến mãi)
 -- CGV
 INSERT INTO Vouchers (VoucherID, VoucherName, TheatreID, ImagePath, ExpiryDate)
 VALUES 
@@ -2632,6 +2643,9 @@ VALUES
 
 
 insert into Actors(ActorID, ActorName, ImagePath) values
+('A00001', 'Robert Downey Jr.',NULL),
+('A00002', 'Scarlett Johansson',NULL),
+('A00003', 'Tom Hanks',NULL),
 ('A00004','Denzel Washington',NULL),
 ('A00005','Leonardo DiCaprio',NULL),
 ('A00006','Christian Bale',NULL),
@@ -2662,7 +2676,27 @@ insert into MovieActors(MovieID, ActorID) values
 ('M00008','A00001'),
 ('M00009','A00003'),
 ('M00010','A00005')
-insert into MovieGenres(GenreID, MovieID) values
+
+insert into Genres(GenreName) values
+('Action'),
+('Adventure'),
+('Animation'),
+('Biography'),
+('Comedy'),
+('Crime'),
+('Documentary'),
+('Drama'),
+('Fantasy'),
+('Historical'),
+('Horror'),
+('Musical'),
+('Mystery'),
+('Romance'),
+('Science Fiction'),
+('Thriller'),
+('Western')
+	
+	insert into MovieGenres(GenreID, MovieID) values
 (1,'M00001'),
 (2,'M00001'),
 (8,'M00001'),
@@ -2725,25 +2759,6 @@ insert into MovieGenres(GenreID, MovieID) values
 (16,'M00014'),
 (5,'M00015'),
 (13,'M00015')
-insert into Genres(GenreName) values
-('Action'),
-('Adventure'),
-('Animation'),
-('Biography'),
-('Comedy'),
-('Crime'),
-('Documentary'),
-('Drama'),
-('Fantasy'),
-('Historical'),
-('Horror'),
-('Musical'),
-('Mystery'),
-('Romance'),
-('Science Fiction'),
-('Thriller'),
-('Western')
-	
 -- Thêm Booking (đơn đặt vé)
 INSERT INTO Booking (BookingID, UserID, ComboID, BookingDate)
 VALUES 
@@ -2823,7 +2838,14 @@ GROUP BY
 
 	SELECT Avatar FROM Users WHERE UserID = 'U00003';
 
-	
+	select * from Movies
+
+	SELECT DISTINCT m.MovieID, m.MovieName, m.ImgPortrait, m.Rate 
+                 FROM Movies m 
+                 JOIN Shows s ON m.MovieID = s.MovieID
+                 JOIN ShowSeats ss ON s.ShowID = ss.ShowID 
+                 WHERE ss.TheatreID = 'T00001'
+
 CREATE VIEW MovieRatings AS
 SELECT 
     MovieID, 

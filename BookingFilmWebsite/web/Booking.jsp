@@ -3,6 +3,14 @@
 <%@ page import="java.util.Map"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <link rel="stylesheet" href="./css/Booking.css"/>
+<%
+    String user = (String) session.getAttribute("user");
+    if (user == null) { %>
+<%@include file="includes/header.jsp" %>
+<% } else { %>
+<%@include file="includes/header_user.jsp" %>
+<% }%><link rel="stylesheet" href="css/headerssj2.css"/>
+
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -11,9 +19,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Đặt Vé Xem Phim</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./css/BookingCSS.css"/>
 </head>
 <body>
-    <div class="container mt-4">
+    <div class="container mt-4 mb-4" style="max-height: 800px">
         <div class="progress-bar bg-white">
             <ul>
                 <li class="active">Chọn phim / Rạp / Suất</li>
@@ -378,5 +387,7 @@ function updateHiddenFields(event) {
 
 
     </script>
+    <%@include file="includes/footer.jsp" %>
+<link rel="stylesheet" href="css/footerssj2.css" />
 </body>
 </html>

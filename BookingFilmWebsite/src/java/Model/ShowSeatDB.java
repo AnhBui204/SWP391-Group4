@@ -209,10 +209,10 @@ public class ShowSeatDB {
         return bookingTicketID;
     }
 
-    public static List<String> getSeatsForShow(String movieID, String theatreID, String startTime, String showDate) {
-        List<String> seats = new ArrayList<>();
+    public static List<SeatDetail> getSeatsForShow(String movieID, String theatreID, String startTime, String showDate) {
+        List<SeatDetail> seats = new ArrayList<>();
 
-        String query = "SELECT s.SeatName "
+        String query = "SELECT DISTINCT s.SeatName, ss.IsAvailable, ss.Price "
                 + "FROM Seats s "
                 + "JOIN ShowSeats ss ON s.SeatID = ss.SeatID "
                 + "JOIN Rooms r ON s.RoomID = r.RoomID "
@@ -232,7 +232,11 @@ public class ShowSeatDB {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 String seatName = rs.getString("SeatName");
-                seats.add(seatName);
+                int isAvailable = rs.getInt("IsAvailable");
+                int price = rs.getInt("Price");
+
+                SeatDetail seatDetails = new SeatDetail(seatName, isAvailable, price);
+                seats.add(seatDetails);
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -556,11 +556,11 @@ public class MovieDB {
 }
 
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         // Lấy danh sách tất cả các bộ phim
         System.out.println("\nDanh sách tất cả các bộ phim:");
-        List<Movie> movies = MovieDB.getAllMovies();
+        List<Movie> movies = MovieDB.getMoviesByTheatreID("T00001");
         for (Movie movie : movies) {
             System.out.println(movie);
         }

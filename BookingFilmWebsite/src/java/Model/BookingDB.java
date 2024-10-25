@@ -577,7 +577,7 @@ public static String getMaxTicketID(Connection conn) {
 //    }
   public static void main(String[] args) {
         // Prepare a list of combo names to retrieve their IDs
-        List<String> comboNames = Arrays.asList("Bắp rang + 1 Nước ngọt", "Bắp rang + 3 Nước ngọt", "Bắp rang + 4 Nước ngọt"); // Thay thế bằng các tên combo thực tế của bạn
+        List<String> comboNames = Arrays.asList("Bắp rang + Nước ngọt", "Bắp rang + 2 Nước ngọt"); // Thay thế bằng các tên combo thực tế của bạn
 
         // Call the method to get combo IDs
         List<String> comboIDs = BookingDB.getComboIDsByNames(comboNames);

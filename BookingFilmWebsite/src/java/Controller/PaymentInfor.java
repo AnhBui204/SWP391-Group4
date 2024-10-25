@@ -1,9 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controller;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -15,13 +10,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.BufferedReader;
-
 /**
  *
  * @author ADMIN
  */
 public class PaymentInfor extends HttpServlet {
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -47,7 +40,6 @@ public class PaymentInfor extends HttpServlet {
             out.println("</html>");
         }
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -62,7 +54,6 @@ public class PaymentInfor extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -74,7 +65,6 @@ public class PaymentInfor extends HttpServlet {
     @Override
 protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-
     // Lấy các tham số từ request (theatreID, movieName, selectedDate, selectedTime, selectedSeats, selectedFood, totalPrice, paymentMethod)
     String theatreID = request.getParameter("theatreID");
     String movieName = request.getParameter("movieName");
@@ -84,7 +74,6 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     String selectedFood = request.getParameter("selectedFood");
     String totalPrice = request.getParameter("totalPrice");
     String paymentMethod = request.getParameter("paymentMethod");
-
     // Đọc JSON từ request body cho foodQuantities
     StringBuilder jsonBuilder = new StringBuilder();
     String line;
@@ -101,11 +90,9 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         request.getRequestDispatcher("HomePage.jsp").forward(request, response);
         return;
     }
-
     // Lưu foodQuantities vào session
     HttpSession session = request.getSession();
     session.setAttribute("foodQuantities", foodQuantitiesJson);
-
     // Kiểm tra xem có thiếu thông tin nào không từ request
     if (theatreID == null || movieName == null || selectedDate == null ||
         selectedTime == null || selectedSeats == null || totalPrice == null) {
@@ -113,7 +100,6 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         request.getRequestDispatcher("HomePage.jsp").forward(request, response);
         return;
     }
-
     // Lưu thông tin vào request để gửi tới JSP
     request.setAttribute("theatreID", theatreID);
     request.setAttribute("movieName", movieName);
@@ -123,13 +109,9 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     request.setAttribute("selectedFood", selectedFood);
     request.setAttribute("totalPrice", totalPrice);
     request.setAttribute("paymentMethod", paymentMethod);
-
     // Chuyển tiếp đến trang xác nhận
     request.getRequestDispatcher("Payment.jsp").forward(request, response);
 }
-
-
-
     /**
      * Returns a short description of the servlet.
      *
@@ -139,5 +121,4 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

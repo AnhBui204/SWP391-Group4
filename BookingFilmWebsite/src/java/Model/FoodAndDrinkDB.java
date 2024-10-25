@@ -61,7 +61,29 @@ public class FoodAndDrinkDB {
             throw new RuntimeException("Error creating combo: " + e.getMessage(), e);
         }
     }
+public static List<FoodAndDrink> getFoodsAndDrinksByTheatreID(String theatreID) {
+        List<FoodAndDrink> foodsAndDrinks = new ArrayList<>();
+        String sql = "SELECT ComboID, ComboName, TheatreID, ImagePath, Price FROM FoodsAndDrinks WHERE TheatreID = ?";
 
+        try (Connection conn = getConnect(); 
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, theatreID);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String comboID = rs.getString("ComboID");
+                String comboName = rs.getString("ComboName");
+                String imagePath = rs.getString("ImagePath");
+                double price = rs.getDouble("Price");
+                foodsAndDrinks.add(new FoodAndDrink(comboID, comboName, theatreID, imagePath, price));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return foodsAndDrinks;
+    }
     // Get combo by ID
     public static FoodAndDrink getComboById(String comboID) {
         String sql = "SELECT * FROM FoodsAndDrinks WHERE ComboID = ?";

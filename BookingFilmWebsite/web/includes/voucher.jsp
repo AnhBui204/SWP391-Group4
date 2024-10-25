@@ -12,9 +12,12 @@
 </head>
 <body>
     <main>
-        <header>
-            <h1>TIN KHUYẾN MÃI</h1>
-        </header>
+        <header style="padding: 0px; align-items: center;">
+            <div class="text-left" style="padding: 0px;">
+                        <a href="uudai_homepage.jsp" class="btn" style="font-size: 1.5em;">Tin Khuyến Mãi</a>
+                    </div>
+<!--                        <a href="Promotion.jsp" class="btn btn-primary">Danh sách</a>-->
+                </header>
         <section>
             <% 
                 List<Voucher> listvc = VoucherDB.getAllVouchers();

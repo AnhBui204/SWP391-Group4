@@ -40,7 +40,7 @@
                             <a class="nav-link" href="#">Phim</a>
                         </li>
                         <li class="nav-item me-3">
-                            <a class="nav-link" href="#">Ưu Đãi</a>
+                            <a class="nav-link" href="uudai_homepage.jsp">Ưu Đãi</a>
                         </li>
                         <li class="nav-item me-3">
                             <a class="nav-link" href="#">Rạp/Giá Vé</a>
