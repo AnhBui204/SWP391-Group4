@@ -195,7 +195,10 @@ VALUES
 ('WH0004', 'Security Audit', '11:00:00', '2024-10-13', 'T00001'),
 ('WH0005', 'Server Optimization', '10:15:00', '2024-10-12', 'T00001');
 
-SELECT * FROM WorkHis where StaffID = 'T00001'
+SELECT * FROM WorkHis
+order by WorkId desc
+
+insert into WorkHis(WorkId, WorkDescription, Times, Dates, StaffId) values (?,?,?,?,?)
 
 -- Thêm Users (thêm vài tài khoản mẫu)
 INSERT Users(UserID, UserName, FName, LName, Pass, Email, Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar)
@@ -2543,6 +2546,8 @@ VALUES
 ('M00001', 'A00002'),
 ('M00002', 'A00003');
 
+select * from Vouchers
+
 -- Thêm Vouchers (voucher khuyến mãi)
 -- CGV
 INSERT INTO Vouchers (VoucherID, VoucherName, TheatreID, ImagePath, ExpiryDate)
@@ -2648,7 +2653,129 @@ VALUES
 ('TK0003', 'B00003', 'SH0003', 'T00001', 'R00001', 'S00003',  100000, 'Paid','2024-09-12'),
 ('TK0004', 'B00004', 'SH0004', 'T00001', 'R00001', 'S00004',  130000, 'Paid', '2024-09-12'); 
 
+insert into Genres(GenreName) values
+('Action'),
+('Adventure'),
+('Animation'),
+('Biography'),
+('Comedy'),
+('Crime'),
+('Documentary'),
+('Drama'),
+('Fantasy'),
+('Historical'),
+('Horror'),
+('Musical'),
+('Mystery'),
+('Romance'),
+('Science Fiction'),
+('Thriller'),
+('Western')
 
+select * from Genres
+
+insert into MovieGenres(GenreID, MovieID) values
+(1,'M00001'),
+(2,'M00001'),
+(8,'M00001'),
+(11,'M00001'),
+(16,'M00001'),
+(17,'M00001'),
+(6,'M00002'),
+(11,'M00002'),
+(16,'M00002'),
+(2,'M00003'),
+(3,'M00003'),
+(6,'M00003'),
+(7,'M00003'),
+(10,'M00003'),
+(16,'M00003'),
+(5,'M00004'),
+(8,'M00004'),
+(14,'M00004'),
+(2,'M00005'),
+(6,'M00005'),
+(7,'M00005'),
+(10,'M00005'),
+(17,'M00005'),
+(1,'M00006'),
+(6,'M00006'),
+(8,'M00006'),
+(4,'M00007'),
+(7,'M00007'),
+(8,'M00007'),
+(2,'M00008'),
+(3,'M00008'),
+(5,'M00008'),
+(8,'M00008'),
+(15,'M00008'),
+(17,'M00008'),
+(1,'M00009'),
+(5,'M00009'),
+(6,'M00009'),
+(8,'M00009'),
+(14,'M00009'),
+(16,'M00009'),
+(1,'M00010'),
+(2,'M00010'),
+(6,'M00010'),
+(16,'M00010'),
+(5,'M00011'),
+(8,'M00011'),
+(14,'M00011'),
+(7,'M00012'),
+(8,'M00012'),
+(10,'M00012'),
+(14,'M00012'),
+(2,'M00013'),
+(5,'M00013'),
+(13,'M00013'),
+(17,'M00013'),
+(5,'M00014'),
+(8,'M00014'),
+(14,'M00014'),
+(16,'M00014'),
+(5,'M00015'),
+(13,'M00015')
+
+select * from MovieGenres
+
+insert into MovieActors(MovieID, ActorID) values
+('M00001','A00011'),
+('M00002','A00007'),
+('M00003','A00008'),
+('M00004','A00002'),
+('M00005','A00004'),
+('M00006','A00006'),
+('M00007','A00001'),
+('M00008','A00003'),
+('M00009','A00005'),
+('M00010','A00004'),
+('M00011','A00010'),
+('M00012','A00009'),
+('M00013','A00003'),
+('M00014','A00012'),
+('M00015','A00004'),
+('M00006','A00007'),
+('M00007','A00010'),
+('M00008','A00001'),
+('M00009','A00003'),
+('M00010','A00005')
+
+select Actors.ActorName from MovieActors inner join Actors on MovieActors.ActorID = Actors.ActorID where MovieActors.MovieID = 'M00001'
+
+insert into Actors(ActorID, ActorName, ImagePath) values
+('A00004','Denzel Washington',NULL),
+('A00005','Leonardo DiCaprio',NULL),
+('A00006','Christian Bale',NULL),
+('A00007','Meryl Streep',NULL),
+('A00008','Jack Nicholson',NULL),
+('A00009','Cate Blanchett',NULL),
+('A00010','Viola Davis',NULL),
+('A00011','Johnny Depp',NULL),
+('A00012','Brad Pitt',NULL)
+
+select * from Actors
 
 select Username, Pass , UserID, Email, Phone, Sex, DateOfBirth, MoneyLeft from Users where Username = 'Admin' and Pass= '123'
 
@@ -2725,3 +2852,20 @@ UPDATE Movies
 SET Rate = (SELECT AVG(Rating) 
             FROM Ratings 
             WHERE Ratings.MovieID = Movies.MovieID);
+
+SELECT 'M' + RIGHT('00000' + CAST(CAST(SUBSTRING(MAX(MovieID), 2, 5) AS INT) + 1 AS VARCHAR(5)), 5) AS NextID FROM Movies
+SELECT 'WH' + RIGHT('0000' + CAST(CAST(SUBSTRING(MAX(WorkId), 3, 4) AS INT) + 1 AS VARCHAR(4)), 4) AS NextID FROM WorkHis
+
+select * from Shows
+select * from Seats 
+select * from Rooms
+select * from Movies
+select * from WorkHis
+
+SELECT 'WH' + RIGHT('0000' + CAST(CAST(SUBSTRING(MAX(WorkId), 3, 4) AS INT) + 1 AS VARCHAR(4)), 4) AS NextID FROM WorkHis
+
+insert into WorkHis(WorkId, WorkDescription, Times, Dates, StaffId) values ('','','','','')
+
+select * from FoodsAndDrinks
+select * from Vouchers
+SELECT * FROM Vouchers WHERE TheatreID = 'T00001' ORDER BY VoucherID OFFSET 1 ROWS FETCH NEXT 8 ROWS ONLY
