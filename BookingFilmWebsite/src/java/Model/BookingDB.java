@@ -545,6 +545,41 @@ public static String getMaxTicketID(Connection conn) {
     
     return maxID; // Return the maximum TicketID found, or null if none exists
 }
+public static String deductMoneyLeft(String userID, BigDecimal totalPrice) {
+        String queryCheckBalance = "SELECT MoneyLeft FROM Users WHERE UserID = ?";
+        String queryUpdateBalance = "UPDATE Users SET MoneyLeft = MoneyLeft - ? WHERE UserID = ?";
+
+        try (
+                Connection conn = getConnect();
+                PreparedStatement checkStmt = conn.prepareStatement(queryCheckBalance);
+             PreparedStatement updateStmt = conn.prepareStatement(queryUpdateBalance)) {
+
+            // Check current MoneyLeft
+            checkStmt.setString(1, userID);
+            ResultSet resultSet = checkStmt.executeQuery();
+            
+            if (resultSet.next()) {
+                BigDecimal moneyLeft = resultSet.getBigDecimal("MoneyLeft");
+
+                // Check if sufficient funds are available
+                if (moneyLeft.compareTo(totalPrice) >= 0) {
+                    // Deduct the money
+                    updateStmt.setBigDecimal(1, totalPrice);
+                    updateStmt.setString(2, userID);
+                    updateStmt.executeUpdate();
+                    
+                    return "Transaction successful. Money deducted.";
+                } else {
+                    return "Insufficient funds.";
+                }
+            } else {
+                return "User not found.";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "An error occurred while processing the transaction.";
+        }
+    }
 //
 //   public static void main(String[] args) {
 //        // Dữ liệu mẫu để chèn vào bảng Tickets

@@ -1,5 +1,5 @@
-package Controller;
 
+package Controller;
 import Model.FoodItem;
 import Model.BookingDB;
 import Model.RoomDB;
@@ -80,151 +80,123 @@ public class PaymentServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Retrieve selected seats
-        String[] seatNamesArray = request.getParameterValues("selectedSeats");
-        String seatNames = (seatNamesArray != null) ? String.join(", ", seatNamesArray) : "";
-        // Retrieve total price
-        String priceString = request.getParameter("totalPrice");
-        BigDecimal totalPrice = null;
-        if (priceString != null && !priceString.isEmpty()) {
-            try {
-                totalPrice = new BigDecimal(priceString.trim());
-            } catch (NumberFormatException e) {
-                System.out.println("Không thể chuyển đổi giá trị: " + priceString);
-            }
-        }
-        // Retrieve show date and time
-        String showDate = request.getParameter("selectedDate");
-        String startTime = request.getParameter("selectedTime");
-        HttpSession session = request.getSession();
-        String userID = (String) session.getAttribute("id");
-        // Retrieve selected food data
-        String selectedFoodData = request.getParameter("selectedFood");
-        // Initialize the list to hold FoodItem objects
-        List<FoodItem> foodItems = new ArrayList<>();
-// Assuming selectedFoodData is the JSON string containing food information
-        JSONArray foodArray = new JSONArray(selectedFoodData); // Use org.json.JSONArray
-// Loop through each food item in the JSON array
-        for (int i = 0; i < foodArray.length(); i++) {
-            JSONObject foodItem = foodArray.getJSONObject(i);
-            // Get the food name(s) and quantity
-            String foodName = foodItem.getString("name");
-            int quantity = Integer.parseInt(foodItem.getString("quantity")); // Convert to integer
-            // Assuming foodName is a single name for now; modify if it can be multiple
-            List<String> namesList = new ArrayList<>();
-            namesList.add(foodName); // Add the food name to the list
-            // Add the food item to the list
-            foodItems.add(new FoodItem(namesList, quantity));
-        }
-// Initialize lists to hold combo IDs, quantities, and food names
-// Initialize lists to hold combo IDs, quantities, and food names
-        List<String> allComboIDs = new ArrayList<>();
-        List<Integer> allQuantities = new ArrayList<>();
-        List<List<String>> allFoodNames = new ArrayList<>();
-        for (FoodItem item : foodItems) {
-            // Get the list of names from the food item
-            List<String> foodNames = item.getNames();
-            // Trim each food name to remove any leading/trailing spaces
-            List<String> trimmedFoodNames = foodNames.stream()
-                    .map(String::trim) // Trim each food name
-                    .collect(Collectors.toList());
-            // Add the current food names to the allFoodNames list
-            allFoodNames.add(trimmedFoodNames); // Store the trimmed food names in the overall list
-            // Log the trimmed food names (optional, for debugging)
-            System.out.println("Trimmed Food Names: " + trimmedFoodNames);
-            // Create a set to hold combo IDs for this specific food item
-            Set<String> comboIDsForItem = new HashSet<>();
-            // Iterate through each trimmed food name for processing
-            for (String foodName : trimmedFoodNames) {
-                System.out.println("Food Name: " + foodName + ", Quantity: " + item.getQuantity());
-                // Retrieve combo IDs for the current food name only
-                List<String> comboIDsForFoodName = BookingDB.getComboIDsByNames(Arrays.asList(foodName));
-                // Check if the combo IDs are not null and contain entries
-                if (comboIDsForFoodName != null && !comboIDsForFoodName.isEmpty()) {
-                    comboIDsForItem.addAll(comboIDsForFoodName); // Add all retrieved combo IDs for this item
-                    allComboIDs.addAll(comboIDsForFoodName); // Also add to the global list
-                } else {
-                    System.out.println("Combo IDs not found for: " + foodName);
-                }
-            }
-            // Log combo IDs for the current item
-            System.out.println("Combo IDs for item: " + comboIDsForItem);
-            // Add the quantity for this food item to the list of all quantities
-            allQuantities.add(item.getQuantity());
-        }
-// Final logging of collected data
-        System.out.println("All Combo IDs: " + allComboIDs);
-        System.out.println("All Quantities: " + allQuantities);
-        System.out.println("All Food Names: " + allFoodNames); // This will now contain trimmed names
-        // Print out other parameters for debugging
-        System.out.println("Ghế đã chọn: " + seatNames);
-        System.out.println("Giá: " + priceString);
-        System.out.println("Ngày suất chiếu: " + showDate);
-        System.out.println("Thời gian bắt đầu: " + startTime);
-        System.out.println("ID người dùng: " + userID);
-        System.out.println("ID combo: " + allComboIDs);
-        Date bookingDate = new Date();
-        String bookingID = BookingDB.generateBookingID();
-        String voucherID = null;
-        String showID = ShowDB.getShowID(showDate, startTime);
-        String roomID = RoomDB.getRoomIDFromShow(showID);
-        // Handle quantities from the request if necessary
+// Step 1: Parse request parameters for seat names, price, show details, and user info
+String[] seatNamesArray = request.getParameterValues("selectedSeats");
+String seatNames = (seatNamesArray != null) ? String.join(", ", seatNamesArray) : "";
 
-        // Get seat IDs from seat names
-        List<String> seatID = SeatDB.getSeatIDsFromNames(seatNames, roomID);
-        if (seatID.isEmpty()) {
-            request.setAttribute("message", "Không tìm thấy ghế.");
-            request.getRequestDispatcher("PaymentResult.jsp").forward(request, response);
-            return;
-        }
-        // Perform ticket booking
-        boolean isSuccess = BookingDB.bookTicket(bookingID, userID, seatNames, showID, showDate, startTime, allComboIDs, allQuantities, bookingDate, voucherID);
-        if (totalPrice == null) {
-            request.setAttribute("message", "Không thể xác định tổng tiền.");
-            request.getRequestDispatcher("PaymentResult.jsp").forward(request, response);
-            return;
-        }
-        // Retrieve current balance
-        BigDecimal currentBalance = UserDB.getCurrentBalance(userID); // You need to create this method in UserDB
-        // Compare current balance with total price
-        if (currentBalance.compareTo(totalPrice) < 0) {
-            // If the current balance is less than the total price, show a message
-            request.setAttribute("message", "Số tiền không đủ để đặt vé. Vui lòng nạp thêm tiền.");
-            request.getRequestDispatcher("PaymentResult.jsp").forward(request, response);
-            return;
-        }
-        if (isSuccess) {
-            request.setAttribute("message", "Đặt vé thành công!");
+// Retrieve total price
+String priceString = request.getParameter("totalPrice");
+BigDecimal totalPrice = null;
 
-            // Retrieve bookingSeatID from the database after booking
-            List<String> bookingSeatID = BookingDB.getBookingSeatIDsByBookingID(bookingID);
-            List<String> bookingComboID = BookingDB.getBookingComboIDs(bookingID);
-            // Insert into Tickets table
-            List<BigDecimal> totalPrices = new ArrayList<>();
-            for (String id : seatID) {  // Loop through seatID
-                BigDecimal seatPrice = BookingDB.calculateTotalPrice(id, allComboIDs);
-                totalPrices.add(seatPrice);
-            }
-            BookingDB.insertTickets(userID, bookingID, bookingSeatID, roomID, bookingComboID, totalPrices, bookingDate);
+if (priceString != null && !priceString.isEmpty()) {
+    try {
+        totalPrice = new BigDecimal(priceString.trim());
+    } catch (NumberFormatException e) {
+        System.out.println("Không thể chuyển đổi giá trị: " + priceString);
+    }
+}
+
+// Retrieve show date, time, and user ID from session
+String showDate = request.getParameter("selectedDate");
+String startTime = request.getParameter("selectedTime");
+HttpSession session = request.getSession();
+String userID = (String) session.getAttribute("id");
+
+// Retrieve and parse selected food data
+String selectedFoodData = request.getParameter("selectedFood");
+List<FoodItem> foodItems = new ArrayList<>();
+if (selectedFoodData != null) {
+    JSONArray foodArray = new JSONArray(selectedFoodData);
+    for (int i = 0; i < foodArray.length(); i++) {
+        JSONObject foodItem = foodArray.getJSONObject(i);
+        String foodName = foodItem.getString("name");
+        int quantity = Integer.parseInt(foodItem.getString("quantity"));
+        foodItems.add(new FoodItem(Arrays.asList(foodName.trim()), quantity));
+    }
+}
+
+// Prepare lists for combo IDs and quantities
+List<String> allComboIDs = new ArrayList<>();
+List<Integer> allQuantities = new ArrayList<>();
+
+for (FoodItem item : foodItems) {
+    List<String> trimmedFoodNames = item.getNames().stream().map(String::trim).collect(Collectors.toList());
+    for (String foodName : trimmedFoodNames) {
+        List<String> comboIDsForFoodName = BookingDB.getComboIDsByNames(Arrays.asList(foodName));
+        if (comboIDsForFoodName != null && !comboIDsForFoodName.isEmpty()) {
+            allComboIDs.addAll(comboIDsForFoodName);
         } else {
-            request.setAttribute("message", "Đặt vé thất bại! Vui lòng thử lại.");
+            System.out.println("Combo IDs not found for: " + foodName);
         }
-        System.out.println("Length of seatNamesArray: " + seatNamesArray.length);
-        System.out.println("Length of foodArray: " + foodArray.length());
+    }
+    allQuantities.add(item.getQuantity());
+}
 
-        // Redirect to notification page
+// Debugging output for parameters
+System.out.println("Ghế đã chọn: " + seatNames);
+System.out.println("Giá: " + priceString);
+System.out.println("Ngày suất chiếu: " + showDate);
+System.out.println("Thời gian bắt đầu: " + startTime);
+System.out.println("ID người dùng: " + userID);
+System.out.println("ID combo: " + allComboIDs);
+
+
+BigDecimal currentBalance = UserDB.getCurrentBalance(userID);
+if (currentBalance.compareTo(totalPrice) < 0) {
+    session.setAttribute("message", "Đặt vé không thành công! Số tiền không đủ để đặt vé. Vui lòng nạp thêm tiền.");
+    request.getRequestDispatcher("PaymentResult.jsp").forward(request, response);
+    return;
+}
+
+
+if (totalPrice == null) {
+    session.setAttribute("message", "Không thể xác định tổng tiền.");
+    request.getRequestDispatcher("PaymentResult.jsp").forward(request, response);
+    return;
+}
+// Đoạn mã kiểm tra đủ tiền mới thực hiện đặt vé
+if (currentBalance.compareTo(totalPrice) >= 0) {  // Điều kiện chỉnh sửa >=
+    String bookingID = BookingDB.generateBookingID();
+    String showID = ShowDB.getShowID(showDate, startTime);
+    String roomID = RoomDB.getRoomIDFromShow(showID);
+    List<String> seatID = SeatDB.getSeatIDsFromNames(seatNames, roomID);
+
+    if (seatID.isEmpty()) {
+        request.setAttribute("message", "Không tìm thấy ghế.");
         request.getRequestDispatcher("PaymentResult.jsp").forward(request, response);
+        return;
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+    boolean isSuccess = BookingDB.bookTicket(bookingID, userID, seatNames, showID, showDate, startTime, allComboIDs, allQuantities, new Date(), null);
+
+    if (isSuccess) {
+        List<String> bookingSeatID = BookingDB.getBookingSeatIDsByBookingID(bookingID);
+        List<String> bookingComboID = BookingDB.getBookingComboIDs(bookingID);
+
+        List<BigDecimal> totalPrices = new ArrayList<>();
+        for (String id : seatID) {
+            BigDecimal seatPrice = BookingDB.calculateTotalPrice(id, allComboIDs);
+            totalPrices.add(seatPrice);
+        }
+        BookingDB.insertTickets(userID, bookingID, bookingSeatID, roomID, bookingComboID, totalPrices, new Date());
+        BookingDB.deductMoneyLeft(userID, totalPrice);
+        session.setAttribute("message", "Thanh toán của bạn đã được xử lý thành công! Cảm ơn bạn đã đặt vé xem phim.");
+    } else {
+        session.setAttribute("message", "Đặt vé thất bại! Vui lòng thử lại.");
+    }
+    System.out.println("Message: " + session.getAttribute("message"));
+    session.setAttribute("Thành công", "message");
+    request.getRequestDispatcher("PaymentResult.jsp").forward(request, response);
+}
+
+
+ }
     @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }
