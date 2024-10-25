@@ -580,6 +580,28 @@ public static String deductMoneyLeft(String userID, BigDecimal totalPrice) {
             return "An error occurred while processing the transaction.";
         }
     }
+ public static List<BookingInfo> getBookingDetailsByUserID(String userID) throws SQLException {
+        List<BookingInfo> bookingDetails = new ArrayList<>();
+        String query = "SELECT BookingID, BookingDate, TotalPrice FROM Tickets WHERE UserID = ?";
+       
+        try (Connection conn = getConnect();
+                PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, userID);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String bookingID = rs.getString("BookingID");
+                    String bookingDate = rs.getString("BookingDate");
+                    double totalPrice = rs.getDouble("TotalPrice");
+
+                    // Assuming BookingInfo is a POJO to hold booking details
+                    BookingInfo info = new BookingInfo(bookingID, bookingDate, totalPrice);
+                    bookingDetails.add(info);
+                }
+            }
+        }
+
+        return bookingDetails;
+    }
 //
 //   public static void main(String[] args) {
 //        // Dữ liệu mẫu để chèn vào bảng Tickets

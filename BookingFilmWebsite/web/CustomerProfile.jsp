@@ -53,7 +53,7 @@
                         <hr class="w-75 mx-auto">
                         <div class="text-center mt-3 d-flex flex-column">
                             <h3 class="bg-white p-3">Chỉnh sửa hồ sơ</h3>
-                            <h3 class="mt-4 p-3"><a href="HistoryBooking.jsp">Lịch sử giao dịch</a></h3>
+                            <a class="h3 mt-4 p-3 d-block" href="summaryBooking.jsp">Lịch sử giao dịch</a>
                             <h3 class="my-4 p-3">Quà tặng tích điểm</h3>
                             <h3 class="mt-4 p-3"><a href="report.jsp?userID=${user.userID}">Báo cáo</a></h3>
 

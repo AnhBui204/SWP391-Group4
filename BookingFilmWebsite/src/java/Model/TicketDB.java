@@ -161,46 +161,46 @@ public static List<Ticket> getTicketsByUserID(String userID) {
 
         return tickets;
     }
-public static List<ShowInfo1> getShowInfoByUserID(String userID) {
-    List<ShowInfo1> showInfos = new ArrayList<>();
-    String sql = "SELECT th.TheatreName, s.SeatName, sh.ShowDate, sh.StartTime, r.RoomName, bs.Price " +
-                 "FROM Tickets t " +
-                 "JOIN Booking b ON t.BookingID = b.BookingID " +
-                 "JOIN Booking_Seats bs ON t.BookingSeatID = bs.BookingSeatID " +
-                 "JOIN Seats s ON bs.SeatID = s.SeatID " +
-                 "JOIN ShowSeats ss ON bs.ShowID = ss.ShowID AND bs.SeatID = ss.SeatID " +
-                 "JOIN Shows sh ON ss.ShowID = sh.ShowID " +
-                 "JOIN Theatres th ON ss.TheatreID = th.TheatreID " +
-                 "JOIN Rooms r ON s.RoomID = r.RoomID " +
-                 "WHERE t.UserID = ?";
-
-    try (Connection conn = getConnect();
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-        
-        pstmt.setString(1, userID);
-        ResultSet rs = pstmt.executeQuery();
-
-        while (rs.next()) {
-            String theatreName = rs.getString("TheatreName");
-            String seatName = rs.getString("SeatName");
-            Date showDate = rs.getDate("ShowDate");
-           String startTime = rs.getString("StartTime");
-           if (startTime != null && startTime.length() > 8) {
-                startTime = startTime.substring(0, 8); // Lấy 8 ký tự đầu tiên
-            }
-            String roomName = rs.getString("RoomName");
-            BigDecimal price = rs.getBigDecimal("Price"); // Lấy giá tiền
-
-            // Tạo đối tượng ShowInfo và thêm vào danh sách
-            ShowInfo1 showInfo = new ShowInfo1(theatreName, seatName, showDate, startTime, roomName, price);
-            showInfos.add(showInfo);
-        }
-    } catch (SQLException e) {
-        System.out.println("Lỗi khi truy vấn thông tin suất chiếu: " + e.getMessage());
-    }
-
-    return showInfos;
-}
+//public static List<ShowInfo1> getShowInfoByUserID(String userID) {
+//    List<ShowInfo1> showInfos = new ArrayList<>();
+//    String sql = "SELECT th.TheatreName, s.SeatName, sh.ShowDate, sh.StartTime, r.RoomName, bs.Price " +
+//                 "FROM Tickets t " +
+//                 "JOIN Booking b ON t.BookingID = b.BookingID " +
+//                 "JOIN Booking_Seats bs ON t.BookingSeatID = bs.BookingSeatID " +
+//                 "JOIN Seats s ON bs.SeatID = s.SeatID " +
+//                 "JOIN ShowSeats ss ON bs.ShowID = ss.ShowID AND bs.SeatID = ss.SeatID " +
+//                 "JOIN Shows sh ON ss.ShowID = sh.ShowID " +
+//                 "JOIN Theatres th ON ss.TheatreID = th.TheatreID " +
+//                 "JOIN Rooms r ON s.RoomID = r.RoomID " +
+//                 "WHERE t.UserID = ?";
+//
+//    try (Connection conn = getConnect();
+//         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+//        
+//        pstmt.setString(1, userID);
+//        ResultSet rs = pstmt.executeQuery();
+//
+//        while (rs.next()) {
+//            String theatreName = rs.getString("TheatreName");
+//            String seatName = rs.getString("SeatName");
+//            Date showDate = rs.getDate("ShowDate");
+//           String startTime = rs.getString("StartTime");
+//           if (startTime != null && startTime.length() > 8) {
+//                startTime = startTime.substring(0, 8); // Lấy 8 ký tự đầu tiên
+//            }
+//            String roomName = rs.getString("RoomName");
+//            BigDecimal price = rs.getBigDecimal("Price"); // Lấy giá tiền
+//
+//            // Tạo đối tượng ShowInfo và thêm vào danh sách
+//            ShowInfo1 showInfo = new ShowInfo1(theatreName, seatName, showDate, startTime, roomName, price);
+//            showInfos.add(showInfo);
+//        }
+//    } catch (SQLException e) {
+//        System.out.println("Lỗi khi truy vấn thông tin suất chiếu: " + e.getMessage());
+//    }
+//
+//    return showInfos;
+//}
 
 
     // Private method to generate a unique ID
@@ -208,20 +208,20 @@ public static List<ShowInfo1> getShowInfoByUserID(String userID) {
         return UUID.randomUUID().toString().substring(0, 6);
     }
     
-   public static void main(String[] args) {
-        // Thay thế userID bằng một ID hợp lệ
-        String userID = "U00003"; // Đảm bảo rằng userID này tồn tại trong cơ sở dữ liệu
-
-        // Gọi phương thức getTicketsByUserID
-       List<ShowInfo1> showInfos = TicketDB.getShowInfoByUserID(userID);
-for (ShowInfo1 showInfo : showInfos) {
-    System.out.println("Theatre Name: " + showInfo.getTheatreName());
-    System.out.println("Seat Name: " + showInfo.getSeatName());
-    System.out.println("Show Date: " + showInfo.getShowDate());
-    System.out.println("Start Time: " + showInfo.getStartTime());
-    System.out.println("Room Name: " + showInfo.getRoomName());
-}
-   }
+//   public static void main(String[] args) {
+//        // Thay thế userID bằng một ID hợp lệ
+//        String userID = "U00003"; // Đảm bảo rằng userID này tồn tại trong cơ sở dữ liệu
+//
+//        // Gọi phương thức getTicketsByUserID
+//       List<ShowInfo1> showInfos = TicketDB.getShowInfoByUserID(userID);
+//for (ShowInfo1 showInfo : showInfos) {
+//    System.out.println("Theatre Name: " + showInfo.getTheatreName());
+//    System.out.println("Seat Name: " + showInfo.getSeatName());
+//    System.out.println("Show Date: " + showInfo.getShowDate());
+//    System.out.println("Start Time: " + showInfo.getStartTime());
+//    System.out.println("Room Name: " + showInfo.getRoomName());
+//}
+//   }
    
    
    public static List<Ticket> listAllTickets() {
@@ -253,5 +253,49 @@ for (ShowInfo1 showInfo : showInfos) {
 
         return tickets;
     }
+public static List<ShowInfo1> getShowInfoByUserIDAndBookingID(String userID, String bookingID) {
+    List<ShowInfo1> showInfos = new ArrayList<>();
+    String sql = "SELECT th.TheatreName, s.SeatName, sh.ShowDate, sh.StartTime, r.RoomName, bs.Price, m.MovieName, t.Status " +
+                 "FROM Tickets t " +
+                 "JOIN Booking b ON t.BookingID = b.BookingID " +
+                 "JOIN Booking_Seats bs ON t.BookingSeatID = bs.BookingSeatID " +
+                 "JOIN Seats s ON bs.SeatID = s.SeatID " +
+                 "JOIN ShowSeats ss ON bs.ShowID = ss.ShowID AND bs.SeatID = ss.SeatID " +
+                 "JOIN Shows sh ON ss.ShowID = sh.ShowID " +
+                 "JOIN Theatres th ON ss.TheatreID = th.TheatreID " +
+                 "JOIN Rooms r ON s.RoomID = r.RoomID " +
+                 "JOIN Movies m ON sh.MovieID = m.MovieID " + 
+                 "WHERE t.UserID = ? AND b.BookingID = ?";
 
+    try (Connection conn = getConnect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, userID);
+        pstmt.setString(2, bookingID); // Thêm điều kiện cho BookingID
+        ResultSet rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+            String theatreName = rs.getString("TheatreName");
+            String seatName = rs.getString("SeatName");
+            Date showDate = rs.getDate("ShowDate");
+            String startTime = rs.getString("StartTime");
+            if (startTime != null && startTime.length() > 8) {
+                startTime = startTime.substring(0, 8); // Lấy 8 ký tự đầu tiên
+            }
+            String roomName = rs.getString("RoomName");
+           BigDecimal priceDecimal = rs.getBigDecimal("Price"); // Lấy giá tiền dưới dạng BigDecimal
+    int price = priceDecimal != null ? priceDecimal.intValue() : 0; 
+            String movieName = rs.getString("MovieName"); // Lấy tên phim
+            String status = rs.getString("Status"); // Lấy trạng thái
+
+            // Tạo đối tượng ShowInfo và thêm vào danh sách
+            ShowInfo1 showInfo = new ShowInfo1(theatreName, seatName, showDate, startTime, roomName, price, movieName, status);
+            showInfos.add(showInfo);
+        }
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi truy vấn thông tin suất chiếu: " + e.getMessage());
+    }
+
+    return showInfos;
+}
 }
