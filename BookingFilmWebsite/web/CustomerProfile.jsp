@@ -1,5 +1,12 @@
+<%@page import="java.math.BigDecimal"%>
+<%@page import="Model.UserDB"%>
 <%
     String user = (String) session.getAttribute("user");
+       String userID = (String) session.getAttribute("id");
+        
+       
+        BigDecimal moneyLeft = UserDB.getCurrentBalance(userID);
+        int moneyLeftInt = (moneyLeft != null) ? moneyLeft.intValue() : 0;
     if (user == null) { %>
 <%@include file="includes/header.jsp" %>
 <% } else { %>
@@ -28,6 +35,11 @@
                             <div class="d-flex align-items-center px-3">
                                 <i class="fa-solid fa-gift fa-2x"></i>
                                 <p class="m-0 px-2 fs-3">0 Stars</p>
+                                 <% if (moneyLeft != null) { %>
+                            <p class="m-0 px-2 fs-4">Số tiền: <strong><%= moneyLeftInt %></strong></p>
+                        <% } else { %>
+                            <p class="m-0 px-2 fs-4">Số tiền: <strong>Không có dữ liệu</strong></p>
+                        <% } %>
                             </div>
 
                         </div>
