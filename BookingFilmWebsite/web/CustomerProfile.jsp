@@ -1,4 +1,19 @@
+<<<<<<< Updated upstream
 
+=======
+<%@page import="java.math.BigDecimal"%>
+<%@page import="Model.UserDB"%>
+<%
+    String user = (String) session.getAttribute("user");
+       String userID = (String) session.getAttribute("id");
+        
+       
+        BigDecimal moneyLeft = UserDB.getCurrentBalance(userID);
+        int moneyLeftInt = (moneyLeft != null) ? moneyLeft.intValue() : 0;
+    if (user == null) { %>
+<%@include file="includes/header.jsp" %>
+<% } else { %>
+>>>>>>> Stashed changes
 <%@include file="includes/header_user.jsp" %>
 <link rel="stylesheet" href="css/headerssj2.css" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -22,6 +37,11 @@
                             <div class="d-flex align-items-center px-3">
                                 <i class="fa-solid fa-gift fa-2x"></i>
                                 <p class="m-0 px-2 fs-3">0 Stars</p>
+                                 <% if (moneyLeft != null) { %>
+                            <p class="m-0 px-2 fs-4">Số tiền: <strong><%= moneyLeftInt %></strong></p>
+                        <% } else { %>
+                            <p class="m-0 px-2 fs-4">Số tiền: <strong>Không có dữ liệu</strong></p>
+                        <% } %>
                             </div>
 
                         </div>
@@ -35,7 +55,11 @@
                         <hr class="w-75 mx-auto">
                         <div class="text-center mt-3 d-flex flex-column">
                             <h3 class="bg-white p-3">Chỉnh sửa hồ sơ</h3>
+<<<<<<< Updated upstream
                             <h3 class="mt-4 p-3">Lịch sử giao dịch</h3>
+=======
+                            <a class="h3 mt-4 p-3 d-block" href="summaryBooking.jsp">Lịch sử giao dịch</a>
+>>>>>>> Stashed changes
                             <h3 class="my-4 p-3">Quà tặng tích điểm</h3>
                         </div>
                     </div>

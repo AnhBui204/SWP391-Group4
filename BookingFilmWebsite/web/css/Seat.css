@@ -1,0 +1,76 @@
+.seat-button {
+    width: 25px;
+    height: 25px;
+    font-size: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    border-radius: 4px;
+    border: none;
+}
+
+
+.rectangle {
+    width: 20px; /* Chiều rộng của ô chữ nhật */
+    height: 20px; /* Chiều cao của ô chữ nhật */
+    display: inline-block; /* Hiển thị dưới dạng khối nội tuyến */
+    margin-right: 10px; /* Khoảng cách giữa ô chữ nhật và nhãn */
+}
+.available {
+    background-color:  orange; 
+}
+
+.unavailable {
+  background-color:#D3D3D3; /* Màu cho ghế không có sẵn */
+    cursor: not-allowed; /* Chỉ hiển thị con trỏ không cho phép */
+}
+.selected{
+    background-color: orangered; 
+}
+.custom-available, .custom-unavailable, .custom-selected {
+    line-height: 20px; /* Giúp căn giữa văn bản với ô chữ nhật */
+    font-weight: bold; /* Đậm chữ */
+}
+.seat-button.selected {
+    background-color:  orangered; /* Màu khi ghế được chọn */
+    color: white;
+}
+
+.seat-button:hover {
+    background-color: #007bff;
+    color: white;
+}
+ .seat-row {
+    display: flex; /* Để sử dụng Flexbox */
+    align-items: center;
+    margin-bottom: 10px;
+}
+     .row-label {
+    font-weight: bold;
+    font-size: 18px;
+    margin-right: 10px;
+    min-width: 30px; /* Đặt chiều rộng tối thiểu để hàng dãy rõ ràng hơn */
+}
+.seat-row-seats {
+    display: flex;
+    flex-wrap: wrap; /* Cho phép các ghế tự động xuống dòng khi không đủ chỗ */
+    gap: 5px; /* Khoảng cách giữa các ghế */
+    max-width: 100%; /* Giới hạn chiều rộng để tránh tràn màn hình */
+}
+
+
+.screen {
+    width: 100%; /* Để thanh màn hình chiếm toàn bộ chiều rộng */
+    height: 10px; /* Chiều cao của thanh màn hình */
+    background-color: orange; /* Màu nền của thanh */
+    margin: 0; /* Không có khoảng cách trên và dưới */
+}
+
+.screen-text {  
+    font-size: 10px;
+    background-color: orange; /* Màu nền giống như màn hình */
+    padding: 5px; /* Khoảng cách trong */
+    margin-top: -22px; /* Đưa lên một chút để nằm giữa thanh */
+}
+

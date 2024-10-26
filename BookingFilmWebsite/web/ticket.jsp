@@ -1,6 +1,10 @@
+<<<<<<< Updated upstream
 <%@ page import="java.util.List" %>
+=======
+<%@page import="Model.ShowInfo1"%>
+<%@page import="java.util.List"%>
+>>>>>>> Stashed changes
 <%@page import="Model.DatabaseInfo"%>
-<%@page import="Model.Ticket"%>
 <%@page import="Model.TicketDB"%>
 <%@page import="Model.TicketDetails"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -98,12 +102,55 @@
         .main-admin button:hover {
             background-color: #2980b9;
         }
+<<<<<<< Updated upstream
+=======
+       .action-buttons {
+    display: flex;
+    gap: 10px; /* Thêm khoảng cách giữa hai nút */
+    justify-content: center;
+}
+
+.btn-approve, .btn-reject {
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-approve {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-approve:hover {
+    background-color: #218838; 
+}
+
+.btn-reject {
+    background-color:  #e74c3c; 
+    color: white;
+}
+
+.btn-reject:hover {
+    background-color: #e0a800; 
+}
+>>>>>>> Stashed changes
 
     </style>
     <body>
 
+<<<<<<< Updated upstream
         <div class="container">
             <aside>
+=======
+<body>
+    
+<%
+    List<ShowInfo1> tickets = TicketDB.getAllShowInfo();
+    System.out.println("Tickets size: " + tickets.size()); // In ra kích thước của danh sách vé
+    request.setAttribute("tickets", tickets); 
+%>
+>>>>>>> Stashed changes
 
                 <div class="top">
                     <div class="log">
@@ -203,9 +250,74 @@
                         </table>
                     </div>
                 </div>
+<<<<<<< Updated upstream
 
             </main>
 
     </body>
     <script src="js/admin.js"></script>
 </html>
+=======
+            </div>
+            <div class="main-admin">
+                <div class="userInfo">
+                    <h1>Thông Tin Vé</h1>
+                    <table class="table-container">
+                        <thead>
+                            <tr>
+                        <th>Rạp</th>
+                        <th>Phim</th>
+                        <th>Ghế</th>
+                        <th>Ngày Chiếu</th>
+                        <th>Giờ Chiếu</th>
+                        <th>Phòng</th>
+                        <th>Giá (VND)</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                        </thead>
+                        <tbody>
+                                               <c:forEach var="ticket" items="${tickets}">
+                        <tr>
+                            <td>${ticket.theatreName}</td>
+                            <td>${ticket.movieName}</td>
+                            <td>${ticket.seatName}</td>
+                            <td>${ticket.showDate}</td>
+                            <td>${ticket.startTime}</td>
+                            <td>${ticket.roomName}</td>
+                            <td>${ticket.price}</td>
+                            <td>${ticket.status}</td>
+                            <td>
+    <c:choose>
+        <c:when test="${ticket.status == 'Đang chờ'}">
+            <div class="action-buttons">
+                <!-- Nút Chấp thuận -->
+                <a href="TicketServlet?action=approve&ticketID=${ticket.ticketID}" 
+                   class="btn-approve">
+                   Chấp thuận
+                </a>
+                <!-- Nút Từ chối -->
+                <a href="TicketServlet?action=reject&ticketID=${ticket.ticketID}" 
+                   class="btn-reject">
+                   Từ chối
+                </a>
+            </div>
+        </c:when>
+    </c:choose>
+                            </td>
+
+
+
+                        </tr>
+                    </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/admin.js"></script>
+</body>
+</html>
+    
+>>>>>>> Stashed changes
