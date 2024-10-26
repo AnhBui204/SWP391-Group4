@@ -10,7 +10,7 @@
     <title>Đặt Vé Xem Phim</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="./css/Booking.css"/>
-    <link rel="stylesheet" href="./css/Seats.css"/>
+    <link rel="stylesheet" href="./css/Seat.css"/>
 </head>
 <body>
     <div class="container mt-4">
@@ -29,20 +29,42 @@
                         <h5 class="card-title">Chọn ghế</h5>
                         <div class="row d-flex">
                             <div class="col-md-10">
-                                <c:if test="${not empty availableSeats}">
-                                    <div class="row">
-                                        <c:forEach var="seat" items="${availableSeats}">
-                                            <c:set var="seatName" value="${seat.seatName}" />
-                                            <c:set var="isAvailable" value="${seat.isAvailables}" />
-                                            <c:set var="price" value="${seat.price}" />
-                                            <div>
-                                                <button class="seat-button ${isAvailable == 1 ? 'available' : 'unavailable'}" 
-                                                         ${isAvailable == 0 ? 'disabled' : ''} 
-                                                        onclick="selectSeat(this, '${price}')">
-                                                    ${seatName}
-                                                </button>
-                                            </div>
-                                        </c:forEach>
+                                <c:if test="${not empty rowLabels}">
+                                    <div class="seats-container">
+<c:forEach var="rowLabel" items="${rowLabels}">
+    <div class="seat-row d-flex align-items-center mb-2">
+        <!-- Hiển thị nhãn của dãy ghế -->
+        <span class="row-label mr-3 font-weight-bold">${rowLabel}</span>
+
+        <!-- Khởi tạo div chứa ghế -->
+        <div class="seat-row-seats d-flex">
+            <c:set var="seatCount" value="0" /> <!-- Biến đếm ghế trong hàng -->
+
+            <c:forEach var="seat" items="${availableSeats}">
+                <c:if test="${seat.seatName.startsWith(rowLabel)}">
+                    <c:set var="seatName" value="${seat.seatName}" />
+                    <c:set var="isAvailable" value="${seat.isAvailables}" />
+                    <c:set var="price" value="${seat.price}" />
+
+                    <button class="seat-button ${isAvailable == 1 ? 'available' : 'unavailable'}"
+                            ${isAvailable == 0 ? 'disabled' : ''} 
+                            onclick="selectSeat(this, '${price}')">
+                        ${seatName}
+                    </button>
+
+                    <c:set var="seatCount" value="${seatCount + 1}" /> <!-- Tăng biến đếm ghế -->
+
+                    <c:if test="${seatCount % 10 == 0 && seatCount != 0}">
+                        </div> <!-- Kết thúc hàng ghế hiện tại -->
+                        <div class="seat-row-seats d-flex"> <!-- Bắt đầu hàng ghế mới -->
+                    </c:if>
+                </c:if>
+            </c:forEach>
+        </div> <!-- Kết thúc hàng ghế -->
+    </div>
+</c:forEach>
+
+
                                     </div>
                                 </c:if>
                                 <c:if test="${empty availableSeats}">
@@ -50,19 +72,25 @@
                                 </c:if>
 
                                 <div class="col-md-10 mx-auto mt-4">
-                                    <div class="row mt-3 justify-content-center"> <!-- Thêm justify-content-center để căn giữa -->
+                                    <div class="row mt-3 justify-content-center">
                                         <div class="screen mx-auto" style="width: 80%; height: 20px; background-color: #333;"></div> 
                                         <div class="screen-text text-center w-100">MÀN HÌNH</div> 
                                     </div>
                                 </div>
 
                                 <!-- Labels for available and unavailable seats -->
-                             <div class="row mt-3 justify-content-center">
-    <div class="col-auto">
-        <span class="badge custom-available">Có sẵn</span>
+                             <div class="row mt-3 justify-content-start">
+    <div class="col-auto text-center">
+        <div class="rectangle available"></div>
+        <span class="custom-available">Có sẵn</span>
     </div>
-    <div class="col-auto">
-        <span class="badge custom-unavailable">Không có sẵn</span>
+    <div class="col-auto text-center">
+        <div class="rectangle unavailable"></div>
+        <span class="custom-unavailable">Không có sẵn</span>
+    </div>
+    <div class="col-auto text-center">
+        <div class="rectangle selected"></div>
+        <span class="custom-selected">Đang chọn</span>
     </div>
 </div>
 
@@ -93,23 +121,24 @@
         </div>  
     </div>
 
-    <!-- Modal for alert -->
-    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="alertModalLabel">Thông báo</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Bạn chỉ có thể chọn tối đa 8 ghế.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Đóng</button>
-                </div>
+   <!-- Modal for alert -->
+<div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alertModalLabel">Thông báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn chỉ có thể chọn tối đa 8 ghế.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="closeModal()">Đóng</button>
             </div>
         </div>
     </div>
+</div>
+
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
@@ -205,6 +234,12 @@
             document.body.appendChild(form);
             form.submit();
         };
+      function closeModal() {
+    const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+    alertModal.hide(); // Gọi hàm hide để đóng modal
+}
+;
+
     </script>
 </body>
 </html>
