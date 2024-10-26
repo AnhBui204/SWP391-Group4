@@ -72,6 +72,10 @@
         <servlet-name>vnpayRefund</servlet-name>
         <servlet-class>com.vnpay.common.vnpayRefund</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TicketServlet</servlet-name>
+        <servlet-class>Controller.TicketServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TheatreServlet</servlet-name>
         <url-pattern>/TheatreServlet</url-pattern>
@@ -147,6 +151,10 @@
     <servlet-mapping>
         <servlet-name>vnpayRefund</servlet-name>
         <url-pattern>/vnpayRefund</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TicketServlet</servlet-name>
+        <url-pattern>/TicketServlet</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>HomePage.jsp</welcome-file>

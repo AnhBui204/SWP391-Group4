@@ -1,0 +1,93 @@
+ .seat-button {
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+            font-weight: bold;
+            font-size: 10px;
+            color: #fff;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+.available {
+    color: black; 
+}
+.unavailable {
+    color: grey; /* Màu cho ghế không có sẵn */
+    cursor: not-allowed; /* Chỉ hiển thị con trỏ không cho phép */
+}
+ .custom-available {
+        background-color:  black;
+        color: white; 
+    }
+
+    .custom-unavailable {
+        background-color: grey; 
+        color: white; 
+    }
+     .custom-available, .custom-unavailable {
+        border-radius: 50%; /* Makes the badge circular */
+        padding: 10px; /* Adjust padding to control size */
+        color: white; /* Text color */
+        text-align: center; /* Center the text */
+        display: inline-block; /* Ensures the badge behaves as a block element */
+    }
+
+.seat-button.selected {
+    background-color: orange; /* Màu khi ghế được chọn */
+    color: white;
+}
+.seat-label {
+    margin-right: 0; /* Khoảng cách bên phải của nhãn */
+    font-weight: bold; /* Làm cho nhãn đậm hơn */
+}
+.seat-button:hover {
+    background-color: #007bff;
+    color: white;
+}
+ .seat-row {
+    display: flex; /* Để sử dụng Flexbox */
+    justify-content: flex-start; /* Căn chỉnh các ghế về bên trái */
+    margin-bottom: 5px; /* Khoảng cách giữa các hàng ghế */
+    overflow: hidden; /* Tránh bị ra ngoài card */
+}
+        .seat-label {
+            width: 30px; /* Kích thước label */
+            text-align: center;
+        }
+
+   .seat-placeholder {
+    width: 60px; /* Chiều rộng giống như ghế */
+    height: 60px; /* Chiều cao giống như ghế */
+    margin: 5px; /* Khoảng cách giữa các ghế */
+    background-color: transparent; /* Nền trong suốt */
+    border: 1px dashed #ccc; /* Viền giả để hiển thị hàng trống */
+}
+.screen {
+    width: 100%; /* Để thanh màn hình chiếm toàn bộ chiều rộng */
+    height: 10px; /* Chiều cao của thanh màn hình */
+    background-color: orange; /* Màu nền của thanh */
+    margin: 0; /* Không có khoảng cách trên và dưới */
+}
+
+.screen-text {  
+    font-size: 10px;
+    background-color: orange; /* Màu nền giống như màn hình */
+    padding: 5px; /* Khoảng cách trong */
+    margin-top: -22px; /* Đưa lên một chút để nằm giữa thanh */
+}
+
+.available-seat {
+    background-color: #4CAF50; /* Màu xanh cho ghế khả dụng */
+    color: white;
+    cursor: pointer;
+}
+
+.unavailable-seat {
+    background-color: #F44336; /* Màu đỏ cho ghế không khả dụng */
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.6;
+}

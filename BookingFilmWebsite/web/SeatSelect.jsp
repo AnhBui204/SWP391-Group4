@@ -10,7 +10,7 @@
     <title>Đặt Vé Xem Phim</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="./css/Booking.css"/>
-    <link rel="stylesheet" href="./css/Seat.css"/>
+    <link rel="stylesheet" href="./css/Seats.css"/>
 </head>
 <body>
     <div class="container mt-4">

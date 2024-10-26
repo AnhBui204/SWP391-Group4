@@ -255,7 +255,7 @@ public static List<Ticket> getTicketsByUserID(String userID) {
     }
 public static List<ShowInfo1> getShowInfoByUserIDAndBookingID(String userID, String bookingID) {
     List<ShowInfo1> showInfos = new ArrayList<>();
-    String sql = "SELECT th.TheatreName, s.SeatName, sh.ShowDate, sh.StartTime, r.RoomName, bs.Price, m.MovieName, t.Status " +
+    String sql = "SELECT th.TheatreName, s.SeatName, sh.ShowDate, sh.StartTime, r.RoomName, bs.Price, m.MovieName, t.Status,t.ticketID " +
                  "FROM Tickets t " +
                  "JOIN Booking b ON t.BookingID = b.BookingID " +
                  "JOIN Booking_Seats bs ON t.BookingSeatID = bs.BookingSeatID " +
@@ -287,9 +287,9 @@ public static List<ShowInfo1> getShowInfoByUserIDAndBookingID(String userID, Str
     int price = priceDecimal != null ? priceDecimal.intValue() : 0; 
             String movieName = rs.getString("MovieName"); // Lấy tên phim
             String status = rs.getString("Status"); // Lấy trạng thái
-
+            String ticketID = rs.getString("ticketID");
             // Tạo đối tượng ShowInfo và thêm vào danh sách
-            ShowInfo1 showInfo = new ShowInfo1(theatreName, seatName, showDate, startTime, roomName, price, movieName, status);
+            ShowInfo1 showInfo = new ShowInfo1(ticketID,theatreName, seatName, showDate, startTime, roomName, price, movieName, status);
             showInfos.add(showInfo);
         }
     } catch (SQLException e) {
@@ -298,4 +298,115 @@ public static List<ShowInfo1> getShowInfoByUserIDAndBookingID(String userID, Str
 
     return showInfos;
 }
+public static List<ShowInfo1> getAllShowInfo() {
+    List<ShowInfo1> showInfos = new ArrayList<>();
+    String sql = "SELECT th.TheatreName, s.SeatName, sh.ShowDate, sh.StartTime, r.RoomName, bs.Price, m.MovieName, t.Status, t.ticketID " +
+                 "FROM Tickets t " +
+                 "JOIN Booking b ON t.BookingID = b.BookingID " +
+                 "JOIN Booking_Seats bs ON t.BookingSeatID = bs.BookingSeatID " +
+                 "JOIN Seats s ON bs.SeatID = s.SeatID " +
+                 "JOIN ShowSeats ss ON bs.ShowID = ss.ShowID AND bs.SeatID = ss.SeatID " +
+                 "JOIN Shows sh ON ss.ShowID = sh.ShowID " +
+                 "JOIN Theatres th ON ss.TheatreID = th.TheatreID " +
+                 "JOIN Rooms r ON s.RoomID = r.RoomID " +
+                 "JOIN Movies m ON sh.MovieID = m.MovieID";
+
+    try (Connection conn = getConnect();
+         PreparedStatement pstmt = conn.prepareStatement(sql);
+         ResultSet rs = pstmt.executeQuery()) {
+
+        while (rs.next()) {
+            String theatreName = rs.getString("TheatreName");
+            String seatName = rs.getString("SeatName");
+            Date showDate = rs.getDate("ShowDate");
+            String startTime = rs.getString("StartTime");
+            if (startTime != null && startTime.length() > 8) {
+                startTime = startTime.substring(0, 8); // Lấy 8 ký tự đầu tiên
+            }
+            String roomName = rs.getString("RoomName");
+            BigDecimal priceDecimal = rs.getBigDecimal("Price"); // Lấy giá tiền dưới dạng BigDecimal
+            int price = priceDecimal != null ? priceDecimal.intValue() : 0;
+            String movieName = rs.getString("MovieName");
+            String status = rs.getString("Status");
+            String ticketID = rs.getString("ticketID");
+
+            // Tạo đối tượng ShowInfo và thêm vào danh sách
+            ShowInfo1 showInfo = new ShowInfo1(ticketID, theatreName, seatName, showDate, startTime, roomName, price, movieName, status);
+            showInfos.add(showInfo);
+        }
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi truy vấn thông tin suất chiếu: " + e.getMessage());
+    }
+
+    return showInfos;
+}
+
+public static void requestRefund(String ticketID) {
+    String sql = "UPDATE Tickets SET Status = N'Đang chờ' WHERE TicketID = ?";
+    
+    try (Connection conn = getConnect(); 
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setString(1, ticketID);
+        pstmt.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace(); // In ra chi tiết lỗi nếu có
+    }
+}
+public static void approveRefund(String ticketID) {
+    String sql = "UPDATE Tickets SET Status = N'Chấp thuận' WHERE TicketID = ?";
+    
+    try (Connection conn = getConnect(); 
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setString(1, ticketID);
+        pstmt.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace(); // In ra chi tiết lỗi nếu có
+    }
+}
+public static void rejectRefund(String ticketID) {
+    String sql = "UPDATE Tickets SET Status = N'Từ chối' WHERE TicketID = ?";
+    
+    try (Connection conn = getConnect(); 
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setString(1, ticketID);
+        pstmt.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace(); // In ra chi tiết lỗi nếu có
+    }
+}
+public static void addBalanceToUser(String ticketID) {
+    String getUserBalanceSQL = "SELECT u.UserID, u.MoneyLeft, t.TotalPrice " + // Thay TotalPrice thành Price
+                               "FROM Users u " +
+                               "JOIN Tickets t ON u.UserID = t.UserID " +
+                               "WHERE t.ticketID = ?";
+
+    String updateUserBalanceSQL = "UPDATE Users SET MoneyLeft = ? WHERE UserID = ?";
+
+    try (Connection conn = getConnect();
+         PreparedStatement getUserStmt = conn.prepareStatement(getUserBalanceSQL);
+         PreparedStatement updateUserStmt = conn.prepareStatement(updateUserBalanceSQL)) {
+
+        // Lấy thông tin UserID, Balance hiện tại và Price của ticket
+        getUserStmt.setString(1, ticketID);
+        ResultSet rs = getUserStmt.executeQuery();
+
+        if (rs.next()) {
+            String userID = rs.getString("UserID");
+            BigDecimal balance = rs.getBigDecimal("MoneyLeft");
+            BigDecimal ticketPrice = rs.getBigDecimal("TotalPrice"); // Lấy giá vé
+
+            // Cộng tiền vào tài khoản người dùng
+            BigDecimal newBalance = balance.add(ticketPrice);
+
+            // Cập nhật số dư vào Users
+            updateUserStmt.setBigDecimal(1, newBalance);
+            updateUserStmt.setString(2, userID);
+            updateUserStmt.executeUpdate();
+        }
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi cộng tiền vào tài khoản người dùng: " + e.getMessage());
+    }
+}
+
+
 }
