@@ -51,10 +51,9 @@
                 <!-- Chọn phim -->
                 <div class="card mb-3 ">
                     <div class="card-body p-4">
-                        <h5 class="card-title">Chọn phim</h5>
-                       
+                        <h5 class="card-title">Chọn phim</h5>                      
                         <div id="movie-list" class="movie-list">
-                            <div id="movie-options" class="movie-options"></div> 
+                            <div id="movie-options" class="movie-options " ></div>                       
                         </div>
       <span id="notification-movie" class="text-danger" style="display: none; border: none;"></span>
 
@@ -177,6 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     data.forEach(movie => {
                         const movieDiv = document.createElement('div');
                         movieDiv.classList.add('movie-item');
+                          movieDiv.classList.add('col-md-3');
                         movieDiv.setAttribute('data-movie-id', movie.movieID);
                         console.log("Image Path: ", movie.imgPortrait);
 
