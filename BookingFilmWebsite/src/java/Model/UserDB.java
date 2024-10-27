@@ -85,7 +85,7 @@ public static BigDecimal getCurrentBalance(String userID) {
 }
     public static User getUsersByID(String userID) {
         User user = null;
-        String query = "select UserName, FName , LName, Pass , UserID, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar "
+        String query = "select UserName, FName , LName, Pass , UserID, Email, Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar "
                 + "from Users where UserID =? ";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
@@ -175,16 +175,34 @@ public static BigDecimal getCurrentBalance(String userID) {
 
 //-----------------------------------------------------------------------------------
     public static User updateUserProfile(User user) {
-        String query = "UPDATE Users SET FName=?, LName=?, email =? , phone=?, sex=? , DOB=? WHERE UserID=?";
+    String query = "UPDATE Users SET FName=?, LName=?, phone=?, sex=?, DateOfBirth=? WHERE UserID=?";
+
+    try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+        stmt.setString(1, user.getfName());
+        stmt.setString(2, user.getlName());
+        stmt.setString(3, user.getPhone()); // sửa lại thành setPhone
+        stmt.setString(4, user.getSex());
+        stmt.setDate(5, user.getDob()); // sửa lại vị trí đúng của Date
+        stmt.setString(6, user.getUserID()); // UserID tại vị trí cuối cùng
+
+        int rc = stmt.executeUpdate();
+        if (rc == 0) {
+            throw new SQLException("Update failed, no rows affected.");
+        }
+        return user;
+
+    } catch (Exception ex) {
+        Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        throw new RuntimeException("Invalid data");
+    }
+}
+    
+    public static User updatePassword(User user) {
+        String query = "UPDATE Users SET Pass = ? WHERE UserID=?";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
-            stmt.setString(1, user.getfName());
-            stmt.setString(2, user.getlName());
-            stmt.setString(3, user.getEmail());
-            stmt.setString(4, user.getPhone());
-            stmt.setString(5, user.getSex());
-            stmt.setDate(6, user.getDob());
-            stmt.setString(7, user.getUserID());
+            stmt.setString(1, user.getPassword());
+            stmt.setString(2, user.getUserID());
 
             int rc = stmt.executeUpdate();
             if (rc == 0) {

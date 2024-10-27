@@ -9,7 +9,7 @@
 <%@include file="includes/header.jsp" %>
 <% } else { %>
 <%@include file="includes/header_user.jsp" %>
-<% }%><link rel="stylesheet" href="css/headerssj2.css"/>
+<% }%><link rel="stylesheet" href="css/headerssj3.css"/>
 
 
 <!DOCTYPE html>
@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="./css/BookingCSS.css"/>
 </head>
 <body>
-    <div class="container mt-4 mb-4" style="max-height: 800px">
+    <div class="container mt-4" style="max-height: 800px">
         <div class="progress-bar bg-white">
             <ul>
                 <li class="active">Chọn phim / Rạp / Suất</li>

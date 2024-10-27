@@ -2,11 +2,10 @@
 <%@page import="Model.UserDB"%>
 <%
     String user = (String) session.getAttribute("user");
-       String userID = (String) session.getAttribute("id");
-        
-       
-        BigDecimal moneyLeft = UserDB.getCurrentBalance(userID);
-        int moneyLeftInt = (moneyLeft != null) ? moneyLeft.intValue() : 0;
+    String userID = (String) session.getAttribute("id");
+
+    BigDecimal moneyLeft = UserDB.getCurrentBalance(userID);
+    int moneyLeftInt = (moneyLeft != null) ? moneyLeft.intValue() : 0;
     if (user == null) { %>
 <%@include file="includes/header.jsp" %>
 <% } else { %>
@@ -33,22 +32,13 @@
                         <div class="d-flex justify-content-center pt-5 pb-2">
                             <img src="${user.avatar}" alt="Profile Image" class="img-fluid rounded-circle" style="height: 100px; width: 100px;"/>
                             <div class="d-flex align-items-center px-3">
-                                <i class="fa-solid fa-gift fa-2x"></i>
-                                <p class="m-0 px-2 fs-3">0 Stars</p>
-                                 <% if (moneyLeft != null) { %>
-                            <p class="m-0 px-2 fs-4">Số tiền: <strong><%= moneyLeftInt %></strong></p>
-                        <% } else { %>
-                            <p class="m-0 px-2 fs-4">Số tiền: <strong>Không có dữ liệu</strong></p>
-                        <% } %>
+                                <% if (moneyLeft != null) {%>
+                                <p class="m-0 px-2 fs-6 text-success">Số tiền: <strong><%= moneyLeftInt%></strong></p>
+                                <% } else { %>
+                                <p class="m-0 px-2 fs-6">Số tiền: <strong>Không có dữ liệu</strong></p>
+                                <% }%>
                             </div>
 
-                        </div>
-                        <div class="d-flex justify-content-center mt-3">
-                            <form id="uploadForm"  enctype="multipart/form-data">
-                                <input type="file" class="text-center" name="profileImage" id="profileImage" />
-                                <input type="hidden" name="userID" value="${user.userID}" />
-                                <button type="button" id="uploadButton">Upload Image</button>
-                            </form>
                         </div>
                         <hr class="w-75 mx-auto">
                         <div class="text-center mt-3 d-flex flex-column">
@@ -118,7 +108,10 @@
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
                                 <input type="password" value="${user.password}" class="form-control fs-4" disabled>
-                                <button class="input-group-text">Thay đổi</button>
+                                <button type="button" class="btn btn-warning mt-3" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                                    Đổi mật khẩu
+                                </button>
+
                             </div>
                         </div>
 
@@ -143,20 +136,23 @@
                         <h5 class="modal-title" id="updateProfileModalLabel">Cập nhật thông tin cá nhân</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+
+
                     <div class="modal-body d-flex">
                         <div class="col-md-6">
                             <form id="updateProfileForm" action="UserServlet?action=updateProfile" method="POST">
+                                <!-- Profile Update Fields -->
                                 <div class="mb-3">
                                     <label for="firstName" class="form-label">Tên <span class="text-danger">*</span></label>
-                                    <input type="text" required name="firstName" placeholder="Tên" class="form-control" />
+                                    <input type="text" required name="firstName" placeholder="${user.fName}" class="form-control" />
                                 </div>
                                 <div class="mb-3">
                                     <label for="lastName" class="form-label">Họ <span class="text-danger">*</span></label>
-                                    <input type="text" required name="lastName" placeholder="Họ" class="form-control" />
+                                    <input type="text" required name="lastName" placeholder="${user.lName}" class="form-control" />
                                 </div>
                                 <div class="mb-3">
                                     <label for="phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
-                                    <input type="tel" id="phone" name="phone" required placeholder="Số điện thoại" class="form-control" />
+                                    <input type="tel" id="phone" name="phone"  placeholder="${user.phone}" class="form-control" />
                                 </div>
                                 <div class="mb-3">
                                     <label for="gender" class="form-label">Giới tính</label>
@@ -166,21 +162,61 @@
                                         <option>Khác</option>
                                     </select>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="dob" class="form-label">Ngày sinh <span class="text-danger">*</span></label>
+                                    <input type="date" id="dob" name="dob" placeholder="${user.dob}" class="form-control" />
+                                </div>
                                 <input type="hidden" name="userID" value="${user.userID}" />
                                 <button type="button" class="btn btn-primary" id="saveProfileButton">Lưu thay đổi</button>
                             </form>
                         </div>
+
+                        <!-- Separate Image Upload Form -->
                         <div class="col-md-6 text-center">
-                            <img src="${user.avatar}" alt="Profile Image" class="img-fluid rounded-circle" style="height: 150px; width: 150px;"/>
-                            <div class="mt-3">
-                                <input type="file" class="form-control" name="profileImage" id="profileImage" />
-                                <button type="button" id="uploadButton" class="btn btn-warning mt-2">Đổi Ảnh</button>
-                            </div>
+                            <form id="uploadForm" enctype="multipart/form-data">
+                                <img src="${user.avatar}" alt="Profile Image" class="img-fluid rounded-circle" style="height: 150px; width: 150px;"/>
+                                <div class="mt-3">
+                                    <input type="hidden" name="userID" value="${user.userID}" />
+                                    <input type="file" class="form-control" name="profileImage" id="profileImage" />
+                                    <button type="submit" id="uploadButton" class="btn btn-warning mt-2">Đổi Ảnh</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Change Password Modal -->
+        <div class="modal" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changePasswordModalLabel">Đổi mật khẩu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="changePasswordForm" action="UserServlet?action=changePassword" method="POST">
+                            <div class="mb-3">
+                                <label for="currentPassword" class="form-label">Mật khẩu hiện tại</label>
+                                <input type="password" name="currentPassword" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newPassword" class="form-label">Mật khẩu mới</label>
+                                <input type="password" name="newPassword" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmNewPassword" class="form-label">Xác nhận mật khẩu mới</label>
+                                <input type="password" name="confirmNewPassword" class="form-control" required>
+                            </div>
+                            <input type="hidden" name="userID" value="${user.userID}" />
+                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
 
 
@@ -190,55 +226,78 @@
     <script src="bs/js/bootstrap.bundle.js"></script>
     <script>
         $(document).ready(function () {
-            $('#uploadImageButton').click(function () {
-                var formData = new FormData();
-                var profileImage = $('input[name="profileImage"]')[0].files[0];
+            // Upload Image
+            $('#uploadForm').submit(function (event) {
+                event.preventDefault(); // Prevent default form submission
 
-                if (profileImage) {
-                    formData.append('profileImage', profileImage);
-                    formData.append('userID', $('#updateProfileForm input[name="userID"]').val()); // Add user ID
-
-                    $.ajax({
-                        url: 'UserServlet?action=uploadProfileImage',
-                        type: 'POST',
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            // Update the displayed image with the new one
-                            $('img[alt="Current Profile Image"]').attr('src', response.newAvatarPath);
-                            alert(response.message);
-                        },
-                        error: function () {
-                            alert('Upload failed.');
-                        }
-                    });
-                } else {
-                    alert('Please select an image to upload.');
-                }
+                var formData = new FormData(this);
+                $.ajax({
+                    url: 'UserServlet?action=uploadProfileImage',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        $('img[alt="Profile Image"]').attr('src', response.newAvatarPath); // Update image
+                        alert(response.message);
+                    },
+                    error: function () {
+                        alert('Upload failed.');
+                    }
+                });
             });
 
             $('#saveProfileButton').click(function () {
                 var formData = new FormData($('#updateProfileForm')[0]);
 
                 $.ajax({
-                    url: 'UserServlet?action=updateProfile',
+                    url: 'UserServlet?action=updateprofile',
                     type: 'POST',
                     data: formData,
                     contentType: false,
                     processData: false,
                     success: function (response) {
-                        alert(response.message);
-                        $('#updateProfileModal').modal('hide'); // Hide the modal after success
+                        if (response === "success") {
+                            alert('Cập nhật thành công.');
+                            $('#updateProfileModal').modal('hide');
+                            setTimeout(function () {
+                                location.reload(); // Refresh the page after a delay
+                            }, 3000);
+                        } else {
+                            alert('Cập nhật thất bại.');
+                        }
                     },
                     error: function () {
-                        alert('Profile update failed.');
+                        alert('Cập nhật thất bại.');
                     }
                 });
-                setTimeout(function () {
-                    location.reload(); // This will refresh the page
-                }, 3000);
             });
+
+            $('#changePasswordForm').submit(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: 'UserServlet?action=changePassword',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.message === "Đổi mật khẩu thành công.") {
+                            alert(response.message);
+                            $('#changePasswordModal').modal('hide');  // Đóng modal khi thành công
+                            $('#changePasswordForm')[0].reset();  // Xóa hết dữ liệu trong form
+                        } else {
+                            alert(response.message);  // Hiển thị thông báo lỗi mà không đóng modal
+                        }
+                    },
+                    error: function (xhr) {
+                        var response = JSON.parse(xhr.responseText);
+                        alert(response.message || 'Đổi mật khẩu thất bại.');
+                    }
+                });
+            });
+
+
         });
 
 

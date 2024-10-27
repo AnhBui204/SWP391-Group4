@@ -52,8 +52,11 @@ public class UserServlet extends HttpServlet {
             case "uploadprofileimage":
                 handleUploadProfileImage(request, response); // Case for image upload
                 break;
-            case "updateProfile":
+            case "updateprofile":
                 handleUpdateProfile(request, response); // Case for image upload
+                break;
+            case "changepassword":
+                handleChangePassword(request, response); // Case for image upload
                 break;
             default:
                 response.sendRedirect("error.jsp");
@@ -293,20 +296,65 @@ public class UserServlet extends HttpServlet {
     //Update Profile
     private void handleUpdateProfile(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String Hello = request.getParameter("Hello");
         String userID = request.getParameter("userID");
-        
-        System.out.println(Hello);
-        System.out.println("ID: " + userID);
+        String newFirstName = request.getParameter("firstName");
+        String newLastName = request.getParameter("lastName");
+        String newPhone = request.getParameter("phone");
+        String newGender = request.getParameter("gender");
+        String dob = request.getParameter("dob");
+
+        // Chuyển đổi chuỗi ngày sinh thành đối tượng Date SQL
+        Date newDob = null;
+        if (dob != null && !dob.isEmpty()) {
+            newDob = Date.valueOf(dob);
+        }
+
+        // Lấy thông tin người dùng hiện tại từ session hoặc cơ sở dữ liệu
         User user = UserDB.getUsersByID(userID);
 
-        // Store the user in the session
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user);
+        // Kiểm tra và cập nhật từng thuộc tính nếu nó không rỗng
+        user.setfName((newFirstName != null && !newFirstName.isEmpty()) ? newFirstName : user.getfName());
+        user.setlName((newLastName != null && !newLastName.isEmpty()) ? newLastName : user.getlName());
+        user.setPhone((newPhone != null && !newPhone.isEmpty()) ? newPhone : user.getPhone());
+        user.setSex((newGender != null && !newGender.isEmpty()) ? newGender : user.getSex());
+        user.setDob((newDob != null) ? newDob : user.getDob());
 
-        // Redirect to CustomerProfile.jsp
-        String encodedURL = response.encodeRedirectURL("CustomerProfile.jsp");
-        response.sendRedirect(encodedURL);
+        // Cập nhật thông tin người dùng trong cơ sở dữ liệu
+        System.out.println(user);
+
+        UserDB.updateUserProfile(user);
+        request.setAttribute("user", user); // Cập nhật lại thông tin trong session
+        response.setContentType("text/plain");
+        response.getWriter().write("success");
+
+    }
+
+    private void handleChangePassword(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        String userID = request.getParameter("userID");
+        User user = UserDB.getUsersByID(userID);
+
+        String currentPassword = request.getParameter("currentPassword");
+        String newPassword = request.getParameter("newPassword");
+        String confirmNewPassword = request.getParameter("confirmNewPassword");
+        PrintWriter out = response.getWriter();
+
+        if (user != null && user.getPassword().equals(currentPassword)) {
+            System.out.println(user.getPassword());
+            if (newPassword.equals(confirmNewPassword)) {
+                UserDB.updatePassword(user);
+                out.write("{\"message\": \"Đổi mật khẩu thành công.\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.write("{\"message\": \"Mật khẩu mới không trùng khớp.\"}");
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.write("{\"message\": \"Mật khẩu cũ không chính xác.\"}");
+        }
+        out.flush();
     }
 
     @Override

@@ -8,27 +8,23 @@
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="../css/headerssj1.css"/>
+        
     </head>
     <body>
         <div class="overlay hidden"></div>
         <header>
-            <div class="header-container container-fluid d-flex justify-content-between align-items-center p-3">
+            <div class="header-container container-fluid d-flex justify-content-between align-items-center row px-3">
                 <!-- Logo -->
-                <div class="bigLogo d-flex align-items-center ms-n2">
-                    <div class="logo me-2">
+                <div class="bigLogo d-flex flex-column align-items-center col-md-4 text-center">
+                    <div class="logo">
                         <img src="image/logo/logo.png" alt="FPT Cinema" style="cursor: pointer;" onclick="window.location.href = 'HomePage.jsp';">
                     </div>
                     <h3 class="text mb-0">CineLuxe Cinema</h3>
                 </div>
-                <!-- Navbar -->
-                <nav class="navbar">
-                    <ul class="navbar-nav d-flex flex-row">
-                        <!--
-                                                <li class="nav-item me-3">
-                                                    <a class="nav-link" href="MovieServlet?action=booking">Mua Vé</a>
-                                                </li>-->
 
+                <!-- Navbar -->
+                <nav class="navbar col-md-6 d-flex justify-content-center">
+                    <ul class="navbar-nav d-flex flex-row">
                         <li class="nav-item me-3">
                             <a class="nav-link p-0" href="MovieServlet?action=booking">
                                 <div id="raffle-red" class="entry raffle">
@@ -49,12 +45,11 @@
                 </nav>
 
                 <!-- User Info -->
-                <div class="user-info">
+                <div class="user-info col-md-2 d-flex justify-content-end">
                     <div class="profile-container">
                         <div class="profile">
                             <img src="${users.avatar}" alt="Avatar" class="avatar">
                             <span class="username">${users.username}</span>
-                            <span class="stars">0 Stars</span>
                         </div>
                         <div class="dropdown-menu">
                             <a href="UserServlet?action=db" class="dropdown-item">Tài Khoản</a>
