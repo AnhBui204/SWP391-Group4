@@ -9,7 +9,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/admins.css">
+        <link rel="stylesheet" href="css/admins1.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
         <title>Theatre Management</title>
     </head>
@@ -169,12 +169,12 @@
                     </div>
                 </div>
                 <div class="sidebar">
-                    <a href="AdminDashBoard.jsp" >
-                        <span class="material-symbols-outlined">
-                            grid_view
-                        </span>
-                        <h3>Dashboard</h3>
-                    </a>
+                    <!--                    <a href="AdminDashBoard.jsp" >
+                                            <span class="material-symbols-outlined">
+                                                grid_view
+                                            </span>
+                                            <h3>Dashboard</h3>
+                                        </a>-->
                     <a href="customer.jsp" class="">
                         <span class="material-symbols-outlined">
                             person
@@ -242,7 +242,7 @@
                                 </thead>
                                 <tbody>
                                     <%
-                                        
+
                                         List<Theatre> list = TheatreDB.listAllTheatres();
                                         for (Theatre ci : list) {
                                     %>
@@ -254,7 +254,7 @@
                                             <!-- Update and Delete buttons -->
                                             <form action="updateTheatre.jsp" method="GET">
                                                 <input type="hidden" name="theatreID" value="<%= ci.getTheatreID()%>">
-                                                <button style="background-color: var(--clr-primary)" type="submit" name="action" value="update">Update</button>
+                                                <button style="background-color: #008000" type="submit" name="action" value="update">Update</button>
                                             </form>
                                             <!-- Open Modal Button -->
                                             <form action="TheatreServlet?action=delete" method="POST">
@@ -266,8 +266,7 @@
                                                     <div class="modal-content">
                                                         <h2>Are you sure you want to delete <%= ci.getTheatreID()%>?</h2>
                                                         <button class="delete-btn" id="closeModal-<%= ci.getTheatreID()%>">Cancel</button>
-                                                        <button type="submit" class="delete-btn" style="background-color: var(--clr-danger)">Delete</button>
-                                                    </div>
+                                                        <button class="open-btn" style="background-color: #d5514d" type="button" id="openModal-<%= ci.getTheatreID()%>">Delete</button>                                                    </div>
                                                 </div>
 
                                                 <script>

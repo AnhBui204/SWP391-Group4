@@ -8,8 +8,19 @@
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        
     </head>
+    <style>
+        .nav-item.dropdown:hover .dropdown-menu {
+            display: unset;
+            margin-top: 0; /* Remove default margin */
+        }
+
+        /* Optional: Adjust dropdown link colors on hover */
+        .nav-item .dropdown-menu a:hover {
+            background-color: #f7cf90; /* Custom background color */
+            color: #333; /* Text color */
+        }
+    </style>
     <body>
         <div class="overlay hidden"></div>
         <header>
@@ -32,11 +43,29 @@
                                 </div>
                             </a>
                         </li>
-                        <li class="nav-item me-3">
-                            <a class="nav-link" href="#">Phim</a>
+                        <li class="nav-item dropdown me-3">
+                            <a class="nav-link dropdown-toggle" href="#" id="phimDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Phim
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="phimDropdown">
+                                <a class="dropdown-item" href="movie1.jsp">Phim 1</a>
+                                <a class="dropdown-item" href="movie2.jsp">Phim 2</a>
+                                <a class="dropdown-item" href="movie3.jsp">Phim 3</a>
+                                <!-- Add more movies as needed -->
+                            </div>
                         </li>
-                        <li class="nav-item me-3">
-                            <a class="nav-link" href="uudai_homepage.jsp">Ưu Đãi</a>
+
+                        <!-- Ưu Đãi Dropdown -->
+                        <li class="nav-item dropdown me-3">
+                            <a class="nav-link dropdown-toggle" href="uudai_homepage.jsp" id="uudaiDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Ưu Đãi
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="uudaiDropdown">
+                                <a class="dropdown-item" href="voucher1.jsp">Voucher 1</a>
+                                <a class="dropdown-item" href="voucher2.jsp">Voucher 2</a>
+                                <a class="dropdown-item" href="voucher3.jsp">Voucher 3</a>
+                                <!-- Add more vouchers as needed -->
+                            </div>
                         </li>
                         <li class="nav-item me-3">
                             <a class="nav-link" href="#">Rạp/Giá Vé</a>
@@ -53,7 +82,7 @@
                         </div>
                         <div class="dropdown-menu">
                             <a href="UserServlet?action=db" class="dropdown-item">Tài Khoản</a>
-                            <a href="#" class="dropdown-item">Lịch Sử</a>
+                            <a href="summaryBooking.jsp" class="dropdown-item">Lịch Sử</a>
                             <a href="UserServlet?action=logout" class="dropdown-item">Đăng Xuất</a>
                         </div>
                     </div>

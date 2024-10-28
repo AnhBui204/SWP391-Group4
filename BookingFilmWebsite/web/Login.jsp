@@ -74,7 +74,7 @@
                                             <div class="text-center pt-1 mb-5 pb-1">
                                                 <button type="submit" class="btn btn-warning m-2 p-2">Login</button>
                                                 <br>
-                                                <button type="button" class="btn btn-outline-danger" onclick="window.location.href = 'https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/BookingFilmWebsite/Login.jsp&response_type=code&client_id=375465691355-c20ocp2cb0lnhhept5ssqsrgjukm3ceq.apps.googleusercontent.com&approval_prompt=force'">
+                                                <button type="button" class="btn btn-outline-danger" onclick="window.location.href = 'https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/BookingFilmWebsite/HomePage.jsp&response_type=code&client_id=375465691355-c20ocp2cb0lnhhept5ssqsrgjukm3ceq.apps.googleusercontent.com&approval_prompt=force'">
                                                     <i class="fab fa-google"></i> Login with Google
                                                 </button>
                                                 <br>

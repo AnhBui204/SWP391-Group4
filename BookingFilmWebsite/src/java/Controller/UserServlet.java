@@ -55,8 +55,12 @@ public class UserServlet extends HttpServlet {
             case "updateprofile":
                 handleUpdateProfile(request, response); // Case for image upload
                 break;
+                
             case "changepassword":
                 handleChangePassword(request, response); // Case for image upload
+                break;
+            case "deposit":
+                handleDeposit(request, response); // Case for image upload
                 break;
             default:
                 response.sendRedirect("error.jsp");
@@ -211,7 +215,7 @@ public class UserServlet extends HttpServlet {
         switch (role) {
             case "Admin" -> {
                 request.setAttribute("admin", user.getUsername());
-                RequestDispatcher dispatcher = request.getRequestDispatcher("AdminDashBoard.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("customer.jsp");
                 dispatcher.forward(request, response);
             }
             case "User" -> {
@@ -342,6 +346,7 @@ public class UserServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         if (user != null && user.getPassword().equals(currentPassword)) {
+            user.setPassword(newPassword);
             System.out.println(user.getPassword());
             if (newPassword.equals(confirmNewPassword)) {
                 UserDB.updatePassword(user);
@@ -355,6 +360,10 @@ public class UserServlet extends HttpServlet {
             out.write("{\"message\": \"Mật khẩu cũ không chính xác.\"}");
         }
         out.flush();
+    }
+
+    private void handleDeposit(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
     }
 
     @Override

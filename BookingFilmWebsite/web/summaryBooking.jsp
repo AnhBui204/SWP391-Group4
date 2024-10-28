@@ -29,7 +29,7 @@
 <html>
     <head>
 
-        <link rel="stylesheet" href="css/headerssj2.css" />
+        <link rel="stylesheet" href="css/headerssj4.css" />
         <%@ page contentType="text/html;charset=UTF-8" language="java" %>
         <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -41,33 +41,35 @@
         <div class="container my-5">
             <c:if test="${not empty user}">
                 <div class="row">
-                    <h1 class="col-12 mb-4 display-5">Chỉnh sửa hồ sơ</h1>
                     <div class="col-md-4 col-12 d-flex flex-column justify-content-center shadow-lg rounded" style="background-color: rgb(255, 247, 229);">
                         <div class="d-flex justify-content-center pt-5 pb-2">
-                            <img src="<%= users.getAvatar() %>" alt="Profile Image" class="img-fluid rounded-circle" style="height: 100px; width: 100px;"/>
-                            <div class="d-flex align-items-center px-3">
+                            <img src="<%= users.getAvatar()%>" alt="Profile Image" class="img-fluid rounded-circle" style="height: 100px; width: 100px;"/>
+                            <div class="d-flex flex-column align-items-center mt-3 px-3">
                                 <% if (moneyLeft != null) {%>
                                 <p class="m-0 px-2 fs-6 text-success">Số tiền: <strong><%= moneyLeftInt%></strong></p>
                                 <% } else { %>
                                 <p class="m-0 px-2 fs-6">Số tiền: <strong>Không có dữ liệu</strong></p>
                                 <% }%>
+                                <a href="charge.jsp?userID=$<%= users.getUserID()%>" class="btn btn-success" >
+                                    Nạp tiền
+                                </a>
                             </div>
 
                         </div>
                         <hr class="w-75 mx-auto">
                         <div class="text-center mt-3 d-flex flex-column">
-                            <h3 class="bg-white p-3">Chỉnh sửa hồ sơ</h3>
-                            <a class="h3 mt-4 p-3 d-block" href="summaryBooking.jsp">Lịch sử giao dịch</a>
-                            <h3 class="my-4 p-3">Quà tặng tích điểm</h3>
-                            <h3 class="mt-4 p-3"><a href="report.jsp?userID=<%= users.getUserID()%>">Báo cáo</a></h3>
-
+                            <a class="h3 mt-4 p-3 d-block text-decoration-none" href="UserServlet?action=db">Chỉnh sửa hồ sơ</a>
+                            <a class="h3 mt-4 p-3 d-block bg-white text-decoration-none rounded" href="summaryBooking.jsp">Lịch sử giao dịch</a>
+                            <a class="h3 mt-4 p-3 d-block text-decoration-none" href="report.jsp?userID=<%= users.getUserID()%>">Báo cáo</a>
                         </div>
                     </div>
                     <div class="col-1"></div>
-                    <div class="col-7 row">
-                        <div class="table-responsive">
+                    <div class="col-7">
+                        <!-- Outer container for max height and scrollable body -->
+                        <div class="table-responsive" style="max-height: 550px; overflow-y: auto;">
                             <table class="table table-striped table-bordered table-hover">
-                                <thead class="thead-dark text-center" style="background-color: #f7cf90">
+                                <!-- Table Header (Fixed) -->
+                                <thead class="text-center pt-2" style="background-color: #f7cf90; position: sticky; top: 0; z-index: 1">
                                     <tr>
                                         <th scope="col">Mã đơn hàng</th>
                                         <th scope="col">Ngày đặt</th>
@@ -75,37 +77,43 @@
                                         <th scope="col">Hành động</th>
                                     </tr>
                                 </thead>
+
+                                <!-- Scrollable Table Body -->
+
                                 <tbody class="text-center">
                                     <c:if test="${empty booking}">
-                                    <p>No bookings found for this user.</p>
-                                </c:if>
-                                <c:forEach var="book" items="${booking}">
-                                    <tr>
-                                        <td>${book.bookingID}</td>
-                                        <td>${book.bookingDate}</td>
-                                        <td>${book.totalPrice}</td>
-                                        <td>
-                                            <a href="HistoryBooking.jsp?bookingID=${book.bookingID}" class="btn btn-primary btn-sm">Xem chi tiết</a>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-
+                                        <tr>
+                                            <td colspan="4">No bookings found for this user.</td>
+                                        </tr>
+                                    </c:if>
+                                    <c:forEach var="book" items="${booking}">
+                                        <tr>
+                                            <td>${book.bookingID}</td>
+                                            <td>${book.bookingDate}</td>
+                                            <td>${book.totalPrice}</td>
+                                            <td>
+                                                <a href="HistoryBooking.jsp?bookingID=${book.bookingID}" class="btn btn-primary btn-sm">Xem chi tiết</a>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
                                 </tbody>
                             </table>
                         </div>
-
-
                     </div>
+
+
+
                 </div>
-            </c:if>
-            <c:if test="${empty user}">
-                <p>No user information available.</p>
-            </c:if>
-        </div>
+            </div>
+        </c:if>
+        <c:if test="${empty user}">
+            <p>No user information available.</p>
+        </c:if>
+    </div>
 
 
-    </body>
-    <script src="bs/js/bootstrap.bundle.js"></script>
+</body>
+<script src="bs/js/bootstrap.bundle.js"></script>
 </html>
 <%@include file="includes/footer.jsp" %>
-<link rel="stylesheet" href="css/footer.css" />
+<link rel="stylesheet" href="css/footerssj2.css" />

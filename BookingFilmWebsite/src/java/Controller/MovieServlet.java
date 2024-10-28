@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import static Controller.FoodAndDrinkServlet.tempName;
 import Model.Movie;
 import Model.MovieDB;
 import Model.Show;
@@ -13,6 +14,8 @@ import Model.ShowSeat;
 import Model.ShowSeatDB;
 import Model.Theatre;
 import Model.TheatreDB;
+import Model.WorkHistory;
+import Model.WorkHistoryDB;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
@@ -24,9 +27,12 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024,
@@ -41,21 +47,26 @@ public class MovieServlet extends HttpServlet {
         switch (action) {
             case "add":
                 handleAddMV(request, response);
+                handleUpdateWorkHistory(request, response);
                 break;
             case "update":
                 handleUpdateMV(request, response);
+                handleUpdateWorkHistory(request, response);
                 break;
             case "delete":
                 handleDeleteMV(request, response);
+                handleUpdateWorkHistory(request, response);
                 break;
             case "setShow":
                 handleSetShow(request, response);
+                handleUpdateWorkHistory(request, response);
                 break;
             case "booking":
                 handleBooking(request, response);
                 break;
             case "showSeat":
                 handleSetShowSeat(request, response);
+                handleUpdateWorkHistory(request, response);
                 break;
             case "mvList":
                 handlegetMovieList(request, response);
@@ -66,7 +77,7 @@ public class MovieServlet extends HttpServlet {
             case "getShowInfo":
                 handleGetShowInfo(request, response);
                 break;
-            
+
 //            case "search":
 //                handleSearchMovie(request, response);
 //                break;
@@ -294,6 +305,38 @@ public class MovieServlet extends HttpServlet {
         response.getWriter().write(new Gson().toJson(showInfoList));
     }
 
+    private void handleUpdateWorkHistory(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        String referer = request.getHeader("referer");
+
+        HttpSession session = request.getSession();
+        String id = (String) session.getAttribute("id");
+        String page = request.getParameter("page");
+        String whDes = "";
+        LocalDate dateCurr = LocalDate.now();
+        LocalTime timeCurr = LocalTime.now();
+        Date dateSql = Date.valueOf(dateCurr);
+        Time timeSql = Time.valueOf(timeCurr);
+        String action = request.getParameter("action");
+
+        WorkHistory whs = new WorkHistory();
+        if ((page.equalsIgnoreCase("movie") && !action.equalsIgnoreCase("setShow")) || page.equalsIgnoreCase("food and drink") || page.equalsIgnoreCase("voucher")) {
+
+            whDes = "Action: " + action + " " + page + " " + tempName + ", Affected page: " + page + ", Executor: " + id;
+
+        } else if (page.equalsIgnoreCase("movie") && action.equalsIgnoreCase("setShow")) {
+            whDes = "Action: set Show movie " + tempName + ", Affected page: " + page + ", Executor: " + id;
+        } else if (action.equalsIgnoreCase("showSeat")) {
+            whDes = "Action: set Room in " + tempName + ", Affected page: " + page + ", Executor: " + id;
+        }
+
+        whs.setWorkID(WorkHistoryDB.getNextWorkHisId());
+        whs.setWorkDes(whDes);
+        whs.setDates(dateSql);
+        whs.setTimes(timeSql);
+        whs.setStaffID(id);
+
+        WorkHistoryDB.addWorkHis(whs);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

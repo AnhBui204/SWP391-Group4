@@ -78,56 +78,51 @@ public class MovieDetailServlet extends HttpServlet {
             throws ServletException, IOException {
         String rate = request.getParameter("rate") + "";
         if (rate.equalsIgnoreCase("null")) {
-        try {
-            //        processRequest(request, response);
-            SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                //        processRequest(request, response);
+                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            
-            String MovieId = request.getParameter("MovieId");
-            String MovieName = request.getParameter("MovieName");
-            String Duration = request.getParameter("Duration");
-            String Country = request.getParameter("Country");
-            String Manufacturer = request.getParameter("Manufacturer");
-            String Director = request.getParameter("Director");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+                String MovieId = request.getParameter("MovieId");
+                String MovieName = request.getParameter("MovieName");
+                String Duration = request.getParameter("Duration");
+                String Country = request.getParameter("Country");
+                String Manufacturer = request.getParameter("Manufacturer");
+                String Director = request.getParameter("Director");
 //            String MovieType = request.getParameter("MovieType");
-            Date ReleaseDate = sf.parse(request.getParameter("ReleaseDate"));
-            String ImgP = request.getParameter("ImgP");
-            String ImgL = request.getParameter("ImgL");
+                Date ReleaseDate = sf.parse(request.getParameter("ReleaseDate"));
+                String ImgP = request.getParameter("ImgP");
+                String ImgL = request.getParameter("ImgL");
 //            String Rate = request.getParameter("Rate");
-            
-            String ReleaseDateString = sdf.format(ReleaseDate);
-//        response.getWriter().println("MovieName: " + MovieName);
-//        response.getWriter().println("Duration: " + Duration);
-//        response.getWriter().println("Country: " + Country);
-//        response.getWriter().println("Director: " + Director);
-//        response.getWriter().println("MovieType: " + MovieType);
-//        response.getWriter().println("ReleaseDate: " + ReleaseDate);
-//        response.getWriter().println("ImgP: " + ImgP);
-//        response.getWriter().println("ImgL: " + ImgL);
-//        response.getWriter().println("Rate: " + Rate);
 
-        
+                String ReleaseDateString = sdf.format(ReleaseDate);
+                System.out.println("MovieName: " + MovieName);
+                System.out.println("Duration: " + Duration);
+                System.out.println("Country: " + Country);
+                System.out.println("Director: " + Director);
+                System.out.println("ReleaseDate: " + ReleaseDate);
+                System.out.println("ImgP: " + ImgP);
+                System.out.println("ImgL: " + ImgL);
 
 //            response.sendRedirect("MovieDetail.jsp?MovieId="+ MovieId +"&MovieName="+ MovieName +"&Duration="+ Duration +"&Country="+ Country +"&Director="+ Director /*+"&MovieType="+ MovieType */+"&ReleaseDate="+ ReleaseDateString +"&ImgP="+ ImgP /*+"&ImgL="+ ImgL +"&Rate="+ Rate*/);
-
-            request.setAttribute("movieId", MovieId);
-            request.setAttribute("movieName", MovieName);
-            request.setAttribute("duration", Duration);
-            request.setAttribute("country", Country);
-            request.setAttribute("manufacturer", Manufacturer);
-            request.setAttribute("director", Director);
-            request.setAttribute("imgP", ImgP);
-            request.setAttribute("imgL", ImgL);
-            request.setAttribute("releaseDate", ReleaseDateString);
+                request.setAttribute("movieId", MovieId);
+                request.setAttribute("movieName", MovieName);
+                request.setAttribute("duration", Duration);
+                request.setAttribute("country", Country);
+                request.setAttribute("manufacturer", Manufacturer);
+                request.setAttribute("director", Director);
+                request.setAttribute("imgP", ImgP);
+                request.setAttribute("imgL", ImgL);
+                request.setAttribute("releaseDate", ReleaseDateString);
 //            System.out.println(ImgL);
 //            System.out.println(ImgP);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("MovieDetail.jsp");
-            dispatcher.forward(request, response);
-            
-        } catch (ParseException ex) {
-            response.getWriter().println(ex);
-        }
+                RequestDispatcher dispatcher = request.getRequestDispatcher("MovieDetail.jsp");
+                dispatcher.forward(request, response);
+
+            } catch (ParseException ex) {
+                response.getWriter().println(ex);
+            }
         } else {
             HttpSession session = request.getSession();
             String userId = (String) session.getAttribute("id");
@@ -149,19 +144,18 @@ public class MovieDetailServlet extends HttpServlet {
                 String Director = movie.getDirector();
                 Date ReleaseDate = movie.getReleaseDate();
                 String ImgP = movie.getImgPortrait();
-            String ImgL = movie.getImgLandscape();
-                
-            
+                String ImgL = movie.getImgLandscape();
+
                 String ReleaseDateString = sdf.format(ReleaseDate);
 
                 request.setAttribute("movieId", mvId);
-            request.setAttribute("movieName", MovieName);
-            request.setAttribute("duration", Duration);
-            request.setAttribute("country", Country);
-            request.setAttribute("manufacturer", Manufacturer);
-            request.setAttribute("director", Director);
-            request.setAttribute("imgP", ImgP);
-            request.setAttribute("imgL", ImgL);
+                request.setAttribute("movieName", MovieName);
+                request.setAttribute("duration", Duration);
+                request.setAttribute("country", Country);
+                request.setAttribute("manufacturer", Manufacturer);
+                request.setAttribute("director", Director);
+                request.setAttribute("imgP", ImgP);
+                request.setAttribute("imgL", ImgL);
                 request.setAttribute("releaseDate", ReleaseDateString);
 
                 RequestDispatcher dispatcher = request.getRequestDispatcher("MovieDetail.jsp");

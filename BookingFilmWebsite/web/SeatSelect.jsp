@@ -10,7 +10,7 @@
 <% } else { %>
 <%@include file="includes/header_user.jsp" %>
 <% }%>
-<link rel="stylesheet" href="css/headerssj2.css">
+<link rel="stylesheet" href="css/headerssj3.css">
 <!DOCTYPE html>
 <html lang="vi">
     <head>  
@@ -88,23 +88,25 @@
                                     </div>
 
                                     <!-- Labels for available and unavailable seats -->
-                                    <div class="row mt-3 d-flex justify-content-start">
-                                        <div class="col-auto text-center">
-                                            <div class="rectangle available"></div>
-                                            <span class="custom-available">Có sẵn</span>
-                                        </div>
-                                        <div class="col-auto text-center">
-                                            <div class="rectangle unavailable"></div>
-                                            <span class="custom-unavailable">Không có sẵn</span>
-                                        </div>
-                                        <div class="col-auto text-center">
-                                            <div class="rectangle selected"></div>
-                                            <span class="custom-selected">Đang chọn</span>
-                                        </div>
-                                    </div>
+                                    
+
 
 
                                 </div>
+                                <div class="row mt-3 d-flex justify-content-start">
+                                        <div class="col-md-4 text-center">
+                                            <div class="rectangle available"></div>
+                                            <span class="custom-available fs-6">Có sẵn</span>
+                                        </div>
+                                        <div class="col-md-4 text-center">
+                                            <div class="rectangle unavailable"></div>
+                                            <span class="custom-unavailable fs-6">Không có sẵn</span>
+                                        </div>
+                                        <div class="col-md-4 text-center">
+                                            <div class="rectangle selected"></div>
+                                            <span class="custom-selected fs-6">Đang chọn</span>
+                                        </div>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -154,100 +156,100 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
         <script>
-                        let selectedSeatNames = [];
-                        let selectedSeatPrices = [];
+                            let selectedSeatNames = [];
+                            let selectedSeatPrices = [];
 
-                        window.selectSeat = function (button, price) {
-                            const seatName = button.innerText; // Lấy tên ghế
-                            const selectedSeats = document.getElementById('selected-seats');
-                            const selectedPrice = document.getElementById('selected-price');
-                            console.log("Selected seat price:", price); // Lấy phần tử giá
-                            const maxSeats = 8;
-                            const currentSelectedCount = document.querySelectorAll('.seat-button.selected').length;
+                            window.selectSeat = function (button, price) {
+                                const seatName = button.innerText; // Lấy tên ghế
+                                const selectedSeats = document.getElementById('selected-seats');
+                                const selectedPrice = document.getElementById('selected-price');
+                                console.log("Selected seat price:", price); // Lấy phần tử giá
+                                const maxSeats = 8;
+                                const currentSelectedCount = document.querySelectorAll('.seat-button.selected').length;
 
-                            if (button.classList.contains('selected')) {
-                                // Nếu ghế đã được chọn
-                                button.classList.remove('selected');
-                                // Xóa ghế khỏi danh sách đã chọn
-                                selectedSeatNames = selectedSeatNames.filter(name => name !== seatName);
-                                selectedSeatPrices = selectedSeatPrices.filter(p => p !== parseInt(price));
-                            } else {
-                                // Nếu ghế chưa được chọn
-                                if (currentSelectedCount >= maxSeats) {
-                                    // Nếu đã chọn đủ số ghế tối đa
+                                if (button.classList.contains('selected')) {
+                                    // Nếu ghế đã được chọn
+                                    button.classList.remove('selected');
+                                    // Xóa ghế khỏi danh sách đã chọn
+                                    selectedSeatNames = selectedSeatNames.filter(name => name !== seatName);
+                                    selectedSeatPrices = selectedSeatPrices.filter(p => p !== parseInt(price));
+                                } else {
+                                    // Nếu ghế chưa được chọn
+                                    if (currentSelectedCount >= maxSeats) {
+                                        // Nếu đã chọn đủ số ghế tối đa
+                                        const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+                                        alertModal.show();
+                                        return; // Không cho phép chọn thêm ghế
+                                    }
+                                    button.classList.add('selected');
+                                    selectedSeatNames.push(seatName);
+                                    selectedSeatPrices.push(parseInt(price));
+                                }
+
+                                const updatedSeats = getSelectedSeats();
+                                selectedSeats.innerText = updatedSeats.length > 0 ? updatedSeats : 'Chưa chọn ghế';
+                                const totalPrice = selectedSeatPrices.reduce((total, price) => total + price, 0);
+                                selectedPrice.innerText = totalPrice + ' VNĐ'; // Cập nhật giá
+                            };
+
+                            window.getSelectedSeats = function () {
+                                const selectedSeats = Array.from(document.querySelectorAll('.seat-button.selected'))
+                                        .map(seat => seat.innerText);
+                                return selectedSeats.join(', ');
+                            };
+
+                            window.submitSelectedSeats = function () {
+                                const selectedSeats = getSelectedSeats();
+                                const totalPrice = selectedSeatPrices.reduce((total, price) => total + price, 0);
+                                const maxSeats = 8;
+                                const currentSelectedCount = document.querySelectorAll('.seat-button.selected').length;
+
+                                if (currentSelectedCount === 0) {
+                                    // Nếu không chọn ghế nào
                                     const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
                                     alertModal.show();
-                                    return; // Không cho phép chọn thêm ghế
+                                    document.querySelector('.modal-body').innerText = "Bạn phải chọn ít nhất 1 ghế.";
+                                    return;
                                 }
-                                button.classList.add('selected');
-                                selectedSeatNames.push(seatName);
-                                selectedSeatPrices.push(parseInt(price));
-                            }
 
-                            const updatedSeats = getSelectedSeats();
-                            selectedSeats.innerText = updatedSeats.length > 0 ? updatedSeats : 'Chưa chọn ghế';
-                            const totalPrice = selectedSeatPrices.reduce((total, price) => total + price, 0);
-                            selectedPrice.innerText = totalPrice + ' VNĐ'; // Cập nhật giá
-                        };
+                                if (currentSelectedCount > maxSeats) {
+                                    // Nếu đã chọn quá số ghế tối đa
+                                    const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+                                    alertModal.show();
+                                    document.querySelector('.modal-body').innerText = "Bạn chỉ có thể chọn tối đa 8 ghế.";
+                                    return;
+                                }
 
-                        window.getSelectedSeats = function () {
-                            const selectedSeats = Array.from(document.querySelectorAll('.seat-button.selected'))
-                                    .map(seat => seat.innerText);
-                            return selectedSeats.join(', ');
-                        };
+                                const form = document.createElement('form');
+                                form.method = 'POST';
+                                form.action = 'FoodsAndDrinks';
 
-                        window.submitSelectedSeats = function () {
-                            const selectedSeats = getSelectedSeats();
-                            const totalPrice = selectedSeatPrices.reduce((total, price) => total + price, 0);
-                            const maxSeats = 8;
-                            const currentSelectedCount = document.querySelectorAll('.seat-button.selected').length;
+                                const input = document.createElement('input');
+                                input.type = 'hidden';
+                                input.name = 'selectedSeats';
+                                input.value = selectedSeats;
 
-                            if (currentSelectedCount === 0) {
-                                // Nếu không chọn ghế nào
+                                const inputTotalPrice = document.createElement('input');
+                                inputTotalPrice.type = 'hidden';
+                                inputTotalPrice.name = 'totalPrice';
+                                inputTotalPrice.value = totalPrice;
+
+                                const theatreIDInput = document.createElement('input');
+                                theatreIDInput.type = 'hidden';
+                                theatreIDInput.name = 'theatreID';
+                                theatreIDInput.value = '${sessionScope.theatreID}';
+
+                                form.appendChild(input);
+                                form.appendChild(inputTotalPrice);
+                                form.appendChild(theatreIDInput);
+                                document.body.appendChild(form);
+                                form.submit();
+                            };
+                            function closeModal() {
                                 const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
-                                alertModal.show();
-                                document.querySelector('.modal-body').innerText = "Bạn phải chọn ít nhất 1 ghế.";
-                                return;
+                                alertModal.hide(); // Gọi hàm hide để đóng modal
                             }
-
-                            if (currentSelectedCount > maxSeats) {
-                                // Nếu đã chọn quá số ghế tối đa
-                                const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
-                                alertModal.show();
-                                document.querySelector('.modal-body').innerText = "Bạn chỉ có thể chọn tối đa 8 ghế.";
-                                return;
-                            }
-
-                            const form = document.createElement('form');
-                            form.method = 'POST';
-                            form.action = 'FoodsAndDrinks';
-
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.name = 'selectedSeats';
-                            input.value = selectedSeats;
-
-                            const inputTotalPrice = document.createElement('input');
-                            inputTotalPrice.type = 'hidden';
-                            inputTotalPrice.name = 'totalPrice';
-                            inputTotalPrice.value = totalPrice;
-
-                            const theatreIDInput = document.createElement('input');
-                            theatreIDInput.type = 'hidden';
-                            theatreIDInput.name = 'theatreID';
-                            theatreIDInput.value = '${sessionScope.theatreID}';
-
-                            form.appendChild(input);
-                            form.appendChild(inputTotalPrice);
-                            form.appendChild(theatreIDInput);
-                            document.body.appendChild(form);
-                            form.submit();
-                        };
-                        function closeModal() {
-                            const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
-                            alertModal.hide(); // Gọi hàm hide để đóng modal
-                        }
-                        ;
+                            ;
 
         </script>
     </body>

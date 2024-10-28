@@ -64,25 +64,26 @@ public class UserDB implements DatabaseInfo {
         }
         return user;
     }
-public static BigDecimal getCurrentBalance(String userID) {
-    BigDecimal balance = null;
-    String sql = "SELECT MoneyLeft FROM Users WHERE userID = ?"; // Thay đổi theo cấu trúc bảng của bạn
 
-    try (Connection conn = getConnect();
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-        
-        pstmt.setString(1, userID);
-        ResultSet rs = pstmt.executeQuery();
+    public static BigDecimal getCurrentBalance(String userID) {
+        BigDecimal balance = null;
+        String sql = "SELECT MoneyLeft FROM Users WHERE userID = ?"; // Thay đổi theo cấu trúc bảng của bạn
 
-        if (rs.next()) {
-            balance = rs.getBigDecimal("MoneyLeft");
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, userID);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                balance = rs.getBigDecimal("MoneyLeft");
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi truy vấn số tiền của người dùng: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Lỗi khi truy vấn số tiền của người dùng: " + e.getMessage());
+
+        return balance;
     }
 
-    return balance;
-}
     public static User getUsersByID(String userID) {
         User user = null;
         String query = "select UserName, FName , LName, Pass , UserID, Email, Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar "
@@ -175,28 +176,28 @@ public static BigDecimal getCurrentBalance(String userID) {
 
 //-----------------------------------------------------------------------------------
     public static User updateUserProfile(User user) {
-    String query = "UPDATE Users SET FName=?, LName=?, phone=?, sex=?, DateOfBirth=? WHERE UserID=?";
+        String query = "UPDATE Users SET FName=?, LName=?, phone=?, sex=?, DateOfBirth=? WHERE UserID=?";
 
-    try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
-        stmt.setString(1, user.getfName());
-        stmt.setString(2, user.getlName());
-        stmt.setString(3, user.getPhone()); // sửa lại thành setPhone
-        stmt.setString(4, user.getSex());
-        stmt.setDate(5, user.getDob()); // sửa lại vị trí đúng của Date
-        stmt.setString(6, user.getUserID()); // UserID tại vị trí cuối cùng
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, user.getfName());
+            stmt.setString(2, user.getlName());
+            stmt.setString(3, user.getPhone()); // sửa lại thành setPhone
+            stmt.setString(4, user.getSex());
+            stmt.setDate(5, user.getDob()); // sửa lại vị trí đúng của Date
+            stmt.setString(6, user.getUserID()); // UserID tại vị trí cuối cùng
 
-        int rc = stmt.executeUpdate();
-        if (rc == 0) {
-            throw new SQLException("Update failed, no rows affected.");
+            int rc = stmt.executeUpdate();
+            if (rc == 0) {
+                throw new SQLException("Update failed, no rows affected.");
+            }
+            return user;
+
+        } catch (Exception ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Invalid data");
         }
-        return user;
-
-    } catch (Exception ex) {
-        Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
-        throw new RuntimeException("Invalid data");
     }
-}
-    
+
     public static User updatePassword(User user) {
         String query = "UPDATE Users SET Pass = ? WHERE UserID=?";
 
@@ -245,6 +246,37 @@ public static BigDecimal getCurrentBalance(String userID) {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return userList;
+    }
+
+    public static void deposit(String userID, int money) {
+        String selectQuery = "SELECT moneyleft FROM Users WHERE UserID = ?";
+        String updateQuery = "UPDATE Users SET moneyleft = ? WHERE UserID = ?";
+
+        try (Connection con = getConnect(); PreparedStatement selectStmt = con.prepareStatement(selectQuery); PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
+
+            // Get the current balance
+            selectStmt.setString(1, userID);
+            ResultSet rs = selectStmt.executeQuery();
+            int currentBalance = 0;
+            if (rs.next()) {
+                currentBalance = rs.getInt("moneyleft");
+            }
+
+            // Calculate new balance
+            int newBalance = currentBalance + money;
+
+            // Update the balance in the database
+            updateStmt.setInt(1, newBalance);
+            updateStmt.setString(2, userID);
+            int rowsUpdated = updateStmt.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Deposit successfully.");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Failed to Deposit.");
+        }
     }
 
     //Upload Image
@@ -344,7 +376,7 @@ public static BigDecimal getCurrentBalance(String userID) {
 //        User v = UserDB.getUsersByID("U00003");
 //        System.out.println(v);
 
-        ArrayList<WorkHistory> list = UserDB.listWorkHistoryByDate("T00001","2024-10-16");
+        ArrayList<WorkHistory> list = UserDB.listWorkHistoryByDate("T00001", "2024-10-16");
         for (WorkHistory s : list) {
             System.out.println(s);
         }

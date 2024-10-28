@@ -441,7 +441,7 @@ public static String generateTicketID(String maxTicketID) {
     return newID;          
 }
 
- public static List<String> getComboIDsByNames(List<String> comboNames) {
+ public static List<String> getComboIDsByNames(List<String> comboNames, String theatreID) {
         List<String> comboIDs = new ArrayList<>();
         
         // Prepare SQL with IN clause for multiple names
@@ -454,7 +454,7 @@ public static String generateTicketID(String maxTicketID) {
                 sql += ",";
             }
         }
-        sql += ")";
+        sql += ") And theatreID = ?";
 
         // Try-with-resources to ensure resources are closed
         try (Connection conn =getConnect();
@@ -464,6 +464,7 @@ public static String generateTicketID(String maxTicketID) {
             for (int i = 0; i < comboNames.size(); i++) {
                 pstmt.setString(i + 1, comboNames.get(i));
             }
+            pstmt.setString(comboNames.size() + 1, theatreID);
             
             ResultSet rs = pstmt.executeQuery();
 
@@ -637,7 +638,7 @@ public static String deductMoneyLeft(String userID, BigDecimal totalPrice) {
         List<String> comboNames = Arrays.asList("Bắp rang + Nước ngọt", "Bắp rang + 2 Nước ngọt"); // Thay thế bằng các tên combo thực tế của bạn
 
         // Call the method to get combo IDs
-        List<String> comboIDs = BookingDB.getComboIDsByNames(comboNames);
+        List<String> comboIDs = BookingDB.getComboIDsByNames(comboNames,"T00001");
 
         // Print the retrieved combo IDs
         System.out.println("Retrieved Combo IDs: " + comboIDs);

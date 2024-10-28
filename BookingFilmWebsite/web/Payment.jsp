@@ -98,6 +98,7 @@
                     <p>Bạn có chắc chắn muốn thanh toán không?</p>
                 </div>
                 <div class="modal-footer">
+                    <input type="hidden" name="theatreID" value="${sessionScope.theatreID}" />
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
                     <button type="button" class="btn btn-primary" onclick="submitPayment()">Xác Nhận</button>
                 </div>

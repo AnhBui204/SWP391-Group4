@@ -2,7 +2,7 @@
 
 
 :root {
-    --clr-primary: #7380ec;
+    --clr-primary: #eb7d5d;
     --clr-danger: #ff7782;
     --clr-success: #41f1b6;
     --clr-white: #fff;
@@ -207,6 +207,10 @@ aside .sidebar a:hover span {
 main {
     margin-top: 1, 4rem;
     width: auto;
+}
+
+.userInfo {
+    background-color: #f7cf90;
 }
 
 main input {

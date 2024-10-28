@@ -15,7 +15,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width= , initial-scale=1.0">
-        <link rel="stylesheet" href="css/admins.css">
+        <link rel="stylesheet" href="css/admins1.css">
         <link rel="stylesheet"
               href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
         <title>Document</title>
@@ -166,12 +166,12 @@
                     </div>
                 </div>
                 <div class="sidebar">
-                    <a href="AdminDashBoard.jsp" >
+<!--                    <a href="AdminDashBoard.jsp" >
                         <span class="material-symbols-outlined">
                             grid_view
                         </span>
                         <h3>Dashboard</h3>
-                    </a>
+                    </a>-->
                     <a href="customer.jsp" class="active">
                         <span class="material-symbols-outlined">
                             person

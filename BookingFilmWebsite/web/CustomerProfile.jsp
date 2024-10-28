@@ -11,7 +11,7 @@
 <% } else { %>
 <%@include file="includes/header_user.jsp" %>
 <% }%>
-<link rel="stylesheet" href="css/headerssj2.css">
+<link rel="stylesheet" href="css/headerssj4.css">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
@@ -27,26 +27,26 @@
         <div class="container my-5">
             <c:if test="${not empty user}">
                 <div class="row">
-                    <h1 class="col-12 mb-4 display-5">Chỉnh sửa hồ sơ</h1>
                     <div class="col-md-4 col-12 d-flex flex-column justify-content-center shadow-lg rounded" style="background-color: rgb(255, 247, 229);">
                         <div class="d-flex justify-content-center pt-5 pb-2">
                             <img src="${user.avatar}" alt="Profile Image" class="img-fluid rounded-circle" style="height: 100px; width: 100px;"/>
-                            <div class="d-flex align-items-center px-3">
+                            <div class="d-flex flex-column align-items-center mt-3 px-3">
                                 <% if (moneyLeft != null) {%>
                                 <p class="m-0 px-2 fs-6 text-success">Số tiền: <strong><%= moneyLeftInt%></strong></p>
                                 <% } else { %>
                                 <p class="m-0 px-2 fs-6">Số tiền: <strong>Không có dữ liệu</strong></p>
                                 <% }%>
+                                <a href="charge.jsp?userID=${user.userID}" class="btn btn-success" >
+                                    Nạp tiền
+                                </a>
                             </div>
 
                         </div>
                         <hr class="w-75 mx-auto">
                         <div class="text-center mt-3 d-flex flex-column">
-                            <h3 class="bg-white p-3">Chỉnh sửa hồ sơ</h3>
-                            <a class="h3 mt-4 p-3 d-block" href="summaryBooking.jsp">Lịch sử giao dịch</a>
-                            <h3 class="my-4 p-3">Quà tặng tích điểm</h3>
-                            <h3 class="mt-4 p-3"><a href="report.jsp?userID=${user.userID}">Báo cáo</a></h3>
-
+                            <a class="h3 mt-4 p-3 d-block bg-white text-decoration-none rounded" href="UserServlet?action=db">Chỉnh sửa hồ sơ</a>
+                            <a class="h3 mt-4 p-3 d-block text-decoration-none" href="summaryBooking.jsp">Lịch sử giao dịch</a>
+                            <a class="h3 mt-4 p-3 d-block text-decoration-none" href="report.jsp?userID=${user.userID}">Báo cáo</a>
                         </div>
                     </div>
                     <div class="col-md-1"></div>
@@ -93,7 +93,7 @@
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
                                 <input type="text" value="${user.email}" class="form-control fs-4" disabled>
-                                <button class="input-group-text">Thay đổi</button>
+                                <button class="btn-warning text-dark rounded">Thay đổi</button>
                             </div>
                         </div>
                         <div class="pt-3">
@@ -108,7 +108,7 @@
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
                                 <input type="password" value="${user.password}" class="form-control fs-4" disabled>
-                                <button type="button" class="btn btn-warning mt-3" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                                <button type="button" class=" btn-warning text-dark rounded" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
                                     Đổi mật khẩu
                                 </button>
 

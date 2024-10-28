@@ -43,6 +43,11 @@
         .box2-1 .skin p, input:hover {
             background-color: #ffa75a;
         }
+
+        .box2-1:hover{
+            cursor: pointer;
+            opacity: 100%;
+        }
     </style>
     <body>
         <div class="text-movie text-center mt-2 mb-2">
@@ -58,38 +63,43 @@
                         Movie movie = mvList.get(i);
                         String hiddenClass = (i >= maxDisplay) ? "d-none" : ""; // Hide movies after the 8th one
                 %>
-                <div class="col-md-3 col-6 mb-4 movie-box <%= hiddenClass %>"> <!-- col-md-3 for larger screens, col-6 for mobile -->
-                    <div class="box2-1">
-                        <div class="skin">
-                            <div class="layer fs-4">
-                                <p>Mua vé</p>
-                                <form action="MovieDetailServlet" method="post" class="d-flex justify-content-center">
-                                    <input type="text" name="MovieId" value="<%=movie.getMovieID()%>" hidden/>
-                                    <input type="text" name="MovieName" value="<%=movie.getMovieName()%>" hidden/>
-                                    <input type="text" name="Duration" value="<%=movie.getDuration()%>" hidden/>
-                                    <input type="text" name="Country" value="<%=movie.getCountry()%>" hidden/>
-                                    <input type="text" name="Manufacturer" value="<%=movie.getManufacturer()%>" hidden/>
-                                    <input type="text" name="Director" value="<%=movie.getDirector()%>" hidden/>
-                                    <input type="text" name="ReleaseDate" value="<%=movie.getReleaseDate()%>" hidden/>
-                                    <input type="text" name="ImgP" value="<%=movie.getImgPortrait()%>" hidden/>
-                                    <input type="submit" value="Trailer"/>
-                                </form>
+                <div class="col-md-3 col-6 mb-4 movie-box <%= hiddenClass%>"> <!-- col-md-3 for larger screens, col-6 for mobile -->
+                    <form action="MovieDetailServlet" method="post" id="movieForm_<%= i%>">
+                        <div class="box2-1" onclick="document.getElementById('movieForm_<%= i%>').submit();">
+
+                            <input type="text" name="MovieId" value="<%= movie.getMovieID()%>" hidden />
+                            <input type="text" name="MovieName" value="<%= movie.getMovieName()%>" hidden />
+                            <input type="text" name="Duration" value="<%= movie.getDuration()%>" hidden />
+                            <input type="text" name="Country" value="<%= movie.getCountry()%>" hidden />
+                            <input type="text" name="Manufacturer" value="<%= movie.getManufacturer()%>" hidden />
+                            <input type="text" name="Director" value="<%= movie.getDirector()%>" hidden />
+                            <input type="text" name="ReleaseDate" value="<%= movie.getReleaseDate()%>" hidden />
+                            <input type="text" name="ImgP" value="<%= movie.getImgPortrait()%>" hidden />
+                            <input type="text" name="ImgL" value="<%= movie.getImgLandscape()%>" hidden />
+
+                            <div class="skin">
+                                <div class="layer fs-4">
+                                    <p>Mua vé</p>
+                                    <p>Trailer</p>
+                                </div>
+                            </div>
+
+                            <img src="<%= movie.getImgPortrait()%>" alt="alt" class="img-fluid small-image" />
+                            <div class="box3">
+                                <div class="danhgia fs-4">
+                                    <p><i class="fas fa-star"></i> 8.0</p>
+                                </div>
+                                <div class="dotuoi fs-4">
+                                    <p>T16</p>
+                                </div>
                             </div>
                         </div>
-                        <img src="<%= movie.getImgPortrait()%>" alt="alt" class="img-fluid small-image" />
-                        <div class="box3">
-                            <div class="danhgia fs-4">
-                                <p><i class="fas fa-star"></i> 8.0</p>
-                            </div>
-                            <div class="dotuoi fs-4">
-                                <p>T16</p>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
                 <%
                     }
                 %>
+
             </div>
             <div class="text-center mt-2 mb-4">
                 <button id="viewMoreBtn" class="btn btn-primary">Xem thêm</button>
@@ -100,7 +110,7 @@
         <style>
             @media (max-width: 576px) {
                 .small-image {
-                    width: 50%; 
+                    width: 50%;
                     height: auto;
                 }
             }
@@ -108,16 +118,16 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script>
-            document.getElementById('viewMoreBtn').addEventListener('click', function() {
-                document.querySelectorAll('.movie-box.d-none').forEach(function(el) {
+            document.getElementById('viewMoreBtn').addEventListener('click', function () {
+                document.querySelectorAll('.movie-box.d-none').forEach(function (el) {
                     el.classList.remove('d-none'); // Show hidden movie boxes
                 });
                 this.style.display = 'none'; // Hide the 'View More' button
                 document.getElementById('collapseBtn').classList.remove('d-none'); // Show the collapse button
             });
 
-            document.getElementById('collapseBtn').addEventListener('click', function() {
-                document.querySelectorAll('.movie-box').forEach(function(el, index) {
+            document.getElementById('collapseBtn').addEventListener('click', function () {
+                document.querySelectorAll('.movie-box').forEach(function (el, index) {
                     if (index >= 8) {
                         el.classList.add('d-none'); // Hide additional movie boxes
                     }

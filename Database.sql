@@ -2859,3 +2859,5 @@ UPDATE Movies
 SET Rate = (SELECT AVG(Rating) 
             FROM Ratings 
             WHERE Ratings.MovieID = Movies.MovieID);
+
+			select * from Users

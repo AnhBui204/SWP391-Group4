@@ -58,7 +58,12 @@
         <div class="container-fluid">
             <div class="container-main row">
                 <!-- Sidebar -->
-                <div class="col-12 col-lg-3" style="padding-left: 0px; padding-right: 0px;">
+
+                <div class="col-12 col-lg-3" id="tempDiv">
+
+                </div>
+
+                <div class="col-12 col-lg-3" style="padding-left: 0px ;padding-right: 0px; position: fixed;">
                     <div class="sidebar" style="height: 100vh;">
                         <div class="widget widget_collection">
                             <div class="widget-title text-center">
@@ -108,7 +113,7 @@
                 </div>
 
                 <!-- Main Content -->
-                <div class="col-12 col-lg-9" style="padding: 0; background-color: #f7cf90;">
+                <div class="col-12 col-lg-9" style="padding: 0; background-color: #f7cf90; min-height: 100vh;">
                     <div class="p-4">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h2 class="section-title px-5 bordered text-left">
@@ -128,7 +133,7 @@
                                 </form>
                             </div>
 
-                            <div class="recent_order">
+                            <div class="recent_order" style="max-height: 80vh; overflow-y: scroll">
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
@@ -152,20 +157,23 @@
 
                                                 // Display work history
                                     %>
-                                    <tbody>
-                                        <%            for (WorkHistory workHis : list) {
-                                        %>
-                                        <tr>
-                                            <td><%= workHis.getWorkID()%></td>
-                                            <td><%= workHis.getWorkDes()%></td>
-                                            <td><%= workHis.getDates()%></td>
-                                            <td><%= workHis.getTimes()%></td>
-                                            <td><%= workHis.getStaffID()%></td>
-                                        </tr>
-                                        <%
-                                            }
-                                        %>
-                                    </tbody>
+                                    
+                                        <tbody>
+                                            <%            for (WorkHistory workHis : list) {
+                                            %>
+                                            <tr>
+                                                <td><%= workHis.getWorkID()%></td>
+                                                <td><%= workHis.getWorkDes()%></td>
+                                                <td><%= workHis.getDates()%></td>
+                                                <td><%= workHis.getTimes()%></td>
+                                                <td><%= workHis.getStaffID()%></td>
+                                            </tr>
+                                            <%
+                                                }
+                                            %>
+                                        </tbody>
+
+
                                     <%
                                             } catch (IllegalArgumentException e) {
                                                 out.println("<p>Invalid date format. Please select a valid date.</p>");
@@ -186,9 +194,9 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script>
-            document.getElementById('date').addEventListener('change', function () {
-                this.form.submit(); // Automatically submit form on date change
-            });
+                                        document.getElementById('date').addEventListener('change', function () {
+                                            this.form.submit(); // Automatically submit form on date change
+                                        });
         </script>
     </body>
 

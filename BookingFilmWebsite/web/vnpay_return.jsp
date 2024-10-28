@@ -72,7 +72,7 @@
             String signValue = Config.hashAllFields(fields);
 
             int amount = Integer.parseInt(request.getParameter("vnp_Amount")) / 100;
-            NumberFormat currency = NumberFormat.getCurrencyInstance(new Locale("vi","VN"));
+            NumberFormat currency = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
             String money = currency.format(amount);
 
             String date = request.getParameter("vnp_PayDate");
@@ -94,22 +94,22 @@
                     <label>Số tiền:</label>
                     <div><%=money%></div>
                 </div>
-<!--                <div class="form-group">
-                    <label>Mô tả giao dịch:</label>
-                    <div><%=request.getParameter("vnp_OrderInfo")%></div>
-                </div>-->
-<!--                <div class="form-group">
-                    <label>Mã lỗi thanh toán:</label>
-                    <div><%=request.getParameter("vnp_ResponseCode")%></div>
-                </div>-->
+                <!--                <div class="form-group">
+                                    <label>Mô tả giao dịch:</label>
+                                    <div><%=request.getParameter("vnp_OrderInfo")%></div>
+                                </div>-->
+                <!--                <div class="form-group">
+                                    <label>Mã lỗi thanh toán:</label>
+                                    <div><%=request.getParameter("vnp_ResponseCode")%></div>
+                                </div>-->
                 <div class="form-group">
                     <label>Mã giao dịch tại VNPAY-QR:</label>
                     <div><%=request.getParameter("vnp_TransactionNo")%></div>
                 </div>
-<!--                <div class="form-group">
-                    <label>Mã ngân hàng thanh toán:</label>
-                    <div><%=request.getParameter("vnp_BankCode")%></div>
-                </div>-->
+                <!--                <div class="form-group">
+                                    <label>Mã ngân hàng thanh toán:</label>
+                                    <div><%=request.getParameter("vnp_BankCode")%></div>
+                                </div>-->
                 <div class="form-group">
                     <label>Thời gian thanh toán:</label>
                     <div><%=date%></div>
@@ -130,8 +130,9 @@
                         %>
                     </div>
                 </div>
-            </div>
 
+            </div>
+            <a href="HomePage.jsp" class="d-flex justify-content-center btn btn-warning">Trở về</a>
             <footer>
                 <p>&copy; VNPAY 2024</p>
             </footer>

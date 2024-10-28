@@ -5,6 +5,7 @@
  */
 package com.vnpay.common;
 
+import Model.UserDB;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.io.IOException;
@@ -37,7 +38,11 @@ public class ajaxServlet extends HttpServlet {
         String vnp_Command = "pay";
         String orderType = "other";
         long amount = Integer.parseInt(req.getParameter("amount"))*100;
+        System.out.println(amount);
+        String userID = req.getParameter("userID");
         String bankCode = req.getParameter("bankCode");
+        System.out.println("HELLO "+ userID);
+        UserDB.deposit(userID, Integer.parseInt(req.getParameter("amount")));
         
         String vnp_TxnRef = Config.getRandomNumber(8);
         String vnp_IpAddr = Config.getIpAddress(req);

@@ -23,7 +23,13 @@
         <div class="container-fluid">
             <div class="container-main row no-gutters">
                 <!-- Sidebar -->
-                <div class="col-12 col-lg-3" style="background-color: #eb7d5d;">
+                
+                <div class="col-12 col-lg-3" id="tempDiv">
+                    
+                </div>
+                
+                <div class="col-12 col-lg-3" style="background-color: #eb7d5d; padding-left: 0px ;padding-right: 0px; position: fixed;">
+<!--                <div class="col-12 col-lg-3" style="background-color: #eb7d5d;">-->
                     <div class="sidebar" style="height: 100vh;" >
                         <div class="widget widget_collection">
                             <div class="widget-title text-center">
@@ -196,7 +202,7 @@
                             <div id="scheduleModal" class="modal fade">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <form action="MovieServlet?action=showSeat" method="POST">
+                                        <form action="MovieServlet?action=showSeat&page=showSeat" method="POST">
                                             <div class="modal-header">						
                                                 <h4 class="modal-title">Đặt lịch chiếu</h4>
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

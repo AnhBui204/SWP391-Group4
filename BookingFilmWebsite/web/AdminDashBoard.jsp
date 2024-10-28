@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width= , initial-scale=1.0">
-    <link rel="stylesheet" href="css/admins.css">
+    <link rel="stylesheet" href="css/admins1.css">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <title>Document</title>
@@ -26,12 +26,12 @@
                 </div>
             </div>
             <div class="sidebar">
-                <a href="AdminDashBoard.jsp" class="active">
+<!--                <a href="AdminDashBoard.jsp" class="active">
                     <span class="material-symbols-outlined">
                         grid_view
                     </span>
                     <h3>Dashboard</h3>
-                </a>
+                </a>-->
                 <a href="customer.jsp">
                     <span class="material-symbols-outlined">
                         person
@@ -50,11 +50,11 @@
                     </span>
                     <h3>Ticket</h3>
                 </a>
-                <a href="statistic.jsp">
+                <a href="AdminReport.jsp">
                         <span class="material-symbols-outlined">
                             trending_up 
                         </span>
-                        <h3>Revenue Statistic</h3>
+                        <h3>Report</h3>
                     </a>
                 <a href="statistic.jsp">
                         <span class="material-symbols-outlined">
@@ -79,7 +79,7 @@
             </div>
 
             <div class="insight">
-                <div class="sales">
+<!--                <div class="sales">
                     <span class="material-symbols-outlined">trending_up</span>
                     <h3>Total Sales</h3>
                     <div class="middle">
@@ -94,10 +94,10 @@
                         </div>
                     </div>
                     <small>Last 24 Hours</small>
-                </div>
+                </div>-->
 
 
-                <div class="expenses">
+<!--                <div class="expenses">
                     <span class="material-symbols-outlined">local_mall</span>
                     <h3>Total Expenses</h3>
                     <div class="middle">
@@ -113,9 +113,9 @@
                     </div>
 
                     <small>Last 24 Hours</small>
-                </div>
+                </div>-->
 
-                <div class="income">
+<!--                <div class="income">
                     <span class="material-symbols-outlined">stacked_line_chart</span>
                     <h3>Income</h3>
                     <div class="middle">
@@ -130,10 +130,10 @@
                         </div>
                     </div>
                     <small>Last 24 Hours</small>
-                </div>
+                </div>-->
             </div>
 
-            <div class="recent_order">
+<!--            <div class="recent_order">
                 <h1>Recent Order</h1>
                 <table>
                     <thead>
@@ -179,7 +179,7 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </div>-->
 
         </main>
 
@@ -196,7 +196,7 @@
                     <span class="material-symbols-outlined">dark_mode</span>
 
                 </div>
-                <div class="profile">
+<!--                <div class="profile">
                     <div class="info">
                         <p><b>Babar</b></p>
                         <p>Admin</p>
@@ -205,10 +205,10 @@
                     <div class="profile-photo">
                         <img src="image/logo/logo.png" alt="">
                     </div>
-                </div>
+                </div>-->
             </div>
 
-            <div class="recent_updates">
+<!--            <div class="recent_updates">
                 <h2>Recent Update</h2>
                 <div class="updates">
                     <div class="update">
@@ -233,9 +233,9 @@
                     </div>
                 </div>
 
-            </div>
+            </div>-->
             
-            <div class="sales_analytics">
+<!--            <div class="sales_analytics">
                 <h2>Sales Analytics</h2>
 
                 <div class="item onlion">
@@ -279,12 +279,12 @@
                         <h3>3849</h3>
                     </div>
                 </div>
-            </div>
-            <div class="item add_products">
+            </div>-->
+<!--            <div class="item add_products">
                 <div>
                     <span class="material-symbols-outlined">add</span>
                 </div>
-            </div>
+            </div>-->
         </div>
         
     </div>

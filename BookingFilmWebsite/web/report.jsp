@@ -30,7 +30,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Lịch Sử Báo Cáo</title>
+        <title>Lịch Sử Phản Hồi</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
         <style>
@@ -129,9 +129,9 @@
         </style>
     </head>
     <body>
-        <h1>Lịch Sử Báo Cáo</h1>
+        <h1>Lịch Sử Phản Hồi</h1>
         <button id="createReportBtn" style="margin-bottom: 20px; padding: 10px 15px; background-color: #ff6969; color: white; border: none; border-radius: 5px; cursor: pointer;">
-            Tạo Báo Cáo
+            Tạo Phản Hồi
         </button>
         <table>
             <thead>
@@ -158,7 +158,7 @@
                 } else {
                 %>
                 <tr>
-                    <td colspan="4">Không có báo cáo nào.</td>
+                    <td colspan="4">Không có phản hồi nào.</td>
                 </tr>
                 <%
                     }
@@ -169,7 +169,7 @@
         <!-- Modal -->
         <div id="reportModal">
             <div class="modal-content">
-                <h2>Tạo Báo Cáo</h2>
+                <h2>Tạo Phản Hồi</h2>
                 <form id="reportForm" action="ReportServlet" method="post">
                     <div>
                         <label for="title">Tiêu Đề:</label>
