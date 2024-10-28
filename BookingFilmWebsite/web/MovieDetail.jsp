@@ -65,11 +65,6 @@
                     <i id="star5" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
                 </button>
             </form>
-<!--            <i id="star1" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this, 2)"></i>
-            <i id="star2" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
-            <i id="star3" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
-            <i id="star4" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
-            <i id="star5" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>-->
         </div>
         <p class=" mt-2 text-grey"><%=MovieDB.getNumRate(movieId)%> votes</p>
     </div>
@@ -93,11 +88,14 @@
         <link rel="stylesheet" href="css/MovieDetail_css.css"/>
     </head>
     <style>
-        #poster_landscape img {
+        #poster_landscape div {
             width: 100vw;  
             height: 100vh; 
             object-fit: cover; 
-            filter: brightness(50%);
+            /*filter: brightness(50%);*/
+            background-image: linear-gradient(rgba(0,0,0,1) 2%, rgba(0,0,0,0), rgba(0,0,0,1) 98%), url('<%=request.getAttribute("imgL")%>');
+            background-size: cover;
+            background-repeat: no-repeat;
         }
     </style>
     <body>
@@ -105,7 +103,7 @@
             <div class="container">
                 <div id="background_page" class="position-absolute w-100 start-0 z-0">
                     <div id="poster_landscape">
-                        <img src="<%=request.getAttribute("imgL")%>" alt="alt" class="img-fluid"/>
+                        <div class="img-fluid"></div>
                     </div>
                 </div>
 

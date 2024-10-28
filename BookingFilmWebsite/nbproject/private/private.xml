@@ -6,24 +6,28 @@
             <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/src/java/Model/TheatreDB.java</file>
             <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/includes/header_user.jsp</file>
             <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/includes/voucher.jsp</file>
+            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/CustomerProfile.jsp</file>
+            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/css/voucherss.css</file>
+            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/src/java/Model/UserDB.java</file>
+            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/includes/header.jsp</file>
+            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/css/CustomerProfile_css.css</file>
+            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/includes/body.jsp</file>
+            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/css/headerssj3.css</file>
+            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/src/java/Controller/Seat.java</file>
+            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/SeatSelect.jsp</file>
+            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/src/java/Controller/PaymentServlet.java</file>
             <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/js/vouchers.js</file>
             <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/MovieDetail.jsp</file>
             <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/src/java/Model/BookingDB.java</file>
-            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/CustomerProfile.jsp</file>
-            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/css/voucherss.css</file>
-            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/includes/header.jsp</file>
-            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/css/CustomerProfile_css.css</file>
+            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/src/java/Controller/UserServlet.java</file>
             <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/css/uudai_homepage.css</file>
             <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/uudai_homepage.jsp</file>
             <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/src/java/Controller/MovieServlet.java</file>
-            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/css/headerssj3.css</file>
             <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/WEB-INF/web.xml</file>
             <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/src/java/Model/DatabaseInfo.java</file>
             <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/HomePage.jsp</file>
-            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/src/java/Controller/Seat.java</file>
-            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/SeatSelect.jsp</file>
+            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/src/java/Model/User.java</file>
             <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/web/summaryBooking.jsp</file>
-            <file>file:/D:/FILE%20SWP/BookingWebsite/project2810/SWP391-Group4/BookingFilmWebsite/src/java/Controller/PaymentServlet.java</file>
         </group>
     </open-files>
 </project-private>

@@ -72,6 +72,7 @@
                                     <input type="text" name="Director" value="<%=movie.getDirector()%>" hidden/>
                                     <input type="text" name="ReleaseDate" value="<%=movie.getReleaseDate()%>" hidden/>
                                     <input type="text" name="ImgP" value="<%=movie.getImgPortrait()%>" hidden/>
+                                    <input type="text" name="ImgL" value="<%=movie.getImgLandscape()%>" hidden/>
                                     <input type="submit" value="Trailer"/>
                                 </form>
                             </div>
