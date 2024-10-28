@@ -58,6 +58,9 @@ public class UserServlet extends HttpServlet {
             case "changepassword":
                 handleChangePassword(request, response); // Case for image upload
                 break;
+            case "changeemail":
+                handleChangeEmail(request, response);
+                break;
             default:
                 response.sendRedirect("error.jsp");
                 break;
@@ -341,9 +344,11 @@ public class UserServlet extends HttpServlet {
         String confirmNewPassword = request.getParameter("confirmNewPassword");
         PrintWriter out = response.getWriter();
 
+
         if (user != null && user.getPassword().equals(currentPassword)) {
             System.out.println(user.getPassword());
             if (newPassword.equals(confirmNewPassword)) {
+                user.setPassword(newPassword);
                 UserDB.updatePassword(user);
                 out.write("{\"message\": \"Đổi mật khẩu thành công.\"}");
             } else {
@@ -356,7 +361,38 @@ public class UserServlet extends HttpServlet {
         }
         out.flush();
     }
+    
+    private void handleChangeEmail(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
+        String userID = request.getParameter("userID");
+        User user = UserDB.getUsersByID(userID);
+
+        String newEmail = request.getParameter("newEmail");
+        PrintWriter out = response.getWriter();
+        
+        
+        user.setEmail(newEmail);
+        
+        UserDB.updateEmail(user);
+//        if (user != null && user.getPassword().equals(currentPassword)) {
+//            System.out.println(user.getPassword());
+//            if (newPassword.equals(confirmNewPassword)) {
+//                UserDB.updatePassword(user);
+//                out.write("{\"message\": \"Đổi mật khẩu thành công.\"}");
+//            } else {
+//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//                out.write("{\"message\": \"Mật khẩu mới không trùng khớp.\"}");
+//            }
+//        } else {
+//            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            out.write("{\"message\": \"Mật khẩu cũ không chính xác.\"}");
+//        }
+        
+        out.flush();
+    }
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

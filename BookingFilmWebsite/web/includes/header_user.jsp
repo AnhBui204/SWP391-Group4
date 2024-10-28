@@ -11,6 +11,7 @@
         
     </head>
     <body>
+        <div class="vbody">
         <div class="overlay hidden"></div>
         <header>
             <div class="header-container container-fluid d-flex justify-content-between align-items-center row px-3">
@@ -62,5 +63,6 @@
 
             </div>
         </header>
+        </div>
     </body>
 </html>

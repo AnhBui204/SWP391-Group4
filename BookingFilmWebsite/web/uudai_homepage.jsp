@@ -3,7 +3,13 @@
     Created on : Sep 13, 2024, 8:04:02 PM
     Author     : DELL
 --%>
-
+<%
+    String user = (String) session.getAttribute("user");
+    if (user == null) { %>
+<%@include file="includes/header.jsp" %>
+<% } else { %>
+<%@include file="includes/header_user.jsp" %>
+<% }%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">   
@@ -15,15 +21,9 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="css/uudai_homepage.css"/>
-  <link rel="stylesheet" href="css/headerssj2.css"/>
+  <link rel="stylesheet" href="css/headerssj3.css"/>
 </head>
-<%
-    String user = (String) session.getAttribute("user");
-    if (user == null) { %>
-<%@include file="includes/header.jsp" %>
-<% } else { %>
-<%@include file="includes/header_user.jsp" %>
-<% }%>
+
     <body>        
         <!-- Navbar Start -->
         <div class="container-main">

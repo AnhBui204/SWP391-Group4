@@ -216,6 +216,25 @@ public static BigDecimal getCurrentBalance(String userID) {
         }
     }
 
+    public static User updateEmail(User user) {
+        String query = "UPDATE Users SET Email = ? WHERE UserID=?";
+
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, user.getEmail());
+            stmt.setString(2, user.getUserID());
+
+            int rc = stmt.executeUpdate();
+            if (rc == 0) {
+                throw new SQLException("Update failed, no rows affected.");
+            }
+            return user;
+
+        } catch (Exception ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Invalid data");
+        }
+    }
+    
     public static ArrayList<User> listAllUsers() {
         ArrayList<User> userList = new ArrayList<>();
         String query = "SELECT UserID, UserName, FName , LName, Pass , Email,Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar FROM Users";

@@ -11,7 +11,7 @@
 <% } else { %>
 <%@include file="includes/header_user.jsp" %>
 <% }%>
-<link rel="stylesheet" href="css/headerssj2.css">
+<link rel="stylesheet" href="css/headerssj3.css">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
@@ -93,7 +93,7 @@
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
                                 <input type="text" value="${user.email}" class="form-control fs-4" disabled>
-                                <button class="input-group-text">Thay đổi</button>
+                                <button type="button" class="input-group-text" data-bs-toggle="modal" data-bs-target="#changeEmailModal">Thay đổi</button>
                             </div>
                         </div>
                         <div class="pt-3">
@@ -108,7 +108,7 @@
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
                                 <input type="password" value="${user.password}" class="form-control fs-4" disabled>
-                                <button type="button" class="btn btn-warning mt-3" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                                <button type="button" class="input-group-text btn btn-warning" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
                                     Đổi mật khẩu
                                 </button>
 
@@ -217,7 +217,27 @@
             </div>
         </div>
 
-
+        <!-- Change Password Modal -->
+        <div class="modal" id="changeEmailModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changePasswordModalLabel">Đổi Email</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="changeEmailForm" action="UserServlet?action=changeEmail" method="POST">
+                            <div class="mb-3">
+                                <label for="newPassword" class="form-label">Email mới</label>
+                                <input type="text" name="newEmail" class="form-control" required>
+                            </div>
+                            <input type="hidden" name="userID" value="${user.userID}" />
+                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 

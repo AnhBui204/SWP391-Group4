@@ -25,6 +25,7 @@
 <% } else { %>
 <%@include file="includes/header_user.jsp" %>
 <% }%>
+<link rel="stylesheet" href="css/headerssj3.css" />
 <!DOCTYPE html>
 <html>
     <head>
@@ -108,4 +109,4 @@
     <script src="bs/js/bootstrap.bundle.js"></script>
 </html>
 <%@include file="includes/footer.jsp" %>
-<link rel="stylesheet" href="css/footer.css" />
+<link rel="stylesheet" href="css/footerssj2.css" />

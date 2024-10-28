@@ -89,7 +89,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link rel="stylesheet" href="bs/css/bootstrap.css"/>
-        <link rel="stylesheet" href="css/headerssj2.css"/>
+        <link rel="stylesheet" href="css/headerssj3.css"/>
         <link rel="stylesheet" href="css/MovieDetail_css.css"/>
     </head>
     <style>

@@ -10,7 +10,7 @@
 <% } else { %>
 <%@include file="includes/header_user.jsp" %>
 <% }%>
-<link rel="stylesheet" href="css/headerssj2.css">
+<link rel="stylesheet" href="css/headerssj3.css">
 <!DOCTYPE html>
 <html lang="vi">
     <head>  
