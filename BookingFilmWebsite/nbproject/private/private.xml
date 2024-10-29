@@ -3,8 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/crudMV.jsp</file>
-            <file>file:/D:/Hoc/Ky%205/SWP391/BookingFilmWebsite/web/cinema.jsp</file>
+            <file>file:/D:/FPT/Semester/5.%20SU24/SWP391/SWP391-Group4/BookingFilmWebsite/src/java/OTP/OTP.java</file>
+            <file>file:/D:/FPT/Semester/5.%20SU24/SWP391/SWP391-Group4/BookingFilmWebsite/src/java/Model/EmailSender.java</file>
+            <file>file:/D:/FPT/Semester/5.%20SU24/SWP391/SWP391-Group4/BookingFilmWebsite/src/java/Model/User.java</file>
+            <file>file:/D:/FPT/Semester/5.%20SU24/SWP391/SWP391-Group4/BookingFilmWebsite/src/java/Model/FoodAndDrinkDB.java</file>
+            <file>file:/D:/FPT/Semester/5.%20SU24/SWP391/SWP391-Group4/BookingFilmWebsite/web/otp_authentication.jsp</file>
+            <file>file:/D:/FPT/Semester/5.%20SU24/SWP391/SWP391-Group4/BookingFilmWebsite/src/java/Model/DatabaseInfo.java</file>
         </group>
     </open-files>
 </project-private>

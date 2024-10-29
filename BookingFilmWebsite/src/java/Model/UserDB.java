@@ -97,9 +97,38 @@ public class UserDB implements DatabaseInfo {
         }
         return user;
     }
+
+    //Lấy người dùng theo email
+    public User findByEmail(String email) {
+        String query = "SELECT * FROM Users WHERE email=?";
+        try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, email);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String username = rs.getString(1);
+                    String fName = rs.getString(2);
+                    String lName = rs.getString(3);
+                    String password = rs.getString(4);
+                    String id = rs.getString(5);
+                    String role = rs.getString(6);
+                    String phone = rs.getString(7);
+                    String sex = rs.getString(8);
+                    Date DOB = rs.getDate(9);
+                    String money = rs.getString(10);
+                    String avatar = rs.getString(11);
+
+                    User user = new User(id, username, fName, lName, password, email, role, phone, sex, DOB, money, avatar);
+                    return user;
+                }
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
 //--------------------------------------------------------------------------------------------
     // Phương thức để lấy ID lớn nhất hiện có
-
     public String getMaxUserId() {
         String maxId = null;
         String query = "SELECT MAX(CAST(SUBSTRING(UserId, 3, LEN(UserId) - 2) AS INT)) AS maxId FROM Users WHERE UserId LIKE 'US%'";
@@ -307,10 +336,29 @@ public class UserDB implements DatabaseInfo {
 //        User v = UserDB.getUsersByID("U00003");
 //        System.out.println(v);
 
-        ArrayList<WorkHistory> list = UserDB.listWorkHistoryByDate("T00001","2024-10-16");
+        ArrayList<WorkHistory> list = UserDB.listWorkHistoryByDate("T00001", "2024-10-16");
         for (WorkHistory s : list) {
             System.out.println(s);
         }
+    }
+
+    //Phương thức lấy userId user bằng email
+    public static int getUserIdByEmail(String email) {
+        int userId = -1; // Default value if user_id is not found
+
+        String query = "SELECT userID FROM Users WHERE email = ?";
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, email);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    userId = rs.getInt("userID");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return userId;
     }
 }
 
