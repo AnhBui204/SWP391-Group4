@@ -555,6 +555,87 @@ public class MovieDB {
     return movies;
 }
 
+    public static List<String> getGernesList(){
+        List<String> gernesList = new ArrayList<>();
+        try{
+            String sql = "select * from Genres";
+            Connection con = getConnect();
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            
+            while(rs.next()){
+                gernesList.add(rs.getString("GenreName"));
+            }
+        } catch (Exception ex){
+            System.out.println(ex);
+        }
+        return gernesList;
+    }
+    
+    public static List<String> getYearsList(){
+        List<String> yearsList = new ArrayList<>();
+        try{
+            String sql = "select distinct YEAR(ReleaseDate) as years from Movies";
+            Connection con = getConnect();
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            
+            while(rs.next()){
+                yearsList.add(rs.getString("years"));
+            }
+        } catch (Exception ex){
+            System.out.println(ex);
+        }
+        return yearsList;
+    }
+    
+    public static List<Movie> getFilterMovieList(String genre, String year){
+        List<Movie> listMovie = new ArrayList<>();
+        try{
+            String sql = "select distinct Movies.* from Movies\n" +
+                         "inner join MovieGenres on Movies.MovieID = MovieGenres.MovieID\n" +
+                         "inner join Genres on MovieGenres.GenreID = Genres.GenreID";
+            if (genre != null){
+                sql += " where GenreName = ?";
+                if (year != null){
+                    sql += " and Year(ReleaseDate) = ?";
+                }
+            } else if (year != null){
+                sql += " where Year(ReleaseDate) = ?";
+            }
+            Connection con = getConnect();
+            PreparedStatement stmt = con.prepareStatement(sql);
+            if (genre != null){
+                stmt.setString(1, genre);
+                if (year != null){
+                    stmt.setInt(2, Integer.parseInt(year));
+                }
+            } else if (year != null){
+                stmt.setInt(1, Integer.parseInt(year));
+            }
+//            stmt.setString(1, genre);
+//            stmt.setInt(2, Integer.parseInt(year));
+            ResultSet rs = stmt.executeQuery();
+            
+            while(rs.next()){
+                String movieID = rs.getString("MovieID");
+                String movieName = rs.getString("MovieName");
+                int duration = rs.getInt("Duration");
+                String country = rs.getString("Country");
+                String manufacturer = rs.getString("Manufacturer");
+                String director = rs.getString("Director");
+                Date releaseDate = rs.getDate("ReleaseDate");
+                String imgPortrait = rs.getString("ImgPortrait");
+                String imgLandscape = rs.getString("ImgLandscape");
+                String des = rs.getString("MovieDescription");
+                Movie movie = new Movie(movieID, movieName, duration, country, manufacturer, director, imgPortrait, imgLandscape, releaseDate, des);
+                listMovie.add(movie);
+            }
+        } catch (Exception ex){
+            System.out.println(ex);
+        }
+        return listMovie;
+    }
     
     public static void main(String[] args) throws SQLException {
 

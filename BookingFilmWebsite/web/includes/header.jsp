@@ -35,7 +35,7 @@
                             </a>
                         </li>
                         <li class="nav-item me-3">
-                            <a class="nav-link" href="#">Phim</a>
+                            <a class="nav-link" href="ListMovie.jsp">Phim</a>
                         </li>
                         <li class="nav-item me-3">
                             <a class="nav-link" href="uudai_homepage.jsp">Ưu Đãi</a>

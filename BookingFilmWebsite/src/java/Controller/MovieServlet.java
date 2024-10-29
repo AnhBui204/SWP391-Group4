@@ -66,6 +66,9 @@ public class MovieServlet extends HttpServlet {
             case "getShowInfo":
                 handleGetShowInfo(request, response);
                 break;
+            case "filtermovie":
+                handleGetFilterMovieList(request, response);
+                break;
             
 //            case "search":
 //                handleSearchMovie(request, response);
@@ -292,6 +295,20 @@ public class MovieServlet extends HttpServlet {
         // Convert the show info list to JSON and send it back to the client
         response.setContentType("application/json");
         response.getWriter().write(new Gson().toJson(showInfoList));
+    }
+    
+    protected void handleGetFilterMovieList(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String genre = request.getParameter("genre");
+        String year = request.getParameter("year");
+
+        List<Movie> listMovie = MovieDB.getFilterMovieList(genre, year);
+        
+        request.setAttribute("genre", genre);
+        request.setAttribute("year", year);
+        request.setAttribute("listMovie", listMovie);
+        request.getRequestDispatcher("ListMovie.jsp").forward(request, response);
     }
 
 

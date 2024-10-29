@@ -2859,3 +2859,9 @@ UPDATE Movies
 SET Rate = (SELECT AVG(Rating) 
             FROM Ratings 
             WHERE Ratings.MovieID = Movies.MovieID);
+
+select * from Genres
+select distinct YEAR(ReleaseDate) as years from Movies
+select * from Movies
+left join MovieGenres on Movies.MovieID = MovieGenres.MovieID
+left join Genres on MovieGenres.GenreID = Genres.GenreID where GenreName = 'Drama' and Year(ReleaseDate) = '2024'
