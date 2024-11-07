@@ -94,26 +94,30 @@ public class MovieServlet extends HttpServlet {
     private void handleSearchMovie(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String searchKey = request.getParameter("search");
+        String redirectPage = request.getParameter("redirectPage"); // Lấy trang gọi tìm kiếm
         List<Movie> searchResults = new ArrayList<>();
 
         if (searchKey != null && !searchKey.trim().isEmpty()) {
             MovieDB movieDB = new MovieDB();
 
-            // Choose the search method based on the input
+            // Chọn phương thức tìm kiếm dựa trên từ khóa
             if (isKeywordSearch(searchKey)) {
                 searchResults = movieDB.searchByKeyWord(searchKey);
-
             } else {
                 searchResults = movieDB.searchByName(searchKey);
             }
         }
 
-        // Set the results and the search key in the request
+        // Thiết lập kết quả tìm kiếm và từ khóa cho trang JSP
         request.setAttribute("searchResults", searchResults);
-        request.setAttribute("searchKey", searchKey); // Set the search key for the JSP
+        request.setAttribute("searchKey", searchKey);
 
-        // Forward to the same JSP page to display results
-        RequestDispatcher dispatcher = request.getRequestDispatcher("crudMV.jsp"); // Replace with your actual JSP page
+        // Sử dụng redirectPage để chuyển hướng đến trang gọi tìm kiếm
+        if (redirectPage == null || redirectPage.isEmpty()) {
+            redirectPage = "HomePage.jsp"; // Trang mặc định nếu không có redirectPage
+        }
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher(redirectPage);
         dispatcher.forward(request, response);
     }
 
@@ -375,7 +379,7 @@ public class MovieServlet extends HttpServlet {
 
         WorkHistoryDB.addWorkHis(whs);
     }
-    
+
     protected void handleGetFilterMovieList(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -383,7 +387,7 @@ public class MovieServlet extends HttpServlet {
         String year = request.getParameter("year");
 
         List<Movie> listMovie = MovieDB.getFilterMovieList(genre, year);
-        
+
         request.setAttribute("genre", genre);
         request.setAttribute("year", year);
         request.setAttribute("listMovie", listMovie);

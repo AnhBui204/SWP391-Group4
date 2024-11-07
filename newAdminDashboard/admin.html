@@ -1,8 +1,213 @@
-<%@ page import="java.util.List" %>
-<%@page import="Model.DatabaseInfo"%>
-<%@page import="Model.Theatre"%>
-<%@page import="Model.TheatreDB"%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiêu đề Trang</title>
+    <!-- Đưa CSS hoặc link đến các file CSS vào đây -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Dashboard -->
+<div class="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
+    <!-- Vertical Navbar -->
+    <nav class="navbar show navbar-vertical h-lg-screen navbar-expand-lg px-0 py-3 navbar-light bg-white border-bottom border-bottom-lg-0 border-end-lg" id="navbarVertical">
+        <div class="container-fluid">
+            <!-- Toggler -->
+            <button class="navbar-toggler ms-n2" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse" aria-controls="sidebarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Brand -->
+            <a class="navbar-brand py-lg-2 mb-lg-5 px-lg-6 me-0" href="#">
+                <img src="https://preview.webpixels.io/web/img/logos/clever-primary.svg" alt="...">
+            </a>
+            <!-- User menu (mobile) -->
+            <div class="navbar-user d-lg-none">
+                <!-- Dropdown -->
+                <div class="dropdown">
+                    <!-- Toggle -->
+                    <a href="#" id="sidebarAvatar" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="avatar-parent-child">
+                            <img alt="Image Placeholder" src="https://images.unsplash.com/photo-1548142813-c348350df52b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar- rounded-circle">
+                            <span class="avatar-child avatar-badge bg-success"></span>
+                        </div>
+                    </a>
+                    <!-- Menu -->
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="sidebarAvatar">
+                        <a href="#" class="dropdown-item">Profile</a>
+                        <a href="#" class="dropdown-item">Settings</a>
+                        <a href="#" class="dropdown-item">Billing</a>
+                        <hr class="dropdown-divider">
+                        <a href="#" class="dropdown-item">Logout</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Collapse -->
+            <div class="collapse navbar-collapse" id="sidebarCollapse">
+                <!-- Navigation -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-film"></i> Rạp phim
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-bar-chart"></i> Doanh Thu
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-chat"></i> Phản Hồi
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-card-checklist"></i> Vé ticket
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-people"></i> Khách Hàng
+                        </a>
+                    </li>
+                </ul>
+                <!-- Divider -->
+                <hr class="navbar-divider my-5 opacity-20">
+                <!-- Push content down -->
+                <div class="mt-auto"></div>
+                <!-- User (md) -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-person-square"></i> Account
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-box-arrow-left"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Main content -->
+    <div class="h-screen flex-grow-1 overflow-y-lg-auto">
+        <!-- Header -->
+        <header class="bg-surface-primary border-bottom pt-6">
+            <div class="container-fluid">
+                <div class="mb-npx">
+                    <div class="row align-items-center">
+                        <div class="col-sm-6 col-12 mb-4 mb-sm-0">
+                            <!-- Title -->
+                            <h1 class="h2 mb-0 ls-tight">Quản Lý Rạp Phim</h1>
+                        </div>
+                    </div>
+                    <!-- Nav -->
+                    <ul class="nav nav-tabs mt-4 overflow-x border-0">
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <!-- Main -->
+        <main class="py-6 bg-surface-secondary">
+            <div class="container-fluid"> 
+                <div class="card shadow border-0 mb-7">
+                    <div class="card-header">
+                        <h5 class="mb-0">Applications</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-nowrap">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Company</th>
+                                    <th scope="col">Offer</th>
+                                    <th scope="col">Meeting</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <img alt="..." src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2">
+                                        <a class="text-heading font-semibold" href="#">
+                                            Robert Fox
+                                        </a>
+                                    </td>
+                                    <td>
+                                        Feb 15, 2021
+                                    </td>
+                                    <td>
+                                        <img alt="..." src="https://preview.webpixels.io/web/img/other/logos/logo-1.png" class="avatar avatar-xs rounded-circle me-2">
+                                        <a class="text-heading font-semibold" href="#">
+                                            Dribbble
+                                        </a>
+                                    </td>
+                                    <td>
+                                        $3.500
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-lg badge-dot">
+                                            <i class="bg-success"></i>Scheduled
+                                        </span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="#" class="btn btn-sm btn-neutral">View</a>
+                                        <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer border-0 py-5">
+                        <span class="text-muted text-sm">Showing 10 items out of 250 results found</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -67,7 +272,6 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-bottom: 3px;
         }
 
         /* Feedback Modal */
@@ -108,8 +312,8 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <!-- Brand -->
-                    <a class="navbar-brand py-lg-2 mb-lg-5 px-lg-6 me-0" href="HomePage.jsp">
-                        <span style="font-size: 1.5rem; font-weight: bold; color: #333;">Cineluxe</span>             
+                    <a class="navbar-brand py-lg-2 mb-lg-5 px-lg-6 me-0" href="#">
+                        <img src="https://preview.webpixels.io/web/img/logos/clever-primary.svg" alt="...">
                     </a>
                     <!-- User menu (mobile) -->
                     <div class="navbar-user d-lg-none">
@@ -229,22 +433,21 @@
                                             <td><%= ci.getTheatreLocation()%></td>
                                             <td>
                                                 <!-- Update and Delete buttons -->
-                                                <!--<form action="AdminReport" method="POST" style="display: inline;">-->
-                                                <form action="updateTheatre.jsp" method="GET" style="display: inline;">
+                                                <form action="updateTheatre.jsp" method="GET">
                                                     <input type="hidden" name="theatreID" value="<%= ci.getTheatreID()%>">
-                                                    <button class="open-btn" style="background-color: #008000" type="submit" name="action" value="update">Update</button>
+                                                    <button style="background-color: #008000" type="submit" name="action" value="update">Update</button>
                                                 </form>
                                                 <!-- Open Modal Button -->
                                                 <form action="TheatreServlet?action=delete" method="POST">
                                                     <input type="hidden" name="theatreID" value="<%= ci.getTheatreID()%>">
-                                                    <button class="open-btn" style="background-color: #DC3545" type="button" id="openModal-<%= ci.getTheatreID()%>">Delete</button>
+                                                    <button class="open-btn" style="background-color: var(--clr-danger)" type="button" id="openModal-<%= ci.getTheatreID()%>">Delete</button>
 
                                                     <!-- Modal -->
                                                     <div class="modal-container" id="myModal-<%= ci.getTheatreID()%>">
                                                         <div class="modal-content">
                                                             <h2>Are you sure you want to delete <%= ci.getTheatreID()%>?</h2>
-                                                            <button class="close-btn" id="closeModal-<%= ci.getTheatreID()%>">Cancel</button>
-                                                            <button class="open-btn" style="background-color: #d5514d" type="button" id="openModal-<%= ci.getTheatreID()%>">Delete</button></div>
+                                                            <button class="delete-btn" id="closeModal-<%= ci.getTheatreID()%>">Cancel</button>
+                                                            <button class="open-btn" style="background-color: #d5514d" type="button" id="openModal-<%= ci.getTheatreID()%>">Delete</button>                                                    </div>
                                                     </div>
 
                                                     <script>
@@ -280,7 +483,7 @@
                             <div class="card-footer border-0 py-5">
                                 <div class="action-buttons">
                                     <form action="addTheatre.jsp" method="GET">
-                                        <button class="open-btn" style="background-color: green; margin-top: 10px" type="submit">Add New Theatre</button>
+                                        <button style="background-color: green; margin-top: 10px" type="submit">Add New Theatre</button>
                                     </form>
                                 </div>
                             </div>
@@ -293,3 +496,24 @@
 
     </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -59,6 +59,9 @@
             .box2-1 .skin p, input:hover {
                 background-color: #ffa75a;
             }
+            .skin{
+                cursor: pointer;
+            }
         </style>
         <%
             String genreS = (String) request.getAttribute("genre");
@@ -119,9 +122,11 @@
                     <div class="search-container">
                         <form action="MovieServlet?action=search" method="post">
                             <input type="text" placeholder="Tìm Kiếm..." name="search" required>
+                            <input type="hidden" name="redirectPage" value="ListMovie.jsp" />
                             <button type="submit"><i class="fa fa-search"></i></button>
                         </form>
                     </div>
+
                 </div>
             </div>
             <div class="row" id="box2_dangchieu_id">
@@ -131,26 +136,29 @@
                         Movie movie = mvList.get(i);
                         String hiddenClass = (i >= maxDisplay) ? "d-none" : ""; // Hide movies after the 8th one
 %>
-                <div class="col-md-3 col-6 mb-4 movie-box <%= hiddenClass%>"> <!-- col-md-3 for larger screens, col-6 for mobile -->
+                <form action="MovieDetailServlet" method="post" class="col-md-3 col-6 mb-4 movie-box <%= hiddenClass%>">
+                    <!-- col-md-3 for larger screens, col-6 for mobile -->
                     <div class="box2-1">
-                        <div class="skin">
+                        <!-- Thêm onclick vào lớp skin -->
+                        <div class="skin" onclick="this.closest('form').submit();">
                             <div class="layer fs-4">
                                 <p>Mua vé</p>
-                                <form action="MovieDetailServlet" method="post" class="d-flex justify-content-center">
-                                    <input type="text" name="MovieId" value="<%=movie.getMovieID()%>" hidden/>
-                                    <input type="text" name="MovieName" value="<%=movie.getMovieName()%>" hidden/>
-                                    <input type="text" name="Duration" value="<%=movie.getDuration()%>" hidden/>
-                                    <input type="text" name="Country" value="<%=movie.getCountry()%>" hidden/>
-                                    <input type="text" name="Manufacturer" value="<%=movie.getManufacturer()%>" hidden/>
-                                    <input type="text" name="Director" value="<%=movie.getDirector()%>" hidden/>
-                                    <input type="text" name="ReleaseDate" value="<%=movie.getReleaseDate()%>" hidden/>
-                                    <input type="text" name="ImgP" value="<%=movie.getImgPortrait()%>" hidden/>
-                                    <input type="text" name="ImgL" value="<%=movie.getImgLandscape()%>" hidden/>
-                                    <input type="submit" value="Trailer"/>
-                                </form>
+                                <p>Trailer</p>
+                                <!-- Các trường hidden để gửi dữ liệu phim -->
+                                <input type="text" name="MovieId" value="<%= movie.getMovieID()%>" hidden />
+                                <input type="text" name="MovieName" value="<%= movie.getMovieName()%>" hidden />
+                                <input type="text" name="Duration" value="<%= movie.getDuration()%>" hidden />
+                                <input type="text" name="Country" value="<%= movie.getCountry()%>" hidden />
+                                <input type="text" name="Manufacturer" value="<%= movie.getManufacturer()%>" hidden />
+                                <input type="text" name="Director" value="<%= movie.getDirector()%>" hidden />
+                                <input type="text" name="ReleaseDate" value="<%= movie.getReleaseDate()%>" hidden />
+                                <input type="text" name="ImgP" value="<%= movie.getImgPortrait()%>" hidden />
+                                <input type="text" name="ImgL" value="<%= movie.getImgLandscape()%>" hidden />
                             </div>
                         </div>
+                        <!-- Hình ảnh phim -->
                         <img src="<%= movie.getImgPortrait()%>" alt="alt" class="img-fluid small-image" />
+                        <!-- Thông tin đánh giá và độ tuổi -->
                         <div class="box3">
                             <div class="danhgia fs-4">
                                 <p><i class="fas fa-star"></i> 8.0</p>
@@ -160,7 +168,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
                 <%
                     }
                 %>

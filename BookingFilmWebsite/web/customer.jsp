@@ -4,229 +4,256 @@
 <%@page import="Model.UserDB"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="vi">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width= , initial-scale=1.0">
-        <link rel="stylesheet" href="css/admins1.css">
-        <link rel="stylesheet"
-              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-        <title>Document</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Đưa CSS hoặc link đến các file CSS vào đây -->
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="./css/admins2.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+        <title>Customer Management</title>
     </head>
     <style>
-        /* Các trang khác */
-
-        .userInfo {
-            background-color: var(--clr-white);
+        /* Modal container */
+        .modal-container {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
-            padding: var(--card-padding);
-            border: var(--card-border-radius);
-            box-shadow: var(--box-shadow);
-            margin-top: 15px;
         }
 
-        .userInfo h1{
-            margin: 10px;
-            color: var(--clr-primary);
-        }
-
-        .table-container {
-            width:95%;
-            margin: auto;
-        }
-
-        .main-admin table {
-            width: 90%;
-            height: 100%;
-            background-color: var(--clr-white);
-            padding: var(--card-padding);
-            border-radius: var(--card-border-radius);
+        /* Modal content */
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 600px;
             text-align: center;
-            transition: all .3s ease;
-            color: var(--clr-dark);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .main-admin table, th, td {
-            border: 1px solid #ddd;
-        }
-
-        .main-admin th, td {
-            padding: 15px;
-            text-align: center;
-            color: var(--clr-dark);
-        }
-
-        .main-admin th {
-            background-color: var(--clr-primary);
+        /* Close button */
+        .close-btn {
+            background-color: red;
             color: white;
-            font-weight: bold;
-        }
-
-        .main-admin tbody tr{
-            height: 3.8rem;
-            border-bottom: 1px solid var(--clr-white);
-            color: var(--clr-dark-variant);
-        }
-
-        .main-admin tbody tr:hover {
-            background-color: #ddd;
-        }
-
-        .main-table tbody td{
-            height: 3.8rem;
-            border-bottom: 1px solid var(--clr-dark);
-        }
-
-        .main-table tbody td:last-child td{
-            border: none;
-        }
-
-        /* Button Styling */
-        .main-admin button {
             padding: 5px 10px;
-            background-color: #3498db;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+            float: right;
+        }
+
+        /* Delete button */
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Open modal button */
+        .open-btn {
+            padding: 5px 15px;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            margin-bottom: 3px;
         }
 
-        .main-admin button:hover {
-            background-color: #2980b9;
+        /* Feedback Modal */
+        .feedback-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
         }
 
+        .feedback-modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 400px;
+            text-align: center;
+        }
+
+        .action-cell {
+            width: 40%; /* Điều chỉnh độ rộng ô này */
+        }
     </style>
     <body>
 
-        <div class="container">
-            <aside>
-
-                <div class="top">
-                    <div class="log">
-                        <h2 class="primary">Cine<span class="danger">Luxe</span></h2>
-                    </div>
-                    <div class="close" id="close_btn">
-                        <span class="material-symbols-outlined">
-                            close
-                        </span>
-                    </div>
-                </div>
-                <div class="sidebar">
-<!--                    <a href="AdminDashBoard.jsp" >
-                        <span class="material-symbols-outlined">
-                            grid_view
-                        </span>
-                        <h3>Dashboard</h3>
-                    </a>-->
-                    <a href="customer.jsp" class="active">
-                        <span class="material-symbols-outlined">
-                            person
-                        </span>
-                        <h3>Customer</h3>
-                    </a>
-                    <a href="cinema.jsp">
-                        <span class="material-symbols-outlined">
-                            movie
-                        </span>
-                        <h3>Cinema</h3>
-                    </a>
-                    <a href="ticket.jsp">
-                        <span class="material-symbols-outlined">
-                            local_activity
-                        </span>
-                        <h3>Ticket</h3>
-                    </a>
-                    <a href="AdminReport.jsp">
-                        <span class="material-symbols-outlined">local_activity</span>
-                        <h3>Report</h3>
-                    </a>
-                    <a href="statistic.jsp">
-                        <span class="material-symbols-outlined">
-                            trending_up 
-                        </span>
-                        <h3>Revenue Statistic</h3>
-                    </a>
-                    <a href="UserServlet?action=logout">
-                        <span class="material-symbols-outlined">
-                            logout
-                        </span>
-                        <h3>Log out</h3>
-                    </a>
-                </div>
-
-            </aside>
-
-            <main>
-                <div class="right">
-                <div class="top">
-                    <button id="menu_bar">
-                        <span class="material-symbols-outlined">
-                            menu
-                        </span>
+        <!-- Dashboard -->
+        <div class="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
+            <!-- Vertical Navbar -->
+            <nav class="navbar show navbar-vertical h-lg-screen navbar-expand-lg px-0 py-3 navbar-light bg-white border-bottom border-bottom-lg-0 border-end-lg" id="navbarVertical">
+                <div class="container-fluid">
+                    <!-- Toggler -->
+                    <button class="navbar-toggler ms-n2" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse" aria-controls="sidebarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="theme-toggler">
-                        <span class="material-symbols-outlined active">light_mode</span>
-
-                        <span class="material-symbols-outlined">dark_mode</span>
-
+                    <!-- Brand -->
+                    <a class="navbar-brand py-lg-2 mb-lg-5 px-lg-6 me-0" href="HomePage.jsp">
+                        <span style="font-size: 1.5rem; font-weight: bold; color: #333;">Cineluxe</span>             
+                    </a>
+                    <!-- User menu (mobile) -->
+                    <div class="navbar-user d-lg-none">
+                        <!-- Dropdown -->
+                        <div class="dropdown">
+                            <!-- Toggle -->
+                            <a href="#" id="sidebarAvatar" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="avatar-parent-child">
+                                    <img alt="Image Placeholder" src="https://images.unsplash.com/photo-1548142813-c348350df52b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar- rounded-circle">
+                                    <span class="avatar-child avatar-badge bg-success"></span>
+                                </div>
+                            </a>
+                            <!-- Menu -->
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="sidebarAvatar">
+                                <a href="#" class="dropdown-item">Profile</a>
+                                <a href="#" class="dropdown-item">Settings</a>
+                                <a href="#" class="dropdown-item">Billing</a>
+                                <hr class="dropdown-divider">
+                                <a href="#" class="dropdown-item">Logout</a>
+                            </div>
+                        </div>
                     </div>
-            </div>
-                <div class="main-admin">
-                    <div class="userInfo">
-                        <h1>Account Information</h1>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Username</th>
-                                    <th>Password</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Email</th>
-                                    <th>Phone Number</th>
-                                    <th>Sex</th>
-                                    <th class='dob'>Date of Birth</th>
-                                    <th>Money Left</th>
-                                    <th>Role</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <%
-                                    UserDB userDB = new UserDB();
-                                    List<User> list = userDB.listAllUsers();
-                                    for (User user : list) {
-                                %>
-                                <tr>
-                                    <td><%= user.getUsername()%></td>
-                                    <td>
-                                        <span id="passwordDisplay">********</span>
-                                        <button onclick="togglePassword()">Show</button>
-                                    </td>
-                                    <td><%= user.getfName()%></td>
-                                    <td><%= user.getlName()%></td>
-                                    <td><%= user.getEmail()%></td>
-                                    <td><%= user.getPhone()%></td>
-                                    <td><%= user.getSex()%></td>
-                                    <td class='dob'><%= user.getDob()%></td>
-                                    <td class='money'><%= user.getMoney()%> $</td>
-                                    <td><%= user.getRole() %></td>
-                                </tr>
-                                <%
-                                    }
-                                %>
-                            </tbody>
-                        </table>
+                    <!-- Collapse -->
+                    <div class="collapse navbar-collapse" id="sidebarCollapse">
+                        <!-- Navigation -->
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="cinema.jsp">
+                                    <i class="bi bi-film"></i> Rạp phim
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="statistic.jsp">
+                                    <i class="bi bi-bar-chart"></i> Doanh Thu
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="AdminReport.jsp">
+                                    <i class="bi bi-chat"></i> Phản Hồi
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="ticket.jsp">
+                                    <i class="bi bi-card-checklist"></i> Vé ticket
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="customer.jsp">
+                                    <i class="bi bi-people"></i> Khách Hàng
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- Divider -->
+                        <hr class="navbar-divider my-5 opacity-20">
+                        <!-- Push content down -->
+                        <div class="mt-auto"></div>
+                        <!-- User (md) -->
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="CustomerProfile.jsp">
+                                    <i class="bi bi-person-square"></i> Account
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="UserServlet?action=logout">
+                                    <i class="bi bi-box-arrow-left"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
+            </nav>
+            <!-- Main content -->
+            <div class="h-screen flex-grow-1 overflow-y-lg-auto">
+                <!-- Header -->
+                <header class="bg-surface-primary border-bottom pt-6">
+                    <div class="container-fluid">
+                        <div class="mb-npx">
+                            <div class="row align-items-center">
+                                <div class="col-sm-6 col-12 mb-4 mb-sm-0">
+                                    <!-- Title -->
+                                    <h1 class="h2 mb-0 ls-tight">Quản Lý Khách Hàng</h1>
+                                </div>
                             </div>
-            </main>
-
-            
-
+                            <!-- Nav -->
+                            <ul class="nav nav-tabs mt-4 overflow-x border-0">
+                            </ul>
+                        </div>
+                    </div>
+                </header>
+                <!-- Main -->
+                <main class="py-6 bg-surface-secondary">
+                    <div class="container-fluid"> 
+                        <div class="card shadow border-0 mb-7">
+                            <div class="card-header">
+                                <h5 class="mb-0">Thông tin khách hàng</h5>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-nowrap">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Username</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Email</th>
+                                            <th>Phone Number</th>
+                                            <th>Sex</th>
+                                            <th class='dob'>Date of Birth</th>
+                                            <th>Money Left</th>
+                                            <th>Role</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <%
+                                            UserDB userDB = new UserDB();
+                                            List<User> list = userDB.listAllUsers();
+                                            for (User user : list) {
+                                        %>
+                                        <tr>
+                                            <td><%= user.getUsername()%></td>
+                                            <td><%= user.getfName()%></td>
+                                            <td><%= user.getlName()%></td>
+                                            <td><%= user.getEmail()%></td>
+                                            <td><%= user.getPhone()%></td>
+                                            <td><%= user.getSex()%></td>
+                                            <td class='dob'><%= user.getDob()%></td>
+                                            <td class='money'><%= user.getMoney()%> $</td>
+                                            <td><%= user.getRole()%></td>
+                                        </tr>
+                                        <%
+                                            }
+                                        %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-footer border-0 py-5">
+                                <span class="text-muted text-sm">Showing 10 items out of 250 results found</span>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
         </div>
+        <script src="js/admin.js"></script>
 
     </body>
-    <script src="js/admin.js"></script>
 </html>
