@@ -93,6 +93,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     // Lưu foodQuantities vào session
     HttpSession session = request.getSession();
     session.setAttribute("foodQuantities", foodQuantitiesJson);
+        System.out.println(foodQuantitiesJson);
     // Kiểm tra xem có thiếu thông tin nào không từ request
     if (theatreID == null || movieName == null || selectedDate == null ||
         selectedTime == null || selectedSeats == null || totalPrice == null) {

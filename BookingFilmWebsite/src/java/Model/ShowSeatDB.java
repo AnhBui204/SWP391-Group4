@@ -122,17 +122,19 @@ public class ShowSeatDB {
         return showList;
     }
 
-    public static boolean setShowSeat(String showID, String roomID, String theatreID) {
+    public static boolean setShowSeat(String showID, String roomID, String theatreID, int money) {
         String insertQuery = "INSERT INTO ShowSeats (ShowID, SeatID, RoomID, TheatreID, price, IsAvailable) "
-                + "SELECT ?, SeatID, RoomID, TheatreID, 60000, 1 "
+                + "SELECT ?, SeatID, RoomID, TheatreID, ?, 1 "
                 + "FROM Seats "
                 + "WHERE RoomID = ? AND TheatreID = ?";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(insertQuery)) {
 
             stmt.setString(1, showID); // Set the showID parameter
-            stmt.setString(2, roomID); // Set the roomID parameter
-            stmt.setString(3, theatreID); // Set the theatreID parameter
+            stmt.setInt(2, money); // Set the roomID parameter
+            stmt.setString(3, roomID); // Set the roomID parameter
+            stmt.setString(4, theatreID); // Set the theatreID parameter
+            
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0; // Return true if rows were affected
@@ -250,15 +252,30 @@ public class ShowSeatDB {
         return uniqueID;
     }
 
+    public static boolean updateSeatAvailability(String seatId, boolean isAvailable) throws SQLException {
+        String sql = "UPDATE ShowSeats SET IsAvailable = ? WHERE SeatID = ?";
+        try (
+                Connection conn = getConnect(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setBoolean(1, isAvailable); // Set availability (true or false)
+            stmt.setString(2, seatId);       // Set the SeatID to identify the seat
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;  // Return true if the update was successful
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     public static void main(String[] args) {
         // Example usage
 
         //List all seats
-        List<ShowSeat> seats = getSeatByRoom("R00001");
+        List<ShowSeat> seats = getSeatByRoom("R00010");
         for (ShowSeat seat : seats) {
             System.out.println(seat);
         }
-//        boolean result = setShowSeat("SH0001", "R00009", "T00002");
+//        boolean result = setShowSeat("SH0002", "R00010", "T00002", 80000);
 //        if (result) {
 //            System.out.println("Seats set successfully.");
 //        } else {

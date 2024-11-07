@@ -185,6 +185,8 @@ public class UserServlet extends HttpServlet {
             UserDB db = new UserDB();
             User newUser = new User(null, username, password, fname, lname, email, role, phone, sex, dob);
             db.insert(newUser);
+            
+            db.uploadProfileImage(newUser.getUserID(), "image/Avatar/default.jpg");
 
             // Đặt thông báo thành công
             HttpSession session = request.getSession();

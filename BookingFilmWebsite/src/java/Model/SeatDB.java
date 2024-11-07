@@ -42,34 +42,36 @@ public class SeatDB implements DatabaseInfo {
         }
         return seat;
     }
-public static List<String> getSeatIDsFromNames(String seatNames, String roomID) {
-    List<String> seatIDs = new ArrayList<>();
-    // Tách chuỗi thành danh sách các ghế
-    List<String> seatNameList = Arrays.asList(seatNames.split(",\\s*")); // Tách chuỗi và loại bỏ khoảng trắng
 
-    String sql = "SELECT se.SeatID " +
-                 "FROM Seats se " +
-                 "JOIN ShowSeats ss ON se.SeatID = ss.SeatID " +
-                 "WHERE se.SeatName = ? " +
-                 "AND ss.RoomID = ?";
+    public static List<String> getSeatIDsFromNames(String seatNames, String roomID) {
+        List<String> seatIDs = new ArrayList<>();
+        // Tách chuỗi thành danh sách các ghế
+        List<String> seatNameList = Arrays.asList(seatNames.split(",\\s*")); // Tách chuỗi và loại bỏ khoảng trắng
 
-    try (Connection conn = getConnect(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-        for (String seatName : seatNameList) {
-            stmt.setString(1, seatName);
-            stmt.setString(2, roomID);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                seatIDs.add(rs.getString("SeatID")); // Lưu SeatID vào danh sách
+        String sql = "SELECT Distinct se.SeatID "
+                + "FROM Seats se "
+                + "JOIN ShowSeats ss ON se.SeatID = ss.SeatID "
+                + "WHERE se.SeatName = ? "
+                + "AND ss.RoomID = ?";
+
+        try (Connection conn = getConnect(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            for (String seatName : seatNameList) {
+                stmt.setString(1, seatName);
+                stmt.setString(2, roomID);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    seatIDs.add(rs.getString("SeatID")); // Lưu SeatID vào danh sách
+                }
+                // Clear parameters before the next iteration
+                stmt.clearParameters(); // Xóa các tham số đã đặt
             }
-            // Clear parameters before the next iteration
-            stmt.clearParameters(); // Xóa các tham số đã đặt
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+
+        return seatIDs; // Trả về danh sách SeatID
     }
 
-    return seatIDs; // Trả về danh sách SeatID
-}
     // Method to get all seats in a specific room
     public static List<Seat> getSeatsByRoom(String roomID) {
         List<Seat> seatList = new ArrayList<>();
@@ -151,12 +153,17 @@ public static List<String> getSeatIDsFromNames(String seatNames, String roomID) 
 
     public static void main(String[] args) {
         // Example usage
-        Seat a = getSeat("S00001");
-        System.out.println(a);
+//        Seat a = getSeat("S00001");
+//        System.out.println(a);
         // List all seats
-//        List<Seat> seats = listAll();
-//        for (Seat seat : seats) {
-//            System.out.println(seat);
-//        }
+        //        List<Seat> seats = listAll();
+        //        for (Seat seat : seats) {
+        //            System.out.println(seat);
+        //        }
+
+        List<String> seats = getSeatIDsFromNames("A1, A2, A4", "R00001");
+        for(String s : seats){
+            System.out.println(s);
+        }
     }
 }

@@ -65,11 +65,6 @@
                     <i id="star5" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
                 </button>
             </form>
-<!--            <i id="star1" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this, 2)"></i>
-            <i id="star2" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
-            <i id="star3" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
-            <i id="star4" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>
-            <i id="star5" class="fa-regular fa-star text-warning fa-3x" onmouseover="mouseOverFunction(this)"></i>-->
         </div>
         <p class=" mt-2 text-grey"><%=MovieDB.getNumRate(movieId)%> votes</p>
     </div>
@@ -93,11 +88,14 @@
         <link rel="stylesheet" href="css/MovieDetail_css.css"/>
     </head>
     <style>
-        #poster_landscape img {
-            width: 100vw;  
-            height: 100vh; 
-            object-fit: cover; 
-            filter: brightness(50%);
+        #poster_landscape div {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            /*filter: brightness(50%);*/
+            background-image: linear-gradient(rgba(0,0,0,1) 2%, rgba(0,0,0,0), rgba(0,0,0,1) 98%), url('<%=request.getAttribute("imgL")%>');
+            background-size: cover;
+            background-repeat: no-repeat;
         }
     </style>
     <body>
@@ -105,7 +103,7 @@
             <div class="container">
                 <div id="background_page" class="position-absolute w-100 start-0 z-0">
                     <div id="poster_landscape">
-                        <img src="<%=request.getAttribute("imgL")%>" alt="alt" class="img-fluid"/>
+                        <div class="img-fluid"></div>
                     </div>
                 </div>
 
@@ -150,7 +148,7 @@
                                 <div class="mt-2 bg-secondary-subtle d-inline fs-4 p-2 rounded"><p class="d-inline fs-4">Đạo diễn: </p><p class="d-inline fs-4 fw-bold"><%= request.getAttribute("director")%></p></div>
                             </div>
                             <div class="mt-3">
-                                <div class="mt-2 bg-secondary-subtle d-inline fs-4 p-2 rounded"><p class="d-inline fs-4">Diễn viên: </p><p class="d-inline fs-4 fw-bold"><%for (String actor: actorArr){%><%=actor+", "%><%}%></p></div>
+                                <div class="mt-2 bg-secondary-subtle d-inline fs-4 p-2 rounded"><p class="d-inline fs-4">Diễn viên: </p><p class="d-inline fs-4 fw-bold"><%for (String actor : actorArr) {%><%=actor + ", "%><%}%></p></div>
                             </div>
                         </div>
                     </div>
@@ -158,7 +156,7 @@
 
                 <div id="movie_introduction" class="row z-1 position-relative text-white" style="background-color: rgba(255,255,255,0.5); margin-top: 250px;">
                     <h1 class="col-12 display-5 pt-5 px-4">Giới Thiệu Phim</h1>
-<!--                    <p class="col-12 fs-4 fw-medium px-5 pb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a venenatis nulla. Nullam malesuada dignissim augue, at lobortis urna fermentum sed. Sed a facilisis leo. Aliquam dapibus augue sem, sed finibus nisi elementum non. Aliquam sollicitudin tincidunt odio eget ornare. Aenean non ornare dolor. Mauris non lorem vitae erat rhoncus ullamcorper eget fermentum leo. Vivamus bibendum tellus sit amet velit gravida, ut pharetra tellus aliquet. Nunc ac nisi et turpis consequat tempor.</p>-->
+                    <!--                    <p class="col-12 fs-4 fw-medium px-5 pb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a venenatis nulla. Nullam malesuada dignissim augue, at lobortis urna fermentum sed. Sed a facilisis leo. Aliquam dapibus augue sem, sed finibus nisi elementum non. Aliquam sollicitudin tincidunt odio eget ornare. Aenean non ornare dolor. Mauris non lorem vitae erat rhoncus ullamcorper eget fermentum leo. Vivamus bibendum tellus sit amet velit gravida, ut pharetra tellus aliquet. Nunc ac nisi et turpis consequat tempor.</p>-->
                     <p class="col-12 fs-4 fw-medium px-5 pb-4 mt-3"><%=movie.getDescription()%></p>
                 </div>
 
@@ -223,9 +221,12 @@
                                         List<String> hourArr = hmTheatre.get(theatre);
                                         for (String hour : hourArr) {
                                     %>
-                                    <div class="mx-3 border rounded p-2 session fs-5" id="<%=hour%>">
-                                        <p class="m-0"><%=hour%></p>
-                                    </div>
+                                    <a href="Booking.jsp?theatreID=${theatreID}&movieID=<%= movieId%>&date=<%= day%>&time=<%= hour%>">
+                                        <div class="mx-3 border rounded p-2 session fs-5" id="<%= hour%>">
+                                            <p class="m-0"><%= hour%></p>
+                                        </div>
+                                    </a>
+                                    F 
                                     <%
                                         }
                                     %>
@@ -282,7 +283,7 @@
                                                                 <div class="mx-3 border rounded p-2 session">
                                                                     <p class="m-0">14:00 - 16:10</p>
                                                                 </div>
-                                                                <div class="mx-3 border rounded p-2 session">
+                                                                <div class="mx-3     border rounded p-2 session">
                                                                     <p class="m-0">20:00 - 22:10</p>
                                                                 </div>
                                                             </div>
@@ -342,15 +343,15 @@
 
             let showIdTableJs; // table xuat hien hien tai
             let dayPass;
-<%
-                String dayArr0 = "";
-                if (dayArr.size() != 0){
-                    dayArr0 = dayArr.get(0);
+            <%
+    String dayArr0 = "";
+    if (dayArr.size() != 0) {
+        dayArr0 = dayArr.get(0);
     }
-                showIdTable = "time_schedule_" + dayArr0;
+    showIdTable = "time_schedule_" + dayArr0;
             %>
             document.addEventListener("DOMContentLoaded", function () {
-            
+
                 let showId = 'D_<%=dayArr0%>';
                 const timeScheduleTablefirstD = document.getElementById(showId);
                 const timeScheduleTablefirst = document.getElementById("time_schedule_<%=dayArr0%>");

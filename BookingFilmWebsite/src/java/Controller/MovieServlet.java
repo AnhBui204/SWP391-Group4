@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -33,6 +34,7 @@ import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024,
@@ -77,14 +79,47 @@ public class MovieServlet extends HttpServlet {
             case "getShowInfo":
                 handleGetShowInfo(request, response);
                 break;
-
-//            case "search":
-//                handleSearchMovie(request, response);
-//                break;
+            case "filtermovie":
+                handleGetFilterMovieList(request, response);
+                break;
+            case "search":
+                handleSearchMovie(request, response);
+                break;
             default:
                 response.sendRedirect("error.jsp");
                 break;
         }
+    }
+
+    private void handleSearchMovie(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String searchKey = request.getParameter("search");
+        List<Movie> searchResults = new ArrayList<>();
+
+        if (searchKey != null && !searchKey.trim().isEmpty()) {
+            MovieDB movieDB = new MovieDB();
+
+            // Choose the search method based on the input
+            if (isKeywordSearch(searchKey)) {
+                searchResults = movieDB.searchByKeyWord(searchKey);
+
+            } else {
+                searchResults = movieDB.searchByName(searchKey);
+            }
+        }
+
+        // Set the results and the search key in the request
+        request.setAttribute("searchResults", searchResults);
+        request.setAttribute("searchKey", searchKey); // Set the search key for the JSP
+
+        // Forward to the same JSP page to display results
+        RequestDispatcher dispatcher = request.getRequestDispatcher("crudMV.jsp"); // Replace with your actual JSP page
+        dispatcher.forward(request, response);
+    }
+
+    private boolean isKeywordSearch(String searchKey) {
+        // Implement your logic to decide if it's a keyword search, e.g., check for spaces or certain characters
+        return searchKey.contains(" "); // Example: Treating any input with spaces as a keyword search
     }
 
     private void handleAddMV(HttpServletRequest request, HttpServletResponse response)
@@ -263,11 +298,14 @@ public class MovieServlet extends HttpServlet {
         String theatreID = request.getParameter("theatreID");
         String roomID = request.getParameter("roomID");
         String showID = request.getParameter("selectedShowtimeID");
+        String getMoney = request.getParameter("money");
+        System.out.println(getMoney);
+        int money = Integer.parseInt(getMoney);
 
         List<Movie> movieList = MovieDB.getAllMovies();
         request.setAttribute("movieList", movieList);
 
-        ShowSeatDB.setShowSeat(showID, roomID, theatreID);
+        ShowSeatDB.setShowSeat(showID, roomID, theatreID, money);
         request.getRequestDispatcher("TrackingShowTime.jsp").forward(request, response);
     }
 
@@ -336,6 +374,20 @@ public class MovieServlet extends HttpServlet {
         whs.setStaffID(id);
 
         WorkHistoryDB.addWorkHis(whs);
+    }
+    
+    protected void handleGetFilterMovieList(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String genre = request.getParameter("genre");
+        String year = request.getParameter("year");
+
+        List<Movie> listMovie = MovieDB.getFilterMovieList(genre, year);
+        
+        request.setAttribute("genre", genre);
+        request.setAttribute("year", year);
+        request.setAttribute("listMovie", listMovie);
+        request.getRequestDispatcher("ListMovie.jsp").forward(request, response);
     }
 
     @Override

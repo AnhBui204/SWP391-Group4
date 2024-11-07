@@ -42,6 +42,69 @@ public class MovieDB {
         return "M00001";
     }
 
+    public static ArrayList<Movie> searchByKeyWord(String key) {
+        ArrayList<Movie> movieList = new ArrayList<>();
+        String sql = "SELECT * FROM Movies WHERE MovieName LIKE ? OR MovieDescription LIKE ?";
+
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, "%" + key + "%");
+            pstmt.setString(2, "%" + key + "%");
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Movie movie = new Movie();
+                movie.setMovieID(rs.getString("MovieID"));
+                movie.setMovieName(rs.getString("MovieName"));
+                movie.setDuration(rs.getInt("Duration"));
+                movie.setCountry(rs.getString("Country"));
+                movie.setManufacturer(rs.getString("Manufacturer"));
+                movie.setDirector(rs.getString("Director"));
+                movie.setReleaseDate(rs.getDate("ReleaseDate"));
+                movie.setImgPortrait(rs.getString("ImgPortrait"));
+                movie.setImgLandscape(rs.getString("ImgLandscape"));
+                movie.setDescription(rs.getString("MovieDescription"));
+
+                movieList.add(movie);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return movieList;
+    }
+
+    public static ArrayList<Movie> searchByName(String name) {
+        ArrayList<Movie> movieList = new ArrayList<>();
+        String sql = "SELECT * FROM Movies WHERE MovieName LIKE ?";
+
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, "%" + name + "%");
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Movie movie = new Movie();
+                movie.setMovieID(rs.getString("MovieID"));
+                movie.setMovieName(rs.getString("MovieName"));
+                movie.setDuration(rs.getInt("Duration"));
+                movie.setCountry(rs.getString("Country"));
+                movie.setManufacturer(rs.getString("Manufacturer"));
+                movie.setDirector(rs.getString("Director"));
+                movie.setReleaseDate(rs.getDate("ReleaseDate"));
+                movie.setImgPortrait(rs.getString("ImgPortrait"));
+                movie.setImgLandscape(rs.getString("ImgLandscape"));
+                movie.setDescription(rs.getString("MovieDescription"));
+
+                movieList.add(movie);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return movieList;
+    }
+
     // Add Movie to the database
     public static boolean addMovie(Movie movie) {
         String sql = "INSERT INTO Movies (MovieID, MovieName, Duration, Country, Manufacturer, Director, ReleaseDate, ImgPortrait, ImgLandscape, MovieDescription) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -388,18 +451,15 @@ public class MovieDB {
 //
 //    return movies;
 //}
-
-
-  public static List<Date> getShowDateByMovieIDAndTheatreID(String movieID, String theatreID) {
+    public static List<Date> getShowDateByMovieIDAndTheatreID(String movieID, String theatreID) {
         List<Date> showDates = new ArrayList<>();
-        String query = "SELECT DISTINCT S.ShowDate " +
-                   "FROM Shows S " +
-                   "JOIN ShowSeats SS ON S.ShowID = SS.ShowID " +
-                   "WHERE S.MovieID = ? AND SS.TheatreID = ?";
+        String query = "SELECT DISTINCT S.ShowDate "
+                + "FROM Shows S "
+                + "JOIN ShowSeats SS ON S.ShowID = SS.ShowID "
+                + "WHERE S.MovieID = ? AND SS.TheatreID = ?";
 
-        try (Connection connection = getConnect();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-             
+        try (Connection connection = getConnect(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
             preparedStatement.setString(1, movieID);
             preparedStatement.setString(2, theatreID);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -413,7 +473,7 @@ public class MovieDB {
 
         return showDates;
     }
-    
+
     public static double getAvgRate(String movieId) {
         String sql = "select round(avg(Rating), 1) as Rating from Ratings where MovieID = ?";
         double avgRate = 0;
@@ -508,8 +568,8 @@ public class MovieDB {
         }
 
     }
-    
-    public static List<String> getListActorsByMovieId(String movieId){
+
+    public static List<String> getListActorsByMovieId(String movieId) {
         List<String> actorArr = new ArrayList<>();
         String sql = "select Actors.ActorName from MovieActors inner join Actors on MovieActors.ActorID = Actors.ActorID where MovieActors.MovieID = ?";
         try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -518,7 +578,7 @@ public class MovieDB {
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()){
+            while (rs.next()) {
                 actorArr.add(rs.getString("ActorName"));
             }
         } catch (SQLException e) {
@@ -528,34 +588,113 @@ public class MovieDB {
         }
         return actorArr;
     }
-    
-  
-   public static List<Movie> getMoviesByTheatreID(String theatreID) throws SQLException {
-    List<Movie> movies = new ArrayList<>();
-  String sql = "SELECT DISTINCT m.MovieID, m.MovieName, m.ImgPortrait, m.Rate " +
-                 "FROM Movies m " +
-                 "JOIN Shows s ON m.MovieID = s.MovieID " +
-                 "JOIN ShowSeats ss ON s.ShowID = ss.ShowID " +
-                 "WHERE ss.TheatreID = ?"; 
-    
-    try (Connection conn = getConnect(); 
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setString(1, theatreID);
-        ResultSet rs = stmt.executeQuery();
 
-        while (rs.next()) {
-            Movie movie = new Movie();
-            movie.setMovieID(rs.getString("MovieID"));
-            movie.setMovieName(rs.getString("MovieName"));
-            movie.setImgPortrait(rs.getString("ImgPortrait"));        
-            movies.add(movie);
+    public static List<Movie> getMoviesByTheatreID(String theatreID) throws SQLException {
+        List<Movie> movies = new ArrayList<>();
+        String sql = "SELECT DISTINCT m.MovieID, m.MovieName, m.ImgPortrait, m.Rate "
+                + "FROM Movies m "
+                + "JOIN Shows s ON m.MovieID = s.MovieID "
+                + "JOIN ShowSeats ss ON s.ShowID = ss.ShowID "
+                + "WHERE ss.TheatreID = ?";
+
+        try (Connection conn = getConnect(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, theatreID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Movie movie = new Movie();
+                movie.setMovieID(rs.getString("MovieID"));
+                movie.setMovieName(rs.getString("MovieName"));
+                movie.setImgPortrait(rs.getString("ImgPortrait"));
+                movies.add(movie);
+            }
         }
+
+        return movies;
     }
 
-    return movies;
-}
+    public static List<String> getGernesList() {
+        List<String> gernesList = new ArrayList<>();
+        try {
+            String sql = "select * from Genres";
+            Connection con = getConnect();
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
 
-    
+            while (rs.next()) {
+                gernesList.add(rs.getString("GenreName"));
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return gernesList;
+    }
+
+    public static List<String> getYearsList() {
+        List<String> yearsList = new ArrayList<>();
+        try {
+            String sql = "select distinct YEAR(ReleaseDate) as years from Movies";
+            Connection con = getConnect();
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                yearsList.add(rs.getString("years"));
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return yearsList;
+    }
+
+    public static List<Movie> getFilterMovieList(String genre, String year) {
+        List<Movie> listMovie = new ArrayList<>();
+        try {
+            String sql = "select distinct Movies.* from Movies\n"
+                    + "inner join MovieGenres on Movies.MovieID = MovieGenres.MovieID\n"
+                    + "inner join Genres on MovieGenres.GenreID = Genres.GenreID";
+            if (genre != null) {
+                sql += " where GenreName = ?";
+                if (year != null) {
+                    sql += " and Year(ReleaseDate) = ?";
+                }
+            } else if (year != null) {
+                sql += " where Year(ReleaseDate) = ?";
+            }
+            Connection con = getConnect();
+            PreparedStatement stmt = con.prepareStatement(sql);
+            if (genre != null) {
+                stmt.setString(1, genre);
+                if (year != null) {
+                    stmt.setInt(2, Integer.parseInt(year));
+                }
+            } else if (year != null) {
+                stmt.setInt(1, Integer.parseInt(year));
+            }
+//            stmt.setString(1, genre);
+//            stmt.setInt(2, Integer.parseInt(year));
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String movieID = rs.getString("MovieID");
+                String movieName = rs.getString("MovieName");
+                int duration = rs.getInt("Duration");
+                String country = rs.getString("Country");
+                String manufacturer = rs.getString("Manufacturer");
+                String director = rs.getString("Director");
+                Date releaseDate = rs.getDate("ReleaseDate");
+                String imgPortrait = rs.getString("ImgPortrait");
+                String imgLandscape = rs.getString("ImgLandscape");
+                String des = rs.getString("MovieDescription");
+                Movie movie = new Movie(movieID, movieName, duration, country, manufacturer, director, imgPortrait, imgLandscape, releaseDate, des);
+                listMovie.add(movie);
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return listMovie;
+    }
+
     public static void main(String[] args) throws SQLException {
 
         // Lấy danh sách tất cả các bộ phim
@@ -578,7 +717,6 @@ public class MovieDB {
 //                System.out.println(hmm.get(strr));
 //            }
 //        }
-        
     }
 
 }

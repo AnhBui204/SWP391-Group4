@@ -30,11 +30,11 @@
                     <div class="col-md-4 col-12 d-flex flex-column justify-content-center shadow-lg rounded" style="background-color: rgb(255, 247, 229);">
                         <div class="d-flex justify-content-center pt-5 pb-2">
                             <img src="${user.avatar}" alt="Profile Image" class="img-fluid rounded-circle" style="height: 100px; width: 100px;"/>
-                            <div class="d-flex flex-column align-items-center mt-3 px-3">
+                            <div class="d-flex flex-column align-items-center justify-content-center mt-3 px-3">
                                 <% if (moneyLeft != null) {%>
                                 <p class="m-0 px-2 fs-6 text-success">Số tiền: <strong><%= moneyLeftInt%></strong></p>
                                 <% } else { %>
-                                <p class="m-0 px-2 fs-6">Số tiền: <strong>Không có dữ liệu</strong></p>
+                                <p class="m-0 px-2 fs-6 text-success">Số tiền: <strong> 0 VNĐ</strong></p>
                                 <% }%>
                                 <a href="charge.jsp?userID=${user.userID}" class="btn btn-success" >
                                     Nạp tiền

@@ -106,7 +106,7 @@ if (availableSeats != null && !availableSeats.isEmpty()) {
         double price = seat.getPrice();
 
 
-        System.out.println("Seat: " + seatName + ", Available: " + isAvailable + ", Price: " + price);
+//        System.out.println("Seat: " + seatName + ", Available: " + isAvailable + ", Price: " + price);
     }
 } else {
     System.out.println("Không có ghế nào có sẵn.");

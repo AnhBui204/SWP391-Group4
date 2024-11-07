@@ -192,6 +192,8 @@ CREATE TABLE Tickets (
     FOREIGN KEY (BookingSeatID) REFERENCES Booking_Seats(BookingSeatID),
     FOREIGN KEY (BookingComboID) REFERENCES Booking_Combos(BookingComboID) 
 );
+ALTER TABLE Tickets
+ADD Status NVARCHAR(20) CHECK (Status IN (N'Đã đặt', N'Chấp thuận',N'Đang chờ',N'Từ chối')) DEFAULT N'Đã đặt';
 
 CREATE table WorkHis(
 	WorkId char(6) primary key,
@@ -202,6 +204,7 @@ CREATE table WorkHis(
 	foreign key (StaffId) references Users(UserId)
 )
 
+select * from Booking_Combos
 
 CREATE TABLE Report(
 	ReportId char(6) primary key,

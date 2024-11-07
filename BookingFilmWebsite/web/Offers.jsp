@@ -146,13 +146,6 @@
                                                 </ul>
                                             </nav>
 
-                                            <!-- Search Bar -->
-                                            <div class="search-container">
-                                                <form action="/search_voucher" method="GET">
-                                                    <input type="text" placeholder="Tìm Kiếm..." name="search">
-                                                    <button type="submit"><i class="fa fa-search"></i></button>
-                                                </form>
-                                            </div>
                                         </div>
 
                                         <!-- Danh sách Voucher -->

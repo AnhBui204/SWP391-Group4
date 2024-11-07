@@ -232,6 +232,9 @@
                                                         <!-- The showtimes will be populated via AJAX -->
                                                     </select>     
                                                 </div>
+                                                <div class="form-group">
+                                                    <input type="number" id="money" name="money" value="">
+                                                </div>
                                                 <input type="hidden" id="selectedShowtimeID" name="selectedShowtimeID" value="">
                                             </div>
                                             <div class="modal-footer">
