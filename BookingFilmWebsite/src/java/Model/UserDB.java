@@ -83,6 +83,21 @@ public class UserDB implements DatabaseInfo {
 
         return balance;
     }
+    
+    public void addMoneyToBalance(int amount, String userID) {
+        String query = "Update Users set MoneyLeft = MoneyLeft + ? where userID = ?";
+        try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, amount);
+            ps.setString(2, userID);
+            try {
+                ps.executeUpdate();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } catch (Exception err) {
+            System.out.println(err);
+        }
+    }
 
     public static User getUsersByID(String userID) {
         User user = null;

@@ -141,7 +141,8 @@
         </style>
     </head>
     <%
-        String userID = request.getParameter("userID");
+        String userID = request.getParameter("userID");       
+        if(session.getAttribute("user") != null){
     %>
     <body>
         <div class="recharge-container">
@@ -164,6 +165,9 @@
                 <button type="submit" class="submit-btn">Xác Nhận Nạp Tiền</button>
             </form>
         </div>
+        <%
+            }
+        %>       
 
         <!-- JavaScript and jQuery code remains the same -->
         <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>

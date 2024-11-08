@@ -2,7 +2,7 @@
 <%@page import="java.nio.charset.StandardCharsets"%>
 <%@page import="com.vnpay.common.Config"%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="Model.*"%>
 
 <%@page import="java.util.*"%>
 <%@page import="java.text.NumberFormat"%>
@@ -53,6 +53,9 @@
             }
         </style>
     </head>
+    <%
+        if(session.getAttribute("user") != null){
+    %>
     <body>
         <%
             // Begin process return from VNPAY
@@ -116,11 +119,15 @@
                 </div>
                 <div class="form-group">
                     <label>Tình trạng giao dịch:</label>
-                    <div>
+                    <label>
                         <%
                             if (signValue.equals(vnp_SecureHash)) {
                                 if ("00".equals(request.getParameter("vnp_TransactionStatus"))) {
-                                    out.print("Thành công");
+                                    String userID = (String)session.getAttribute("user");
+                                    new UserDB().addMoneyToBalance(amount / 1000, userID);
+                                    
+                                    session.setAttribute("user", userID);
+                                    out.print("Thành công"); 
                                 } else {
                                     out.print("Không thành công");
                                 }
@@ -128,18 +135,22 @@
                                 out.print("Chữ ký không hợp lệ");
                             }
                         %>
-                    </div>
+                    </label>
                 </div>
-
             </div>
-            <a href="HomePage.jsp" class="d-flex justify-content-center btn btn-warning">Trở về</a>
-            <footer>
-                <p>&copy; VNPAY 2024</p>
-            </footer>
-        </div>
 
-        <!-- Bootstrap 5 JS -->
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-    </body>
+        </div>
+        <a href="HomePage.jsp" class="d-flex justify-content-center btn btn-warning">Trở về</a>
+        <footer>
+            <p>&copy; VNPAY 2024</p>
+        </footer>
+    </div>
+    <%
+        }
+    %>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
 </html>

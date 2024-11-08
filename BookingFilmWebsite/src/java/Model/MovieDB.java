@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MovieDB {
+    
 
     public static Connection getConnect() {
         try {
