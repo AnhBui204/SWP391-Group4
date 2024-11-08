@@ -42,7 +42,7 @@ public class ajaxServlet extends HttpServlet {
         String userID = req.getParameter("userID");
         String bankCode = req.getParameter("bankCode");
         System.out.println("HELLO "+ userID);
-        UserDB.deposit(userID, Integer.parseInt(req.getParameter("amount")));
+        
         
         String vnp_TxnRef = Config.getRandomNumber(8);
         String vnp_IpAddr = Config.getIpAddress(req);

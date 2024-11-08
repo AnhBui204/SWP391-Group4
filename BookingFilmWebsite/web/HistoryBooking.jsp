@@ -1,4 +1,5 @@
 <%@page import="Model.ShowInfo1"%>
+<%@page import="Model.Combo"%>
 <%@page import="java.util.List"%>
 <%@page import="Model.TicketDB"%>
 <%@page pageEncoding="UTF-8"%>
@@ -10,6 +11,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Thông Tin Vé</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+     <style>      
+        .table-bordered th, .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-4">
@@ -18,12 +24,17 @@
         <%
             String userID = (String) session.getAttribute("id");
             String bookingID = request.getParameter("bookingID");
+
             List<ShowInfo1> tickets = TicketDB.getShowInfoByUserIDAndBookingID(userID, bookingID);
             request.setAttribute("tickets", tickets);
+
+            List<Combo> combos = TicketDB.getCombosByBookingID(bookingID);
+            request.setAttribute("combos", combos);
         %>
 
+        <!-- Hiển thị bảng vé -->
         <c:if test="${not empty tickets}">
-            <table class="table table-striped">
+            <table class="table table-striped table-bordered">
                 <thead class="text-center" style="background-color: #f7cf90">
                     <tr>
                         <th>Rạp</th>
@@ -33,8 +44,7 @@
                         <th>Giờ Chiếu</th>
                         <th>Phòng</th>
                         <th>Giá (VND)</th>
-                        <th>Trạng thái</th>
-                        <th>Hành động</th>
+                                                       
                     </tr>
                 </thead>
                 <tbody class="text-center">
@@ -47,20 +57,9 @@
                             <td>${ticket.startTime}</td>
                             <td>${ticket.roomName}</td>
                             <td>${ticket.price}</td>
-                            <td>${ticket.status}</td>
-                           <td>
-    <c:if test="${ticket.status != 'Đang chờ' && ticket.status != 'Chấp thuận' && ticket.status != 'Từ chối'}">
-        <a href="#refundTicketModal" 
-           class="btn btn-danger btn-sm" 
-           data-toggle="modal" 
-           data-ticketid="${ticket.ticketID}">
-           Hủy Vé
-        </a>
-    </c:if>
-</td>
-
+                            
                         </tr>
-                    </c:forEach> <!-- Đảm bảo đóng thẻ forEach ở đây -->
+                    </c:forEach>
                 </tbody>
             </table>
         </c:if>
@@ -69,52 +68,45 @@
             <p class="text-center">Chưa có vé nào được đặt.</p>
         </c:if>
 
+  
+        <h2 class="text-center mt-5">Danh Sách Combo</h2>
+<c:if test="${not empty combos}">
+    <table  class="table table-striped table-bordered">
+        <thead class="text-center" style="background-color: #f7cf90">
+            <tr>
+                <th>Combo</th>
+                <th>Số Lượng</th>
+                <th>Giá(VND)</th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+            <c:forEach var="combo" items="${combos}">
+                <tr>
+                    <td>${combo.comboName != null ? combo.comboName : 'N/A'}</td>
+                    <td>${combo.quantity != null ? combo.quantity : 'N/A'}</td>
+                    <td>${combo.comboPrice != 0 ? combo.comboPrice : 'N/A'}</td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
+</c:if>
+
+     <c:if test="${empty combos}">
+    <p class="text-center">Chưa có combo nào được chọn.</p>
+</c:if>
+
+
         <div class="text-center">
             <a href="summaryBooking.jsp" class="btn btn-primary">Quay lại</a>
         </div>
     </div>
 
-    <!-- Refund Modal HTML -->
-    <div id="refundTicketModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form action="TicketServlet" method="post">
-                    <input type="hidden" name="action" value="requestRefund"> 
-                    <input type="hidden" name="ticketID" value="">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Hủy Vé</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Bạn có chắc chắn muốn hủy vé này không?</p>
-                        <p>(Nếu hủy vé, tiền sẽ được hoàn lại vào ví)</p>
-                        <p class="text-warning"><small>Hành động này không thể hoàn tác sau khi thực hiện.</small></p>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                        <input type="submit" class="btn btn-primary" value="Hủy Vé">
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+   
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
-    <script>
-        $('#refundTicketModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Nút đã kích hoạt modal
-            
-            // Lấy thông tin từ data-* attributes
-            var ticketID = button.data('ticketid'); // Lấy ticketID từ data-* attribute
-
-            // Gán ticketID vào input hidden trong modal
-            var modal = $(this);
-            modal.find('input[name="ticketID"]').val(ticketID);
-        });
-    </script>
-
+ 
 </body>
 </html>

@@ -1,3 +1,4 @@
+<%@page import="Model.UserDB"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.nio.charset.StandardCharsets"%>
 <%@page import="com.vnpay.common.Config"%>
@@ -80,6 +81,10 @@
             DateTimeFormatter output = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
             LocalDateTime ldt = LocalDateTime.parse(date, input);
             date = ldt.format(output);
+            System.out.println("Hello VNPay");
+            String userID = (String) session.getAttribute("id");
+            System.out.println(userID);
+            UserDB.deposit(userID, amount);
         %>
 
         <div class="container">

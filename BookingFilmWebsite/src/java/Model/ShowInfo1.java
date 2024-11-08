@@ -1,9 +1,11 @@
 package Model;
-import java.math.BigDecimal;
+
 import java.util.Date;
+
 public class ShowInfo1 {
+
     private String TicketID;
- private String theatreName;
+    private String theatreName;
     private String seatName;
     private Date showDate;
     private String startTime;
@@ -11,8 +13,9 @@ public class ShowInfo1 {
     private int price;
     private String movieName;
     private String status;
-     public ShowInfo1(String TicketID,String theatreName, String seatName, Date showDate, String startTime, String roomName, int price, String movieName, String status) {
-         this.TicketID=TicketID;
+
+    public ShowInfo1(String TicketID, String theatreName, String seatName, Date showDate, String startTime, String roomName, int price, String movieName, String status) {
+        this.TicketID = TicketID;
         this.theatreName = theatreName;
         this.seatName = seatName;
         this.showDate = showDate;
@@ -20,7 +23,7 @@ public class ShowInfo1 {
         this.roomName = roomName;
         this.price = price;
         this.movieName = movieName;
-        this.status = status; 
+        this.status = status;
     }
 
     public String getTicketID() {
@@ -30,6 +33,7 @@ public class ShowInfo1 {
     public void setTicketID(String TicketID) {
         this.TicketID = TicketID;
     }
+
     public String getTheatreName() {
         return theatreName;
     }
@@ -57,13 +61,15 @@ public class ShowInfo1 {
     public String getRoomName() {
         return roomName;
     }
-      public String getMovieName() {
+
+    public String getMovieName() {
         return movieName;
     }
 
     public void setMovieName(String movieName) {
         this.movieName = movieName;
     }
+
     public String getStatus() {
         return status;
     }
@@ -71,4 +77,5 @@ public class ShowInfo1 {
     public void setStatus(String status) {
         this.status = status;
     }
+
 }

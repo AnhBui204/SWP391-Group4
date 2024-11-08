@@ -192,7 +192,7 @@ CREATE TABLE Tickets (
     FOREIGN KEY (BookingSeatID) REFERENCES Booking_Seats(BookingSeatID),
     FOREIGN KEY (BookingComboID) REFERENCES Booking_Combos(BookingComboID) 
 );
-ALTER TABLE Tickets
+ALTER TABLE Booking
 ADD Status NVARCHAR(20) CHECK (Status IN (N'Đã đặt', N'Chấp thuận',N'Đang chờ',N'Từ chối')) DEFAULT N'Đã đặt';
 
 CREATE table WorkHis(
@@ -2864,3 +2864,7 @@ SET Rate = (SELECT AVG(Rating)
             WHERE Ratings.MovieID = Movies.MovieID);
 
 			select * from Users
+
+			UPDATE Tickets SET Status = N'Đang chờ' WHERE TicketID = 'TK0077'
+
+			select * from Tickets where TicketID = 'TK0077'

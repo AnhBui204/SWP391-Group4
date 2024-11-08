@@ -11,6 +11,7 @@
         <!-- Đưa CSS hoặc link đến các file CSS vào đây -->
         <meta charset="UTF-8">
         <link rel="stylesheet" href="./css/admins2.css">
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
         <title>Customer Management</title>
     </head>
@@ -114,21 +115,14 @@
                     <!-- User menu (mobile) -->
                     <div class="navbar-user d-lg-none">
                         <!-- Dropdown -->
-                        <div class="dropdown">
-                            <!-- Toggle -->
-                            <a href="#" id="sidebarAvatar" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <div class="avatar-parent-child">
-                                    <img alt="Image Placeholder" src="https://images.unsplash.com/photo-1548142813-c348350df52b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar- rounded-circle">
-                                    <span class="avatar-child avatar-badge bg-success"></span>
-                                </div>
-                            </a>
+                        <div class="dropdown">                            
                             <!-- Menu -->
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="sidebarAvatar">
-                                <a href="#" class="dropdown-item">Profile</a>
-                                <a href="#" class="dropdown-item">Settings</a>
-                                <a href="#" class="dropdown-item">Billing</a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="#" class="dropdown-item">...</a>
+                                <a href="#" class="dropdown-item">...</a>
+                                <a href="#" class="dropdown-item">...</a>
                                 <hr class="dropdown-divider">
-                                <a href="#" class="dropdown-item">Logout</a>
+                                <a href="#" class="dropdown-item">...</a>
                             </div>
                         </div>
                     </div>
@@ -153,7 +147,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="ticket.jsp">
-                                    <i class="bi bi-card-checklist"></i> Vé ticket
+                                    <i class="bi bi-card-checklist"></i> Đơn Hàng
                                 </a>
                             </li>
                             <li class="nav-item">

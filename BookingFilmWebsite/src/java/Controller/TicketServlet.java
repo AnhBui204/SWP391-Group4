@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controller;
 
 import Model.TicketDB;
@@ -56,16 +52,16 @@ public class TicketServlet extends HttpServlet {
     @Override
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String action = request.getParameter("action");
-    String ticketID = request.getParameter("ticketID");
+    String bookingID = request.getParameter("bookingID");
 
-    if (ticketID != null && !ticketID.isEmpty()) {
+    if (bookingID != null && !bookingID.isEmpty()) {
         if ("approve".equals(action)) {
-            TicketDB.approveRefund(ticketID);
-            TicketDB.addBalanceToUser(ticketID);
-            System.out.println("Đã chấp thuận hoàn tiền cho vé ID: " + ticketID);
+            TicketDB.approveRefund(bookingID);
+            TicketDB.addBalanceToUser(bookingID);
+            System.out.println("Đã chấp thuận hoàn tiền cho vé ID: " + bookingID);
         } else if ("reject".equals(action)) {
-            TicketDB.rejectRefund(ticketID);   // Gọi phương thức reject từ TicketDB
-            System.out.println("Đã từ chối hoàn tiền cho vé ID: " + ticketID);
+            TicketDB.rejectRefund(bookingID);   // Gọi phương thức reject từ TicketDB
+            System.out.println("Đã từ chối hoàn tiền cho vé ID: " + bookingID);
         }
     }
 
@@ -86,17 +82,12 @@ public class TicketServlet extends HttpServlet {
     String action = request.getParameter("action");
     
     if ("requestRefund".equals(action)) {
-        String ticketID = request.getParameter("ticketID");
-        TicketDB.requestRefund(ticketID);
-    
-
-
+        String bookingID = request.getParameter("bookingID");
+        System.out.println("BookingID "+ bookingID);
+        TicketDB.requestRefund(bookingID);
         response.sendRedirect("summaryBooking.jsp");
     }
 }
-
-
-
 
     /**
      * Returns a short description of the servlet.

@@ -67,7 +67,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="ticket.jsp">
-                                    <i class="bi bi-card-checklist"></i> Vé ticket
+                                    <i class="bi bi-card-checklist"></i> Đơn Hàng
                                 </a>
                             </li>
                             <li class="nav-item">

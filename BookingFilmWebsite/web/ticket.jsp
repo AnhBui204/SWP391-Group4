@@ -1,3 +1,4 @@
+<%@page import="Model.BookingInfo"%>
 <%@page import="Model.ShowInfo1"%>
 <%@page import="java.util.List"%>
 <%@page import="Model.DatabaseInfo"%>
@@ -51,12 +52,12 @@
     </style>
     <body>
         <%
-            List<ShowInfo1> tickets = TicketDB.getAllShowInfo();
-            System.out.println("Tickets size: " + tickets.size()); // In ra kích thước của danh sách vé
-            request.setAttribute("tickets", tickets);
+            List<BookingInfo> booking = TicketDB.getBookingDetails();
+            System.out.println("Tickets size: " + booking.size());
+            request.setAttribute("booking", booking);
         %>
-        
-        
+
+
 
         <!-- Dashboard -->
         <div class="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
@@ -113,7 +114,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="ticket.jsp">
-                                    <i class="bi bi-card-checklist"></i> Vé ticket
+                                    <i class="bi bi-card-checklist"></i> Đơn Hàng
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -151,7 +152,7 @@
                             <div class="row align-items-center">
                                 <div class="col-sm-6 col-12 mb-4 mb-sm-0">
                                     <!-- Title -->
-                                    <h1 class="h2 mb-0 ls-tight">Quản Lý Vé</h1>
+                                    <h1 class="h2 mb-0 ls-tight">Quản Lý Đơn Hàng</h1>
                                 </div>
                             </div>
                             <!-- Nav -->
@@ -165,46 +166,36 @@
                     <div class="container-fluid"> 
                         <div class="card shadow border-0 mb-7">
                             <div class="card-header">
-                                <h5 class="mb-0">Thông tin Vé</h5>
+                                <h5 class="mb-0">Thông tin Đơn Hàng</h5>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-hover table-nowrap">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th>Rạp</th>
-                                            <th>Phim</th>
-                                            <th>Ghế</th>
-                                            <th>Ngày Chiếu</th>
-                                            <th>Giờ Chiếu</th>
-                                            <th>Phòng</th>
-                                            <th>Giá (VND)</th>
-                                            <th>Trạng thái</th>
-                                            <th>Hành động</th>
+                                            <th scope="col">Mã đơn hàng</th>
+                                            <th scope="col">Ngày đặt</th>
+                                            <th scope="col">Tổng giá</th>
+                                            <th scope="col">Trạng thái</th>
+                                            <th scope="col">Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="ticket" items="${tickets}">
+                                        <c:forEach var="book" items="${booking}">
                                             <tr>
-                                                <td>${ticket.theatreName}</td>
-                                                <td>${ticket.movieName}</td>
-                                                <td>${ticket.seatName}</td>
-                                                <td>${ticket.showDate}</td>
-                                                <td>${ticket.startTime}</td>
-                                                <td>${ticket.roomName}</td>
-                                                <td>${ticket.price}</td>
-                                                <td>${ticket.status}</td>
+                                                <td>${book.bookingID}</td> <!-- Add the necessary details here -->
+                                                <td>${book.bookingDate}</td>
+                                                <td>${book.totalPrice}</td>
+                                                <td>${book.status}</td>
                                                 <td>
                                                     <c:choose>
-                                                        <c:when test="${ticket.status == 'Đang chờ'}">
+                                                        <c:when test="${book.status == 'Đang chờ'}">
                                                             <div class="action-buttons">
                                                                 <!-- Nút Chấp thuận -->
-                                                                <a href="TicketServlet?action=approve&ticketID=${ticket.ticketID}" 
-                                                                   class="btn-approve">
+                                                                <a href="TicketServlet?action=approve&bookingID=${book.bookingID}" class="btn-approve">
                                                                     Chấp thuận
                                                                 </a>
                                                                 <!-- Nút Từ chối -->
-                                                                <a href="TicketServlet?action=reject&ticketID=${ticket.ticketID}" 
-                                                                   class="btn-reject">
+                                                                <a href="TicketServlet?action=reject&bookingID=${book.bookingID}" class="btn-reject">
                                                                     Từ chối
                                                                 </a>
                                                             </div>

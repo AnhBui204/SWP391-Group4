@@ -259,131 +259,131 @@ cardBodyRight.insertBefore(movieImgElement, document.getElementById('selected-mo
                 movieOptions.style.display = 'block';
             })
             .catch(error => console.error("Error: ", error));
+            }
+        });
+
+        document.getElementById('select-date').addEventListener('change', function () {
+            const movieID = movieIDInput.value;
+            const theatreID = selectTheatre.value;
+            const showDate = this.value;
+            selectedDate.textContent = showDate ? `Ngày: ` + showDate : 'Ngày: Chưa chọn';
+            resetNotifications();
+            if (movieID && theatreID && showDate) {
+                fetch('SelectDate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({movieID: movieID, theatreID: theatreID, showDate: showDate})
+                })
+                        .then(response => response.json())
+                        .then(data => {
+                            const startTimeSelect = document.getElementById('select-time');
+                            startTimeSelect.innerHTML = '<option value="">Chọn suất chiếu</option>'; // Reset danh sách suất chiếu
+
+                            if (Array.isArray(data) && data.length > 0) {
+                                data.forEach(showTime => {
+                                    const option = document.createElement('option');
+                                    option.value = showTime;
+                                    option.textContent = showTime;
+                                    startTimeSelect.appendChild(option);
+                                });
+                            } else {
+                                startTimeSelect.innerHTML = '<option value="">Không có suất chiếu nào</option>';
+                            }
+                        });
+            }
+        });
+
+        document.getElementById('select-time').addEventListener('change', function () {
+            const timeSelected = this.value;
+            selectedTime.textContent = timeSelected ? `Suất:` + timeSelected : 'Suất:Chưa chọn';
+            resetNotifications();
+        });
+    });
+    function resetNotifications() {
+        const notificationTheatreElement = document.getElementById('notification-theatre');
+        const notificationMovieElement = document.getElementById('notification-movie');
+        const notificationDateElement = document.getElementById('notification-date');
+        const notificationTimeElement = document.getElementById('notification-time');
+
+        notificationTheatreElement.innerHTML = '';
+        notificationTheatreElement.style.display = 'none';
+
+        notificationMovieElement.innerHTML = '';
+        notificationMovieElement.style.display = 'none';
+
+        notificationDateElement.innerHTML = '';
+        notificationDateElement.style.display = 'none';
+
+        notificationTimeElement.innerHTML = '';
+        notificationTimeElement.style.display = 'none';
+    }
+    function updateHiddenFields(event) {
+        // Ngăn chặn form gửi trước khi cập nhật các trường ẩn
+        event.preventDefault();
+
+        const isLoggedIn = <%= (session.getAttribute("user") != null) ? "true" : "false"%>;
+
+        if (!isLoggedIn) {
+            // Hiển thị modal đăng nhập
+            $('#loginModal').modal('show');
+            return;
         }
-    });
 
-    document.getElementById('select-date').addEventListener('change', function() {
-        const movieID = movieIDInput.value; 
-        const theatreID = selectTheatre.value;
-         const showDate = this.value;  
-   selectedDate.textContent = showDate ? `Ngày: `+ showDate : 'Ngày: Chưa chọn';
-  resetNotifications();
-        if (movieID && theatreID && showDate) {
-            fetch('SelectDate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ movieID: movieID, theatreID: theatreID, showDate: showDate })
-            })
-            .then(response => response.json())
-            .then(data => {
-                const startTimeSelect = document.getElementById('select-time');
-                startTimeSelect.innerHTML = '<option value="">Chọn suất chiếu</option>'; // Reset danh sách suất chiếu
+        const selectedDate = document.getElementById('select-date').value;
+        const selectedTime = document.getElementById('select-time').value;
+        const theatreID = document.getElementById('select-theatre').value; // Thay đổi để lấy giá trị từ select
+        const movieID = document.getElementById('movieID').value;
 
-                if (Array.isArray(data) && data.length > 0) {
-                    data.forEach(showTime => {
-                        const option = document.createElement('option');
-                        option.value = showTime;
-                        option.textContent = showTime;
-                        startTimeSelect.appendChild(option);
-                    });
-                } else {
-                    startTimeSelect.innerHTML = '<option value="">Không có suất chiếu nào</option>';
-                }
-            });
+        // Kiểm tra các trường đã được chọn
+        let notificationTheatre = '';
+        let notificationMovie = '';
+        let notificationDate = '';
+        let notificationTime = '';
+
+        if (!theatreID) {
+            notificationTheatre = 'Bạn chưa chọn rạp.<br>';
         }
-    });
+        if (!movieID) {
+            notificationMovie = 'Bạn chưa chọn phim.<br>';
+        }
+        if (!selectedDate) {
+            notificationDate = 'Bạn chưa chọn ngày.<br>';
+        }
+        if (!selectedTime) {
+            notificationTime = 'Bạn chưa chọn suất chiếu.<br>';
+        }
 
-    document.getElementById('select-time').addEventListener('change', function() {
-        const timeSelected = this.value;
-        selectedTime.textContent = timeSelected ? `Suất:` + timeSelected : 'Suất:Chưa chọn';
-          resetNotifications();
-    });
-});
-function resetNotifications() {
-    const notificationTheatreElement = document.getElementById('notification-theatre');
-    const notificationMovieElement = document.getElementById('notification-movie');
-    const notificationDateElement = document.getElementById('notification-date');
-    const notificationTimeElement = document.getElementById('notification-time');
+        const notificationTheatreElement = document.getElementById('notification-theatre');
+        const notificationMovieElement = document.getElementById('notification-movie');
+        const notificationDateElement = document.getElementById('notification-date');
+        const notificationTimeElement = document.getElementById('notification-time');
 
-    notificationTheatreElement.innerHTML = '';
-    notificationTheatreElement.style.display = 'none';
+        // Hiện thông báo cho từng mục nếu có
+        notificationTheatreElement.innerHTML = notificationTheatre;
+        notificationTheatreElement.style.display = notificationTheatre ? 'block' : 'none';
 
-    notificationMovieElement.innerHTML = '';
-    notificationMovieElement.style.display = 'none';
+        notificationMovieElement.innerHTML = notificationMovie;
+        notificationMovieElement.style.display = notificationMovie ? 'block' : 'none';
 
-    notificationDateElement.innerHTML = '';
-    notificationDateElement.style.display = 'none';
+        notificationDateElement.innerHTML = notificationDate;
+        notificationDateElement.style.display = notificationDate ? 'block' : 'none';
 
-    notificationTimeElement.innerHTML = '';
-    notificationTimeElement.style.display = 'none';
-}
-function updateHiddenFields(event) {
-    // Ngăn chặn form gửi trước khi cập nhật các trường ẩn
-    event.preventDefault();
+        notificationTimeElement.innerHTML = notificationTime;
+        notificationTimeElement.style.display = notificationTime ? 'block' : 'none';
 
-    const isLoggedIn = <%= (session.getAttribute("user") != null) ? "true" : "false" %>;
+        if (!notificationTheatre && !notificationMovie && !notificationDate && !notificationTime) {
+            // Cập nhật các trường ẩn
+            document.getElementById('selectedDate').value = selectedDate;
+            document.getElementById('selectedTime').value = selectedTime;
+            document.getElementById('theatreID').value = theatreID;
+            document.getElementById('movieID').value = movieID;
 
-    if (!isLoggedIn) {
-        // Hiển thị modal đăng nhập
-        $('#loginModal').modal('show');
-        return;
+            // Gửi form sau khi đã cập nhật
+            document.getElementById('bookingForm').submit();
+        }
     }
-
-    const selectedDate = document.getElementById('select-date').value;
-    const selectedTime = document.getElementById('select-time').value;
-    const theatreID = document.getElementById('select-theatre').value; // Thay đổi để lấy giá trị từ select
-    const movieID = document.getElementById('movieID').value;
-
-    // Kiểm tra các trường đã được chọn
-    let notificationTheatre = '';
-    let notificationMovie = '';
-    let notificationDate = '';
-    let notificationTime = '';
-
-    if (!theatreID) {
-        notificationTheatre = 'Bạn chưa chọn rạp.<br>';
-    }
-    if (!movieID) {
-        notificationMovie = 'Bạn chưa chọn phim.<br>';
-    }
-    if (!selectedDate) {
-        notificationDate = 'Bạn chưa chọn ngày.<br>';
-    }
-    if (!selectedTime) {
-        notificationTime = 'Bạn chưa chọn suất chiếu.<br>';
-    }
-
-    const notificationTheatreElement = document.getElementById('notification-theatre');
-    const notificationMovieElement = document.getElementById('notification-movie');
-    const notificationDateElement = document.getElementById('notification-date');
-    const notificationTimeElement = document.getElementById('notification-time');
-
-    // Hiện thông báo cho từng mục nếu có
-    notificationTheatreElement.innerHTML = notificationTheatre;
-    notificationTheatreElement.style.display = notificationTheatre ? 'block' : 'none';
-
-    notificationMovieElement.innerHTML = notificationMovie;
-    notificationMovieElement.style.display = notificationMovie ? 'block' : 'none';
-
-    notificationDateElement.innerHTML = notificationDate;
-    notificationDateElement.style.display = notificationDate ? 'block' : 'none';
-
-    notificationTimeElement.innerHTML = notificationTime;
-    notificationTimeElement.style.display = notificationTime ? 'block' : 'none';
-
-    if (!notificationTheatre && !notificationMovie && !notificationDate && !notificationTime) {
-        // Cập nhật các trường ẩn
-        document.getElementById('selectedDate').value = selectedDate;
-        document.getElementById('selectedTime').value = selectedTime;
-        document.getElementById('theatreID').value = theatreID;
-        document.getElementById('movieID').value = movieID;
-
-        // Gửi form sau khi đã cập nhật
-        document.getElementById('bookingForm').submit();
-    }
-}
 
 
     </script>

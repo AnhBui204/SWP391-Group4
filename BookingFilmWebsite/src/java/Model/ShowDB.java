@@ -53,28 +53,28 @@ public class ShowDB {
 
         return showList;
     }
-public static String getShowID(String showDate, String startTime) {
-    String showID = null;
-    String sql = "SELECT ShowID FROM Shows WHERE ShowDate = ? AND StartTime = ? ";
 
-    try (Connection conn = getConnect(); 
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-        
-        pstmt.setString(1, showDate);
-        pstmt.setString(2, startTime);
-      
+    public static String getShowID(String showDate, String startTime) {
+        String showID = null;
+        String sql = "SELECT ShowID FROM Shows WHERE ShowDate = ? AND StartTime = ? ";
 
-        try (ResultSet rs = pstmt.executeQuery()) {
-            if (rs.next()) {
-                showID = rs.getString("ShowID"); // Lấy giá trị ShowID từ kết quả truy vấn
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, showDate);
+            pstmt.setString(2, startTime);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    showID = rs.getString("ShowID"); // Lấy giá trị ShowID từ kết quả truy vấn
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+
+        return showID;
     }
-    
-    return showID;
-}
+
     public static List<Show> getAllShowsByMovieID(String movieID) {
         List<Show> showList = new ArrayList<>();
         String sql = "SELECT * FROM Shows where MovieID = ?";
@@ -196,19 +196,17 @@ public static String getShowID(String showDate, String startTime) {
         return false;
     }
 
-  
- public static List<String> getShowDatesByMovieAndTheatre(String movieID, String theatreID) {
+    public static List<String> getShowDatesByMovieAndTheatre(String movieID, String theatreID) {
         List<String> showDates = new ArrayList<>();
-        String sql = "SELECT DISTINCT s.ShowDate " +
-                     "FROM Shows s " +
-                     "JOIN ShowSeats ss ON s.ShowID = ss.ShowID " +
-                     "WHERE ss.TheatreID = ? AND s.MovieID = ?";
+        String sql = "SELECT DISTINCT s.ShowDate "
+                + "FROM Shows s "
+                + "JOIN ShowSeats ss ON s.ShowID = ss.ShowID "
+                + "WHERE ss.TheatreID = ? AND s.MovieID = ? AND s.ShowDate >= CURRENT_DATE";
 
-        try (Connection conn = getConnect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
             pstmt.setString(1, theatreID);
-            pstmt.setString(2, movieID); 
+            pstmt.setString(2, movieID);
 
             ResultSet rs = pstmt.executeQuery();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Định dạng ngày
@@ -216,21 +214,23 @@ public static String getShowID(String showDate, String startTime) {
             while (rs.next()) {
                 Date showDate = rs.getDate("ShowDate");
                 if (showDate != null) {
-                    showDates.add(dateFormat.format(showDate)); 
+                    showDates.add(dateFormat.format(showDate));
                 }
             }
-            
+
         } catch (SQLException e) {
+            e.printStackTrace(); // Để kiểm tra lỗi khi truy vấn
         }
-        
-        return showDates; 
+
+        return showDates;
     }
 
     public static List<Time> getStartTimes(String movieID, String theatreID, String showDate) {
         List<Time> startTimes = new ArrayList<>();
         String sql = "SELECT StartTime FROM Shows "
                 + "WHERE MovieID = ? AND ShowDate = ? AND ShowID IN "
-                + "(SELECT ShowID FROM ShowSeats WHERE TheatreID = ? AND IsAvailable = 1)";
+                + "(SELECT ShowID FROM ShowSeats WHERE TheatreID = ? AND IsAvailable = 1) "
+                + "AND StartTime > CURRENT_TIME";
 
         try {
             Connection conn = getConnect(); // Lấy kết nối từ phương thức getConnect()
@@ -244,11 +244,10 @@ public static String getShowID(String showDate, String startTime) {
 
             // Lấy thời gian bắt đầu và thêm vào danh sách
             while (resultSet.next()) {
-                startTimes.add(resultSet.getTime("StartTime")); // Chuyển đổi thành chuỗi
+                startTimes.add(resultSet.getTime("StartTime"));
             }
         } catch (SQLException e) {
-            // Ghi lại lỗi nếu có
-
+            e.printStackTrace(); // Ghi lại lỗi để kiểm tra
         }
         return startTimes; // Trả về danh sách thời gian bắt đầu
     }
@@ -272,7 +271,7 @@ public static String getShowID(String showDate, String startTime) {
 //        ShowDB.deleteShow("SH001");
 
         // Lấy danh sách tất cả các show
-        List<String> allShows = ShowDB.getShowDatesByMovieAndTheatre("M00001","T00001");
+        List<String> allShows = ShowDB.getShowDatesByMovieAndTheatre("M00001", "T00001");
         allShows.forEach(System.out::println);
 
     }

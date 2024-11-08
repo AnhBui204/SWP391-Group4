@@ -153,7 +153,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="ticket.jsp">
-                                    <i class="bi bi-card-checklist"></i> Vé ticket
+                                    <i class="bi bi-card-checklist"></i> Đơn Hàng
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -204,8 +204,15 @@
                 <main class="py-6 bg-surface-secondary">
                     <div class="container-fluid"> 
                         <div class="card shadow border-0 mb-7">
-                            <div class="card-header">
+                            <div class="card-header d-flex align-items-center justify-content-between">
                                 <h5 class="mb-0">Rạp Phim</h5>
+                                <div class="card-footer border-0 py-2">
+                                <div class="action-buttons">
+                                    <form action="addTheatre.jsp" method="GET">
+                                        <button class="open-btn" style="background-color: green;" type="submit">Add New Theatre</button>
+                                    </form>
+                                </div>
+                            </div>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-hover table-nowrap">
@@ -277,13 +284,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="card-footer border-0 py-5">
-                                <div class="action-buttons">
-                                    <form action="addTheatre.jsp" method="GET">
-                                        <button class="open-btn" style="background-color: green; margin-top: 10px" type="submit">Add New Theatre</button>
-                                    </form>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </main>

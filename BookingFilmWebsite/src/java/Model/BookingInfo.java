@@ -1,22 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Model;
 
-/**
- *
- * @author ADMIN
- */
 public class BookingInfo {
-      private String bookingID;
+
+    private String bookingID;
     private String bookingDate;
     private double totalPrice;
+    private String status;
 
-    public BookingInfo(String bookingID, String bookingDate, double totalPrice) {
+    public BookingInfo(String bookingID, String bookingDate, double totalPrice, String status) {
         this.bookingID = bookingID;
         this.bookingDate = bookingDate;
         this.totalPrice = totalPrice;
+        this.status = status;
     }
 
     public String getBookingID() {
@@ -42,5 +37,13 @@ public class BookingInfo {
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
-    
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 }
