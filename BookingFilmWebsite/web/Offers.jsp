@@ -30,11 +30,11 @@
         <div class="container-fluid">
             <div class="container-main row">
                 <!-- Sidebar -->
-                
+
                 <div class="col-12 col-lg-3" id="tempDiv">
-                    
+
                 </div>
-                
+
                 <div class="col-12 col-lg-3" style="padding-left: 0px ;padding-right: 0px; position: fixed;">
                     <div class="sidebar" style="height: 190vh;">
                         <div class="widget widget_collection">
@@ -122,7 +122,7 @@
                                             List<Voucher> listVC = voucherDB.getVouchersByPage(theatre.getTheatreID(), mvPage, vouchersPerPage); // Lấy danh sách voucher theo trang
                                             int totalVouchers = voucherDB.getTotalVouchersByTheatre(theatre.getTheatreID()); // Tổng số voucher
                                             int totalPages = (int) Math.ceil(totalVouchers / (double) vouchersPerPage); // Tính tổng số trang
-%>
+                                        %>
 
                                         <!-- Phân trang và thanh tìm kiếm -->
                                         <div class="pagination-container d-flex justify-content-between align-items-center mb-4">
@@ -165,7 +165,7 @@
                                                                    data-toggle="modal"
                                                                    data-id="<%= voucher.getVoucherID()%>" 
                                                                    data-name="<%= voucher.getVoucherName()%>" 
-                                                                   
+
                                                                    data-expirydate="<%= voucher.getExpiryDate()%>">
                                                                     <i class="material-icons" data-toggle="tooltip" title="Update" style="background-color: green;">&#xE254;</i></a>
                                                                 <a href="#deleteEmployeeModal" 
@@ -211,10 +211,10 @@
                                     <label for="voucherName">Name</label>
                                     <input type="text" name="voucherName" id="voucherName" class="form-control" required>
                                 </div>
-                                
+
                                 <!-- Used to be Price -->
-                                
-                                
+
+
                                 <div class="form-group">
                                     <label for="expiryDate">Expiry Date</label>
                                     <input type="date" name="expiryDate" id="expiryDate" class="form-control" required>
@@ -253,10 +253,10 @@
                                     <label for="voucherName">Name</label>
                                     <input type="text" name="voucherName" id="voucherName" value="" class="form-control" required>
                                 </div>
-                                
+
                                 <!-- Used to be Price -->
-                                
-                                
+
+
                                 <div class="form-group">
                                     <label for="expiryDate">Expiry Date</label>
                                     <input type="date" name="expiryDate" id="expiryDate" value="" class="form-control" required>
@@ -327,7 +327,17 @@
                         $('#messageModal').modal('show');
                     }
                 });
+                if (window.location.href.includes("action=add")) {
+                    window.location.href = "Offers.jsp";
+                }
 
+                if (window.location.href.includes("action=update")) {
+                    window.location.href = "Offers.jsp";
+                }
+
+                if (window.location.href.includes("action=delete")) {
+                    window.location.href = "Offers.jsp";
+                }
             </script>
             <!-- Modal display message -->
             <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">

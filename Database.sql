@@ -2458,64 +2458,219 @@ VALUES
 	('M00013', N'Báo Thủ Đi Tìm Chủ', 88, N'Canada', N'Second Chance Productions', N'Kevin Donovan, Gottfried Roodt', '2024-09-13', 'image/MovieImg/P/Pets.jpg', 'image/MovieImg/L/Pets.jpg',N''),
 	('M00014', N'Mắt Biếc', 117, N'Việt Nam', 'Galaxy M&E, November Film', 'Victor Vũ', '2024-09-04', 'image/MovieImg/P/Matbiec.jpg', 'image/MovieImg/L/Matbiec.jpg',N'Đạo diễn Victor Vũ trở lại với một tác phẩm chuyển thể từ truyện ngắn cùng tên nổi tiếng của nhà văn Nguyễn Nhật Ánh: Mắt Biếc. Phim kể về chuyện tình đơn phương của chàng thanh niên Ngạn dành cho cô bạn từ thuở nhỏ Hà Lan... Ngạn và Hà Lan vốn là hai người bạn từ thuở nhỏ, cùng ở làng Đo Đo an bình. Họ cùng nhau đi học, cùng trải qua quãng đời áo trắng ngây thơ vụng dại với những cảm xúc bồi hồi của tuổi thiếu niên.'),
 	('M00015', N'Làm Giàu Với Ma', 112, N'Việt Nam', N'BlueBells Studios', N'Trung Lùn', '2024-08-29', 'image/MovieImg/P/Lamgiauvoima.jpg', 'image/MovieImg/L/Lamgiauvoima.jpg',N'Phim mới Làm Giàu Với Ma kể về Lanh (Tuấn Trần) - con trai của ông Đạo làm nghề mai táng (Hoài Linh), lâm vào đường cùng vì cờ bạc. Trong cơn túng quẫn, “duyên tình” đẩy đưa anh gặp một ma nữ (Diệp Bảo Ngọc) và cùng nhau thực hiện những “kèo thơm" để phục vụ mục đích của cả hai.');
+	
+INSERT INTO Movies (MovieID, MovieName, Duration, Country, Manufacturer, Director, ReleaseDate, ImgPortrait, ImgLandscape, MovieDescription)
+VALUES 
+    ('M00017', N'Red One: Mật Mã Đỏ', 120, N'Mỹ', N'Universal Pictures', N'Jake Kasdan', '2024-12-15', 'image/MovieImg/P/RedOne.jpg', 'image/MovieImg/L/RedOne.jpg', N'Một bộ phim hành động phiêu lưu về một nhiệm vụ đặc biệt mang tên Mật Mã Đỏ.'),
 
+    ('M00018', N'Ngày Xưa Có Một Chuyện Tình', 110, N'Việt Nam', N'Galaxy M&E', N'Victor Vũ', '2024-10-20', 'image/MovieImg/P/NgayXuaCoMotChuyenTinh.jpg', 'image/MovieImg/L/NgayXuaCoMotChuyenTinh.jpg', N'Bộ phim tình cảm lãng mạn về những câu chuyện tình đã qua.'),
+
+    ('M00019', N'Venom: Kèo Cuối', 130, N'Mỹ', N'Sony Pictures', N'Andy Serkis', '2024-11-01', 'image/MovieImg/P/Venom.jpg', 'image/MovieImg/L/Venom.jpg', N'Phim hành động khoa học viễn tưởng tiếp nối cuộc phiêu lưu của Venom.'),
+
+    ('M00020', N'Học Viện Anh Hùng: You are Next', 95, N'Nhật Bản', N'Toei Animation', N'Kenji Nagasaki', '2024-09-30', 'image/MovieImg/P/MyHeroAcademia.jpg', 'image/MovieImg/L/MyHeroAcademia.jpg', N'Hoạt hình hành động về các siêu anh hùng học đường.'),
+
+    ('M00021', N'Đôi Bạn Học Yêu', 100, N'Việt Nam', N'TBA', N'TBA', '2024-10-10', 'image/MovieImg/P/DoiBanHocYeu.jpg', 'image/MovieImg/L/DoiBanHocYeu.jpg', N'Bộ phim hài tình cảm xoay quanh tình bạn và tình yêu học đường.'),
+
+    ('M00022', N'Cô Dâu Hào Môn', 105, N'Hàn Quốc', N'TBA', N'TBA', '2024-11-05', 'image/MovieImg/P/CoDauHaoMon.jpg', 'image/MovieImg/L/CoDauHaoMon.jpg', N'Bộ phim tâm lý tình cảm về cuộc sống trong giới thượng lưu.'),
+
+    ('M00023', N'Thần Dược', 100, N'Thái Lan', N'TBA', N'TBA', '2024-10-30', 'image/MovieImg/P/ThanDuoc.jpg', 'image/MovieImg/L/ThanDuoc.jpg', N'Một bộ phim kinh dị bí ẩn liên quan đến nghi lễ cổ xưa.'),
+
+    ('M00024', N'Tee Yod: Quỷ Ăn Tạng 2', 90, N'Thái Lan', N'TBA', N'TBA', '2024-10-20', 'image/MovieImg/P/TeeYod.jpg', 'image/MovieImg/L/TeeYod.jpg', N'Phim kinh dị về truyền thuyết quỷ ăn tạng.'),
+
+    ('M00025', N'Thiên Đường Quả Báo', 110, N'Nhật Bản', N'TBA', N'TBA', '2024-10-15', 'image/MovieImg/P/ThienDuongQuaBao.jpg', 'image/MovieImg/L/ThienDuongQuaBao.jpg', N'Bộ phim tâm lý hồi hộp về sự trả thù trong thế giới ngầm.'),
+
+    ('M00026', N'Vây Hãm Tại Đài Bắc', 120, N'Trung Quốc', N'TBA', N'TBA', '2024-11-01', 'image/MovieImg/P/VayHamTaiDaiBac.jpg', 'image/MovieImg/L/VayHamTaiDaiBac.jpg', N'Phim hành động hồi hộp lấy bối cảnh Đài Bắc.'),
+
+    ('M00027', N'Vùng Đất Bị Nguyền Rủa', 100, N'Mỹ', N'TBA', N'TBA', '2024-11-10', 'image/MovieImg/P/VungDatBiNguyenRua.jpg', 'image/MovieImg/L/VungDatBiNguyenRua.jpg', N'Phim kinh dị bí ẩn xoay quanh vùng đất ma ám.'),
+
+    ('M00028', N'Robot Hoang Dã', 90, N'Hoa Kỳ', N'TBA', N'TBA', '2024-11-20', 'image/MovieImg/P/RobotHoangDa.jpg', 'image/MovieImg/L/RobotHoangDa.jpg', N'Phim hoạt hình phiêu lưu về robot trong rừng hoang dã.'),
+
+    ('M00029', N'Tiên Tri Tử Thần', 95, N'Anh', N'TBA', N'TBA', '2024-10-10', 'image/MovieImg/P/TienTriTuThan.jpg', 'image/MovieImg/L/TienTriTuThan.jpg', N'Bộ phim kinh dị hồi hộp xoay quanh những lời tiên tri chết chóc.'),
+
+    ('M00030', N'Tiếng Gọi Của Oán Hồn', 90, N'Hàn Quốc', N'TBA', N'TBA', '2024-09-25', 'image/MovieImg/P/TiengGoiCuaOanHon.jpg', 'image/MovieImg/L/TiengGoiCuaOanHon.jpg', N'Phim kinh dị kể về những linh hồn oan khuất chưa siêu thoát.'),
+
+    ('M00031', N'Trò Chơi Nhân Tính', 105, N'Nhật Bản', N'TBA', N'TBA', '2024-10-20', 'image/MovieImg/P/TroChoiNhanTinh.jpg', 'image/MovieImg/L/TroChoiNhanTinh.jpg', N'Phim hồi hộp tâm lý về một trò chơi nguy hiểm giữa con người.'),
+
+    ('M00032', N'Ác Quỷ Truy Hồn', 100, N'Trung Quốc', N'TBA', N'TBA', '2024-11-01', 'image/MovieImg/P/AcQuyTruyHon.jpg', 'image/MovieImg/L/AcQuyTruyHon.jpg', N'Phim kinh dị về một con quỷ đang truy đuổi linh hồn.'),
+
+    ('M00033', N'Biệt Đội Hot Girl', 90, N'Mỹ', N'TBA', N'TBA', '2024-10-15', 'image/MovieImg/P/BietDoiHotGirl.jpg', 'image/MovieImg/L/BietDoiHotGirl.jpg', N'Bộ phim hài hành động xoay quanh một nhóm cô gái táo bạo.'),
+
+    ('M00034', N'An Lạc', 110, N'Trung Quốc', N'TBA', N'TBA', '2024-09-10', 'image/MovieImg/P/AnLac.jpg', 'image/MovieImg/L/AnLac.jpg', N'Bộ phim tâm lý tình cảm về sự an nhiên giữa những sóng gió cuộc đời.'),
+
+    ('M00035', N'Tín Hiệu Cầu Cứu', 95, N'Hàn Quốc', N'TBA', N'TBA', '2024-10-30', 'image/MovieImg/P/TinHieuCauCuu.jpg', 'image/MovieImg/L/TinHieuCauCuu.jpg', N'Phim hồi hộp bí ẩn về một tín hiệu cầu cứu từ thế giới bên kia.'),
+
+    ('M00036', N'Bóng Đá Nữ Việt Nam: Chuyện Lần Đầu Kể', 100, N'Việt Nam', N'Galaxy M&E', N'Nguyễn Thanh Sơn', '2024-09-25', 'image/MovieImg/P/BongDaNuVN.jpg', 'image/MovieImg/L/BongDaNuVN.jpg', N'Phim tài liệu về đội bóng đá nữ Việt Nam và những câu chuyện chưa từng kể.')
+
+
+	DELETE FROM Movies
+WHERE MovieID BETWEEN 'M00017' AND 'M00030';
 	select * from Movies
 
 -- Thêm Shows (suất chiếu phim)
+	INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
+	VALUES 
+		('SH0001', '2024-10-21', '10:00:00', 'M00001'),
+		('SH0002', '2024-10-21', '12:30:00', 'M00002'),
+		('SH0003', '2024-10-21', '15:00:00', 'M00003'),
+		('SH0004', '2024-10-21', '18:30:00', 'M00004'),
+		('SH0005', '2024-10-21', '20:00:00', 'M00005'),
+		('SH0006', '2024-10-22', '09:15:00', 'M00006'),
+		('SH0007', '2024-10-22', '11:45:00', 'M00004'),
+		('SH0008', '2024-10-22', '14:30:00', 'M00005'),
+		('SH0009', '2024-10-22', '16:15:00', 'M00007'),
+		('SH0010', '2024-10-22', '19:00:00', 'M00007'),
+		('SH0011', '2024-10-22', '22:30:00', 'M00008'),
+		('SH0012', '2024-10-23', '10:30:00', 'M00009'),
+		('SH0013', '2024-10-23', '13:00:00', 'M00010'),
+		('SH0014', '2024-10-23', '15:30:00', 'M00010'),
+		('SH0015', '2024-10-23', '17:45:00', 'M00011'),
+		('SH0016', '2024-10-23', '20:00:00', 'M00012'),
+		('SH0017', '2024-10-23', '22:15:00', 'M00013'),
+		('SH0018', '2024-10-24', '11:00:00', 'M00014'),
+		('SH0019', '2024-10-24', '12:30:00', 'M00015'),
+		('SH0020', '2024-10-24', '14:00:00', 'M00001'),
+		('SH0021', '2024-10-24', '16:00:00', 'M00002'),
+		('SH0022', '2024-10-24', '18:00:00', 'M00003'),
+		('SH0023', '2024-10-24', '20:00:00', 'M00004'),
+		('SH0024', '2024-10-24', '22:00:00', 'M00005'),
+		('SH0025', '2024-10-25', '09:00:00', 'M00006'),
+		('SH0026', '2024-10-25', '12:00:00', 'M00007'),
+		('SH0027', '2024-10-25', '15:00:00', 'M00008'),
+		('SH0028', '2024-10-25', '17:00:00', 'M00009'),
+		('SH0029', '2024-10-25', '20:00:00', 'M00010'),
+		('SH0030', '2024-10-25', '22:00:00', 'M00011'),
+		('SH0031', '2024-10-26', '10:00:00', 'M00012'),
+		('SH0032', '2024-10-26', '12:15:00', 'M00013'),
+		('SH0033', '2024-10-26', '14:30:00', 'M00014'),
+		('SH0034', '2024-10-26', '16:45:00', 'M00015'),
+		('SH0035', '2024-10-26', '19:00:00', 'M00001'),
+		('SH0036', '2024-10-26', '21:15:00', 'M00002'),
+		('SH0037', '2024-10-27', '10:30:00', 'M00003'),
+		('SH0038', '2024-10-27', '13:00:00', 'M00004'),
+		('SH0039', '2024-10-27', '15:30:00', 'M00005'),
+		('SH0040', '2024-10-27', '18:00:00', 'M00006'),
+		('SH0041', '2024-10-27', '20:30:00', 'M00007'),
+		('SH0042', '2024-10-27', '22:00:00', 'M00008'),
+		('SH0043', '2024-10-28', '09:15:00', 'M00009'),
+		('SH0044', '2024-10-28', '11:45:00', 'M00010'),
+		('SH0045', '2024-10-28', '14:30:00', 'M00011'),
+		('SH0046', '2024-10-28', '16:15:00', 'M00012'),
+		('SH0047', '2024-10-28', '19:00:00', 'M00013'),
+		('SH0048', '2024-10-28', '22:30:00', 'M00014'),
+		('SH0049', '2024-10-29', '10:30:00', 'M00015'),
+		('SH0050', '2024-10-29', '13:00:00', 'M00001');
+
+		-- Ngày 10/11/2024
 INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
 VALUES 
-    ('SH0001', '2024-10-21', '10:00:00', 'M00001'),
-    ('SH0002', '2024-10-21', '12:30:00', 'M00002'),
-    ('SH0003', '2024-10-21', '15:00:00', 'M00003'),
-    ('SH0004', '2024-10-21', '18:30:00', 'M00004'),
-    ('SH0005', '2024-10-21', '20:00:00', 'M00005'),
-    ('SH0006', '2024-10-22', '09:15:00', 'M00006'),
-    ('SH0007', '2024-10-22', '11:45:00', 'M00004'),
-    ('SH0008', '2024-10-22', '14:30:00', 'M00005'),
-    ('SH0009', '2024-10-22', '16:15:00', 'M00007'),
-    ('SH0010', '2024-10-22', '19:00:00', 'M00007'),
-    ('SH0011', '2024-10-22', '22:30:00', 'M00008'),
-    ('SH0012', '2024-10-23', '10:30:00', 'M00009'),
-    ('SH0013', '2024-10-23', '13:00:00', 'M00010'),
-    ('SH0014', '2024-10-23', '15:30:00', 'M00010'),
-    ('SH0015', '2024-10-23', '17:45:00', 'M00011'),
-    ('SH0016', '2024-10-23', '20:00:00', 'M00012'),
-    ('SH0017', '2024-10-23', '22:15:00', 'M00013'),
-    ('SH0018', '2024-10-24', '11:00:00', 'M00014'),
-    ('SH0019', '2024-10-24', '12:30:00', 'M00015'),
-    ('SH0020', '2024-10-24', '14:00:00', 'M00001'),
-    ('SH0021', '2024-10-24', '16:00:00', 'M00002'),
-    ('SH0022', '2024-10-24', '18:00:00', 'M00003'),
-    ('SH0023', '2024-10-24', '20:00:00', 'M00004'),
-    ('SH0024', '2024-10-24', '22:00:00', 'M00005'),
-    ('SH0025', '2024-10-25', '09:00:00', 'M00006'),
-    ('SH0026', '2024-10-25', '12:00:00', 'M00007'),
-    ('SH0027', '2024-10-25', '15:00:00', 'M00008'),
-    ('SH0028', '2024-10-25', '17:00:00', 'M00009'),
-    ('SH0029', '2024-10-25', '20:00:00', 'M00010'),
-    ('SH0030', '2024-10-25', '22:00:00', 'M00011'),
-    ('SH0031', '2024-10-26', '10:00:00', 'M00012'),
-    ('SH0032', '2024-10-26', '12:15:00', 'M00013'),
-    ('SH0033', '2024-10-26', '14:30:00', 'M00014'),
-    ('SH0034', '2024-10-26', '16:45:00', 'M00015'),
-    ('SH0035', '2024-10-26', '19:00:00', 'M00001'),
-    ('SH0036', '2024-10-26', '21:15:00', 'M00002'),
-    ('SH0037', '2024-10-27', '10:30:00', 'M00003'),
-    ('SH0038', '2024-10-27', '13:00:00', 'M00004'),
-    ('SH0039', '2024-10-27', '15:30:00', 'M00005'),
-    ('SH0040', '2024-10-27', '18:00:00', 'M00006'),
-    ('SH0041', '2024-10-27', '20:30:00', 'M00007'),
-    ('SH0042', '2024-10-27', '22:00:00', 'M00008'),
-    ('SH0043', '2024-10-28', '09:15:00', 'M00009'),
-    ('SH0044', '2024-10-28', '11:45:00', 'M00010'),
-    ('SH0045', '2024-10-28', '14:30:00', 'M00011'),
-    ('SH0046', '2024-10-28', '16:15:00', 'M00012'),
-    ('SH0047', '2024-10-28', '19:00:00', 'M00013'),
-    ('SH0048', '2024-10-28', '22:30:00', 'M00014'),
-    ('SH0049', '2024-10-29', '10:30:00', 'M00015'),
-    ('SH0050', '2024-10-29', '13:00:00', 'M00001');
+    ('SH0117', '2024-11-10', '09:00:00', 'M00013'),
+    ('SH0052', '2024-11-10', '11:30:00', 'M00002'),
+    ('SH0053', '2024-11-10', '14:00:00', 'M00008'),
+    ('SH0054', '2024-11-10', '16:30:00', 'M00021'),
+    ('SH0055', '2024-11-10', '19:00:00', 'M00005'),
+    ('SH0056', '2024-11-10', '21:30:00', 'M00016');
 
+-- Ngày 11/11/2024
+INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
+VALUES 
+    ('SH0057', '2024-11-11', '09:00:00', 'M00017'),
+    ('SH0058', '2024-11-11', '11:30:00', 'M00010'),
+    ('SH0059', '2024-11-11', '14:00:00', 'M00007'),
+    ('SH0060', '2024-11-11', '16:30:00', 'M00025'),
+    ('SH0061', '2024-11-11', '19:00:00', 'M00003'),
+    ('SH0062', '2024-11-11', '21:30:00', 'M00019');
 
+-- Ngày 12/11/2024
+INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
+VALUES 
+    ('SH0063', '2024-11-12', '09:00:00', 'M00004'),
+    ('SH0064', '2024-11-12', '11:30:00', 'M00011'),
+    ('SH0065', '2024-11-12', '14:00:00', 'M00024'),
+    ('SH0066', '2024-11-12', '16:30:00', 'M00036'),
+    ('SH0067', '2024-11-12', '19:00:00', 'M00006'),
+    ('SH0068', '2024-11-12', '21:30:00', 'M00020');
+
+-- Ngày 13/11/2024
+INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
+VALUES 
+    ('SH0069', '2024-11-13', '09:00:00', 'M00022'),
+    ('SH0070', '2024-11-13', '11:30:00', 'M00001'),
+    ('SH0071', '2024-11-13', '14:00:00', 'M00014'),
+    ('SH0072', '2024-11-13', '16:30:00', 'M00018'),
+    ('SH0073', '2024-11-13', '19:00:00', 'M00009'),
+    ('SH0074', '2024-11-13', '21:30:00', 'M00029');
+
+-- Ngày 14/11/2024
+INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
+VALUES 
+    ('SH0075', '2024-11-14', '09:00:00', 'M00027'),
+    ('SH0076', '2024-11-14', '11:30:00', 'M00012'),
+    ('SH0077', '2024-11-14', '14:00:00', 'M00015'),
+    ('SH0078', '2024-11-14', '16:30:00', 'M00030'),
+    ('SH0079', '2024-11-14', '19:00:00', 'M00028'),
+    ('SH0080', '2024-11-14', '21:30:00', 'M00033');
+
+-- Ngày 15/11/2024
+INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
+VALUES 
+    ('SH0081', '2024-11-15', '09:00:00', 'M00023'),
+    ('SH0082', '2024-11-15', '11:30:00', 'M00031'),
+    ('SH0083', '2024-11-15', '14:00:00', 'M00035'),
+    ('SH0084', '2024-11-15', '16:30:00', 'M00032'),
+    ('SH0085', '2024-11-15', '19:00:00', 'M00034'),
+    ('SH0086', '2024-11-15', '21:30:00', 'M00026');
+
+-- Ngày 16/11/2024
+INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
+VALUES 
+    ('SH0087', '2024-11-16', '09:00:00', 'M00002'),
+    ('SH0088', '2024-11-16', '11:30:00', 'M00008'),
+    ('SH0089', '2024-11-16', '14:00:00', 'M00018'),
+    ('SH0090', '2024-11-16', '16:30:00', 'M00029'),
+    ('SH0091', '2024-11-16', '19:00:00', 'M00007'),
+    ('SH0092', '2024-11-16', '21:30:00', 'M00017');
+
+-- Ngày 17/11/2024
+INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
+VALUES 
+    ('SH0093', '2024-11-17', '09:00:00', 'M00004'),
+    ('SH0094', '2024-11-17', '11:30:00', 'M00009'),
+    ('SH0095', '2024-11-17', '14:00:00', 'M00011'),
+    ('SH0096', '2024-11-17', '16:30:00', 'M00021'),
+    ('SH0097', '2024-11-17', '19:00:00', 'M00003'),
+    ('SH0098', '2024-11-17', '21:30:00', 'M00025');
+
+-- Ngày 18/11/2024
+INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
+VALUES 
+    ('SH0099', '2024-11-18', '09:00:00', 'M00012'),
+    ('SH0100', '2024-11-18', '11:30:00', 'M00010'),
+    ('SH0101', '2024-11-18', '14:00:00', 'M00020'),
+    ('SH0102', '2024-11-18', '16:30:00', 'M00015'),
+    ('SH0103', '2024-11-18', '19:00:00', 'M00006'),
+    ('SH0104', '2024-11-18', '21:30:00', 'M00028');
+
+-- Ngày 19/11/2024
+INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
+VALUES 
+    ('SH0105', '2024-11-19', '09:00:00', 'M00005'),
+    ('SH0106', '2024-11-19', '11:30:00', 'M00027'),
+    ('SH0107', '2024-11-19', '14:00:00', 'M00026'),
+    ('SH0108', '2024-11-19', '16:30:00', 'M00022'),
+    ('SH0109', '2024-11-19', '19:00:00', 'M00034'),
+    ('SH0110', '2024-11-19', '21:30:00', 'M00035');
+
+-- Ngày 20/11/2024
+INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
+VALUES 
+    ('SH0111', '2024-11-20', '09:00:00', 'M00036'),
+    ('SH0112', '2024-11-20', '11:30:00', 'M00030'),
+    ('SH0113', '2024-11-20', '14:00:00', 'M00031'),
+    ('SH0114', '2024-11-20', '16:30:00', 'M00014'),
+    ('SH0115', '2024-11-20', '19:00:00', 'M00016'),
+    ('SH0116', '2024-11-20', '21:30:00', 'M00032');
+
+	select * from Shows
 	INSERT INTO Shows (ShowID, ShowDate, StartTime, MovieID)
 VALUES ('SH0024', '2024-09-20', '22:30:00', 'M00001');
 
@@ -2868,3 +3023,90 @@ SET Rate = (SELECT AVG(Rating)
 			UPDATE Tickets SET Status = N'Đang chờ' WHERE TicketID = 'TK0077'
 
 			select * from Tickets where TicketID = 'TK0077'
+
+
+SELECT DISTINCT RoomID, SeatID, TheatreID FROM Seats WHERE TheatreID = 'T00001';
+
+-- Tạo các suất chiếu cho từng ShowID cho tất cả các phòng
+DECLARE @RoomID nvarchar(6);
+DECLARE @ShowID nvarchar(6);
+
+DECLARE RoomCursor CURSOR FOR 
+SELECT DISTINCT RoomID FROM Seats WHERE TheatreID = 'T00006';
+
+-- Mở RoomCursor để lặp qua từng RoomID
+OPEN RoomCursor;
+FETCH NEXT FROM RoomCursor INTO @RoomID;
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    -- Lặp qua từng ShowID có ngày từ hiện tại trở về sau để tạo suất chiếu cho từng phòng
+    DECLARE ShowCursor CURSOR FOR 
+    SELECT DISTINCT ShowID 
+    FROM Shows
+    WHERE ShowDate >= CAST(GETDATE() AS DATE); -- Điều kiện lấy ShowID từ hôm nay trở về sau
+    OPEN ShowCursor;
+    FETCH NEXT FROM ShowCursor INTO @ShowID;
+    
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        -- Thực hiện INSERT cho từng ShowID và RoomID
+        INSERT INTO ShowSeats (ShowID, SeatID, RoomID, TheatreID, price, IsAvailable)
+        SELECT @ShowID, SeatID, @RoomID, 'T00006', 60000, 1
+        FROM Seats 
+        WHERE RoomID = @RoomID AND TheatreID = 'T00006';
+        
+        FETCH NEXT FROM ShowCursor INTO @ShowID;
+    END
+    
+    CLOSE ShowCursor;
+    DEALLOCATE ShowCursor;
+    
+    FETCH NEXT FROM RoomCursor INTO @RoomID;
+END
+
+CLOSE RoomCursor;
+DEALLOCATE RoomCursor;
+
+select RoomID, ShowID from ShowSeats where ShowID = 'SH0058'
+
+SELECT Shows.ShowID, MovieID, ShowDate, StartTime, ShowSeats.TheatreID, TheatreName 
+                 FROM Shows 
+                INNER JOIN ShowSeats ON Shows.ShowID = ShowSeats.ShowID 
+                 INNER JOIN Theatres ON Theatres.TheatreID = ShowSeats.TheatreID 
+                 WHERE Shows.MovieID = 'M00001' AND ShowDate >= CONVERT(DATE, GETDATE())
+                 ORDER BY ShowDate ASC, TheatreName ASC
+
+				 SELECT StartTime 
+FROM Shows 
+WHERE MovieID = 'M00001' 
+  AND ShowDate = '2024-11-13' 
+  AND ShowID IN (SELECT ShowID FROM ShowSeats WHERE TheatreID = 'T00001' AND IsAvailable = 1)
+  AND (ShowDate > CONVERT(DATE, GETDATE()) OR StartTime > CONVERT(TIME, GETDATE()))
+
+
+				SELECT StartTime 
+FROM Shows 
+WHERE MovieID = 'M00001' 
+  AND ShowDate = '2024-11-13' 
+  AND ShowID IN (SELECT ShowID FROM ShowSeats WHERE TheatreID = 'T00001' AND IsAvailable = 1);
+  SELECT CONVERT(TIME, GETDATE()) AS CurrentTime;
+
+
+  select * from Tickets
+
+  select TheatreID, TheatreName , TheatreLocation FROM Theatres
+
+  UPDATE Users
+SET Sex = CASE
+    WHEN Sex = 'Male' THEN 'Nam'
+    WHEN Sex = 'Female' THEN 'Nữ'
+    ELSE Sex
+END;
+
+select * from Users
+
+SELECT u.UserID, u.MoneyLeft, b.TotalPrice 
+                FROM Users u 
+                JOIN Booking b ON u.UserID = b.UserID 
+                WHERE b.bookingID = "

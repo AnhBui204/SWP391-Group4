@@ -513,6 +513,18 @@
             $('#messageModal').modal('show');
         }
     });
+    if (window.location.href.includes("action=add")) {
+        window.location.href = "crudMV.jsp";
+    }
+
+    if (window.location.href.includes("action=update")) {
+        window.location.href = "crudMV.jsp";
+    }
+
+    if (window.location.href.includes("action=delete")) {
+        window.location.href = "crudMV.jsp";
+    }
+
 
 </script>
 </html>

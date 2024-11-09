@@ -21,8 +21,8 @@
     </head>
     <style>
         .combo-image {
-            width: 200px; 
-            min-height: 300px; 
+            width: 200px;
+            min-height: 300px;
             max-height: 300px;
             object-fit: cover;
         }
@@ -125,7 +125,7 @@
                                             List<FoodAndDrink> list = db.getCombosByPage(theatre.getTheatreID(), mvPage, combosPerPage); // Lấy danh sách combo theo trang
                                             int totalCombos = db.getTotalCombosByTheatre(theatre.getTheatreID()); // Tổng số combo
                                             int totalPages = (int) Math.ceil(totalCombos / (double) combosPerPage); // Tính tổng số trang
-                                        %>
+%>
 
                                         <!-- Phân trang -->
                                         <div class="pagination-container d-flex justify-content-between align-items-center mb-4">
@@ -149,7 +149,7 @@
                                                 </ul>
                                             </nav>
 
-                                           
+
                                         </div>
 
                                         <!-- Danh sách combo -->
@@ -182,7 +182,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <% 
+                                            <%
                                                 }
                                                 String nextID = FoodAndDrinkDB.getNextComboID();
                                             %>
@@ -328,6 +328,18 @@
                         $('#messageModal').modal('show');
                     }
                 });
+
+                if (window.location.href.includes("action=add")) {
+                    window.location.href = "crudFD.jsp";
+                }
+
+                if (window.location.href.includes("action=update")) {
+                    window.location.href = "crudFD.jsp";
+                }
+
+                if (window.location.href.includes("action=delete")) {
+                    window.location.href = "crudFD.jsp";
+                }
             </script>
 
             <!-- Modal display message -->

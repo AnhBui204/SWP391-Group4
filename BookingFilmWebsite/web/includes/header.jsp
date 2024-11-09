@@ -11,51 +11,51 @@
     </head>
     <body>
         <div class="vbody">
-        <!-- Overlay for the darkened background -->
-        <div class="overlay hidden"></div>
+            <!-- Overlay for the darkened background -->
+            <div class="overlay hidden"></div>
 
-        <header>
-            <div class="header-container container-fluid d-flex justify-content-between align-items-center row px-3">
-                <!-- Logo -->
-                <div class="bigLogo d-flex flex-column align-items-center col-md-4 text-center">
-                    <div class="logo">
-                        <img src="image/logo/logo.png" alt="FPT Cinema" style="cursor: pointer;" onclick="window.location.href = 'HomePage.jsp';">
+            <header>
+                <div class="header-container container-fluid d-flex justify-content-between align-items-center row px-3">
+                    <!-- Logo -->
+                    <div class="bigLogo d-flex flex-column align-items-center col-md-4 text-center">
+                        <div class="logo">
+                            <img src="image/logo/logo.png" alt="FPT Cinema" style="cursor: pointer;" onclick="window.location.href = 'HomePage.jsp';">
+                        </div>
+                        <h3 class="text mb-0">CineLuxe Cinema</h3>
                     </div>
-                    <h3 class="text mb-0">CineLuxe Cinema</h3>
-                </div>
 
-                <!-- Navbar -->
-                <nav class="navbar col-md-6 d-flex justify-content-center">
-                    <ul class="navbar-nav d-flex flex-row">
-                        <li class="nav-item me-3">
-                            <a class="nav-link p-0" href="MovieServlet?action=booking">
-                                <div id="raffle-red" class="entry raffle">
-                                    <div class="no-scale"></div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item me-3 fs-3">
-                            <a class="nav-link" href="ListMovie.jsp">Phim</a>
-                        </li>
-                        <li class="nav-item me-3 fs-3">
-                            <a class="nav-link" href="uudai_homepage.jsp">Ưu Đãi</a>
-                        </li>
-                        <li class="nav-item me-3 fs-3">
-                            <a class="nav-link" href="#">Rạp/Giá Vé</a>
-                        </li>
-                    </ul>
-                </nav>
+                    <!-- Navbar -->
+                    <nav class="navbar col-md-6 d-flex justify-content-center">
+                        <ul class="navbar-nav d-flex flex-row">
+                            <li class="nav-item me-3">
+                                <a class="nav-link p-0" href="MovieServlet?action=booking">
+                                    <div id="raffle-red" class="entry raffle">
+                                        <div class="no-scale"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link fs-3" href="ListMovie.jsp">Phim</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link fs-3" href="uudai_homepage.jsp">Ưu Đãi</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link fs-3" href="Rap.jsp">Rạp/Giá Vé</a>
+                            </li>
+                        </ul>
+                    </nav>
 
-                <!-- User Info -->
-                <div class="user-info col-md-2 d-flex justify-content-end">
-                    <div class="signlog">
-                        <a href="Login.jsp" class="btn btn-custom">Login</a>
+                    <!-- User Info -->
+                    <div class="user-info col-md-2 d-flex justify-content-end">
+                        <div class="signlog">
+                            <a href="Login.jsp" class="btn btn-custom">Login</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
+            </header>
 
-</div>
+        </div>
         <script>
             document.getElementById('activate_button').addEventListener('click', function () {
                 var hiddenElement = document.getElementById('box_signlog');

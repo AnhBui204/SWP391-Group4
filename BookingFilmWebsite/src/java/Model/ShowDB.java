@@ -201,7 +201,7 @@ public class ShowDB {
         String sql = "SELECT DISTINCT s.ShowDate "
                 + "FROM Shows s "
                 + "JOIN ShowSeats ss ON s.ShowID = ss.ShowID "
-                + "WHERE ss.TheatreID = ? AND s.MovieID = ? AND s.ShowDate >= CURRENT_DATE";
+                + "WHERE ss.TheatreID = ? AND s.MovieID = ? AND s.ShowDate >= CONVERT(DATE, GETDATE())";
 
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -227,10 +227,12 @@ public class ShowDB {
 
     public static List<Time> getStartTimes(String movieID, String theatreID, String showDate) {
         List<Time> startTimes = new ArrayList<>();
-        String sql = "SELECT StartTime FROM Shows "
-                + "WHERE MovieID = ? AND ShowDate = ? AND ShowID IN "
-                + "(SELECT ShowID FROM ShowSeats WHERE TheatreID = ? AND IsAvailable = 1) "
-                + "AND StartTime > CURRENT_TIME";
+        String sql = "SELECT StartTime "
+                + "FROM Shows "
+                + "WHERE MovieID = ? "
+                + "AND ShowDate = ? "
+                + "AND ShowID IN (SELECT ShowID FROM ShowSeats WHERE TheatreID = ? AND IsAvailable = 1) "
+                + "AND (ShowDate > CONVERT(DATE, GETDATE()) OR StartTime > CONVERT(TIME, GETDATE()))";
 
         try {
             Connection conn = getConnect(); // Lấy kết nối từ phương thức getConnect()

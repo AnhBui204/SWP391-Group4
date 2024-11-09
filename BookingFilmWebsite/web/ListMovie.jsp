@@ -1,12 +1,7 @@
-<%-- 
-    Document   : ListMovie
-    Created on : 29 Oct 2024, 7:53:15 pm
-    Author     : HongD
---%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="Model.Movie"%>
-<%@page import="java.util.List"%>
-<%@page import="Model.MovieDB"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="Model.Movie"%>
+<%@ page import="java.util.List"%>
+<%@ page import="Model.MovieDB"%>
 <%
     String user = (String) session.getAttribute("user");
     if (user == null) { %>
@@ -24,6 +19,8 @@
         <link rel="stylesheet" href="bs/css/bootstrap.css"/>
         <link rel="stylesheet" href="css/headerssj4.css"/>
         <link rel="stylesheet" href="css/bodyssj1.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     </head>
     <body>
         <style>
@@ -59,20 +56,53 @@
             .box2-1 .skin p, input:hover {
                 background-color: #ffa75a;
             }
-            .skin{
+            .skin {
                 cursor: pointer;
             }
+
+            .search-bar {
+                width: 100%;
+                margin-bottom: 20px;
+                position: relative;
+            }
+
+            .search-bar input {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                padding: 6px 40px 12px 20px;
+                font-size: 1rem;
+                border-radius: 8px;
+                border: 1px solid #ff5722;
+                outline: none;
+                background-color: #f9f9f9;
+                color: black;
+                transition: all 0.3s ease;
+            }
+
+            .search-bar input:focus {
+                border-color: #ff5722;
+                background-color: #ffffff;
+                box-shadow: 0px 0px 5px rgba(255, 87, 34, 0.5);
+            }
+
+            .search-bar .icon-search {
+                position: absolute;
+                right: 15px;
+                top: 30%;
+                transform: translateY(-50%);
+                font-size: 1.2rem;
+                color: #ff5722;
+            }
+
         </style>
         <%
             String genreS = (String) request.getAttribute("genre");
             String yearS = (String) request.getAttribute("year");
 
-            List<Movie> mvList = new ArrayList<>();
-            mvList = (List<Movie>) request.getAttribute("listMovie");
-            if (mvList == null) {
-                MovieDB movieDB = new MovieDB();
-                mvList = movieDB.getAllMovies();
-            }
+            
+            List<Movie> mvList = MovieDB.getAllMovies();
 
         %>
         <div class="container my-5">
@@ -80,6 +110,7 @@
                 <div>
                     <h1>Danh sách phim</h1>
                 </div>
+
                 <div class="d-flex mt-3">
                     <div class="dropdown me-1">
                         <button class="btn btn-secondary dropdown-toggle fs-4 bg-white text-dark-emphasis px-4" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -119,32 +150,22 @@
                                                         <li><a class="dropdown-item" href="#">Something else here</a></li>-->
                         </ul>
                     </div>
-                    <div class="search-container">
-                        <form action="MovieServlet?action=search" method="post">
-                            <input type="text" placeholder="Tìm Kiếm..." name="search" required>
-                            <input type="hidden" name="redirectPage" value="ListMovie.jsp" />
-                            <button type="submit"><i class="fa fa-search"></i></button>
-                        </form>
+                    <div class="search-bar">
+                        <input type="text" id="searchInput" placeholder="Tìm kiếm phim...">
+                        <span class="icon-search"><i class="fas fa-search"></i></span>
                     </div>
-
                 </div>
             </div>
             <div class="row" id="box2_dangchieu_id">
                 <%
-                    int maxDisplay = 8;
-                    for (int i = 0; i < mvList.size(); i++) {
-                        Movie movie = mvList.get(i);
-                        String hiddenClass = (i >= maxDisplay) ? "d-none" : ""; // Hide movies after the 8th one
-%>
-                <form action="MovieDetailServlet" method="post" class="col-md-3 col-6 mb-4 movie-box <%= hiddenClass%>">
-                    <!-- col-md-3 for larger screens, col-6 for mobile -->
+                    for (Movie movie : mvList) {
+                %>
+                <form action="MovieDetailServlet" method="post" class="col-md-3 col-6 mb-4 movie-box" data-title="<%= movie.getMovieName().toLowerCase()%>">
                     <div class="box2-1">
-                        <!-- Thêm onclick vào lớp skin -->
                         <div class="skin" onclick="this.closest('form').submit();">
                             <div class="layer fs-4">
                                 <p>Mua vé</p>
                                 <p>Trailer</p>
-                                <!-- Các trường hidden để gửi dữ liệu phim -->
                                 <input type="text" name="MovieId" value="<%= movie.getMovieID()%>" hidden />
                                 <input type="text" name="MovieName" value="<%= movie.getMovieName()%>" hidden />
                                 <input type="text" name="Duration" value="<%= movie.getDuration()%>" hidden />
@@ -156,12 +177,10 @@
                                 <input type="text" name="ImgL" value="<%= movie.getImgLandscape()%>" hidden />
                             </div>
                         </div>
-                        <!-- Hình ảnh phim -->
                         <img src="<%= movie.getImgPortrait()%>" alt="alt" class="img-fluid small-image" />
-                        <!-- Thông tin đánh giá và độ tuổi -->
                         <div class="box3">
                             <div class="danhgia fs-4">
-                                <p><i class="fas fa-star"></i> 8.0</p>
+                                <p><i class="fas fa-star"></i> <%=MovieDB.getAvgRate(movie.getMovieID())%></p>
                             </div>
                             <div class="dotuoi fs-4">
                                 <p>T16</p>
@@ -173,27 +192,25 @@
                     }
                 %>
             </div>
-            <div class="text-center mt-2 mb-4">
-                <button id="viewMoreBtn" class="btn btn-primary">Xem thêm</button>
-                <button id="collapseBtn" class="btn btn-secondary d-none">Thu gọn</button> <!-- Collapse button initially hidden -->
-            </div>
+            <div id="noResults" class="no-results">Không tìm thấy phim nào.</div>
             <script>
-                document.getElementById('viewMoreBtn').addEventListener('click', function () {
-                    document.querySelectorAll('.movie-box.d-none').forEach(function (el) {
-                        el.classList.remove('d-none'); // Show hidden movie boxes
-                    });
-                    this.style.display = 'none'; // Hide the 'View More' button
-                    document.getElementById('collapseBtn').classList.remove('d-none'); // Show the collapse button
-                });
+                // Tìm kiếm
+                document.getElementById('searchInput').addEventListener('keyup', function () {
+                    const searchValue = this.value.toLowerCase();
+                    const movies = document.querySelectorAll('.movie-box');
+                    let hasResult = false;
 
-                document.getElementById('collapseBtn').addEventListener('click', function () {
-                    document.querySelectorAll('.movie-box').forEach(function (el, index) {
-                        if (index >= 8) {
-                            el.classList.add('d-none'); // Hide additional movie boxes
+                    movies.forEach(movie => {
+                        const title = movie.getAttribute('data-title');
+                        if (title.includes(searchValue)) {
+                            movie.classList.remove('d-none');
+                            hasResult = true;
+                        } else {
+                            movie.classList.add('d-none');
                         }
                     });
-                    this.classList.add('d-none'); // Hide the collapse button
-                    document.getElementById('viewMoreBtn').style.display = 'inline-block'; // Show the 'View More' button again
+
+                    document.getElementById('noResults').style.display = hasResult ? 'none' : 'block';
                 });
             </script>
         </div>

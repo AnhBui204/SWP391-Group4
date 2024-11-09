@@ -347,84 +347,80 @@ public class MovieDB {
     }
 
     public static HashMap<String, HashMap<String, List<String>>> getTimelineDB(String movieId) {
-        String sql = "select Shows.ShowID, MovieID, ShowDate, StartTime, ShowSeats.TheatreID, TheatreName from Shows inner join ShowSeats on Shows.ShowID = ShowSeats.ShowID inner join Theatres on Theatres.TheatreID = ShowSeats.TheatreID where Shows.MovieID = ? order by ShowDate asc, TheatreName asc";
+    String sql = "SELECT Shows.ShowID, MovieID, ShowDate, StartTime, ShowSeats.TheatreID, TheatreName " +
+                 "FROM Shows " +
+                 "INNER JOIN ShowSeats ON Shows.ShowID = ShowSeats.ShowID " +
+                 "INNER JOIN Theatres ON Theatres.TheatreID = ShowSeats.TheatreID " +
+                 "WHERE Shows.MovieID = ? AND ShowDate >= CONVERT(DATE, GETDATE()) " +
+                 "ORDER BY ShowDate ASC, TheatreName ASC";
 
-        List<String> listTime = new ArrayList<>();
-        HashMap<String, List<String>> hashTheatreNameList = new HashMap<>();
-        HashMap<String, HashMap<String, List<String>>> hashListTime = new HashMap<>();
+    List<String> listTime = new ArrayList<>();
+    HashMap<String, List<String>> hashTheatreNameList = new HashMap<>();
+    HashMap<String, HashMap<String, List<String>>> hashListTime = new HashMap<>();
 
-        Date showDateB4 = new Date(0, 0, 0);
-        String theatreNameB4 = null;
+    Date showDateB4 = new Date(0, 0, 0);
+    String theatreNameB4 = null;
 
-        Date showDate = null;
-        Time startTime = null;
-        String theatreName = null;
-        try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
+    Date showDate = null;
+    Time startTime = null;
+    String theatreName = null;
 
-            ps.setString(1, movieId);
+    try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, movieId);
 
-            ResultSet rs = ps.executeQuery();
+        ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                showDate = rs.getDate("ShowDate");
-                startTime = rs.getTime("StartTime");
-                theatreName = rs.getString("TheatreName");
+        while (rs.next()) {
+            showDate = rs.getDate("ShowDate");
+            startTime = rs.getTime("StartTime");
+            theatreName = rs.getString("TheatreName");
 
-//                System.out.println(showDate.toString());
-//                System.out.println(startTime.toString());
-                if (listTime.isEmpty()) {
-                    showDateB4 = showDate;
-                    theatreNameB4 = theatreName;
-                }
-
-//                if (showDate.equals(showDateB4)){
-//                    if (listTime.contains(startTime.toString()))
-//                        continue;
-//                    listTime.add(startTime.toString());
-//                    continue;
-//                }
-//                hashListTime.put(showDateB4.toString(), listTime);
-//                listTime = new ArrayList<>();
-//                listTime.add(startTime.toString());
-//                showDateB4 = showDate; 
-                if (showDate.equals(showDateB4)) {
-                    if (theatreName.equals(theatreNameB4)) {
-                        if (listTime.contains(startTime.toString())) {
-                            continue;
-                        }
-                        listTime.add(startTime.toString());
-                        continue;
-                    }
-                    hashTheatreNameList.put(theatreNameB4, listTime);
-                    listTime = new ArrayList<>();
-                    listTime.add(startTime.toString());
-
-                    theatreNameB4 = theatreName;
-                    continue;
-                }
-                hashTheatreNameList.put(theatreNameB4, listTime);
-                hashListTime.put(showDateB4.toString(), hashTheatreNameList);
-                hashTheatreNameList = new HashMap<>();
-                listTime = new ArrayList<>();
-                listTime.add(startTime.toString());
-
+            if (listTime.isEmpty()) {
                 showDateB4 = showDate;
                 theatreNameB4 = theatreName;
             }
-            if (!listTime.isEmpty()) {
-                hashTheatreNameList.put(theatreNameB4, listTime);
-                hashListTime.put(showDateB4.toString(), hashTheatreNameList);
-            }
-            if (showDate == null) {
-                return new HashMap<String, HashMap<String, List<String>>>();
-            }
-            hashListTime.put(showDate.toString(), hashTheatreNameList);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+            if (showDate.equals(showDateB4)) {
+                if (theatreName.equals(theatreNameB4)) {
+                    if (listTime.contains(startTime.toString())) {
+                        continue;
+                    }
+                    listTime.add(startTime.toString());
+                    continue;
+                }
+                hashTheatreNameList.put(theatreNameB4, listTime);
+                listTime = new ArrayList<>();
+                listTime.add(startTime.toString());
+
+                theatreNameB4 = theatreName;
+                continue;
+            }
+
+            hashTheatreNameList.put(theatreNameB4, listTime);
+            hashListTime.put(showDateB4.toString(), hashTheatreNameList);
+            hashTheatreNameList = new HashMap<>();
+            listTime = new ArrayList<>();
+            listTime.add(startTime.toString());
+
+            showDateB4 = showDate;
+            theatreNameB4 = theatreName;
         }
-        return hashListTime;
+
+        if (!listTime.isEmpty()) {
+            hashTheatreNameList.put(theatreNameB4, listTime);
+            hashListTime.put(showDateB4.toString(), hashTheatreNameList);
+        }
+        if (showDate == null) {
+            return new HashMap<>();
+        }
+        hashListTime.put(showDate.toString(), hashTheatreNameList);
+
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return hashListTime;
+}
+
 
 //    public static List<Movie> getMoviesByTheatreID(String theatreID) throws SQLException {
 //    List<Movie> movies = new ArrayList<>();

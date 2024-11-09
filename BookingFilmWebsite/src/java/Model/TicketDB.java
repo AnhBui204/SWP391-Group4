@@ -330,22 +330,22 @@ public class TicketDB {
         return showInfos;
     }
 
-    public static void requestRefund(String ticketID) {
+    public static void requestRefund(String bookingID) {
         String sql = "UPDATE Booking SET Status = N'Đang chờ' WHERE BookingID = ?";
 
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, ticketID);
+            pstmt.setString(1, bookingID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace(); // In ra chi tiết lỗi nếu có
         }
     }
 
-    public static void approveRefund(String ticketID) {
+    public static void approveRefund(String bookingID) {
         String sql = "UPDATE Booking SET Status = N'Chấp thuận' WHERE BookingID = ?";
 
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, ticketID);
+            pstmt.setString(1, bookingID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace(); // In ra chi tiết lỗi nếu có
@@ -363,25 +363,25 @@ public class TicketDB {
         }
     }
 
-    public static void addBalanceToUser(String ticketID) {
-        String getUserBalanceSQL = "SELECT u.UserID, u.MoneyLeft, t.TotalPrice "
-                + // Thay TotalPrice thành Price
-                "FROM Users u "
-                + "JOIN Tickets t ON u.UserID = t.UserID "
-                + "WHERE t.ticketID = ?";
+    public static void addBalanceToUser(String bookingID) {
+        String getUserBalanceSQL = "SELECT DISTINCT u.UserID, u.MoneyLeft, t.TotalPrice "
+                + "FROM Users u "
+                + "JOIN Booking b ON u.UserID = b.UserID "
+                + "JOIN Tickets t ON b.BookingID = t.BookingID "
+                + "WHERE b.bookingID = ?";
 
         String updateUserBalanceSQL = "UPDATE Users SET MoneyLeft = ? WHERE UserID = ?";
 
         try (Connection conn = getConnect(); PreparedStatement getUserStmt = conn.prepareStatement(getUserBalanceSQL); PreparedStatement updateUserStmt = conn.prepareStatement(updateUserBalanceSQL)) {
 
             // Lấy thông tin UserID, Balance hiện tại và Price của ticket
-            getUserStmt.setString(1, ticketID);
+            getUserStmt.setString(1, bookingID);
             ResultSet rs = getUserStmt.executeQuery();
 
             if (rs.next()) {
                 String userID = rs.getString("UserID");
                 BigDecimal balance = rs.getBigDecimal("MoneyLeft");
-                BigDecimal ticketPrice = rs.getBigDecimal("TotalPrice"); // Lấy giá vé
+                BigDecimal ticketPrice = rs.getBigDecimal("TotalPrice"); // Lấy giá vé (đã là tổng)
 
                 // Cộng tiền vào tài khoản người dùng
                 BigDecimal newBalance = balance.add(ticketPrice);

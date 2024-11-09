@@ -81,10 +81,8 @@
             DateTimeFormatter output = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
             LocalDateTime ldt = LocalDateTime.parse(date, input);
             date = ldt.format(output);
-            System.out.println("Hello VNPay");
             String userID = (String) session.getAttribute("id");
             System.out.println(userID);
-            UserDB.deposit(userID, amount);
         %>
 
         <div class="container">
@@ -125,6 +123,7 @@
                         <%
                             if (signValue.equals(vnp_SecureHash)) {
                                 if ("00".equals(request.getParameter("vnp_TransactionStatus"))) {
+                                    UserDB.deposit(userID, amount);
                                     out.print("Thành công");
                                 } else {
                                     out.print("Không thành công");

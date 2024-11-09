@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,70 +29,82 @@ public class RoomDB implements DatabaseInfo {
         }
         return null;
     }
-public static String getRoomIdBySeatNamesAndShowDateAndTime(String seatNames, String showDate, String startTime) {
-    String roomId = null;
 
-    // Kiểm tra danh sách ghế không rỗng
-    if (!seatNames.isEmpty()) {
-        // Tách chuỗi và loại bỏ khoảng trắng
-        List<String> seatNameList = Arrays.asList(seatNames.split(",\\s*"));
+    public static String getRoomIdBySeatNamesAndShowDateAndTime(String seatNames, String showDate, String startTime, String theatreID) {
+        String roomId = null;
 
-        // Tạo placeholder cho điều kiện IN
-        String seatNamesPlaceholder = String.join(",", Collections.nCopies(seatNameList.size(), "?"));
+        // Kiểm tra danh sách ghế không rỗng
+        if (!seatNames.isEmpty()) {
+            // Tách chuỗi và loại bỏ khoảng trắng
+            List<String> seatNameList = Arrays.asList(seatNames.split(",\\s*"));
 
-        String query = "SELECT ss.RoomID " +
-                       "FROM ShowSeats ss " +
-                       "JOIN Seats se ON ss.SeatID = se.SeatID " +
-                       "JOIN Shows sh ON ss.ShowID = sh.ShowID " +
-                       "WHERE se.SeatName IN (" + seatNamesPlaceholder + ") " +
-                       "AND sh.ShowDate = ? " +
-                       "AND sh.StartTime = ?";
+            // Tạo placeholder cho điều kiện IN
+            String seatNamesPlaceholder = String.join(",", Collections.nCopies(seatNameList.size(), "?"));
 
-        try (Connection con = getConnect(); 
-             PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            String query = "SELECT ss.RoomID "
+                    + "FROM ShowSeats ss "
+                    + "JOIN Seats se ON ss.SeatID = se.SeatID "
+                    + "JOIN Shows sh ON ss.ShowID = sh.ShowID "
+                    + "WHERE se.SeatName IN (" + seatNamesPlaceholder + ") "
+                    + "AND sh.ShowDate = ? "
+                    + "AND sh.StartTime = ? "
+                    + "AND ss.TheatreID = ?"; // Thêm điều kiện TheatreID
 
-            // Đặt giá trị cho các tham số ghế
-            for (int i = 0; i < seatNameList.size(); i++) {
-                preparedStatement.setString(i + 1, seatNameList.get(i).trim()); // Loại bỏ khoảng trắng
+            try (Connection con = getConnect(); PreparedStatement preparedStatement = con.prepareStatement(query)) {
+
+                // Đặt giá trị cho các tham số ghế
+                for (int i = 0; i < seatNameList.size(); i++) {
+                    preparedStatement.setString(i + 1, seatNameList.get(i).trim()); // Loại bỏ khoảng trắng
+                }
+
+                // Đặt giá trị cho tham số ngày, giờ và TheatreID
+                preparedStatement.setString(seatNameList.size() + 1, showDate);
+                preparedStatement.setString(seatNameList.size() + 2, startTime);
+                preparedStatement.setString(seatNameList.size() + 3, theatreID); // Thiết lập giá trị cho TheatreID
+
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        roomId = resultSet.getString("RoomID");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+        }
 
-            // Đặt giá trị cho tham số ngày và giờ
-            preparedStatement.setString(seatNameList.size() + 1, showDate);
-            preparedStatement.setString(seatNameList.size() + 2, startTime);
+        return roomId; // Trả về RoomID hoặc null nếu không tìm thấy
+    }
 
+    public static String getRandomRoomIDFromShowAndTheatre(String showID, String theatreID) {
+        String roomId = null;
+        String query = "SELECT DISTINCT RoomID FROM ShowSeats "
+                + "WHERE ShowID = ? AND TheatreID = ?";
+
+        try (Connection con = getConnect(); PreparedStatement preparedStatement = con.prepareStatement(query)) {
+
+            preparedStatement.setString(1, showID);
+            preparedStatement.setString(2, theatreID);
+
+            // Lưu các RoomID vào một danh sách tạm
+            List<String> roomIds = new ArrayList<>();
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    roomId = resultSet.getString("RoomID");
+                while (resultSet.next()) {
+                    roomIds.add(resultSet.getString("RoomID"));
                 }
             }
+
+            // Chọn ngẫu nhiên một RoomID từ danh sách nếu có ít nhất một phòng
+            if (!roomIds.isEmpty()) {
+                Random random = new Random();
+                roomId = roomIds.get(random.nextInt(roomIds.size()));
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return roomId; // Trả về RoomID ngẫu nhiên hoặc null nếu không tìm thấy
     }
-
-    return roomId; // Trả về RoomID hoặc null nếu không tìm thấy
-}
-
-
-public static String getRoomIDFromShow(String showID) {
-    String roomId = null;
-    String query = "SELECT DISTINCT RoomID FROM ShowSeats WHERE ShowID = ?";
-
-    try (Connection con = getConnect()) {
-        PreparedStatement preparedStatement = con.prepareStatement(query);
-        preparedStatement.setString(1, showID);
-
-        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (resultSet.next()) {
-                roomId = resultSet.getString("RoomID");
-            }
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-
-    return roomId; // Trả về RoomID hoặc null nếu không tìm thấy
-}
 
     // Method to get room details by RoomID
     public static Room getRoom(String roomID) {
@@ -111,14 +124,14 @@ public static String getRoomIDFromShow(String showID) {
         }
         return room;
     }
-    
+
     //Get room by showID
     public static List<Room> getRoomByShow(String ShowID) {
         List<Room> roomlist = new ArrayList<>();
         try (Connection con = getConnect()) {
             String query = "SELECT DISTINCT r.RoomID, r.RoomName, r.theatreID "
-                         + "FROM ROOMS r INNER JOIN ShowSeats ss "
-                         + "ON r.RoomID = ss.RoomID WHERE ShowID=?";
+                    + "FROM ROOMS r INNER JOIN ShowSeats ss "
+                    + "ON r.RoomID = ss.RoomID WHERE ShowID=?";
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString(1, ShowID);
             ResultSet rs = stmt.executeQuery();
@@ -155,7 +168,7 @@ public static String getRoomIDFromShow(String showID) {
         }
         return roomList;
     }
-    
+
     public static List<Room> getAllRoom() {
         List<Room> roomList = new ArrayList<>();
         try (Connection con = getConnect()) {

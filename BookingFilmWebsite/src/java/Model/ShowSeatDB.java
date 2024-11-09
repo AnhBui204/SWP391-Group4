@@ -134,7 +134,6 @@ public class ShowSeatDB {
             stmt.setInt(2, money); // Set the roomID parameter
             stmt.setString(3, roomID); // Set the roomID parameter
             stmt.setString(4, theatreID); // Set the theatreID parameter
-            
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0; // Return true if rows were affected
