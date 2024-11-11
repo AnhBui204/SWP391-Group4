@@ -16,6 +16,8 @@ public class User implements Serializable {
     private Date dob;
     private String money;
     private String avatar;
+    private String otp_code;
+    private boolean otp_verified;
 
     public User() {
     }
@@ -48,7 +50,21 @@ public class User implements Serializable {
         this.avatar = avatar;
     }
     
-    
+    public User(String userID, String username, String fName, String lName, String password, String email, String role, String phone, String sex, Date dob, String money, String avatar, boolean verify) {
+        this.userID = userID;
+        this.username = username;
+        this.fName = fName;
+        this.lName = lName;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.phone = phone;
+        this.sex = sex;
+        this.dob = dob;
+        this.money = money;
+        this.avatar = avatar;
+        this.otp_verified = verify;
+    }
 
     public String getUserID() {
         return userID;
@@ -144,6 +160,22 @@ public class User implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getOtp_code() {
+        return otp_code;
+    }
+
+    public void setOtp_code(String otp_code) {
+        this.otp_code = otp_code;
+    }
+
+    public boolean isOtp_verified() {
+        return otp_verified;
+    }
+
+    public void setOtp_verified(boolean otp_verified) {
+        this.otp_verified = otp_verified;
     }
 
     @Override

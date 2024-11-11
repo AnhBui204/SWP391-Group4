@@ -4,7 +4,7 @@
     Author     : pc
 --%>
 
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="Model.*,OTP.*,java.sql.*"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,6 +19,7 @@
             .otp-form {
                 max-width: 400px;
                 margin: 0 auto;
+                margin-bottom: 50px;
                 background-color: #fff;
                 padding: 20px;
                 border-radius: 8px;
@@ -40,21 +41,21 @@
             }
             .otp-form .button-container {
                 display: flex;
-                justify-content: space-between; /* Căn hai nút sang hai bên */
-                align-items: center; /* Căn các phần tử theo trục dọc */
-                margin-top: 10px; /* Khoảng cách từ form nhập OTP lên nút */
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 10px;
             }
             .otp-form button[type="submit"] {
                 color:#000;
-                background-color:#06BBCC;
-                border-color:#06BBCC
-               
+                background-color:#F97D5B;
+                border-color:#F97D5B;
+
             }
             .otp-form button[type="submit"]:hover {
-                background-color: #45a049;
+                background-color: #FECF8F;
             }
             .otp-form button[type="submit"]:focus {
-                border: 1px solid #45a049;
+                border: 1px solid #FECF8F;
             }
             .error-message {
                 color: red;
@@ -62,11 +63,14 @@
             .success-message {
                 color: green;
             }
+            a.disabled {
+                pointer-events: none;
+            }
         </style>
     </head>
     <body>
         <jsp:include page="includes/header.jsp"></jsp:include>
-        <link rel="stylesheet" href="./css/headerssj4.css"/>
+            <link rel="stylesheet" href="./css/headerssj4.css"/>
             <div class="otp-form" style="margin-top: 50px">
                 <h2 class="text-primary">Xác nhận mã OTP</h2>
             <% 
@@ -75,33 +79,63 @@
                     out.println("<p class='error-message'>" + verificationError + "</p>");
                     session.removeAttribute("verificationError");
                 }
-            
-                String successMessage = (String) session.getAttribute("successMessage");
-                if (successMessage != null) {
-                    out.println("<p class='success-message'>" + successMessage + "</p>");
-                    session.removeAttribute("successMessage");
-                }
-            
-                Long otpExpiryTime = (Long) session.getAttribute("otpExpiryTime");
-                if (otpExpiryTime != null && System.currentTimeMillis() > otpExpiryTime) {
-                    out.println("<p class='error-message'>OTP has expired. Please request a new OTP.</p>");
-                    session.removeAttribute("otpExpiryTime");
-                }
             %>
-            <form action="VerifyOtpServlet" method="post">
+            <form id="OTP" action="VerifyOtpServlet" method="post">
                 Nhập OTP:
                 <input type="text" name="otp" required>
-                
+
+
                 <div class="button-container">
                     <button class="btn btn-primary" type="submit">Xác minh OTP</button>
-                    <button class="btn btn-primary" style="width: 133px" type="submit" class="resend" formnovalidate>
-                        <a href="ResendOtpServlet" style="text-decoration: none; color: black">Gửi lại</a>
-                    </button>
+                    <div>
+                        <button disabled="true" id="btnResend" class="btn btn-primary" style="width: 133px" onclick="timer()" type="submit" class="resend" formnovalidate>
+                            05:00
+                        </button>
+                    </div>
                 </div>
             </form>
-           
         </div>
-            <jsp:include page="includes/footer.jsp"></jsp:include>
-            <link rel="stylesheet" href="./css/footerssj2.css"/>
+        <jsp:include page="includes/footer.jsp"></jsp:include>
+        <script>
+            window.onload = function(){
+                fetch('SendOtp', {
+                method: 'POST'
+            });
+            }
+            
+            var countDownTime = 5 * 60;
+            var timerInterval = setInterval(updateTimer, 1000);
+            updateTimer();
+
+            function timer() {
+                countDownTime = 5 * 60 - 1;
+                timerInterval = setInterval(updateTimer, 1000);
+                document.getElementById('btnResend').innerHTML = "05:00";
+                document.getElementById('btnResend').disabled = true;
+                
+                var formData = new FormData(document.getElementById('OTP'));
+
+            // Send AJAX request to servlet endpoint
+                fetch('ResendOtpServlet', {
+                method: 'POST',
+                body: formData
+            });
+            }
+            function updateTimer() {
+                var minutes = Math.floor(countDownTime / 60);
+                var seconds = countDownTime % 60;
+
+                document.getElementById('btnResend').innerHTML = ('0' + minutes).slice(-2) + ':' + ('0' + seconds).slice(-2);
+
+                countDownTime--;
+
+                if (countDownTime < 0) {
+                    clearInterval(timerInterval); // Stop the countdown
+                    document.getElementById('btnResend').disabled = false;
+                    document.getElementById('btnResend').innerHTML = "Gửi lại";
+                }
+            }
+        </script>
+        <link rel="stylesheet" href="./css/footerssj2.css"/>
     </body>
 </html>

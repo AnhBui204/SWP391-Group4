@@ -80,6 +80,10 @@
         <servlet-name>WorkHisServlet</servlet-name>
         <servlet-class>Controller.WorkHisServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SendOtp</servlet-name>
+        <servlet-class>OTP.SendOtp</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TheatreServlet</servlet-name>
         <url-pattern>/TheatreServlet</url-pattern>
@@ -163,6 +167,10 @@
     <servlet-mapping>
         <servlet-name>WorkHisServlet</servlet-name>
         <url-pattern>/WorkHisServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendOtp</servlet-name>
+        <url-pattern>/SendOtp</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>HomePage.jsp</welcome-file>

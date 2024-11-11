@@ -197,6 +197,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="changePasswordForm" action="UserServlet?action=changePassword" method="POST">
+                            <input type="hidden" name="email" value="${user.email}"/>
                             <div class="mb-3">
                                 <label for="currentPassword" class="form-label">Mật khẩu hiện tại</label>
                                 <input type="password" name="currentPassword" class="form-control" required>
@@ -283,9 +284,10 @@
                     dataType: 'json',
                     success: function (response) {
                         if (response.message === "Đổi mật khẩu thành công.") {
-                            alert(response.message);
-                            $('#changePasswordModal').modal('hide');  // Đóng modal khi thành công
-                            $('#changePasswordForm')[0].reset();  // Xóa hết dữ liệu trong form
+//                            alert(response.message);
+//                            $('#changePasswordModal').modal('hide');  // Đóng modal khi thành công
+//                            $('#changePasswordForm')[0].reset();  // Xóa hết dữ liệu trong form
+                            window.location.href="http://localhost:8080/BookingFilmWebsite/otp_authentication.jsp";
                         } else {
                             alert(response.message);  // Hiển thị thông báo lỗi mà không đóng modal
                         }
