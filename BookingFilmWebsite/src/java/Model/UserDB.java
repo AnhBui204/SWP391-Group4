@@ -32,7 +32,7 @@ public class UserDB implements DatabaseInfo {
 
     public static User getUsers(String username, String password) {
         User user = null;
-        String query = "select UserName, FName , LName, Pass , UserID, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar "
+        String query = "select UserName, FName , LName, Pass , UserID, Email,Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar, otp_verified "
                 + "from Users where UserName =? and Pass=? ";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
@@ -55,8 +55,9 @@ public class UserDB implements DatabaseInfo {
                 Date DOB = rs.getDate(10);
                 String money = rs.getString(11);
                 String avatar = rs.getString(12);
+                boolean verify = rs.getBoolean(13);
 
-                user = new User(id, username, fName, lName, password, email, role, phone, sex, DOB, money, avatar);
+                user = new User(id, username, fName, lName, password, email, role, phone, sex, DOB, money, avatar, verify);
             }
 
         } catch (Exception ex) {
@@ -219,7 +220,7 @@ public class UserDB implements DatabaseInfo {
 
     public static ArrayList<User> listAllUsers() {
         ArrayList<User> userList = new ArrayList<>();
-        String query = "SELECT UserID, UserName, FName , LName, Pass , Email,Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar FROM Users";
+        String query = "SELECT UserID, UserName, FName , LName, Pass , Email,Role, Phone, Sex, DateOfBirth, MoneyLeft, Avatar, otp_verified FROM Users";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
             ResultSet rs = stmt.executeQuery();
@@ -237,9 +238,10 @@ public class UserDB implements DatabaseInfo {
                 Date dob = rs.getDate("DateOfBirth");
                 String money = rs.getString("MoneyLeft");
                 String avatar = rs.getString("Avatar");
+                boolean verify = rs.getBoolean("otp_verified");
                 // Assuming all are regular users by default
 
-                User user = new User(userID, username, fname, lname, password, email, role, phone, sex, dob, money, avatar);
+                User user = new User(userID, username, fname, lname, password, email, role, phone, sex, dob, money, avatar, verify);
                 userList.add(user);
             }
         } catch (Exception ex) {
@@ -369,37 +371,38 @@ public class UserDB implements DatabaseInfo {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    String username = rs.getString(1);
-                    String fName = rs.getString(2);
-                    String lName = rs.getString(3);
-                    String password = rs.getString(4);
-                    String id = rs.getString(5);
-                    String role = rs.getString(6);
-                    String phone = rs.getString(7);
-                    String sex = rs.getString(8);
-                    Date DOB = rs.getDate(9);
-                    String money = rs.getString(10);
-                    String avatar = rs.getString(11);
+                    String username = rs.getString("UserName");
+                    String fName = rs.getString("FName");
+                    String lName = rs.getString("LName");
+                    String password = rs.getString("Pass");
+                    String id = rs.getString("UserID");
+                    String role = rs.getString("Role");
+                    String phone = rs.getString("Phone");
+                    String sex = rs.getString("Sex");
+                    Date DOB = rs.getDate("DateOfBirth");
+                    String money = rs.getString("MoneyLeft");
+                    String avatar = rs.getString("Avatar");
 
                     User user = new User(id, username, fName, lName, password, email, role, phone, sex, DOB, money, avatar);
                     return user;
                 }
             }
         } catch (Exception e) {
+            
         }
         return null;
     }
 
     //Phương thức lấy userId user bằng email
-    public static int getUserIdByEmail(String email) {
-        int userId = -1; // Default value if user_id is not found
+    public static String getUserIdByEmail(String email) {
+        String userId = ""; // Default value if user_id is not found
 
         String query = "SELECT userID FROM Users WHERE email = ?";
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, email);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    userId = rs.getInt("userID");
+                    userId = rs.getString("userID");
                 }
             }
         } catch (SQLException e) {
@@ -408,12 +411,33 @@ public class UserDB implements DatabaseInfo {
 
         return userId;
     }
+    
+        public static String getEmailByUserID(String userID) {
+        String email = ""; // Default value if user_id is not found
+
+        String query = "SELECT email FROM Users WHERE userID = ?";
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, userID);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    email = rs.getString("email");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return email;
+    }
 
     public static void main(String[] args) {
         ArrayList<User> list = UserDB.listAllUsers();
         for (User user : list) {
             System.out.println(user);
         }
+        
+        String email = getEmailByUserID("U00003");
+        System.out.println("Haha" + email);
 //
 //        String newUserId = getNextUserID();
 //        System.out.println(newUserId);

@@ -15,6 +15,10 @@ CREATE TABLE Users (
     MoneyLeft MONEY CHECK (MoneyLeft >= 0),
     Avatar NVARCHAR(MAX)
 );
+alter table Users
+  add otp_code varchar(6),
+      expiry_time DateTime,
+      otp_verified bit;
 
 -- Table for Theatres
 CREATE TABLE Theatres(
@@ -22,6 +26,8 @@ CREATE TABLE Theatres(
     TheatreName NVARCHAR(50) UNIQUE,
     TheatreLocation NVARCHAR(150)
 );
+select * from Users
+UPDATE Users SET otp_verified=1
 
 -- Table for Vouchers
 CREATE TABLE Vouchers (
@@ -3104,9 +3110,34 @@ SET Sex = CASE
     ELSE Sex
 END;
 
-select * from Users
+select * from ShowSeats
 
-SELECT u.UserID, u.MoneyLeft, b.TotalPrice 
+SELECT distinct u.UserID, u.MoneyLeft, t.TotalPrice 
                 FROM Users u 
                 JOIN Booking b ON u.UserID = b.UserID 
-                WHERE b.bookingID = "
+				JOIN Tickets t on b.BookingID = t.BookingID
+                WHERE b.bookingID = 'B00077'
+
+
+				SELECT DISTINCT th.TheatreName
+FROM Tickets t 
+JOIN Booking b ON t.BookingID = b.BookingID 
+JOIN Booking_Seats bs ON t.BookingSeatID = bs.BookingSeatID 
+JOIN Seats s ON bs.SeatID = s.SeatID 
+JOIN ShowSeats ss ON bs.ShowID = ss.ShowID AND bs.SeatID = ss.SeatID 
+JOIN Shows sh ON ss.ShowID = sh.ShowID 
+JOIN Theatres th ON ss.TheatreID = th.TheatreID 
+JOIN Rooms r ON s.RoomID = r.RoomID 
+JOIN Movies m ON sh.MovieID = m.MovieID 
+WHERE t.UserID = 'U00003' AND b.BookingID = 'B00082';
+
+
+SELECT DISTINCT RoomID FROM ShowSeats WHERE ShowID = 'SH0087' and TheatreID = 'T00001'
+
+SELECT ShowID FROM Shows WHERE ShowDate = '2024-11-16' AND StartTime = '09:00:00' 
+
+--SQL Command để xóa sau 24 giờ
+
+DELETE FROM Users
+WHERE otp_verified = 0 
+AND expiry_time < DATEADD(hour, -24, GETDATE());

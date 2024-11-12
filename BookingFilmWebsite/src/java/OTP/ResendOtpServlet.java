@@ -10,6 +10,7 @@ import OTP.OTP;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import java.sql.Timestamp;
  * @author pc
  */
 @WebServlet(name = "ResendOtpServlet", urlPatterns = {"/ResendOtpServlet"})
+@MultipartConfig
 public class ResendOtpServlet extends HttpServlet {
 
     /**
@@ -36,29 +38,7 @@ public class ResendOtpServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
-        String email = (String) session.getAttribute("email");
 
-        if (email != null) {
-            // Generate new OTP
-            String otp = OTP.generateOTP();
-            int userId = new UserDB().getUserIdByEmail(email);
-            Timestamp expiryTime = new Timestamp(System.currentTimeMillis() + (1 * 60 * 1000));
-            OTP.saveOtpToDatabase(userId, otp, expiryTime, false);
-
-            // Send OTP to user's email
-            EmailSender.sendOtpToEmail(email, otp);
-
-            // Update session with new OTP and expiry time
-            session.setAttribute("otpExpiryTime", expiryTime.getTime());
-
-            // Redirect back to OTP verification page with success message
-            session.setAttribute("successMessage", "New OTP sent successfully. Please check your email.");
-            response.sendRedirect("otp_verification.jsp");
-        } else {
-            session.setAttribute("errorMessage", "Error: Email not found.");
-            response.sendRedirect("otp_verification.jsp");
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -88,6 +68,30 @@ public class ResendOtpServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        HttpSession session = request.getSession();
+        String email = (String) session.getAttribute("email");
+        System.out.println(email);
+
+        if (email != null) {
+            // Generate new OTP
+            String otp = OTP.generateOTP();
+            String userId = new UserDB().getUserIdByEmail(email);
+            Timestamp expiryTime = new Timestamp(System.currentTimeMillis() + (15 * 60 * 1000));
+            OTP.saveOtpToDatabase(userId, otp, expiryTime, false);
+
+            // Send OTP to user's email
+            EmailSender.sendOtpToEmail(email, otp);
+
+            // Update session with new OTP and expiry time
+            session.setAttribute("otpExpiryTime", expiryTime.getTime());
+
+            // Redirect back to OTP verification page with success message
+            session.setAttribute("successMessage", "Mã OTP mới đã được gửi. Xin hãy kiểm tra mail của bạn.");
+            response.sendRedirect("otp_authentication.jsp");
+        } else {
+            session.setAttribute("errorMessage", "Lỗi: Không tìm thấy email.");
+            response.sendRedirect("otp_authentication.jsp");
+        }
     }
 
     /**

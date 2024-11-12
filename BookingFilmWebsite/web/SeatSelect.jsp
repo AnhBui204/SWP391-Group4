@@ -37,7 +37,7 @@
                         <div class="card-body p-4">
                             <h5 class="card-title">Chọn ghế</h5>
                             <div class="row d-flex">
-                                <div class="col-md-10">
+                                <div class="col-md-12">
                                     <c:if test="${not empty rowLabels}">
                                         <div class="seats-container">
                                             <c:forEach var="rowLabel" items="${rowLabels}">

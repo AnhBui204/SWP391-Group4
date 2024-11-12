@@ -260,8 +260,9 @@
                                                 <div class="feedback-modal" id="feedbackModal-<%= report.getReportId()%>">
                                                     <div class="feedback-modal-content">
                                                         <h2>Feedback for <%= report.getReportTitle()%></h2>
-                                                        <form action="FeedbackServlet" method="POST">
+                                                        <form action="FeedBackServlet" method="POST">
                                                             <input type="hidden" name="reportID" value="<%= report.getReportId()%>">
+                                                            <input type="hidden" name="userID" value="<%= report.getUserId()%>">
                                                             <input type="hidden" name="action" value="delete">
                                                             <textarea name="feedback" required placeholder="Enter your feedback..." rows="4" style="width: 100%;"></textarea>
                                                             <button type="submit" class="open-btn" style="margin-top: 10px;">Submit Feedback</button>

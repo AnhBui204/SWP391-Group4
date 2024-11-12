@@ -51,13 +51,13 @@ public class OTP {
     }
 
     // Phương thức lưu mã OTP vào cơ sở dữ liệu
-    public static void saveOtpToDatabase(int userID, String otp, Timestamp expiryTime, boolean otp_verified) {
+    public static void saveOtpToDatabase(String userID, String otp, Timestamp expiryTime, boolean otp_verified) {
         String query = "UPDATE Users SET otp_code = ?, expiry_time = ?, otp_verified = ? WHERE userID = ?";
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, otp);
             pstmt.setTimestamp(2, expiryTime);
             pstmt.setBoolean(3, otp_verified);
-            pstmt.setInt(4, userID);
+            pstmt.setString(4, userID);
             int affectedRows = pstmt.executeUpdate();
             System.out.println("Affected rows: " + affectedRows);
             System.out.println("OTP saved successfully for userID: " + userID);
@@ -69,9 +69,9 @@ public class OTP {
     // Phương thức kiểm tra và xác minh OTP
     public static boolean verifyOtp(String email, String otp) {
         UserDB user = new UserDB();
-        int userId = UserDB.getUserIdByEmail(email);
+        String userId = UserDB.getUserIdByEmail(email);
 
-        if (userId != -1) {
+        if (userId != null) {
             String storedOtp = getStoredOtp(userId);
             Timestamp expiryTime = getOtpExpiryTime(userId);
 
@@ -86,11 +86,11 @@ public class OTP {
     }
 
     // Phương thức lấy mã OTP đã lưu trong cơ sở dữ liệu
-    private static String getStoredOtp(int userId) {
+    private static String getStoredOtp(String userId) {
         String otp = null;
         String query = "SELECT otp_code FROM Users WHERE userID = ?";
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, userId);
+            pstmt.setString(1, userId);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 otp = rs.getString("otp_code");
@@ -102,11 +102,11 @@ public class OTP {
     }
 
     // Phương thức lấy thời gian hết hạn của OTP từ cơ sở dữ liệu
-    public static Timestamp getOtpExpiryTime(int userId) {
+    public static Timestamp getOtpExpiryTime(String userId) {
         Timestamp expiryTime = null;
         String query = "SELECT expiry_time FROM Users WHERE userID = ?";
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, userId);
+            pstmt.setString(1, userId);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 expiryTime = rs.getTimestamp("expiry_time");
@@ -128,11 +128,11 @@ public class OTP {
     }
 
     // Phương thức cập nhật trạng thái otp_verified trong cơ sở dữ liệu
-    private static void updateOtpVerificationStatus(int userId, boolean otpVerified) {
+    public static void updateOtpVerificationStatus(String userId, boolean otpVerified) {
         String query = "UPDATE Users SET otp_verified = ? WHERE userID = ?";
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setBoolean(1, otpVerified);
-            pstmt.setInt(2, userId);
+            pstmt.setString(2, userId);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -140,10 +140,10 @@ public class OTP {
     }
 
     // Phương thức xóa OTP khỏi cơ sở dữ liệu sau khi đã xác minh thành công
-    private static void deleteOtpFromDatabase(int userId) {
+    private static void deleteOtpFromDatabase(String userId) {
         String query = "UPDATE Users SET otp_code = NULL, expiry_time = NULL WHERE userID = ?";
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, userId);
+            pstmt.setString(1, userId);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -153,9 +153,9 @@ public class OTP {
     public static void requestOtpReset(String email) {
         String otp = generateOTP();
         UserDB user = new UserDB();
-        int userId = user.getUserIdByEmail(email);
+        String userId = user.getUserIdByEmail(email);
 
-        if (userId != -1) {
+        if (userId != null) {
             Timestamp expiryTime = new Timestamp(System.currentTimeMillis() + (5 * 60 * 1000));
             saveOtpToDatabase(userId, otp, expiryTime, false);
 

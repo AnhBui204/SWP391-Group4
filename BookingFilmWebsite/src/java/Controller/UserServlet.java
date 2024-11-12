@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.EmailSender;
 import Model.Theatre;
 import Model.TheatreDB;
 import Model.UserDB;
@@ -20,6 +21,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024,
         maxFileSize = 1024 * 1024 * 5,
@@ -55,9 +57,9 @@ public class UserServlet extends HttpServlet {
             case "updateprofile":
                 handleUpdateProfile(request, response); // Case for image upload
                 break;
-                
+
             case "changepassword":
-                handleChangePassword(request, response); // Case for image upload
+                handleChangePassword(request, response); // Case for image upload               
                 break;
             case "deposit":
                 handleDeposit(request, response); // Case for image upload
@@ -99,17 +101,25 @@ public class UserServlet extends HttpServlet {
 
             } else if (a.getRole().equals("User")) {
                 // User login
+                session.setAttribute("email", a.getEmail());
                 session.setAttribute("user", a.getUsername());
                 session.setAttribute("users", a);
                 session.setAttribute("pass", a.getPassword());
                 session.setAttribute("id", a.getUserID());
                 session.setAttribute("role", "User");
                 session.setMaxInactiveInterval(30 * 60);
-
+                System.out.println(a);
+                System.out.println(a.getEmail());
+                System.out.println(a.isOtp_verified());
                 // Đặt thông báo thành công
-                session.setAttribute("successMessage", "Đăng nhập thành công!");
-
-                String encodedURL = response.encodeRedirectURL("HomePage.jsp");
+                String encodedURL = "";
+                //session.setAttribute("successMessage", "Đăng nhập thành công!");
+                if (a.isOtp_verified()) {
+                    encodedURL = response.encodeRedirectURL("HomePage.jsp");
+                } else {
+                    session.setAttribute("checkSendOtp", true);
+                    encodedURL = response.encodeRedirectURL("otp_authentication.jsp");
+                }
                 response.sendRedirect(encodedURL);
             } else if (a.getRole().equals("Staff")) {
                 // Staff login
@@ -185,14 +195,19 @@ public class UserServlet extends HttpServlet {
             UserDB db = new UserDB();
             User newUser = new User(null, username, password, fname, lname, email, role, phone, sex, dob);
             db.insert(newUser);
-            
+
             db.uploadProfileImage(newUser.getUserID(), "image/Avatar/default.jpg");
 
-            // Đặt thông báo thành công
+//            // Đặt thông báo thành công
+//            HttpSession session = request.getSession();
+//            session.setAttribute("successMessage", "Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.");
             HttpSession session = request.getSession();
-            session.setAttribute("successMessage", "Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.");
+            session.setAttribute("email", email);
+            session.setAttribute("checkSendOtp", true);
 
-            response.sendRedirect("Login.jsp");
+            request.setAttribute("successMessage", "Đăng ký thành công! Kiểm tra email của bạn để nhập OTP.");
+
+            response.sendRedirect("otp_authentication.jsp");
 
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Đã xảy ra lỗi trong quá trình đăng ký. Vui lòng thử lại.");
@@ -335,7 +350,7 @@ public class UserServlet extends HttpServlet {
 
     }
 
-    private void handleChangePassword(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void handleChangePassword(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -348,11 +363,22 @@ public class UserServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         if (user != null && user.getPassword().equals(currentPassword)) {
-            user.setPassword(newPassword);
-            System.out.println(user.getPassword());
+            //user.setPassword(newPassword);
+            //System.out.println(user.getPassword());
             if (newPassword.equals(confirmNewPassword)) {
-                UserDB.updatePassword(user);
-                out.write("{\"message\": \"Đổi mật khẩu thành công.\"}");
+                if (newPassword.equals(currentPassword)) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    out.write("{\"message\": \"Mật khẩu mới trùng mật khẩu cũ.\"}");
+                } else {
+                    String email = request.getParameter("email");
+
+                    HttpSession session = request.getSession();
+                    session.setAttribute("isChangePassword", true);
+                    session.setAttribute("checkSendOtp", true);
+                    session.setAttribute("newPass", newPassword);
+                    out.write("{\"message\": \"Đổi mật khẩu thành công.\"}");
+//                    response.sendRedirect("otp_authentication.jsp");
+                }
             } else {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 out.write("{\"message\": \"Mật khẩu mới không trùng khớp.\"}");
@@ -361,11 +387,11 @@ public class UserServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             out.write("{\"message\": \"Mật khẩu cũ không chính xác.\"}");
         }
-        out.flush();
+        //out.flush();
     }
 
     private void handleDeposit(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        
+
     }
 
     @Override

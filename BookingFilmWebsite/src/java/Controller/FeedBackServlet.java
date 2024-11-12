@@ -2,14 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package OTP;
+package Controller;
 
-import Model.User;
+import Model.EmailSender;
+import Model.UserDB;
 import java.io.IOException;
 import java.io.PrintWriter;
-import Model.UserDB;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,10 +16,9 @@ import jakarta.servlet.http.HttpSession;
 
 /**
  *
- * @author pc
+ * @author ANH BUI
  */
-@WebServlet("/VerifyOtpServlet")
-public class OtpVerificationServlet extends HttpServlet {
+public class FeedBackServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,7 +31,19 @@ public class OtpVerificationServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet FeedBackServlet</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet FeedBackServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -62,48 +72,27 @@ public class OtpVerificationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        String otpEntered = request.getParameter("otp");
+        processRequest(request, response);
         HttpSession session = request.getSession();
-        String email = (String) session.getAttribute("email");
-        // Verify OTP
-        if (OTP.verifyOtp(email, otpEntered)) {
-            // OTP verified successfully
-            boolean checkChangePassword = false;
-            String pass = null;
-            if (session.getAttribute("isChangePassword") != null) {
-                checkChangePassword = (boolean) session.getAttribute("isChangePassword");
-            }
-            OTP.updateOtpVerificationStatus(email, true);
-//            if (session.getAttribute("pass") != null) {
-//                pass = (String) session.getAttribute("pass");
-//            }
-            User user = new UserDB().findByEmail(email);
-            session.setAttribute("user", user.getUsername());
-            session.setAttribute("users", user);
-            session.setAttribute("pass", user.getPassword());
-            session.setAttribute("id", user.getUserID());
-            session.setAttribute("role", "User");
-            session.setMaxInactiveInterval(30 * 60);
-            if (checkChangePassword) {
-                pass = (String) session.getAttribute("newPass");
-                user.setPassword(pass);
-                UserDB.updatePassword(user);
-                session.setAttribute("pass", user.getPassword());
-                session.setAttribute("email", email);
-                session.setAttribute("user", user.getUsername());
-                session.setAttribute("pass", pass);
-                session.setAttribute("isChangePassword", false);
-                session.setAttribute("users", user);
-                request.getRequestDispatcher("UserServlet?action=db").forward(request, response);
+        String userID = request.getParameter("userID");
+        String email = UserDB.getEmailByUserID(userID);
+        String message = request.getParameter("feedback");
+        
+        System.out.println("feed-back: "+message);
+        System.out.println("feed-back: "+userID);
+        System.out.println("feed-back: "+email);
+        System.out.println(email);
 
-            } //            session.setAttribute("otp_verified", true);
-            else {
-                response.sendRedirect("HomePage.jsp");
-            }
+        if (email != null) {
+
+            // Send OTP to user's email
+            EmailSender.replyEmail(email, message);
+
+            // Redirect back to OTP verification page with success message
+            session.setAttribute("successMessage", "Hahahah.");
+            response.sendRedirect("AdminReport.jsp");
         } else {
-            // OTP verification failed
-            session.setAttribute("verificationError", "OTP sai. Vui lòng thử lại.");
+            session.setAttribute("errorMessage", "Lỗi: Không tìm thấy email.");
             response.sendRedirect("otp_authentication.jsp");
         }
     }
