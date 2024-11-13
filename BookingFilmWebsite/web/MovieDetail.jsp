@@ -83,9 +83,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        <link rel="stylesheet" href="bs/css/bootstrap.css"/>
         <link rel="stylesheet" href="css/headerssj4.css"/>
         <link rel="stylesheet" href="css/MovieDetail_css.css"/>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="bs/css/bootstrap.css"/>
+
+
     </head>
     <style>
         #poster_landscape div {
@@ -221,12 +224,20 @@
                                         List<String> hourArr = hmTheatre.get(theatre);
                                         for (String hour : hourArr) {
                                     %>
-                                    <a href="Booking.jsp?theatreID=${theatreID}&movieID=<%= movieId%>&date=<%= day%>&time=<%= hour%>">
-                                        <div class="mx-3 border rounded p-2 session fs-5" id="<%= hour%>">
+                                    <form action="Seat" method="post">
+                                        <input type="hidden" name="theatreName" value="<%=theatre%>">
+                                        <input type="hidden" name="selectedDate" value="<%= day%>">
+                                        <input type="hidden" name="movieName" value="${movieName}">
+                                        <input type="hidden" name="selectedTime" value="<%= hour%>">
+                                        <input type="hidden" name="movieID" value="<%= movieId%>">
+                                        <input type="hidden" name="theatreID" value="${theatreID}">
+                                        <input type="hidden" name="movieImg" value="${movieImg}">
+
+                                        <button type="submit" class="mx-3 border rounded p-2 session fs-5" id="<%= hour%>">
                                             <p class="m-0"><%= hour%></p>
-                                        </div>
-                                    </a>
-                                    F 
+                                        </button>
+                                    </form>
+
                                     <%
                                         }
                                     %>
@@ -344,11 +355,11 @@
             let showIdTableJs; // table xuat hien hien tai
             let dayPass;
             <%
-    String dayArr0 = "";
-    if (dayArr.size() != 0) {
-        dayArr0 = dayArr.get(0);
-    }
-    showIdTable = "time_schedule_" + dayArr0;
+                String dayArr0 = "";
+                if (dayArr.size() != 0) {
+                    dayArr0 = dayArr.get(0);
+                }
+                showIdTable = "time_schedule_" + dayArr0;
             %>
             document.addEventListener("DOMContentLoaded", function () {
 

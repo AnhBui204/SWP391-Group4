@@ -98,7 +98,7 @@
             width: 400px;
             text-align: center;
         }
-        
+
         .action-cell {
             width: 40%; /* Điều chỉnh độ rộng ô này */
         }
@@ -138,7 +138,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="customer.jsp">
-                                    <i class="bi bi-people"></i> Khách Hàng
+                                    <i class="bi bi-people"></i> Tài khoản
                                 </a>
                             </li>
                         </ul>
@@ -187,6 +187,7 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th>ID</th>
+                                            <th>UserID</th>
                                             <th>Issue Title</th>
                                             <th>Action</th>
 
@@ -200,15 +201,13 @@
                                         %>
                                         <tr>
                                             <td><%= report.getReportId()%></td>
+                                            <td><%= report.getUserId()%></td>
                                             <td><%= report.getReportTitle()%></td>
                                             <td class="action-cell">
                                                 <!-- Update and Delete buttons -->
-                                                <form action="AdminReport" method="POST" style="display: inline;">
-                                                    <input type="hidden" name="reportID" value="<%= report.getReportId()%>">
-                                                    <button class="open-btn" style="background-color: #eb7d5d" type="submit" name="action" value="view">View</button>
-                                                </form>
-                                                <!-- Open Modal Button -->
-                                                <button class="open-btn" style="background-color: #DC3545" type="button" data-modal="myModal-<%= report.getReportId()%>">Delete</button>
+                                                <button class="open-btn view-report-btn" style="background-color: #eb7d5d" type="button"
+                                                        data-title="<%= report.getReportTitle()%>" 
+                                                        data-description="<%= report.getReportDescription()%>">View</button>
                                                 <!-- Feedback Button -->
                                                 <button class="open-btn" style="background-color: #198754" type="button" data-modal="feedbackModal-<%= report.getReportId()%>">Feedback</button>
 
@@ -216,13 +215,24 @@
                                                 <div class="modal-container" id="myModal-<%= report.getReportId()%>">
                                                     <div class="modal-content">
                                                         <h3>Are you sure you want to delete <%= report.getReportTitle()%>?</h3>
-                                                        <form action="AdminReport" method="POST">
+                                                        <form action="AdminReport.servlet" method="POST">
                                                             <input type="hidden" name="reportID" value="<%= report.getReportId()%>">
-                                                            <button type="submit" class="delete-btn" name="action" value="delete">Delete</button>
-                                                            <button type="button" class="close-btn" onclick="closeModal('myModal-<%= report.getReportId()%>')">Cancel</button>
+                                                            <button type="button" class="btn btn-secondary" onclick="closeModal('myModal-<%= report.getReportId()%>')">Cancel</button>
+                                                            <button type="submit" class="btn btn-danger" name="action" value="delete">Delete</button>
                                                         </form>
                                                     </div>
                                                 </div>
+                                                <!-- Viewing Report -->
+                                                <div class="modal-container" id="viewReportModal" style="display: none;">
+                                                    <div class="modal-content">
+                                                        <h3 id="reportTitle">Report Title</h3>
+                                                        <div class="p-5 mx-2 my-4 border">
+                                                            <p id="reportDescription">Report Description</p>
+                                                        </div>
+                                                        <button type="button" class="btn btn-secondary" onclick="closeModal('viewReportModal')">Close</button>
+                                                    </div>
+                                                </div>
+
 
                                                 <!-- Feedback Modal -->
                                                 <div class="feedback-modal" id="feedbackModal-<%= report.getReportId()%>">
@@ -233,8 +243,9 @@
                                                             <input type="hidden" name="userID" value="<%= report.getUserId()%>">
                                                             <input type="hidden" name="action" value="delete">
                                                             <textarea name="feedback" required placeholder="Enter your feedback..." rows="4" style="width: 100%;"></textarea>
-                                                            <button type="submit" class="open-btn" style="margin-top: 10px;">Submit Feedback</button>
-                                                            <button type="button" class="close-btn" onclick="closeModal('feedbackModal-<%= report.getReportId()%>')">Close</button>
+                                                            <br>
+                                                            <button type="button" class="btn btn-secondary" onclick="closeModal('feedbackModal-<%= report.getReportId()%>')">Close</button>
+                                                            <button type="submit" class="btn btn-success">Submit Feedback</button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -255,6 +266,33 @@
             </div>
         </div>
         <script>
+            function closeModal(modalId) {
+                document.getElementById(modalId).style.display = 'none';
+            }
+
+// Sự kiện cho nút View để mở modal với nội dung động
+            document.querySelectorAll('.view-report-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const title = button.getAttribute('data-title');
+                    const description = button.getAttribute('data-description');
+
+                    document.getElementById('reportTitle').textContent = title;
+                    document.getElementById('reportDescription').textContent = description;
+
+                    document.getElementById('viewReportModal').style.display = 'flex';
+                });
+            });
+
+// Sự kiện mở modal cho nút Delete và Feedback như trước
+            document.querySelectorAll('.open-btn').forEach(button => {
+                if (button.classList.contains('view-report-btn'))
+                    return; // Bỏ qua nút "View"
+                button.addEventListener('click', () => {
+                    const modalId = button.getAttribute('data-modal');
+                    document.getElementById(modalId).style.display = 'flex';
+                });
+            });
+
             function closeModal(modalId) {
                 document.getElementById(modalId).style.display = 'none';
             }

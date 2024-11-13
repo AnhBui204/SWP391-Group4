@@ -1,12 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controller;
 
-import static Controller.FoodAndDrinkServlet.tempName;
+
 import Model.Movie;
 import Model.MovieDB;
+import Model.RoomDB;
 import Model.Show;
 import Model.ShowDB;
 import Model.ShowInfo;
@@ -41,7 +38,7 @@ import java.util.List;
         maxFileSize = 1024 * 1024 * 5,
         maxRequestSize = 1024 * 1024 * 5 * 5)
 public class MovieServlet extends HttpServlet {
-
+    static String tempName = "";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
@@ -128,7 +125,7 @@ public class MovieServlet extends HttpServlet {
 
     private void handleAddMV(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String name = request.getParameter("movieName");
+        String name = request.getParameter("movieName");                tempName = name; // Dien add
         String dur = request.getParameter("duration");
         String country = request.getParameter("country");
         int duration = Integer.parseInt(dur);
@@ -192,7 +189,7 @@ public class MovieServlet extends HttpServlet {
     private void handleUpdateMV(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String id = request.getParameter("movieID");
-        String name = request.getParameter("movieName");
+        String name = request.getParameter("movieName");                tempName = name;
         String dur = request.getParameter("duration");
         String country = request.getParameter("country");
         int duration = Integer.parseInt(dur);
@@ -256,7 +253,7 @@ public class MovieServlet extends HttpServlet {
 
     private void handleDeleteMV(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String movieID = request.getParameter("movieID");
+        String movieID = request.getParameter("movieID");               tempName = MovieDB.getMovieById(movieID).getMovieName(); //
         try {
             MovieDB.deleteMovie(movieID);
             request.setAttribute("message", "Movie delete successfully!");
@@ -301,7 +298,7 @@ public class MovieServlet extends HttpServlet {
             throws ServletException, IOException {
         String theatreID = request.getParameter("theatreID");
         String roomID = request.getParameter("roomID");
-        String showID = request.getParameter("selectedShowtimeID");
+        String showID = request.getParameter("selectedShowtimeID");             tempName = TheatreDB.getTheatreById(theatreID).getTheatreName() + " in room " + RoomDB.getRoom(roomID).getRoomName() + " at " + ShowDB.getShowById(showID).getShowDate().toString() + " " + ShowDB.getShowById(showID).getShowTime().toString() ; // Dien add
         String getMoney = request.getParameter("money");
         System.out.println(getMoney);
         int money = Integer.parseInt(getMoney);

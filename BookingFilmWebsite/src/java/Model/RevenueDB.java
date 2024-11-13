@@ -82,7 +82,7 @@ public class RevenueDB {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Date bookingDate = rs.getDate("BookingDate"); // Convert to Date type
-                    double dailyRevenue = rs.getDouble("dailyRevenue");
+                    int dailyRevenue = rs.getInt("dailyRevenue");
                     revenueList.add(new Revenue(bookingDate, dailyRevenue));
                 }
             }
@@ -112,8 +112,38 @@ public List<Revenue> getTotalRevenueByTheatre(String theatreID) {
         try (ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 theatreID = rs.getString("TheatreID");
-                double totalRevenue = rs.getDouble("totalRevenue");
+                int totalRevenue = rs.getInt("totalRevenue");
                 revenueList.add(new Revenue(null, totalRevenue)); // Pass null for date
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(); // Log lỗi nếu có
+    }
+    return revenueList;
+}
+
+public static List<Revenue> getTotalRevenue() {
+    List<Revenue> revenueList = new ArrayList<>();
+    
+    // SQL Query để lấy doanh thu tổng cho một rạp cụ thể
+    String query = """
+        SELECT th.TheatreName, ss.TheatreID, SUM(t.TotalPrice) AS totalRevenue
+        FROM Tickets t
+        JOIN Booking_Seats bs ON t.BookingSeatID = bs.BookingSeatID
+        JOIN ShowSeats ss ON bs.SeatID = ss.SeatID AND bs.ShowID = ss.ShowID
+        JOIN Theatres th ON ss.TheatreID = th.TheatreID
+        GROUP BY ss.TheatreID, th.TheatreName
+    """;
+
+    try (Connection conn = getConnect(); 
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+//        stmt.setString(1, theatreID);
+        
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                String theatreName = rs.getString("TheatreName");
+                int totalRevenue = rs.getInt("totalRevenue");
+                revenueList.add(new Revenue(null, totalRevenue, theatreName)); // Pass null for date
             }
         }
     } catch (SQLException e) {

@@ -233,7 +233,8 @@
                                                     </select>     
                                                 </div>
                                                 <div class="form-group">
-                                                    <input type="number" id="money" name="money" value="">
+                                                    <label for="money" class="form-label">Giá vé</label>
+                                                    <input type="number" id="money" name="money" class="form-control" value="">
                                                 </div>
                                                 <input type="hidden" id="selectedShowtimeID" name="selectedShowtimeID" value="">
                                             </div>

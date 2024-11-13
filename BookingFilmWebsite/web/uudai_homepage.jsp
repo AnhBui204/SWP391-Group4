@@ -37,6 +37,8 @@
         <link rel="stylesheet" href="bs/css/bootstrap.css"/>
         <link rel="stylesheet" href="css/headerssj4.css"/>
         <link rel="stylesheet" href="css/bodyssj1.css" />
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
+
     </head>
     <style>
         /* Đặt chung cho toàn trang */
@@ -237,26 +239,6 @@
                                                 <h2 class="section-title px-5 bordered mr-auto">
                                                     <span class="px-2">Ưu Đãi</span>
                                                 </h2>
-                                                <!-- Dropdown lọc rạp -->
-                                                <div class="filter-theatre d-flex align-items-center">
-                                                    <label for="theatreSelect" class="mr-2">Lọc theo rạp:</label>
-                                                    <form method="get" action="Offers.jsp" class="mb-0">
-                                                        <select name="theatreID" id="theatreSelect" onchange="this.form.submit()" class="form-control">
-                                                            <option value="">Tất cả rạp</option>
-                                                            <% if (theatres != null) {
-                                                                    for (Theatre theatre : theatres) {
-                                                                        if (theatre != null) {%>
-                                                            <option value=<%= theatre.getTheatreID()%> <%= selectedTheatreID != null && selectedTheatreID.equals(theatre.getTheatreID()) ? "selected" : ""%>>
-                                                                <%= theatre.getTheatreName()%>
-                                                            </option>
-                                                            <% }
-                                                                }
-                                                            } else { %>
-                                                            <option value="">Không có rạp nào khả dụng</option>
-                                                            <% } %>
-                                                        </select>
-                                                    </form>
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="row px-xl-5 pb-3">

@@ -37,19 +37,19 @@ public class RevenueServlet extends HttpServlet {
         System.out.println("ID" + cinemaID);
         RevenueDB revenueDB = new RevenueDB();
         List<Revenue> totalRevenue = revenueDB.getTotalRevenueByTheatre(cinemaID);
+        List<Revenue> totalRevenue2 = revenueDB.getTotalRevenue();
         List<Revenue> dailyRevenue = revenueDB.getDailyRevenueByCinemaAndDate(cinemaID, selectedDate);
         
         System.out.println(dailyRevenue);
-        System.out.println(totalRevenue);
+        System.out.println(totalRevenue2);
         // Chuyển đổi dữ liệu trả về thành JSON
         Map<String, Object> responseData = new HashMap<>();
-        responseData.put("totalRevenue", totalRevenue);
+        responseData.put("totalRevenue", totalRevenue2);
         responseData.put("dailyRevenue", dailyRevenue);
-
+        
         // Chuyển dữ liệu thành JSON và gửi về client
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         out.println(gson.toJson(responseData));
     }
 }
-

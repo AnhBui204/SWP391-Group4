@@ -40,6 +40,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link rel="stylesheet" href="bootstrap/css/bootstrap.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
         <link rel="stylesheet" href="css/CustomerProfile_css.css">
     </head>
     <body>
@@ -63,15 +65,15 @@
                         </div>
                         <hr class="w-75 mx-auto">
                         <div class="text-center mt-3 d-flex flex-column">
-                            <a class="h3 mt-4 p-3 d-block text-decoration-none" href="UserServlet?action=db">Chỉnh sửa hồ sơ</a>
-                            <a class="h3 mt-4 p-3 d-block bg-white text-decoration-none rounded" href="summaryBooking.jsp">Lịch sử giao dịch</a>
-                            <a class="h3 mt-4 p-3 d-block text-decoration-none" href="report.jsp?userID=<%= users.getUserID()%>">Báo cáo</a>
+                            <a class="h3 mt-4 p-3 d-block  text-decoration-none" href="UserServlet?action=db">Chỉnh sửa hồ sơ</a>
+                            <a class="h3 mt-4 p-3 d-block text-decoration-none bg-white rounded" href="summaryBooking.jsp">Lịch sử giao dịch</a>
+                            <a class="h3 mt-4 p-3 d-block text-decoration-none" href="report.jsp?userID=<%= userID %>">Phản hồi</a>
                         </div>
                     </div>
                     <div class="col-1"></div>
                     <div class="col-7">
                         <!-- Outer container for max height and scrollable body -->
-                        <div class="table-responsive" style="max-height: 550px; overflow-y: auto;">
+                        <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
                             <table class="table table-striped table-bordered table-hover">
                                 <!-- Table Header (Fixed) -->
                                 <thead class="text-center pt-2" style="background-color: #f7cf90; position: sticky; top: 0; z-index: 1">
@@ -125,7 +127,7 @@
         </c:if>
     </div>
 
-    <div id="refundBookingModal" class="modal fade">
+    <div id="refundBookingModal" class="modal fade" tabindex="-1" aria-labelledby="refundBookingModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form action="TicketServlet" method="post">
@@ -133,24 +135,25 @@
                     <input type="hidden" name="bookingID" value="">
 
                     <div class="modal-header">
-                        <h4 class="modal-title">Hủy Vé</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="refundBookingModalLabel">Hủy Vé</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
-                    <div class="modal-body">
+                    <div class="modal-body text-center">
                         <p>Bạn có chắc chắn muốn hủy vé này không?</p>
                         <p>(Nếu hủy vé, tiền sẽ được hoàn lại vào ví)</p>
                         <p class="text-warning"><small>Hành động này không thể hoàn tác sau khi thực hiện.</small></p>
                     </div>
 
                     <div class="modal-footer">
-                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                        <input type="submit" class="btn btn-primary" value="Hủy Vé">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Hủy Vé</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
 </body>
 <script src="bs/js/bootstrap.bundle.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

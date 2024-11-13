@@ -20,6 +20,12 @@ alter table Users
       expiry_time DateTime,
       otp_verified bit;
 
+	  SELECT ss.TheatreID, SUM(t.TotalPrice) AS totalRevenue
+        FROM Tickets t
+        JOIN Booking_Seats bs ON t.BookingSeatID = bs.BookingSeatID
+        JOIN ShowSeats ss ON bs.SeatID = ss.SeatID AND bs.ShowID = ss.ShowID
+        GROUP BY ss.TheatreID
+
 -- Table for Theatres
 CREATE TABLE Theatres(
     TheatreID CHAR(6) PRIMARY KEY,
@@ -27,7 +33,7 @@ CREATE TABLE Theatres(
     TheatreLocation NVARCHAR(150)
 );
 select * from Users
-UPDATE Users SET otp_verified=1
+UPDATE Users SET MoneyLeft= 100000000
 
 -- Table for Vouchers
 CREATE TABLE Vouchers (
@@ -201,13 +207,8 @@ CREATE TABLE Tickets (
 ALTER TABLE Booking
 ADD Status NVARCHAR(20) CHECK (Status IN (N'Đã đặt', N'Chấp thuận',N'Đang chờ',N'Từ chối')) DEFAULT N'Đã đặt';
 
-SELECT DISTINCT 
-    b.BookingID, 
-    b.BookingDate, 
-    N'Đã Đặt' AS Status, -- Chuyển tất cả thành 'Đã Đặt'
-    t.TotalPrice
-FROM Booking b
-JOIN Tickets t ON b.BookingID = t.BookingID;
+UPDATE Booking
+SET Status = N'Đã Đặt';
 
 CREATE table WorkHis(
 	WorkId char(6) primary key,

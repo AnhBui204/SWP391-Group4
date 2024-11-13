@@ -96,7 +96,7 @@ public class UserServlet extends HttpServlet {
                 // Đặt thông báo thành công
                 session.setAttribute("successMessage", "Đăng nhập thành công!");
 
-                String encodedURL = response.encodeRedirectURL("AdminDashBoard.jsp");
+                String encodedURL = response.encodeRedirectURL("statistic.jsp");
                 response.sendRedirect(encodedURL);
 
             } else if (a.getRole().equals("User")) {

@@ -2,6 +2,7 @@ package Controller;
 
 import Model.SeatDetail;
 import Model.ShowSeatDB;
+import Model.TheatreDB;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -75,11 +76,12 @@ public class Seat extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     String theatreName = request.getParameter("theatreName");
+    
     String showDate = request.getParameter("selectedDate");
     String movieName = request.getParameter("movieName"); 
     String startTime = request.getParameter("selectedTime");
     String movieID = request.getParameter("movieID");
-    String theatreID = request.getParameter("theatreID");
+    String theatreID = TheatreDB.getTheatreIdByName(theatreName);
     String movieImg= request.getParameter("movieImg");
         System.out.println(movieID);
         System.out.println("theatreID: "+theatreID);

@@ -53,6 +53,23 @@ public class TheatreDB {
         }
         return null;
     }
+    
+    public static String getTheatreIdByName(String theatreName) {
+        String theatreID = "";
+        String sql = "select theatreID from Theatres where theatreName =? ";
+        try (Connection conn = getConnect(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, theatreName);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                theatreID = rs.getString("theatreID");
+                return theatreID;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static ArrayList<Theatre> listAllTheatres() {
         ArrayList<Theatre> cinemaList = new ArrayList<>();
@@ -128,7 +145,7 @@ public class TheatreDB {
     }
 
     public static void main(String[] args) {
-        Theatre a = getTheatreById("T00001");
+        String a = getTheatreIdByName("CGV Vincom Đà Nẵng");
         System.out.println(a);
         ArrayList<Theatre> list = TheatreDB.listAllTheatres();
         for (Theatre ci : list) {

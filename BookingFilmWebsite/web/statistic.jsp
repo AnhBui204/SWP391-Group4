@@ -1,3 +1,4 @@
+<%@page import="Model.RevenueDB"%>
 <%@ page import="java.util.List" %>
 <%@ page import="Model.DatabaseInfo" %>
 <%@ page import="Model.User" %>
@@ -83,7 +84,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="customer.jsp">
-                                    <i class="bi bi-people"></i> Khách Hàng
+                                    <i class="bi bi-people"></i> Tài khoản
                                 </a>
                             </li>
                         </ul>
@@ -151,22 +152,23 @@
                                 <table class="table table-hover table-nowrap">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th>Theatre ID</th>
+                                            
                                             <th>Theatre Name</th>
-                                            <th>Location</th>
+                                            
                                             <th>Total revenue</th>
                                             
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <%
-                                            for (Theatre ci : list) {
+                                            List<Revenue> list2 = RevenueDB.getTotalRevenue();
+                                            for (Revenue ci : list2) {
                                         %>
                                         <tr>
-                                            <td><%= ci.getTheatreID() %></td>
+                                            
                                             <td><%= ci.getTheatreName() %></td>
-                                            <td><%= ci.getTheatreLocation() %></td>
-                                            <td>????VND</td>
+                                            
+                                            <td><%= ci.getTotalRevenue()%>VND</td>
                                         </tr>
                                         <%
                                             }
@@ -269,6 +271,7 @@
 
             function updateCharts(data) {
                 // Clear previous chart data
+                console.log(pieChart.data.datasets[0]);
                 pieChart.data.labels = [];
                 pieChart.data.datasets[0].data = [];
                 barChart.data.labels = [];
@@ -277,7 +280,8 @@
                 // Check if total revenue data exists
                 if (data.totalRevenue && data.totalRevenue.length > 0) {
                     const totalRevenueData = data.totalRevenue;
-                    pieChart.data.labels = ['Total Revenue'];  // Use a generic label if no specific cinema
+                    
+                    pieChart.data.labels = totalRevenueData.map(items => items.theatreName || '');  // Use a generic label if no specific cinema
                     pieChart.data.datasets[0].data = totalRevenueData.map(item => item.totalRevenue || 0);
                     pieChart.update();  // Refresh the pie chart with the new data
                 } else {

@@ -131,7 +131,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="customer.jsp">
-                                    <i class="bi bi-people"></i> Khách Hàng
+                                    <i class="bi bi-people"></i> Tài khoản
                                 </a>
                             </li>
                         </ul>
@@ -175,12 +175,12 @@
                             <div class="card-header d-flex align-items-center justify-content-between">
                                 <h5 class="mb-0">Rạp Phim</h5>
                                 <div class="card-footer border-0 py-2">
-                                <div class="action-buttons">
-                                    <form action="addTheatre.jsp" method="GET">
-                                        <button class="open-btn" style="background-color: green;" type="submit">Add New Theatre</button>
-                                    </form>
+                                    <div class="action-buttons">
+                                        <form action="addTheatre.jsp" method="GET">
+                                            <button class="open-btn" style="background-color: green;" type="submit">Add New Theatre</button>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-hover table-nowrap">
@@ -202,24 +202,27 @@
                                             <td><%= ci.getTheatreID()%></td>
                                             <td><%= ci.getTheatreName()%></td>
                                             <td><%= ci.getTheatreLocation()%></td>
-                                            <td>
+                                            <td class="d-flex">
                                                 <!-- Update and Delete buttons -->
                                                 <!--<form action="AdminReport" method="POST" style="display: inline;">-->
-                                                <form action="updateTheatre.jsp" method="GET" style="display: inline;">
+                                                <form action="updateTheatre.jsp" method="GET" class="me-2">
                                                     <input type="hidden" name="theatreID" value="<%= ci.getTheatreID()%>">
-                                                    <button class="open-btn" style="background-color: #008000" type="submit" name="action" value="update">Update</button>
+                                                    <button class="btn btn-warning btn-sm w-100" type="submit">Update</button>
                                                 </form>
                                                 <!-- Open Modal Button -->
                                                 <form action="TheatreServlet?action=delete" method="POST">
                                                     <input type="hidden" name="theatreID" value="<%= ci.getTheatreID()%>">
-                                                    <button class="open-btn" style="background-color: #DC3545" type="button" id="openModal-<%= ci.getTheatreID()%>">Delete</button>
+                                                    <button class="btn btn-danger btn-sm w-100" type="button" id="openModal-<%= ci.getTheatreID()%>">Delete</button>
 
                                                     <!-- Modal -->
                                                     <div class="modal-container" id="myModal-<%= ci.getTheatreID()%>">
                                                         <div class="modal-content">
                                                             <h2>Are you sure you want to delete <%= ci.getTheatreID()%>?</h2>
-                                                            <button class="close-btn" id="closeModal-<%= ci.getTheatreID()%>">Cancel</button>
-                                                            <button class="open-btn" style="background-color: #d5514d" type="button" id="openModal-<%= ci.getTheatreID()%>">Delete</button></div>
+                                                            <div class="button-container">
+                                                                <button class="btn btn-secondary btn-sm w-100" id="closeModal-<%= ci.getTheatreID()%>">Cancel</button>
+                                                                <button class="btn btn-danger btn-sm w-100" type="submit" id="openModal-<%= ci.getTheatreID()%>">Delete</button>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
                                                     <script>
@@ -229,18 +232,18 @@
                                                         const closeModalBtn<%= ci.getTheatreID()%> = document.getElementById("closeModal-<%= ci.getTheatreID()%>");
                                                         // Open modal on button click
                                                         openModalBtn<%= ci.getTheatreID()%>.addEventListener("click", () => {
-                                                    modal<%= ci.getTheatreID()%>.style.display = "flex";
+                                                            modal<%= ci.getTheatreID()%>.style.display = "flex";
                                                         });
                                                         // Close modal on button click
                                                         closeModalBtn<%= ci.getTheatreID()%>.addEventListener("click", (event) => {
-                                                        event.preventDefault();
-                                                    modal<%= ci.getTheatreID()%>.style.display = "none";
+                                                            event.preventDefault();
+                                                            modal<%= ci.getTheatreID()%>.style.display = "none";
                                                         });
                                                         // Close modal when clicking outside the modal content
                                                         window.addEventListener("click", (event) => {
-                                                    if (event.target === modal<%= ci.getTheatreID()%>) {
-                                                        modal<%= ci.getTheatreID()%>.style.display = "none";
-                                                        }
+                                                            if (event.target === modal<%= ci.getTheatreID()%>) {
+                                                                modal<%= ci.getTheatreID()%>.style.display = "none";
+                                                            }
                                                         });
                                                     </script>
                                                 </form>
@@ -252,7 +255,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            
+
                         </div>
                     </div>
                 </main>

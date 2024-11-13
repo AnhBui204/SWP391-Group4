@@ -94,7 +94,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="customer.jsp">
-                                    <i class="bi bi-people"></i> Khách Hàng
+                                    <i class="bi bi-people"></i> Tài khoản
                                 </a>
                             </li>
                         </ul>

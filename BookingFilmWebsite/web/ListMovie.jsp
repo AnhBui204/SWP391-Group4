@@ -24,6 +24,10 @@
     </head>
     <body>
         <style>
+            .img-fluid {
+                min-height: 394px;
+                max-height: 394px;
+            }
             .box2-1 .skin {
                 opacity: 0%;
                 position: absolute;
@@ -104,6 +108,11 @@
             String yearS = (String) request.getAttribute("year");
 
             List<Movie> mvList = MovieDB.getAllMovies();
+            mvList = (List<Movie>) request.getAttribute("listMovie");
+            if (mvList == null) {
+                MovieDB movieDB = new MovieDB();
+                mvList = movieDB.getAllMovies();
+            }
 
         %>
         <div class="container my-5">
@@ -179,6 +188,7 @@
                             </div>
                         </div>
                         <img src="<%= movie.getImgPortrait()%>" alt="alt" class="img-fluid small-image" />
+
                         <div class="box3">
                             <div class="danhgia fs-4">
                                 <p><i class="fas fa-star"></i> <%=MovieDB.getAvgRate(movie.getMovieID())%></p>
@@ -187,7 +197,9 @@
                                 <p>T16</p>
                             </div>
                         </div>
+
                     </div>
+                    <div class="movie-name text-center mt-2 mb-2"><%= movie.getMovieName()%></div>
                 </form>
                 <%
                     }

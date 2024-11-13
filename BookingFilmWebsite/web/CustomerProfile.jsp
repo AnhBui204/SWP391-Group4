@@ -17,9 +17,14 @@
 <!DOCTYPE html>
 <html>
     <head>
+
+        <link rel="stylesheet" href="css/headerssj4.css" />
+        <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Chỉnh sửa hồ sơ</title>
-        <link rel="stylesheet" href="bs/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
         <link rel="stylesheet" href="css/CustomerProfile_css.css">
     </head>
@@ -46,7 +51,7 @@
                         <div class="text-center mt-3 d-flex flex-column">
                             <a class="h3 mt-4 p-3 d-block bg-white text-decoration-none rounded" href="UserServlet?action=db">Chỉnh sửa hồ sơ</a>
                             <a class="h3 mt-4 p-3 d-block text-decoration-none" href="summaryBooking.jsp">Lịch sử giao dịch</a>
-                            <a class="h3 mt-4 p-3 d-block text-decoration-none" href="report.jsp?userID=${user.userID}">Báo cáo</a>
+                            <a class="h3 mt-4 p-3 d-block text-decoration-none" href="report.jsp?userID=${user.userID}">Phản hồi</a>
                         </div>
                     </div>
                     <div class="col-md-1"></div>
@@ -93,7 +98,6 @@
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
                                 <input type="text" value="${user.email}" class="form-control fs-4" disabled>
-                                <button class="btn-warning text-dark rounded">Thay đổi</button>
                             </div>
                         </div>
                         <div class="pt-3">

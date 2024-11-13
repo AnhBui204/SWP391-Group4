@@ -27,6 +27,8 @@
         <link rel="stylesheet" href="bs/css/bootstrap.css"/>
         <link rel="stylesheet" href="css/headerssj4.css"/>
         <link rel="stylesheet" href="css/bodyssj1.css" />
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
+
         <style>
             /* Đặt chung cho toàn trang */
             body {
@@ -80,6 +82,7 @@
 
             .theatre-list {
                 display: flex;
+                justify-content: space-between;
                 flex-wrap: wrap;
                 gap: 20px;
             }
@@ -130,7 +133,7 @@
     <body>
         <div class="container">
             <h1 class="page-title">Danh Sách Các Rạp</h1>
-            
+
             <!-- Thanh tìm kiếm -->
             <div class="search-bar">
                 <input type="text" placeholder="Tìm kiếm rạp chiếu..." id="search-input">
@@ -148,8 +151,8 @@
                         <i class="fas fa-film"></i>
                     </div>
                     <div class="theatre-details">
-                        <h2 class="theatre-name"><%= theatre.getTheatreName() %></h2>
-                        <p class="theatre-location"><strong>Địa điểm:</strong> <%= theatre.getTheatreLocation() %></p>
+                        <h2 class="theatre-name"><%= theatre.getTheatreName()%></h2>
+                        <p class="theatre-location"><strong>Địa điểm:</strong> <%= theatre.getTheatreLocation()%></p>
                     </div>
                 </div>
                 <% } %>
@@ -157,17 +160,17 @@
             </div>
             <% } else { %>
             <p>Hiện tại không có thông tin về các rạp.</p>
-            <% } %>
+            <% }%>
         </div>
 
         <script src="https://kit.fontawesome.com/a076d05399.js"></script>
         <script src="bs/js/bootstrap.bundle.js"></script>
         <script>
             // Tìm kiếm
-            document.getElementById("search-input").addEventListener("keyup", function() {
+            document.getElementById("search-input").addEventListener("keyup", function () {
                 const searchValue = this.value.toLowerCase();
                 const theatres = document.querySelectorAll(".theatre-item");
-                
+
                 theatres.forEach(theatre => {
                     const theatreName = theatre.querySelector(".theatre-name").innerText.toLowerCase();
                     if (theatreName.includes(searchValue)) {

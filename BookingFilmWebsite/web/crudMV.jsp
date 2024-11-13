@@ -26,7 +26,11 @@
         <div class="container-fluid">
             <div class="container-main row">
                 <!-- Sidebar -->
-                <div class="col-12 col-lg-3" style="padding-left: 0px ;padding-right: 0px; ">
+                <div class="col-12 col-lg-3" id="tempDiv">
+
+                </div>
+
+                <div class="col-12 col-lg-3" style="padding-left: 0px ;padding-right: 0px; position: fixed;">
                     <div class="sidebar" style="height: 190vh;" >
                         <div class="widget widget_collection">
                             <div class="widget-title text-center">
@@ -63,8 +67,7 @@
                                     <h5><button onclick="location.href = 'Offers.jsp'">Thẻ Ưu Đãi<span class="icon">&#127991;</span></button></h5>
                                     <form action="MovieServlet?action=mvList" method="Post">
                                         <h5 style="text-decoration: none">
-                                            <button type="submit" class="btn btn-link">
-                                                Quản lý lịch chiếu<span class="icon">&#128337;</span>
+                                            <button type="submit" class="btn btn-link">Quản lý lịch chiếu<span class="icon">&#128337;</span>
                                             </button>
                                         </h5>
                                     </form>

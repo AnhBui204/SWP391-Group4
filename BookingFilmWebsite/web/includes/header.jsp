@@ -33,13 +33,13 @@
                                 </a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link fs-5" href="ListMovie.jsp">Phim</a>
+                                <a class="nav-link fs-4" href="ListMovie.jsp">Phim</a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link fs-5" href="uudai_homepage.jsp">Ưu Đãi</a>
+                                <a class="nav-link fs-4" href="uudai_homepage.jsp">Ưu Đãi</a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link fs-5" href="Rap.jsp">Rạp</a>
+                                <a class="nav-link fs-4" href="Rap.jsp">Rạp</a>
                             </li>
                         </ul>
                     </nav>

@@ -66,6 +66,26 @@ public class UserDB implements DatabaseInfo {
         return user;
     }
 
+    public static boolean checkEmailExists(String email) {
+        boolean exists = false;
+        String query = "SELECT COUNT(*) FROM Users WHERE Email = ?";
+
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, email); // Gán giá trị email cho câu truy vấn
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                exists = rs.getInt(1) > 0; // Nếu COUNT(*) > 0, email tồn tại
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, "SQL Exception", e);
+        }
+
+        return exists;
+    }
+
     public static BigDecimal getCurrentBalance(String userID) {
         BigDecimal balance = null;
         String sql = "SELECT MoneyLeft FROM Users WHERE userID = ?"; // Thay đổi theo cấu trúc bảng của bạn
@@ -388,7 +408,7 @@ public class UserDB implements DatabaseInfo {
                 }
             }
         } catch (Exception e) {
-            
+
         }
         return null;
     }
@@ -411,8 +431,8 @@ public class UserDB implements DatabaseInfo {
 
         return userId;
     }
-    
-        public static String getEmailByUserID(String userID) {
+
+    public static String getEmailByUserID(String userID) {
         String email = ""; // Default value if user_id is not found
 
         String query = "SELECT email FROM Users WHERE userID = ?";
@@ -435,7 +455,7 @@ public class UserDB implements DatabaseInfo {
         for (User user : list) {
             System.out.println(user);
         }
-        
+
         String email = getEmailByUserID("U00003");
         System.out.println("Haha" + email);
 //

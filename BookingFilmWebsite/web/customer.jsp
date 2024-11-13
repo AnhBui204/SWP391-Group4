@@ -132,7 +132,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="customer.jsp">
-                                    <i class="bi bi-people"></i> Khách Hàng
+                                    <i class="bi bi-people"></i> Tài khoản
                                 </a>
                             </li>
                         </ul>
@@ -160,7 +160,7 @@
                             <div class="row align-items-center">
                                 <div class="col-sm-6 col-12 mb-4 mb-sm-0">
                                     <!-- Title -->
-                                    <h1 class="h2 mb-0 ls-tight">Quản Lý Khách Hàng</h1>
+                                    <h1 class="h2 mb-0 ls-tight">Quản Lý Tài khoản</h1>
                                 </div>
                             </div>
                             <!-- Nav -->
@@ -174,7 +174,7 @@
                     <div class="container-fluid"> 
                         <div class="card shadow border-0 mb-7">
                             <div class="card-header">
-                                <h5 class="mb-0">Thông tin khách hàng</h5>
+                                <h5 class="mb-0">Thông tin Tài khoản</h5>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-hover table-nowrap">
@@ -213,9 +213,6 @@
                                         %>
                                     </tbody>
                                 </table>
-                            </div>
-                            <div class="card-footer border-0 py-5">
-                                <span class="text-muted text-sm">Showing 10 items out of 250 results found</span>
                             </div>
                         </div>
                     </div>
