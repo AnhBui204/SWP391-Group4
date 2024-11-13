@@ -32,7 +32,7 @@
                             <img src="${user.avatar}" alt="Profile Image" class="img-fluid rounded-circle" style="height: 100px; width: 100px;"/>
                             <div class="d-flex flex-column align-items-center justify-content-center mt-3 px-3">
                                 <% if (moneyLeft != null) {%>
-                                <p class="m-0 px-2 fs-6 text-success">Số tiền: <strong><%= moneyLeftInt%></strong></p>
+                                <p class="m-0 px-2 fs-6 text-success">Số tiền: <strong><%= moneyLeftInt%> VNĐ</strong></p>
                                 <% } else { %>
                                 <p class="m-0 px-2 fs-6 text-success">Số tiền: <strong> 0 VNĐ</strong></p>
                                 <% }%>
@@ -241,16 +241,18 @@
                     success: function (response) {
                         $('img[alt="Profile Image"]').attr('src', response.newAvatarPath); // Update image
                         alert(response.message);
+                        // Tự động load lại trang sau 3 giây
+                        setTimeout(function () {
+                            location.reload();
+                        }, 100); // 3000 ms = 3 giây
                     },
                     error: function () {
                         alert('Upload failed.');
                     }
                 });
             });
-
             $('#saveProfileButton').click(function () {
                 var formData = new FormData($('#updateProfileForm')[0]);
-
                 $.ajax({
                     url: 'UserServlet?action=updateprofile',
                     type: 'POST',
@@ -273,10 +275,8 @@
                     }
                 });
             });
-
             $('#changePasswordForm').submit(function (e) {
                 e.preventDefault();
-
                 $.ajax({
                     url: 'UserServlet?action=changePassword',
                     type: 'POST',
@@ -287,9 +287,9 @@
 //                            alert(response.message);
 //                            $('#changePasswordModal').modal('hide');  // Đóng modal khi thành công
 //                            $('#changePasswordForm')[0].reset();  // Xóa hết dữ liệu trong form
-                            window.location.href="http://localhost:8080/BookingFilmWebsite/otp_authentication.jsp";
+                            window.location.href = "http://localhost:8080/BookingFilmWebsite/otp_authentication.jsp";
                         } else {
-                            alert(response.message);  // Hiển thị thông báo lỗi mà không đóng modal
+                            alert(response.message); // Hiển thị thông báo lỗi mà không đóng modal
                         }
                     },
                     error: function (xhr) {
@@ -298,8 +298,6 @@
                     }
                 });
             });
-
-
         });
 
 

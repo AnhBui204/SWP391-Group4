@@ -43,19 +43,19 @@ public class UserDB implements DatabaseInfo {
 
             if (rs.next()) {
                 // String id = rs.getString("UserId");
-                username = rs.getString(1);
-                String fName = rs.getString(2);
-                String lName = rs.getString(3);
-                password = rs.getString(4);
-                String id = rs.getString(5);
-                String email = rs.getString(6);
-                String role = rs.getString(7);
-                String phone = rs.getString(8);
-                String sex = rs.getString(9);
-                Date DOB = rs.getDate(10);
-                String money = rs.getString(11);
-                String avatar = rs.getString(12);
-                boolean verify = rs.getBoolean(13);
+                username = rs.getString("UserName");
+                String fName = rs.getString("FName");
+                String lName = rs.getString("LName");
+                password = rs.getString("Pass");
+                String id = rs.getString("UserID");
+                String email = rs.getString("Email");
+                String role = rs.getString("Role");
+                String phone = rs.getString("Phone");
+                String sex = rs.getString("Sex");
+                Date DOB = rs.getDate("DateOfBirth");
+                String money = rs.getString("MoneyLeft");
+                String avatar = rs.getString("Avatar");
+                boolean verify = rs.getBoolean("otp_verified");
 
                 user = new User(id, username, fName, lName, password, email, role, phone, sex, DOB, money, avatar, verify);
             }
@@ -162,7 +162,7 @@ public class UserDB implements DatabaseInfo {
             stmt.setString(2, user.getUsername());
             stmt.setString(3, user.getPassword());
             stmt.setString(4, user.getfName());
-            stmt.setString(5, user.getfName());
+            stmt.setString(5, user.getlName());
             stmt.setString(6, user.getEmail());
             stmt.setString(7, user.getPhone());
             stmt.setString(8, user.getSex());

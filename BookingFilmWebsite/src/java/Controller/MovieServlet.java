@@ -114,7 +114,7 @@ public class MovieServlet extends HttpServlet {
 
         // Sử dụng redirectPage để chuyển hướng đến trang gọi tìm kiếm
         if (redirectPage == null || redirectPage.isEmpty()) {
-            redirectPage = "HomePage.jsp"; // Trang mặc định nếu không có redirectPage
+            redirectPage = "crudMV.jsp"; // Trang mặc định nếu không có redirectPage
         }
 
         RequestDispatcher dispatcher = request.getRequestDispatcher(redirectPage);
@@ -361,6 +361,7 @@ public class MovieServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         WorkHistory whs = new WorkHistory();
+        System.out.println("Haha" + page);
         if ((page.equalsIgnoreCase("movie") && !action.equalsIgnoreCase("setShow")) || page.equalsIgnoreCase("food and drink") || page.equalsIgnoreCase("voucher")) {
 
             whDes = "Action: " + action + " " + page + " " + tempName + ", Affected page: " + page + ", Executor: " + id;

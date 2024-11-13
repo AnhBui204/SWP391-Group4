@@ -72,7 +72,6 @@ public class FeedBackServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
         HttpSession session = request.getSession();
         String userID = request.getParameter("userID");
         String email = UserDB.getEmailByUserID(userID);

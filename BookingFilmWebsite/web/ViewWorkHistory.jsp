@@ -141,7 +141,6 @@
                                             <th>Work Description</th>
                                             <th>Date</th>
                                             <th>Time</th>
-                                            <th>Staff ID</th>
                                         </tr>
                                     </thead>
                                     <%
@@ -166,7 +165,6 @@
                                                 <td><%= workHis.getWorkDes()%></td>
                                                 <td><%= workHis.getDates()%></td>
                                                 <td><%= workHis.getTimes()%></td>
-                                                <td><%= workHis.getStaffID()%></td>
                                             </tr>
                                             <%
                                                 }

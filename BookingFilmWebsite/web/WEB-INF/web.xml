@@ -88,6 +88,10 @@
         <servlet-name>FeedBackServlet</servlet-name>
         <servlet-class>Controller.FeedBackServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RevenueServlet</servlet-name>
+        <servlet-class>Controller.RevenueServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TheatreServlet</servlet-name>
         <url-pattern>/TheatreServlet</url-pattern>
@@ -179,6 +183,10 @@
     <servlet-mapping>
         <servlet-name>FeedBackServlet</servlet-name>
         <url-pattern>/FeedBackServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RevenueServlet</servlet-name>
+        <url-pattern>/RevenueServlet</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>HomePage.jsp</welcome-file>

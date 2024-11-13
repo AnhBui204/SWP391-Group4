@@ -14,6 +14,8 @@
         <!-- Đưa CSS hoặc link đến các file CSS vào đây -->
         <meta charset="UTF-8">
         <link rel="stylesheet" href="./css/admins2.css">
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
         <title>Ticket Management</title>
     </head>
@@ -64,47 +66,20 @@
             <!-- Vertical Navbar -->
             <nav class="navbar show navbar-vertical h-lg-screen navbar-expand-lg px-0 py-3 navbar-light bg-white border-bottom border-bottom-lg-0 border-end-lg" id="navbarVertical">
                 <div class="container-fluid">
-                    <!-- Toggler -->
-                    <button class="navbar-toggler ms-n2" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse" aria-controls="sidebarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <!-- Brand -->
                     <a class="navbar-brand py-lg-2 mb-lg-5 px-lg-6 me-0" href="HomePage.jsp">
                         <span style="font-size: 1.5rem; font-weight: bold; color: #333;">Cineluxe</span>             
                     </a>
-                    <!-- User menu (mobile) -->
-                    <div class="navbar-user d-lg-none">
-                        <!-- Dropdown -->
-                        <div class="dropdown">
-                            <!-- Toggle -->
-                            <a href="#" id="sidebarAvatar" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <div class="avatar-parent-child">
-                                    <img alt="Image Placeholder" src="https://images.unsplash.com/photo-1548142813-c348350df52b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar- rounded-circle">
-                                    <span class="avatar-child avatar-badge bg-success"></span>
-                                </div>
-                            </a>
-                            <!-- Menu -->
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="sidebarAvatar">
-                                <a href="#" class="dropdown-item">Profile</a>
-                                <a href="#" class="dropdown-item">Settings</a>
-                                <a href="#" class="dropdown-item">Billing</a>
-                                <hr class="dropdown-divider">
-                                <a href="#" class="dropdown-item">Logout</a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Collapse -->
                     <div class="collapse navbar-collapse" id="sidebarCollapse">
                         <!-- Navigation -->
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="cinema.jsp">
-                                    <i class="bi bi-film"></i> Rạp phim
+                                <a class="nav-link" href="statistic.jsp">
+                                    <i class="bi bi-bar-chart"></i> Doanh Thu
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="statistic.jsp">
-                                    <i class="bi bi-bar-chart"></i> Doanh Thu
+                                <a class="nav-link" href="cinema.jsp">
+                                    <i class="bi bi-film"></i> Rạp phim
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -129,11 +104,6 @@
                         <div class="mt-auto"></div>
                         <!-- User (md) -->
                         <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link" href="CustomerProfile.jsp">
-                                    <i class="bi bi-person-square"></i> Account
-                                </a>
-                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="UserServlet?action=logout">
                                     <i class="bi bi-box-arrow-left"></i> Logout
@@ -191,14 +161,15 @@
                                                         <c:when test="${book.status == 'Đang chờ'}">
                                                             <div class="action-buttons">
                                                                 <!-- Nút Chấp thuận -->
-                                                                <a href="TicketServlet?action=approve&bookingID=${book.bookingID}" class="btn-approve">
+                                                                <a href="#" onclick="confirmAction('approve', '${book.bookingID}')" class="btn-approve">
                                                                     Chấp thuận
                                                                 </a>
                                                                 <!-- Nút Từ chối -->
-                                                                <a href="TicketServlet?action=reject&bookingID=${book.bookingID}" class="btn-reject">
+                                                                <a href="#" onclick="confirmAction('reject', '${book.bookingID}')" class="btn-reject">
                                                                     Từ chối
                                                                 </a>
                                                             </div>
+
                                                         </c:when>
                                                     </c:choose>
                                                 </td>
@@ -215,6 +186,40 @@
                 </main>
             </div>
         </div>
+        <!-- Modal xác nhận -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmModalLabel">Xác nhận</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Bạn có chắc chắn muốn thực hiện hành động này?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <a id="confirmAction" href="#" class="btn btn-primary">Xác nhận</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="js/admin.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+                                                                    function confirmAction(action, bookingID) {
+                                                                        // Đặt liên kết xác nhận vào nút "Xác nhận" trong modal
+                                                                        var confirmLink = document.getElementById("confirmAction");
+                                                                        confirmLink.href = "TicketServlet?action=" + action + "&bookingID=" + bookingID;
+
+                                                                        // Hiển thị modal
+                                                                        var myModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+                                                                        myModal.show();
+                                                                    }
+        </script>
+
     </body>
 </html>

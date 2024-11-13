@@ -190,7 +190,7 @@
                         <button type="submit" class="btn btn-warning fs-5">Đăng kí</button>
                     </div>
                     <div class="row justify-content-center mt-2">
-                        <p class="text-center">Bạn đã có tài khoản? <a href="login.jsp" class="text-decoration-none">Đăng nhập</a></p>
+                        <p class="text-center">Bạn đã có tài khoản? <a href="Login.jsp" class="text-decoration-none">Đăng nhập</a></p>
                     </div>
                 </form>
             </div>

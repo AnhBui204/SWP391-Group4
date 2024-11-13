@@ -286,6 +286,9 @@ public class UserServlet extends HttpServlet {
                 String fileURLPath = "image/Avatar/" + fileName;  // Có thể thay đổi theo yêu cầu
                 UserDB.uploadProfileImage(userID, fileURLPath);
                 System.out.println(fileURLPath);
+                user.setAvatar(fileURLPath);
+                HttpSession session = request.getSession();
+                session.setAttribute("users", user);
                 // Tạo phản hồi JSON thành công
                 jsonResponse = String.format("{\"newAvatarPath\": \"%s\", \"message\": \"Image uploaded and saved successfully.\"}", fileURLPath);
             } catch (IOException ex) {

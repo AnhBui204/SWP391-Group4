@@ -233,7 +233,7 @@
             <div id="addEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="MovieServlet?action=add" method="POST" enctype="multipart/form-data">
+                        <form action="MovieServlet?action=add&page=movie" method="POST" enctype="multipart/form-data">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Thêm Phim</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -307,7 +307,7 @@
             <div id="editEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="MovieServlet?action=update" method="POST" enctype="multipart/form-data">
+                        <form action="MovieServlet?action=update&page=movie" method="POST" enctype="multipart/form-data">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Cập Nhật Phim</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -386,7 +386,7 @@
             <div id="deleteEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="MovieServlet?action=delete" method="post">
+                        <form action="MovieServlet?action=delete&page=movie" method="post">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Xóa Phim</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

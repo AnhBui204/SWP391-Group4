@@ -427,8 +427,10 @@ public class TicketDB {
     public static List<BookingInfo> getBookingDetails() throws SQLException {
         List<BookingInfo> bookingDetails = new ArrayList<>();
         String query = "SELECT DISTINCT b.BookingID, b.BookingDate, b.Status, t.TotalPrice "
-                + "FROM Booking b "
-                + "JOIN Tickets t ON b.BookingID = t.BookingID";
+             + "FROM Booking b "
+             + "JOIN Tickets t ON b.BookingID = t.BookingID "
+             + "ORDER BY b.BookingDate DESC";
+
 
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(query); ResultSet rs = pstmt.executeQuery()) {
             while (rs.next()) {

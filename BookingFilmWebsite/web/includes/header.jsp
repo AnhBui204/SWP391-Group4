@@ -5,9 +5,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>CineLuxe Cinema</title>
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
     </head>
     <body>
         <div class="vbody">
@@ -35,13 +33,13 @@
                                 </a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link fs-3" href="ListMovie.jsp">Phim</a>
+                                <a class="nav-link fs-5" href="ListMovie.jsp">Phim</a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link fs-3" href="uudai_homepage.jsp">Ưu Đãi</a>
+                                <a class="nav-link fs-5" href="uudai_homepage.jsp">Ưu Đãi</a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link fs-3" href="Rap.jsp">Rạp/Giá Vé</a>
+                                <a class="nav-link fs-5" href="Rap.jsp">Rạp</a>
                             </li>
                         </ul>
                     </nav>

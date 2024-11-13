@@ -201,6 +201,14 @@ CREATE TABLE Tickets (
 ALTER TABLE Booking
 ADD Status NVARCHAR(20) CHECK (Status IN (N'Đã đặt', N'Chấp thuận',N'Đang chờ',N'Từ chối')) DEFAULT N'Đã đặt';
 
+SELECT DISTINCT 
+    b.BookingID, 
+    b.BookingDate, 
+    N'Đã Đặt' AS Status, -- Chuyển tất cả thành 'Đã Đặt'
+    t.TotalPrice
+FROM Booking b
+JOIN Tickets t ON b.BookingID = t.BookingID;
+
 CREATE table WorkHis(
 	WorkId char(6) primary key,
 	WorkDescription char(4000),

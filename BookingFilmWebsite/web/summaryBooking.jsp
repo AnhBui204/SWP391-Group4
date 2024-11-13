@@ -51,7 +51,7 @@
                             <img src="<%= users.getAvatar()%>" alt="Profile Image" class="img-fluid rounded-circle" style="height: 100px; width: 100px;"/>
                             <div class="d-flex flex-column align-items-center justify-content-center mt-3 px-3">
                                 <% if (moneyLeft != null) {%>
-                                <p class="m-0 px-2 fs-6 text-success">Số tiền: <strong><%= moneyLeftInt%></strong></p>
+                                <p class="m-0 px-2 fs-6 text-success">Số tiền: <strong><%= moneyLeftInt%> VNĐ</strong></p>
                                 <% } else { %>
                                 <p class="m-0 px-2 fs-6 text-success">Số tiền: <strong> 0 VNĐ</strong></p>
                                 <% }%>
